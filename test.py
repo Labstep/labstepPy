@@ -10,7 +10,7 @@ from getExperiments import getExperiments
 from getProtocols import getProtocols
 from getResources import getResources
 
-user = login('test@labstep.com','testpass')
+user = login('demo@labstep.com','demopassword')
 
 resources = getResources(user,100)
 """ resource = createResource(user,'My Resource')
