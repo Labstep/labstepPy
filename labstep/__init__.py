@@ -9,3 +9,4 @@ from .getExperiment import getExperiment
 from .getExperiments import getExperiments
 from .getProtocols import getProtocols
 from .getResources import getResources
+from .attachProtocol import attachProtocol
