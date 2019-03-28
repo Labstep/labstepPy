@@ -2,6 +2,21 @@ import requests
 import json
 
 def getResources(user,count=100):
+  '''
+  Retrieve a list of a users Resources on Labstep.
+  
+  Parameters
+  ----------
+  user : obj
+    The Labstep user whose Resources you want to retrieve. Must have property 'api_key'. See 'login'. 
+  count : int
+    The number of Resources to retrieve. 
+
+  Returns
+  -------
+  resources
+    A list of resource objects.
+  '''
   headers = {
     'apikey': user['api_key']
   }

@@ -1,3 +1,39 @@
+'''
+A library for working with the Labstep API from python.
+
+Available Functions
+----------
+login(username,password)
+  Returns an authenticated labstep User object
+
+createExperiment()
+
+createResource()
+
+createProtocol()
+
+createProject()
+
+addComment()
+
+attachFile()
+
+attachProtocol()
+
+getExperiment()
+
+getExperiments()
+
+getProtocol()
+
+getProtocols()
+
+getResource()
+
+getResources()
+
+'''
+
 from .login import login
 from .createExperiment import createExperiment
 from .createResource import createResource

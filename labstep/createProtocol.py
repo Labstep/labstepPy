@@ -2,6 +2,19 @@ import requests
 import json
 
 def createProtocol(user,name):
+  '''Create a new Labstep Protocol
+  Parameters
+  ----------
+  user : obj
+    The Labstep user creating the protocol. Must have property 'api_key'. See 'login'.
+  name : str
+    Give your protocol a name.
+
+  Returns
+  -------
+  protocol
+    An object representing the new Labstep Protocol.
+  '''
   data = {
     'name':name,
   }

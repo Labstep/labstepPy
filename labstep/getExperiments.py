@@ -2,6 +2,21 @@ import requests
 import json
 
 def getExperiments(user,count=100):
+  '''
+  Retrieve a list of a users Experiments on Labstep.
+  
+  Parameters
+  ----------
+  user : obj
+    The Labstep user whose Experiments you want to retrieve. Must have property 'api_key'. See 'login'. 
+  count : int
+    The number of Experiments to retrieve. 
+
+  Returns
+  -------
+  experiment
+    A list of experiment objects.
+  '''
   headers = {
     'apikey': user['api_key']
   }

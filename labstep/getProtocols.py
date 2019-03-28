@@ -2,6 +2,21 @@ import requests
 import json
 
 def getProtocols(user,count=100):
+  '''
+  Retrieve a list of a users Protocols on Labstep.
+  
+  Parameters
+  ----------
+  user : obj
+    The Labstep user whose Protocols you want to retrieve. Must have property 'api_key'. See 'login'. 
+  count : int
+    The number of Protocols to retrieve. 
+
+  Returns
+  -------
+  protocols
+    A list of Protocol objects.
+  '''
   headers = {
     'apikey': user['api_key']
   }
