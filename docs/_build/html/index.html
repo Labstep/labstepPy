@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to labstepPy’s documentation! &#8212; labstepPy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-labstep">
+<span id="welcome-to-labsteppy-s-documentation"></span><h1>Welcome to labstepPy’s documentation!<a class="headerlink" href="#module-labstep" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="labstep.addComment">
+<code class="descclassname">labstep.</code><code class="descname">addComment</code><span class="sig-paren">(</span><em>user</em>, <em>entity</em>, <em>comment</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.addComment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a comment to a labstep entity such as an experiment or resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The labstep user to comment as. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>entity</strong> (<em>obj</em>) – The labstep entity to comment on. Must have ‘thread’ property with property ‘id’.</p></li>
+<li><p><strong>comment</strong> (<em>str</em>) – The body of the comment</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a comment on labstep.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.attachFile">
+<code class="descclassname">labstep.</code><code class="descname">attachFile</code><span class="sig-paren">(</span><em>user</em>, <em>entity</em>, <em>filepath</em>, <em>caption</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.attachFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a file to a labstep entity such as an experiment or resource. Optionally include a cpation describing the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The labstep user to attach as. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>entity</strong> (<em>obj</em>) – The labstep entity to attach to. Must have ‘thread’ property with property ‘id’.</p></li>
+<li><p><strong>filepath</strong> (<em>str</em>) – The filepath to the file to attach</p></li>
+<li><p><strong>caption</strong> (<em>str</em>) – An optional caption for the file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a comment on labstep.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.attachProtocol">
+<code class="descclassname">labstep.</code><code class="descname">attachProtocol</code><span class="sig-paren">(</span><em>user</em>, <em>experiment</em>, <em>protocol</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.attachProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach a Labstep Protocol to a Labstep Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>experiment</strong> (<em>obj</em>) – The labstep experiment to attach the protocol to. Must have property ‘id’.</p></li>
+<li><p><strong>protocol</strong> – The labstep protocol to attach. Must have property ‘id’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing the updated labstep experiment.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.createExperiment">
+<code class="descclassname">labstep.</code><code class="descname">createExperiment</code><span class="sig-paren">(</span><em>user</em>, <em>name</em>, <em>description</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.createExperiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Labstep Experiment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user creating the experiment. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Give your experiment a name.</p></li>
+<li><p><strong>description</strong> – Give your experiment a description.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing the new labstep experiment.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.createProject">
+<code class="descclassname">labstep.</code><code class="descname">createProject</code><span class="sig-paren">(</span><em>user</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.createProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Labstep Project</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user creating the project. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Give your project a name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing the new Labstep project.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>project</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.createProtocol">
+<code class="descclassname">labstep.</code><code class="descname">createProtocol</code><span class="sig-paren">(</span><em>user</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.createProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Labstep Protocol</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user creating the protocol. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Give your protocol a name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing the new Labstep Protocol.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>protocol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.createResource">
+<code class="descclassname">labstep.</code><code class="descname">createResource</code><span class="sig-paren">(</span><em>user</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.createResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Labstep Resource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user creating the protocol. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Give your resource a name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing the new Labstep Resource.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>protocol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getExperiment">
+<code class="descclassname">labstep.</code><code class="descname">getExperiment</code><span class="sig-paren">(</span><em>user</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getExperiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a specific Labstep Experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – The id of the Experiment to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a Labstep Experiment.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getExperiments">
+<code class="descclassname">labstep.</code><code class="descname">getExperiments</code><span class="sig-paren">(</span><em>user</em>, <em>count=100</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getExperiments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a list of a users Experiments on Labstep.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user whose Experiments you want to retrieve. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>count</strong> (<em>int</em>) – The number of Experiments to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of experiment objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>experiment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getProject">
+<code class="descclassname">labstep.</code><code class="descname">getProject</code><span class="sig-paren">(</span><em>user</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a specific Labstep Project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – The id of the Project to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a Labstep Project.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>project</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getProtocol">
+<code class="descclassname">labstep.</code><code class="descname">getProtocol</code><span class="sig-paren">(</span><em>user</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a specific Labstep Protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – The id of the Protocol to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a Labstep Protocol.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>protocol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getProtocols">
+<code class="descclassname">labstep.</code><code class="descname">getProtocols</code><span class="sig-paren">(</span><em>user</em>, <em>count=100</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getProtocols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a list of a users Protocols on Labstep.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user whose Protocols you want to retrieve. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>count</strong> (<em>int</em>) – The number of Protocols to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of Protocol objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>protocols</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getResource">
+<code class="descclassname">labstep.</code><code class="descname">getResource</code><span class="sig-paren">(</span><em>user</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a specific Labstep Resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – The id of the Resource to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a Labstep Resource.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>resource</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.getResources">
+<code class="descclassname">labstep.</code><code class="descname">getResources</code><span class="sig-paren">(</span><em>user</em>, <em>count=100</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.getResources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a list of a users Resources on Labstep.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<em>obj</em>) – The Labstep user whose Resources you want to retrieve. Must have property ‘api_key’. See ‘login’.</p></li>
+<li><p><strong>count</strong> (<em>int</em>) – The number of Resources to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of resource objects.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>resources</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="labstep.login">
+<code class="descclassname">labstep.</code><code class="descname">login</code><span class="sig-paren">(</span><em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#labstep.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an authenticated labstep User object to allow you to interact with the labstep API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – You labstep username</p></li>
+<li><p><strong>password</strong> (<em>obj</em>) – Your labstep password</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object representing a user on labstep.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>user</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">labstepPy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Barney Walker.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,142 @@
+labstep package
+===============
+
+Submodules
+----------
+
+labstep.addComment module
+-------------------------
+
+.. automodule:: labstep.addComment
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.attachFile module
+-------------------------
+
+.. automodule:: labstep.attachFile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.attachProtocol module
+-----------------------------
+
+.. automodule:: labstep.attachProtocol
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.createExperiment module
+-------------------------------
+
+.. automodule:: labstep.createExperiment
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.createProject module
+----------------------------
+
+.. automodule:: labstep.createProject
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.createProtocol module
+-----------------------------
+
+.. automodule:: labstep.createProtocol
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.createResource module
+-----------------------------
+
+.. automodule:: labstep.createResource
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getExperiment module
+----------------------------
+
+.. automodule:: labstep.getExperiment
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getExperiments module
+-----------------------------
+
+.. automodule:: labstep.getExperiments
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getProject module
+-------------------------
+
+.. automodule:: labstep.getProject
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getProjects module
+--------------------------
+
+.. automodule:: labstep.getProjects
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getProtocol module
+--------------------------
+
+.. automodule:: labstep.getProtocol
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getProtocols module
+---------------------------
+
+.. automodule:: labstep.getProtocols
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getResource module
+--------------------------
+
+.. automodule:: labstep.getResource
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.getResources module
+---------------------------
+
+.. automodule:: labstep.getResources
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+labstep.login module
+--------------------
+
+.. automodule:: labstep.login
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: labstep
+    :members:
+    :undoc-members:
+    :show-inheritance:
