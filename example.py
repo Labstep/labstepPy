@@ -10,5 +10,7 @@ experiment = createExperiment(user,'My First Python Experiment','An experiment c
 addComment(user,experiment,"It's working great!")
 
 # Attach a file to an experiment
-filepath = 'my_script.py'
+filepath = 'example.py'
 attachFile(user,experiment,filepath,'This is the python script used in this experiment')
+
+print(experiment)

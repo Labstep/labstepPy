@@ -26,3 +26,7 @@ addComment(user,experiment,'It's working great!')
 filepath = 'my_script.py'
 attachFile(user,experiment,filepath,'This is the python script used in this experiment')
 ```
+
+For full list of available methods see:
+
+https://labsteppy.readthedocs.io/en/latest/
