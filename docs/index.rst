@@ -2,6 +2,22 @@
 Welcome to labstepPy's documentation!
 =====================================
 
+Installation
+------------
+
+.. code-block:: c
+
+    pip install labstep
+
+Example Usage
+-------------
+
+.. literalinclude:: ../example.py
+  
+
+Available Methods
+-----------------
+
 
 .. automodule:: labstep
     :members:
