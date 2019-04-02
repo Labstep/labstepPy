@@ -14,4 +14,5 @@ setup(name='labstep',
   author_email='barney@labstep.com',
   license='MIT',
   packages=['labstep'],
+  install_requires=['requests','json'],
   zip_safe=False)
