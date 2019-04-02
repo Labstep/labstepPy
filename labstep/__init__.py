@@ -396,7 +396,7 @@ def createProject(user,name):
   )
   return json.loads(r.content)
 
-def createExperiment(user,name,description):
+def createExperiment(user,name,description=None):
   '''Create a new Labstep Experiment
 
   Parameters
@@ -414,9 +414,12 @@ def createExperiment(user,name,description):
     An object representing the new labstep experiment.
   '''
   data = {
-    'name':name,
-    'description': description,
+    'name':name
   }
+
+  if description is not None:
+    data['description'] = description
+
   headers = {
     'apikey': user['api_key']
   }
@@ -544,4 +547,163 @@ def addComment(user,entity,comment):
   )
   return json.loads(r.content)
 
+def createTag(user,name):
+  '''Create a new tag
 
+  Parameters
+  ----------
+  user : obj
+    The Labstep user creating the tag. Must have property 'api_key'. See 'login'.
+  name : str
+    Name of the tag.
+
+  Returns
+  -------
+  tag
+    An object representing the new Labstep tag.
+  '''
+  data = {
+    'name':name,
+  }
+  headers = {
+    'apikey': user['api_key']
+  }
+  url = 'https://api.labstep.com/api/generic/tag'
+  r = requests.post(
+      url,
+      json=data,
+      headers=headers,
+  )
+  return json.loads(r.content)
+
+def addTagTo(user,entity,tag):
+  ''' Attach an existing tag to a Labstep entity. (See 'tag' for simplified tagging).
+
+  Parameters
+  ----------
+  user : obj
+    The labstep user to comment as. Must have property 'api_key'. See 'login'.
+  entity : obj
+    The labstep entity to tag. Can be Resource, Experiment or Protocol. Must have 'id'.
+  tag : str
+    The tag to attach. Must have an 'id' property.
+
+  Returns
+  -------
+  entity
+    Returns the tagged entity.
+  '''
+
+  if 'experiments' in entity:
+    entityType = 'experiment-workflow'
+  elif 'parent_protocol' in entity:
+    entityType = 'protocol-collection'
+  elif 'resource_location' in entity:
+    entityType = 'resource'
+  elif 'collection' in entity:
+    entityType = 'protocol-collection'
+    entity = entity['collection']
+  else:
+    raise Exception('Entities of this type cannot be tagged')
+
+  url = "https://api.labstep.com/api/generic/"+entityType+"/"+str(entity['id'])+"/tag/"+str(tag['id'])
+  headers = {
+    'apikey': user['api_key']
+  } 
+  r = requests.put(url, headers=headers)
+
+  return json.loads(r.content)
+
+def getTags(user,name=None,count=1000):
+  '''Retrieve a list of user tags. 
+  
+  Parameters
+  ----------
+  user : obj
+    The labstep user to comment as. Must have property 'api_key'. See 'login'.
+  name : str
+    Search for tags with a specific name.
+  count : int
+    Total number of results to return. Defaults to 1000.
+
+  Returns
+  -------
+  tags
+    A list of tags matching the search query.
+  '''
+  headers = {
+    'apikey': user['api_key']
+  }
+  n = min(count,1000)
+  url = "https://api.labstep.com/api/generic/tag"
+  params = { 
+    'search': 1,
+    'cursor':-1,
+    'count':n,
+  }
+
+  if name is not None:
+    params['search_query']=name
+
+  r = requests.get(
+    url,
+    params=params,
+    headers=headers,
+  )
+  resp = json.loads(r.content)
+  items = resp['items']
+  expected_results = min(resp['total'],count)
+
+  while len(items)<expected_results:
+    cursor = resp['next_cursor']
+    params= {
+      'search':1,
+      'cursor':cursor,
+      'count':n,
+    }
+    r = requests.get(
+      url,
+      params=params,
+      headers=headers,
+    )
+
+    resp = json.loads(r.content)
+    items.extend(resp['items'])
+
+  return items
+
+def tag(user,entity,name):
+  '''Simple tagging of a Labstep entity (creates a new tag if none exists)
+  
+  Parameters
+  ----------
+  user : obj
+    The labstep user to comment as. Must have property 'api_key'. See 'login'.
+  entity : obj
+    The labstep entity to tag. Can be Resource, Experiment or Protocol. Must have 'id'.
+  name : str
+    The name of the tag to add / create.
+
+  Returns
+  -------
+  entity
+    Returns the tagged entity.
+  '''
+
+  tags = getTags(user,name)
+
+  matchingTags = list(filter(lambda x: x['name']==name,tags))
+
+  if len(matchingTags)==0:
+    tag = createTag(user,name)
+  else: 
+    tag = matchingTags[0]
+
+  entity = addTagTo(user,entity,tag)
+
+  return entity
+
+user = login('demo@labstep.com','demopassword')
+experiment = createProtocol(user,'Tagging Protocols')
+taggedExperiment = tag(user,experiment,'NewTag')
+print(taggedExperiment)
