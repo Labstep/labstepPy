@@ -50,10 +50,17 @@ def getResources(user,count=100):
   }
   n = min(count,1000)
   playlist_id = user['resource_lists'][0]['id']
-  url = f"https://api.labstep.com/api/generic/resource?search=1&cursor=-1&count={n}&resource_list_id={playlist_id}"
+  url = "https://api.labstep.com/api/generic/resource"
+  params = { 
+    'search': 1,
+    'cursor':-1,
+    'count':n,
+    'resource_list_id':playlist_id
+  }
   r = requests.get(
-      url,
-      headers=headers,
+    url,
+    params=params,
+    headers=headers,
   )
 
   resp = json.loads(r.content)
@@ -63,10 +70,16 @@ def getResources(user,count=100):
 
   while len(items)<expected_results:
     cursor = resp['next_cursor']
-    url = f"https://api.labstep.com/api/generic/resource?search=1&cursor={cursor}&count={n}&resource_list_id={playlist_id}"
+    params= {
+      'search':1,
+      'cursor':cursor,
+      'count':n,
+      'resource_list_id':playlist_id
+    }
     r = requests.get(
-        url,
-        headers=headers,
+      url,
+      params=params,
+      headers=headers,
     )
 
     resp = json.loads(r.content)
@@ -94,7 +107,7 @@ def getResource(user,id):
   headers = {
     'apikey': user['api_key']
   }
-  url = f"https://api.labstep.com/api/generic/resource/{id}"
+  url = "https://api.labstep.com/api/generic/resource/"+str(id)
   r = requests.get(
       url,
       headers=headers,
@@ -123,9 +136,16 @@ def getProtocols(user,count=100):
   }
   n = min(count,1000)
   playlist_id = user['protocol_collection_playlists'][0]['id']
-  url = f"https://api.labstep.com/api/generic/protocol-collection?search=1&cursor=-1&count={n}&protocol_collection_playlist_id={playlist_id}"
+  url = "https://api.labstep.com/api/generic/protocol-collection"
+  params = {
+    'search':1,
+    'cursor':-1,
+    'count':n,
+    'protocol_collection_playlist_id':playlist_id
+  }
   r = requests.get(
       url,
+      params=params,
       headers=headers,
   )
 
@@ -135,11 +155,16 @@ def getProtocols(user,count=100):
   expected_results = min(resp['total'],count)
 
   while len(items)<expected_results:
-    cursor = resp['next_cursor']
-    url = f"https://api.labstep.com/api/generic/protocol-collection?search=1&cursor={cursor}&count={n}&protocol_collection_playlist_id={playlist_id}"
+    params = {
+    'search':1,
+    'cursor':resp['next_cursor'],
+    'count':n,
+    'protocol_collection_playlist_id':playlist_id
+    } 
     r = requests.get(
-        url,
-        headers=headers,
+      url,
+      params=params,
+      headers=headers,
     )
 
     resp = json.loads(r.content)
@@ -167,7 +192,7 @@ def getProtocol(user,id):
   headers = {
     'apikey': user['api_key']
   }
-  url = f"https://api.labstep.com/api/generic/protocol/{id}"
+  url = "https://api.labstep.com/api/generic/protocol/"+str(id)
   r = requests.get(
       url,
       headers=headers,
@@ -194,7 +219,7 @@ def getProject(user,id):
   headers = {
     'apikey': user['api_key']
   }
-  url = f"https://api.labstep.com/api/generic/group/{id}"
+  url = "https://api.labstep.com/api/generic/group/"+str(id)
   r = requests.get(
       url,
       headers=headers,
@@ -222,10 +247,16 @@ def getExperiments(user,count=100):
     'apikey': user['api_key']
   }
   n = min(count,1000)
-  url = f"https://api.labstep.com/api/generic/experiment-workflow?search=1&cursor=-1&count={n}"
+  url = "https://api.labstep.com/api/generic/experiment-workflow"
+  params= {
+    'search':1,
+    'cursor':-1,
+    'count':n,
+  }
   r = requests.get(
-      url,
-      headers=headers,
+    url,
+    params=params,
+    headers=headers,
   )
 
   resp = json.loads(r.content)
@@ -234,8 +265,11 @@ def getExperiments(user,count=100):
   expected_results = min(resp['total'],count)
 
   while len(items)<expected_results:
-    cursor = resp['next_cursor']
-    url = f"https://api.labstep.com/api/generic/experiment-workflow?search=1&cursor={cursor}&count={n}"
+    params= {
+      'search':1,
+      'cursor':resp['next_cursor'],
+      'count':n,
+    }
     r = requests.get(
         url,
         headers=headers,
@@ -266,7 +300,7 @@ def getExperiment(user,id):
   headers = {
     'apikey': user['api_key']
   }
-  url = f"https://api.labstep.com/api/generic/experiment-workflow/{id}"
+  url = "https://api.labstep.com/api/generic/experiment-workflow/"+str(id)
   r = requests.get(
       url,
       headers=headers,
@@ -422,7 +456,7 @@ def attachProtocol(user,experiment,protocol):
       json=data,
       headers=headers,
   )
-  url = f"https://api.labstep.com/api/generic/experiment-workflow/{experiment['id']}"
+  url = "https://api.labstep.com/api/generic/experiment-workflow/" + str(experiment['id'])
   r = requests.get(
       url,
       headers=headers,

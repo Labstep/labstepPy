@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 
 setup(name='labstep',
-  version='0.1.1',
+  version='0.2.2',
   description='Python Wrapper around the Labstep API',
   long_description=long_description,
   long_description_content_type="text/markdown",
@@ -14,5 +14,5 @@ setup(name='labstep',
   author_email='barney@labstep.com',
   license='MIT',
   packages=['labstep'],
-  install_requires=['requests','json'],
+  install_requires=['requests'],
   zip_safe=False)
