@@ -192,7 +192,7 @@ def getProtocol(user,id):
   headers = {
     'apikey': user['api_key']
   }
-  url = "https://api.labstep.com/api/generic/protocol/"+str(id)
+  url = "https://api.labstep.com/api/generic/protocol-collection/"+str(id)
   r = requests.get(
       url,
       headers=headers,
@@ -359,7 +359,7 @@ def createProtocol(user,name):
   headers = {
     'apikey': user['api_key']
   }
-  url = 'https://api.labstep.com/api/generic/protocol'
+  url = 'https://api.labstep.com/api/generic/protocol-collection'
   r = requests.post(
       url,
       json=data,
@@ -448,7 +448,7 @@ def attachProtocol(user,experiment,protocol):
   '''
   data = {
     'experiment_workflow_id':experiment['id'],
-    'protocol_id': protocol['id'],
+    'protocol_id': protocol['last_version']['id'],
   }
   headers = {
     'apikey': user['api_key']
@@ -702,8 +702,3 @@ def tag(user,entity,name):
   entity = addTagTo(user,entity,tag)
 
   return entity
-
-user = login('demo@labstep.com','demopassword')
-experiment = createProtocol(user,'Tagging Protocols')
-taggedExperiment = tag(user,experiment,'NewTag')
-print(taggedExperiment)

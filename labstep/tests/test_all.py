@@ -1,6 +1,7 @@
 import labstep
 
 # Creating entities
+
 user = labstep.login('demo@labstep.com','demopassword')
 print(user)
 experiment = labstep.createExperiment(user,'My First Python Experiment','An experiment created using the labstep python package')
@@ -36,3 +37,6 @@ lsFile = labstep.attachFile(user,experiment,'example.py','This is the python scr
 print(lsFile)
 exp = labstep.attachProtocol(user,experiment,protocol)
 print(exp)
+
+taggedExperiment = labstep.tag(user,experiment,'NewTag')
+print(taggedExperiment)
