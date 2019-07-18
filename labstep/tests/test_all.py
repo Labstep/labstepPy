@@ -33,7 +33,7 @@ print(resources)
 # Adding to entities
 comment = labstep.addComment(user,experiment,"It's working great!")
 print(comment)
-lsFile = labstep.attachFile(user,experiment,'example.py','This is the python script used in this experiment')
+lsFile = labstep.attachFile(user,experiment,'examples/attachingDataToExperiment.py','This is the python script used in this experiment')
 print(lsFile)
 exp = labstep.attachProtocol(user,experiment,protocol)
 print(exp)
