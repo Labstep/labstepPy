@@ -490,13 +490,8 @@ def attachFile(user,entity,filepath,caption):
     'apikey': user['api_key']
   }
   files = {'file': open(filepath, 'rb')}
-  url = 'https://api.labstep.com/api/generic/file/upload'
-  r = requests.post(
-      url,
-      headers=headers,
-      files=files,
-  )
-  lsFile = json.loads(r.content)
+  
+  lsFile = uploadFile(user,files)
 
   data = {
       'body': caption,
