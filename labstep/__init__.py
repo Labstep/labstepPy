@@ -5,6 +5,8 @@
 import requests
 import json
 from datetime import datetime
+from time import gmtime, strftime
+
 
 API_ROOT='https://api.labstep.com/'
 
@@ -36,7 +38,7 @@ def login(username,password):
     '''
     data = {'username': username,
             'password': password}
-    url = 'https://api.labstep.com/public-api/user/login'
+    url = url_join(API_ROOT,"/public-api/user/login")
     r = requests.post(url, json=data, headers={}) 
     return json.loads(r.content)
 
@@ -57,7 +59,7 @@ def getResource(user,resource_id):
         An object representing a Labstep Resource.
     '''
     headers = {'apikey': user['api_key']}
-    url = "https://api.labstep.com/api/generic/resource/"+str(resource_id)
+    url = url_join(API_ROOT,"/api/generic/resource/",str(resource_id))
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
 
@@ -78,7 +80,7 @@ def getProtocol(user,protocol_id):
         An object representing a Labstep Protocol.
     '''
     headers = {'apikey': user['api_key']}
-    url = "https://api.labstep.com/api/generic/protocol-collection/"+str(protocol_id)
+    url = url_join(API_ROOT,"/api/generic/protocol-collection/",str(protocol_id))
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
 
@@ -99,7 +101,7 @@ def getWorkspace(user,workspace_id):
         An object representing a Labstep Workspace.
     '''
     headers = {'apikey': user['api_key']}
-    url = "https://api.labstep.com/api/generic/group/"+str(workspace_id)
+    url = url_join(API_ROOT,"/api/generic/group/",str(workspace_id))
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
  
@@ -120,7 +122,7 @@ def getExperiment(user,experiment_id):
         An object representing a Labstep Experiment.
     '''
     headers = {'apikey': user['api_key']}
-    url = "https://api.labstep.com/api/generic/experiment-workflow/"+str(experiment_id)
+    url = url_join(API_ROOT,"/api/generic/experiment-workflow/",str(experiment_id))
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
 
@@ -143,7 +145,7 @@ def getExperiments(user,count=100):
     '''
     headers = {'apikey': user['api_key']}
     n = min(count,1000)
-    url = "https://api.labstep.com/api/generic/experiment-workflow"
+    url = url_join(API_ROOT,"/api/generic/experiment-workflow")
     params= {'search':1,
              'cursor':-1,
              'count':n}
@@ -181,7 +183,7 @@ def getResources(user,count=100):
     '''
     headers = {'apikey': user['api_key']}  
     n = min(count,1000)
-    url = "https://api.labstep.com/api/generic/resource"
+    url = url_join(API_ROOT,"/api/generic/resource")
     params = {'search': 1,
               'cursor':-1,
               'count':n}
@@ -219,7 +221,7 @@ def getProtocols(user,count=100):
     '''
     headers = {'apikey': user['api_key']}
     n = min(count,1000)
-    url = "https://api.labstep.com/api/generic/protocol-collection"
+    url = url_join(API_ROOT,"/api/generic/protocol-collection")
     params = {'search':1,
               'cursor':-1,
               'count':n}
@@ -258,7 +260,7 @@ def getTags(user,name=None,count=1000):
     '''
     headers = {'apikey': user['api_key']}
     n = min(count,1000)
-    url = "https://api.labstep.com/api/generic/tag"
+    url = url_join(API_ROOT,"/api/generic/tag")
     params = {'search': 1,
               'cursor':-1,
               'count':n}
@@ -300,7 +302,7 @@ def newResource(user,name):
     '''
     data = {'name':name}
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/resource'
+    url = url_join(API_ROOT,"/api/generic/resource")
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -323,7 +325,7 @@ def newProtocol(user,name):
     '''
     data = {'name':name}
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/protocol-collection'
+    url = url_join(API_ROOT,"/api/generic/protocol-collection")
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -346,7 +348,7 @@ def newWorkspace(user,name):
     '''
     data = {'name':name}
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/group'
+    url = url_join(API_ROOT,"/api/generic/group")
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -375,7 +377,7 @@ def newExperiment(user,name,description=None):
         data['description'] = description
 
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/experiment-workflow'
+    url = url_join(API_ROOT,"/api/generic/experiment-workflow")
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
     
@@ -397,7 +399,7 @@ def newTag(user,name):
     '''
     data = {'name':name}
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/tag'
+    url = url_join(API_ROOT,"/api/generic/tag")
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -420,7 +422,7 @@ def addProtocol(user,experiment,protocol):
     data = {'experiment_workflow_id':experiment['id'],
             'protocol_id': protocol['last_version']['id']}
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/experiment'
+    url = url_join(API_ROOT,"/api/generic/experiment")
     r = requests.post(url, json=data, headers=headers)  
     return json.loads(r.content)
 
@@ -453,7 +455,7 @@ def addComment(user,entity,body,file=None):
                 'thread_id': threadId,
                 'file_id': lsFile}
   
-    url = 'https://api.labstep.com/api/generic/comment'
+    url = url_join(API_ROOT,"/api/generic/comment")
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -487,7 +489,7 @@ def addTagTo(user,entity,tag):
     else:
         raise Exception('Entities of this type cannot be tagged')
 
-    url = "https://api.labstep.com/api/generic/"+entityType+"/"+str(entity['id'])+"/tag/"+str(tag['id'])
+    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/"+str(tag['id'])
     headers = {'apikey': user['api_key']}
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
@@ -539,11 +541,11 @@ def uploadFile(user, filepath):
     ''' 
     headers = {'apikey': user['api_key']}
     files = {'file': open(filepath, 'rb')}
-    url = 'https://api.labstep.com/api/generic/file/upload'
+    url = url_join(API_ROOT,"/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)  
     return json.loads(r.content)
 
-def captionUploadingFile(user,entity,filepath,caption):
+def attachFile(user,entity,filepath,caption):
     '''
     Upload a file to a Labstep entity such as an Experiment
     or Resource, and caption the uploading file.
@@ -568,18 +570,18 @@ def captionUploadingFile(user,entity,filepath,caption):
     caption = addComment(user,caption,lsFile)  
     return caption
 
-def editCaption(user,caption_id,caption):
+def editComment(user,comment_id,comment):
     '''
-    Edit an existing caption.
+    Edit an existing comment/caption.
   
     Parameters
     ----------
     user (obj)
         The labstep user. Must have property 'api_key'. See 'login'.
-    caption_id (obj)
-        The id of the caption to edit.
-    caption (str)
-        The body of the new caption.
+    comment_id (obj)
+        The id of the comment/caption to edit.
+    comment (str)
+        The body of the new comment.
 
     Returns
     -------
@@ -587,8 +589,8 @@ def editCaption(user,caption_id,caption):
         An object representing the editted comment.
     '''
     headers = {'apikey': user['api_key']}
-    data = {'body': caption}
-    url = 'https://api.labstep.com/api/generic/comment/'+str(caption_id)
+    data = {'body': comment}
+    url = url_join(API_ROOT,"/api/generic/comment/",str(comment_id))
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -612,7 +614,7 @@ def editTag(user,tag,name):
     '''
     data = {'name':name}
     headers = {'apikey': user['api_key']} 
-    url = 'https://api.labstep.com/api/generic/tag/'+ str(tag['id']) #url = url_join(API_ROOT,'/api/generic/tag/',str(tag['id']))
+    url = url_join(API_ROOT,'/api/generic/tag/', str(tag['id']))
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -633,14 +635,18 @@ def deleteTag(user,tag):
         An object representing the tag to delete.
     '''
     headers = {'apikey': user['api_key']}
-    url = 'https://api.labstep.com/api/generic/tag/'+ str(tag['id'])
+    url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id'])
     r = requests.delete(url, headers=headers)
     return json.loads(r.content)
 
 def deleteExperiment(user, experiment):
-    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+z')
+    
+    timezone = strftime("%z", gmtime())
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}'.format(timezone))
+    #timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+z')
+    
     data = {'deleted_at': timestamp}
     headers = {'apikey': user['api_key']} 
-    url = 'https://api.labstep.com/api/generic/tag/'+ str(experiment['id'])
+    url = url_join(API_ROOT,"/api/generic/tag/",str(experiment['id'])
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
