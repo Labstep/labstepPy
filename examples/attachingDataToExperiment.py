@@ -1,16 +1,16 @@
-from labstep import login, createExperiment, addComment, attachFile
+import labstep as LS
+
 
 # Login to your Labstep account
-user = login('demo@labstep.com','demopassword')
+user = LS.login('demo@labstep.com','demopassword')
 
 # Create an experiment
-experiment = createExperiment(user,'My First Python Experiment','An experiment created using the labstep python package')
+experiment = LS.createExperiment(user,'Add file no caption')
 
-# Comment on an experiment
-addComment(user,experiment,"It's working great!")
+# Attach a file
+filename = 'attachingDataToExperiment.py'
+comment = LS.attachFile(user,experiment,filename)
 
-# Attach a file to an experiment
-filepath = 'example.py'
-attachFile(user,experiment,filepath,'This is the python script used in this experiment')
 
-print(experiment)
+updatedExperiment = LS.getExperiment(user,experiment['id'])
+print(updatedExperiment)
