@@ -6,9 +6,6 @@ import requests
 import json
 from datetime import datetime
 
-
-#%%     URL
-
 API_ROOT='https://api.labstep.com/'
 
 def url_join(*args):
@@ -19,9 +16,6 @@ def url_join(*args):
     '''
     return "/".join(arg.strip("/") for arg in args)
 
-
-
-#%%     Login
 
 def login(username,password):
     '''
@@ -46,10 +40,6 @@ def login(username,password):
     r = requests.post(url, json=data, headers={}) 
     return json.loads(r.content)
 
-
-
-#%%     getSingle
-
 def getResource(user,resource_id):
     '''
     Retrieve a specific Labstep Resource.
@@ -70,8 +60,6 @@ def getResource(user,resource_id):
     url = "https://api.labstep.com/api/generic/resource/"+str(resource_id)
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
-
-
 
 def getProtocol(user,protocol_id):
     '''
@@ -94,8 +82,6 @@ def getProtocol(user,protocol_id):
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
 
-
-
 def getWorkspace(user,workspace_id):
     '''
     Retrieve a specific Labstep Workspace.
@@ -116,9 +102,7 @@ def getWorkspace(user,workspace_id):
     url = "https://api.labstep.com/api/generic/group/"+str(workspace_id)
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
-
-
-  
+ 
 def getExperiment(user,experiment_id):
     '''
     Retrieve a specific Labstep Experiment.
@@ -139,10 +123,6 @@ def getExperiment(user,experiment_id):
     url = "https://api.labstep.com/api/generic/experiment-workflow/"+str(experiment_id)
     r = requests.get(url, headers=headers)
     return json.loads(r.content)
-
-
-
-#%%         getMany
 
 def getExperiments(user,count=100):
     '''
@@ -180,7 +160,6 @@ def getExperiments(user,count=100):
         resp = json.loads(r.content)
         items.extend(resp['items'])
     return items
-
 
 
 def getResources(user,count=100):
@@ -221,8 +200,6 @@ def getResources(user,count=100):
         items.extend(resp['items'])
     return items
 
-
-
 def getProtocols(user,count=100):
     '''
     Retrieve a list of a user's Protocols on Labstep.
@@ -259,8 +236,6 @@ def getProtocols(user,count=100):
         resp = json.loads(r.content)
         items.extend(resp['items'])
     return items
-
-
 
 def getTags(user,name=None,count=1000):
     '''
@@ -306,12 +281,6 @@ def getTags(user,name=None,count=1000):
         items.extend(resp['items'])    
     return items
 
-
-
-
-
-#%%     new
-
 def newResource(user,name):
     '''
     Create a new Labstep Resource.
@@ -334,8 +303,6 @@ def newResource(user,name):
     url = 'https://api.labstep.com/api/generic/resource'
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
-
-
 
 def newProtocol(user,name):
     '''
@@ -360,8 +327,6 @@ def newProtocol(user,name):
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
-
-
 def newWorkspace(user,name):
     '''
     Create a new Labstep Workspace.
@@ -384,8 +349,6 @@ def newWorkspace(user,name):
     url = 'https://api.labstep.com/api/generic/group'
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
-
-
 
 def newExperiment(user,name,description=None):
     '''
@@ -416,8 +379,6 @@ def newExperiment(user,name,description=None):
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
     
-
-
 def newTag(user,name):
     '''
     Create a new tag.
@@ -439,11 +400,6 @@ def newTag(user,name):
     url = 'https://api.labstep.com/api/generic/tag'
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
-
-
-
-
-#%%     addSomething
 
 def addProtocol(user,experiment,protocol):
     '''
@@ -467,8 +423,6 @@ def addProtocol(user,experiment,protocol):
     url = 'https://api.labstep.com/api/generic/experiment'
     r = requests.post(url, json=data, headers=headers)  
     return json.loads(r.content)
-
-
 
 def addComment(user,entity,body,file=None):
     '''
@@ -502,8 +456,6 @@ def addComment(user,entity,body,file=None):
     url = 'https://api.labstep.com/api/generic/comment'
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
-
-
 
 def addTagTo(user,entity,tag):
     '''
@@ -540,8 +492,6 @@ def addTagTo(user,entity,tag):
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
 
-
-
 def tag(user,entity,name):
     '''
     Simple tagging of a Labstep entity (creates a new tag if none exists).
@@ -571,10 +521,6 @@ def tag(user,entity,name):
     entity = addTagTo(user,entity,tag)
     return entity
 
-
-
-#%%     uploadFile
-
 def uploadFile(user, filepath):
     '''
     Upload a file to the Labstep entity Data.
@@ -596,8 +542,6 @@ def uploadFile(user, filepath):
     url = 'https://api.labstep.com/api/generic/file/upload'
     r = requests.post(url, headers=headers, files=files)  
     return json.loads(r.content)
-
-
 
 def captionUploadingFile(user,entity,filepath,caption):
     '''
@@ -624,10 +568,6 @@ def captionUploadingFile(user,entity,filepath,caption):
     caption = addComment(user,caption,lsFile)  
     return caption
 
-
-
-#%%     editSomething
-
 def editCaption(user,caption_id,caption):
     '''
     Edit an existing caption.
@@ -651,8 +591,6 @@ def editCaption(user,caption_id,caption):
     url = 'https://api.labstep.com/api/generic/comment/'+str(caption_id)
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
-
-
 
 def editTag(user,tag,name):
     '''
@@ -678,10 +616,6 @@ def editTag(user,tag,name):
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
 
-
-
-#%%     deleteSomething (generally archiveSomething)
-
 def deleteTag(user,tag):
     '''
     Delete an existing tag.
@@ -702,8 +636,6 @@ def deleteTag(user,tag):
     url = 'https://api.labstep.com/api/generic/tag/'+ str(tag['id'])
     r = requests.delete(url, headers=headers)
     return json.loads(r.content)
-
-
 
 def deleteExperiment(user, experiment):
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+z')

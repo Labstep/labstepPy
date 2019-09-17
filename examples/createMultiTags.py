@@ -16,4 +16,4 @@ tagname = ['MultiTag1', 'MultiTag2', 'MultiTag3']
 
 for i in tagname:
     # Create tags
-    LS.createTag(user,i)
+    LS.newTag(user,i)
