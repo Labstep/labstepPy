@@ -8,6 +8,8 @@ from datetime import datetime
 from time import gmtime, strftime
 
 
+
+####################        url_join()
 API_ROOT='https://api.labstep.com/'
 
 def url_join(*args):
@@ -19,6 +21,7 @@ def url_join(*args):
     return "/".join(arg.strip("/") for arg in args)
 
 
+####################        login()
 def login(username,password):
     '''
     Returns an authenticated Labstep User object to allow 
@@ -42,6 +45,8 @@ def login(username,password):
     r = requests.post(url, json=data, headers={}) 
     return json.loads(r.content)
 
+
+####################        getSingle()
 def getResource(user,resource_id):
     '''
     Retrieve a specific Labstep Resource.
@@ -58,9 +63,10 @@ def getResource(user,resource_id):
     resource
         An object representing a Labstep Resource.
     '''
+    params = {'is_deleted': 'both'}
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/resource/",str(resource_id))
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers, params=params)
     return json.loads(r.content)
 
 def getProtocol(user,protocol_id):
@@ -79,9 +85,10 @@ def getProtocol(user,protocol_id):
     protocol
         An object representing a Labstep Protocol.
     '''
+    params = {'is_deleted': 'both'}
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/protocol-collection/",str(protocol_id))
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers, params=params)
     return json.loads(r.content)
 
 def getWorkspace(user,workspace_id):
@@ -100,9 +107,10 @@ def getWorkspace(user,workspace_id):
     workspace
         An object representing a Labstep Workspace.
     '''
+    params = {'is_deleted': 'both'}
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/group/",str(workspace_id))
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers, params=params)
     return json.loads(r.content)
  
 def getExperiment(user,experiment_id):
@@ -121,11 +129,14 @@ def getExperiment(user,experiment_id):
     experiment
         An object representing a Labstep Experiment.
     '''
+    params = {'is_deleted': 'both'}
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/experiment-workflow/",str(experiment_id))
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers, params=params)
     return json.loads(r.content)
 
+
+####################        getMany()
 def getExperiments(user,count=100):
     '''
     Retrieve a list of a user's Experiments on Labstep.
@@ -162,7 +173,6 @@ def getExperiments(user,count=100):
         resp = json.loads(r.content)
         items.extend(resp['items'])
     return items
-
 
 def getResources(user,count=100):
     '''
@@ -283,6 +293,8 @@ def getTags(user,name=None,count=1000):
         items.extend(resp['items'])    
     return items
 
+
+####################        newEntity()
 def newResource(user,name):
     '''
     Create a new Labstep Resource.
@@ -403,6 +415,8 @@ def newTag(user,name):
     r = requests.post(url, json=data, headers=headers)
     return json.loads(r.content)
 
+
+####################        addEntity()
 def addProtocol(user,experiment,protocol):
     '''
     Add a Labstep Protocol to a Labstep Experiment.
@@ -501,14 +515,14 @@ def uploadFile(user, filepath):
     Parameters
     ----------
     user (obj)
-        The Labstep user to attach as. Must have property 'api_key'. See 'login'.
+        The Labstep user. Must have property 'api_key'. See 'login'.
     filepath (str)
         The filepath to the file to attach.
 
     Returns
     -------
     file
-        An object representing a file on Labstep.
+        An object to upload a file on Labstep.
     ''' 
     headers = {'apikey': user['api_key']}
     files = {'file': open(filepath, 'rb')}
@@ -516,6 +530,8 @@ def uploadFile(user, filepath):
     r = requests.post(url, headers=headers, files=files)  
     return json.loads(r.content)
 
+
+####################        editEntity()
 def editComment(user,comment_id,comment):
     '''
     Edit an existing comment/caption.
@@ -549,7 +565,7 @@ def editTag(user,tag,name):
     user (obj)
         The Labstep user. Must have property 'api_key'. See 'login'. 
     tag (obj)
-        The tag to edit.
+        The current tag to edit.
     name (str)
         The new name of the tag.
 
@@ -561,6 +577,99 @@ def editTag(user,tag,name):
     data = {'name':name}
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,'/api/generic/tag/',str(tag['id']))
+    r = requests.put(url, json=data, headers=headers)
+    return json.loads(r.content)
+
+
+####################        deleteEntity()
+timezone = strftime('%z', gmtime())
+timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
+
+def deleteExperiment(user, experiment):
+    '''
+    Delete an existing experiment.
+  
+    Parameters
+    ----------
+    user (obj)
+        The labstep user. Must have property 'api_key'. See 'login'. 
+    experiment (obj)
+        The experiment to delete.
+
+    Returns
+    -------
+    experiment
+        An object representing the experiment to delete.
+    '''
+    data = {'deleted_at': timestamp}
+    headers = {'apikey': user['api_key']} 
+    url = url_join(API_ROOT,"/api/generic/experiment-workflow/",str(experiment['id']))
+    r = requests.put(url, json=data, headers=headers)
+    return json.loads(r.content)
+
+def deleteProtocol(user, protocol):
+    '''
+    Delete an existing protocol.
+  
+    Parameters
+    ----------
+    user (obj)
+        The labstep user. Must have property 'api_key'. See 'login'. 
+    protocol (obj)
+        The protocol to delete.
+
+    Returns
+    -------
+    protocol
+        An object representing the protocol to delete.
+    '''
+    data = {'deleted_at': timestamp}
+    headers = {'apikey': user['api_key']} 
+    url = url_join(API_ROOT,"/api/generic/protocol-collection/",str(protocol['id']))
+    r = requests.put(url, json=data, headers=headers)
+    return json.loads(r.content)
+
+def deleteResource(user, resource):
+    '''
+    Delete an existing resource.
+  
+    Parameters
+    ----------
+    user (obj)
+        The labstep user. Must have property 'api_key'. See 'login'. 
+    resource (obj)
+        The resource to delete.
+
+    Returns
+    -------
+    resource
+        An object representing the resource to delete.
+    '''
+    data = {'deleted_at': timestamp}
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/resource/",str(resource['id']))
+    r = requests.put(url, json=data, headers=headers)
+    return json.loads(r.content)
+
+def deleteWorkspace(user, workspace):
+    '''
+    Delete an existing workspace.
+  
+    Parameters
+    ----------
+    user (obj)
+        The labstep user. Must have property 'api_key'. See 'login'. 
+    workspace (obj)
+        The workspace to delete.
+
+    Returns
+    -------
+    resource
+        An object representing the workspace to delete.
+    '''
+    data = {'deleted_at': timestamp}
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/group/",str(workspace['id']))
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -581,24 +690,12 @@ def deleteTag(user,tag):
         An object representing the tag to delete.
     '''
     headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id'])
+    url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id']))
     r = requests.delete(url, headers=headers)
     return json.loads(r.content)
 
-def deleteExperiment(user, experiment):
-    
-    timezone = strftime("%z", gmtime())
-    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}'.format(timezone))
-    #timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+z')
-    
-    data = {'deleted_at': timestamp}
-    headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,"/api/generic/tag/",str(experiment['id'])
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
 
-
-
+####################        others
 def tag(user,entity,name):
     '''
     Simple tagging of a Labstep entity (creates a new tag if none exists).
@@ -640,14 +737,14 @@ def attachFile(user,entity,filepath,caption):
     entity (obj)
         The Labstep entity to attach to. Must have 'thread' property with property 'id'.
     filepath (str)
-        The filepath to the file to attach.
+        The path to the file to attach.
     caption (str)
         A caption for the file.
 
     Returns
     -------
     caption
-        An object representing a comment on labstep.
+        Returns an uploaded file with a caption.
     '''
     lsFile = uploadFile(user,filepath)
     caption = addComment(user,caption,lsFile)  

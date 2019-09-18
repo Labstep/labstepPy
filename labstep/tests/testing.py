@@ -2,24 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-import json
-import datetime
-from time import gmtime, strftime
-
 
 user = LS.login('demo@labstep.com','demopassword')
 
-# Get an experiment
-get_some_exps = LS.getExperiments(user, count=2)
-get1_exp = LS.getExperiment(user, 21967)
+# Make new experiment
+newexp = LS.newExperiment(user,'Test')
+print('NEW EXPERIMENT')
+print(newexp)
 
-# Delete/archive an experiment
-LS.deleteExperiment(user,get1_exp)
+# Delete that experiment
+del_exp = LS.deleteExperiment(user, newexp)
+print('DELETED')
+print(del_exp)
 
-
-
-#timezone = strftime("%z", gmtime())
-#print(timezone)
-
-#timestamp = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}'.format(timezone))
-#print(json.dumps(timestamp))
+# Get info on that experiment
+get_exp = LS.getExperiment(user, exp['id'])
+print('FIND')
+print(get_exp)
