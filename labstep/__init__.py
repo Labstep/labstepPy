@@ -489,39 +489,10 @@ def addTagTo(user,entity,tag):
     else:
         raise Exception('Entities of this type cannot be tagged')
 
-    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/"+str(tag['id'])
+    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
     headers = {'apikey': user['api_key']}
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
-
-def tag(user,entity,name):
-    '''
-    Simple tagging of a Labstep entity (creates a new tag if none exists).
-  
-    Parameters
-    ----------
-    user (obj)
-        The Labstep user to comment as. Must have property 'api_key'. See 'login'.
-    entity (obj)
-        The Labstep entity to tag. Can be Resource, Experiment, or Protocol. Must have 'id'.
-    name (str)
-        The name of the tag to create.
-
-    Returns
-    -------
-    entity
-        Returns the tagged entity.
-    '''
-    tags = getTags(user,name)
-    matchingTags = list(filter(lambda x: x['name']==name,tags))
-
-    if len(matchingTags)== 0:
-        tag = newTag(user,name)
-    else: 
-        tag = matchingTags[0]
-
-    entity = addTagTo(user,entity,tag)
-    return entity
 
 def uploadFile(user, filepath):
     '''
@@ -544,31 +515,6 @@ def uploadFile(user, filepath):
     url = url_join(API_ROOT,"/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)  
     return json.loads(r.content)
-
-def attachFile(user,entity,filepath,caption):
-    '''
-    Upload a file to a Labstep entity such as an Experiment
-    or Resource, and caption the uploading file.
-
-    Parameters
-    ----------
-    user (obj)
-        The Labstep user to attach as. Must have property 'api_key'. See 'login'.
-    entity (obj)
-        The Labstep entity to attach to. Must have 'thread' property with property 'id'.
-    filepath (str)
-        The filepath to the file to attach.
-    caption (str)
-        A caption for the file.
-
-    Returns
-    -------
-    caption
-        An object representing a comment on labstep.
-    '''
-    lsFile = uploadFile(user,filepath)
-    caption = addComment(user,caption,lsFile)  
-    return caption
 
 def editComment(user,comment_id,comment):
     '''
@@ -614,7 +560,7 @@ def editTag(user,tag,name):
     '''
     data = {'name':name}
     headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,'/api/generic/tag/', str(tag['id']))
+    url = url_join(API_ROOT,'/api/generic/tag/',str(tag['id']))
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
 
@@ -650,3 +596,59 @@ def deleteExperiment(user, experiment):
     url = url_join(API_ROOT,"/api/generic/tag/",str(experiment['id'])
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
+
+
+
+def tag(user,entity,name):
+    '''
+    Simple tagging of a Labstep entity (creates a new tag if none exists).
+  
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user to comment as. Must have property 'api_key'. See 'login'.
+    entity (obj)
+        The Labstep entity to tag. Can be Resource, Experiment, or Protocol. Must have 'id'.
+    name (str)
+        The name of the tag to create.
+
+    Returns
+    -------
+    entity
+        Returns the tagged entity.
+    '''
+    tags = getTags(user,name)
+    matchingTags = list(filter(lambda x: x['name']==name,tags))
+
+    if len(matchingTags)== 0:
+        tag = newTag(user,name)
+    else: 
+        tag = matchingTags[0]
+
+    entity = addTagTo(user,entity,tag)
+    return entity
+
+def attachFile(user,entity,filepath,caption):
+    '''
+    Upload a file to a Labstep entity such as an Experiment
+    or Resource, and add a caption to the uploading file.
+
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user to attach as. Must have property 'api_key'. See 'login'.
+    entity (obj)
+        The Labstep entity to attach to. Must have 'thread' property with property 'id'.
+    filepath (str)
+        The filepath to the file to attach.
+    caption (str)
+        A caption for the file.
+
+    Returns
+    -------
+    caption
+        An object representing a comment on labstep.
+    '''
+    lsFile = uploadFile(user,filepath)
+    caption = addComment(user,caption,lsFile)  
+    return caption
