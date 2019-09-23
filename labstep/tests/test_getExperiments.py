@@ -11,5 +11,5 @@ n = 3
 exp = LS.getExperiments(user, n)
 
 for i in range(n):
-    print('\n GET EXPERIMENTS = \n')
-    print(exp[n])
+    print('\n GET EXPERIMENTS {} = \n'.format(i+1))
+    print(exp[i])

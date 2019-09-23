@@ -28,7 +28,7 @@ timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3]
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
     return timestamp"""
 
-def keepGetting(headers, count, url, extraParams):
+def keepGetting(headers,count,url):    #,extraParams):
     n = min(count,1000)
     params= {'search':1,
              'cursor':-1,
@@ -162,8 +162,7 @@ def getExperiment(user,experiment_id):
 
 
 ####################        getMany()
-"""
-def getExperiments(user,count=100,created_at):
+def getExperiments(user,count=100):     #,created_at):
     '''
     Retrieve a list of a user's Experiments on Labstep.
   
@@ -182,10 +181,10 @@ def getExperiments(user,count=100,created_at):
     '''
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/experiment-workflow")
-    extraParams = {'created_at': created_at}
-    experiments = keepGetting(headers,count,url,extraParams)
+    #extraParams = {'created_at': created_at}
+    experiments = keepGetting(headers,count,url)#,extraParams)
     return experiments
-"""
+
 def getResources(user,count=100):
     '''
     Retrieve a list of a user's Resources on Labstep.
@@ -203,26 +202,10 @@ def getResources(user,count=100):
     resources
         A list of Resource objects.
     '''
-    headers = {'apikey': user['api_key']}  
-    n = min(count,1000)
+    headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/resource")
-    params = {'search': 1,
-              'cursor':-1,
-              'count':n}
-    r = requests.get(url, params=params, headers=headers)
-    resp = json.loads(r.content)
-    items = resp['items']
-
-    expected_results = min(resp['total'],count)
-    while len(items)<expected_results:
-        cursor = resp['next_cursor']
-        params = {'search':1,
-                  'cursor':cursor,
-                  'count':n}
-        r = requests.get(url, params=params, headers=headers)
-        resp = json.loads(r.content)
-        items.extend(resp['items'])
-    return items
+    resources = keepGetting(headers,count,url)
+    return resources
 
 def getProtocols(user,count=100):
     '''
@@ -242,24 +225,9 @@ def getProtocols(user,count=100):
         A list of Protocol objects.
     '''
     headers = {'apikey': user['api_key']}
-    n = min(count,1000)
     url = url_join(API_ROOT,"/api/generic/protocol-collection")
-    params = {'search':1,
-              'cursor':-1,
-              'count':n}
-    r = requests.get(url, params=params, headers=headers)
-    resp = json.loads(r.content)
-    items = resp['items']
-
-    expected_results = min(resp['total'],count)
-    while len(items)<expected_results:
-        params = {'search':1,
-                  'cursor':resp['next_cursor'],
-                  'count':n} 
-        r = requests.get(url, params=params, headers=headers)
-        resp = json.loads(r.content)
-        items.extend(resp['items'])
-    return items
+    protocols = keepGetting(headers,count,url)
+    return protocols
 
 def getTags(user,name=None,count=1000):
     '''
