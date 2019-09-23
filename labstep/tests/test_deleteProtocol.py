@@ -6,7 +6,7 @@ import labstep as LS
 user = LS.login('demo@labstep.com','demopassword')
 
 # Make new
-new_protocol = LS.newProtocol(user,'NEW')
+new_protocol = LS.newProtocol(user,'MONTY')
 print('\n NEW PROTOCOL \n')
 print(new_protocol)
 
