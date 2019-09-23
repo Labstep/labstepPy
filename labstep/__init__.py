@@ -23,10 +23,10 @@ def url_join(*args):
 ####################        getTime(), keepGetting()
 timezone = strftime('%z', gmtime())
 timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
-# def getTime(timestamp):
-#     timezone = strftime('%z', gmtime())
-#     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
-#     return timestamp
+"""def getTime(timestamp):
+    timezone = strftime('%z', gmtime())
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
+    return timestamp"""
 
 def keepGetting(headers, count, url, extraParams):
     n = min(count,1000)
