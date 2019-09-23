@@ -6,7 +6,7 @@ import labstep as LS
 user = LS.login('demo@labstep.com','demopassword')
 
 # Make new
-new_exp = LS.newExperiment(user,'MONTY')
+new_exp = LS.newExperiment(user,'MONTY')#,'MONTY DESCRIPTION')
 print('\n NEW \n')
 print(new_exp)
 
