@@ -588,7 +588,7 @@ def editTag(user,tag,name):
     r = requests.put(url, json=data, headers=headers)
     return json.loads(r.content)
 
-def editExperiment(user,experiment,deleted_at=None):
+def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     '''
     Edit an existing Experiment.
   
@@ -606,7 +606,9 @@ def editExperiment(user,experiment,deleted_at=None):
     experiment
         An object representing the Experiment to edit.
     '''
-    data = {'deleted_at': deleted_at}  
+    data = {'name': name,
+            'description': description,
+            'deleted_at': deleted_at}  
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,"/api/generic/experiment-workflow/",str(experiment['id']))
     r = requests.put(url, json=data, headers=headers)
