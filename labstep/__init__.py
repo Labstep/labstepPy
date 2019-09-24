@@ -34,14 +34,6 @@ timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3]
     return timestamp"""
 
 
-def editEntity(user,entityName,id,data):
-    headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,'/api/generic/',entityName,str(id))
-    r = requests.put(url, json=data, headers=headers)
-    #handleError(r)
-    return json.loads(r.content)
-
-
 ####################        login()
 def login(username,password):
     '''
@@ -227,7 +219,8 @@ def getExperiments(user,count=100,search_query=None):
         A list of Experiment objects.
     '''
     metadata = {'search_query': search_query}
-    return getEntities(user,'experiment-workflow',count,metadata)
+    experiments = getEntities(user,'experiment-workflow',count,metadata)
+    return experiments
 
 def getResources(user,count=100,search_query=None):
     '''
@@ -247,7 +240,8 @@ def getResources(user,count=100,search_query=None):
         A list of Resource objects.
     '''
     metadata = {'search_query': search_query}
-    return getEntities(user,'resource',count,metadata)
+    resources = getEntities(user,'resource',count,metadata)
+    return resources
 
 def getProtocols(user,count=100,search_query=None):
     '''
@@ -267,7 +261,8 @@ def getProtocols(user,count=100,search_query=None):
         A list of Protocol objects.
     '''
     metadata = {'search_query': search_query}
-    return getEntities(user,'protocol-collection',count,metadata)
+    protocols = getEntities(user,'protocol-collection',count,metadata)
+    return protocols
 
 def getTags(user,count=1000,search_query=None):
     '''
@@ -289,7 +284,8 @@ def getTags(user,count=1000,search_query=None):
         A list of tags matching the search query.
     '''
     metadata = {'search_query': search_query}
-    return getEntities(user,'tag',count,metadata)
+    tags = getEntities(user,'tag',count,metadata)
+    return tags
 
 def getWorkspaces(user,count=100,search_query=None):
     '''
@@ -309,11 +305,28 @@ def getWorkspaces(user,count=100,search_query=None):
         A list of Workspace objects.
     '''
     metadata = {'search_query': search_query}
-    return getEntities(user,'group',count,metadata)
+    workspaces = getEntities(user,'group',count,metadata)
+    return workspaces
 
 
 ####################        newEntity()
 def newEntity(user,entityName,data):
+    '''
+    Parameters
+    ----------
+    user (str)
+        The Labstep user.
+    entityName (str)
+        Currents options for entity name are: 'experiment-workflow',
+        'resource', 'protocol-collection', 'tag', 'group'
+    data
+        The name of the entity.
+
+    Returns
+    -------
+    returns?
+        ?.
+    '''
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName)
     r = requests.post(url, json=data, headers=headers)
@@ -338,7 +351,8 @@ def newResource(user,name):
         An object representing the new Labstep Resource.
     '''
     data = {'name': name}
-    return newEntity(user,'resource',data)
+    resource = newEntity(user,'resource',data)
+    return resource
 
 def newProtocol(user,name):
     '''
@@ -347,10 +361,10 @@ def newProtocol(user,name):
     Parameters
     ----------
     user (obj)
-        The Labstep user creating the protocol.
+        The Labstep user creating the Protocol.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your protocol a name.
+        Give your Protocol a name.
 
     Returns
     -------
@@ -358,10 +372,8 @@ def newProtocol(user,name):
         An object representing the new Labstep Protocol.
     '''
     data = {'name':name}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/protocol-collection")
-    r = requests.post(url, json=data, headers=headers)
-    return json.loads(r.content)
+    protocol = newEntity(user,'protocol-collection',data)
+    return protocol
 
 def newWorkspace(user,name):
     '''
@@ -373,18 +385,16 @@ def newWorkspace(user,name):
         The Labstep user creating the Workspace.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your workspace a name.
+        Give your Workspace a name.
 
     Returns
     -------
     workspace
         An object representing the new Labstep Workspace.
     '''
-    data = {'name':name}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/group")
-    r = requests.post(url, json=data, headers=headers)
-    return json.loads(r.content)
+    data = {'name':name} 
+    workspace = newEntity(user,'group',data)
+    return workspace
 
 def newExperiment(user,name,description=None):
     '''
@@ -393,46 +403,42 @@ def newExperiment(user,name,description=None):
     Parameters
     ----------
     user (obj)
-        The Labstep user creating the experiment.
+        The Labstep user creating the Experiment.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your experiment a name.
+        Give your Experiment a name.
     description : 
-        Give your experiment a description.
+        Give your Experiment a description.
 
     Returns
     -------
     experiment
-        An object representing the new Labstep experiment.
+        An object representing the new Labstep Experiment.
     '''
     data = {'name': name,
             'description': description}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/experiment-workflow")
-    r = requests.post(url, json=data, headers=headers)
-    return json.loads(r.content)
-    
+    experiment = newEntity(user,'experimental-workflow',data)
+    return experiment
+
 def newTag(user,name):
     '''
-    Create a new tag.
+    Create a new Tag.
 
     Parameters
     ----------
     user (obj)
-        The Labstep user creating the tag. Must have property 'api_key'. See 'login'.
+        The Labstep user creating the Tag. Must have property 'api_key'. See 'login'.
     name (str)
-        Name of the new tag.
+        Name of the new Tag.
 
     Returns
     -------
     tag
-        An object representing the new Labstep tag.
+        An object representing the new Labstep Tag.
     '''
     data = {'name':name}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/tag")
-    r = requests.post(url, json=data, headers=headers)
-    return json.loads(r.content)
+    tag = newEntity(user,'tag',data)
+    return tag
 
 
 ####################        addEntity()
@@ -550,6 +556,31 @@ def uploadFile(user,filepath):
 
 
 ####################        editEntity()
+def editEntity(user,entityName,id,data):
+    '''
+    Parameters
+    ----------
+    user (str)
+        The Labstep user.
+    entityName (str)
+        Currents options for entity name are: 'experiment-workflow',
+        'resource', 'protocol-collection', 'tag', 'group', 'comment'
+    id
+        The id of the entity.
+    data (dict)
+        The data of the entity being editted.
+
+    Returns
+    -------
+    returns?
+        ?.
+    '''
+    headers = {'apikey': user['api_key']} 
+    url = url_join(API_ROOT,'/api/generic/',entityName,str(id))
+    r = requests.put(url, json=data, headers=headers)
+    #handleError(r)
+    return json.loads(r.content)
+
 def editComment(user,comment_id,comment):
     '''
     Edit an existing comment/caption.
@@ -568,11 +599,9 @@ def editComment(user,comment_id,comment):
     comment
         An object representing the editted comment.
     '''
-    headers = {'apikey': user['api_key']}
     data = {'body': comment}
-    url = url_join(API_ROOT,"/api/generic/comment/",str(comment_id))
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
+    comment = editEntity(user,'comment',id=comment_id,data)
+    return comment
 
 def editTag(user,tag,name):
     '''

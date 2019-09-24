@@ -7,7 +7,7 @@ import json
 user = LS.login('demo@labstep.com','demopassword')
 
 n = 3
-"""
+
 # Get Experiments
 exp = LS.getExperiments(user, n)
 for i in range(n):
@@ -25,7 +25,7 @@ resource = LS.getResources(user, n)
 for i in range(n):
     print('\n GET RESOURCES {} = \n'.format(i+1))
     print(resource[i])
-"""
+
 # Get Tags
 tags = LS.getTags(user, n)
 for i in range(n):
