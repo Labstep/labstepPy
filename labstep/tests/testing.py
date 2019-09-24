@@ -6,10 +6,7 @@ import json
 
 user = LS.login('demo@labstep.com','demopassword')
 
-# Get
-n = 3
-exp = LS.getExperiments(user, n)
-
-for i in range(n):
-    print('\n GET EXPERIMENTS = \n')
-    print(exp[n])
+# Get Tags
+tags = LS.getTags(user, name='Hello')
+print(len(tags),'TAGS FOUND \n\n')
+print(tags)

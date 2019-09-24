@@ -8,6 +8,11 @@ from datetime import datetime
 from time import gmtime, strftime
 
 
+"""def handleError(r):
+    if r['status_code'] !== 200:
+        #Throw Error('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
+        raise Exception('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
+    return"""
 
 ####################        url_join()
 API_ROOT='https://api.labstep.com/'
@@ -28,23 +33,28 @@ timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3]
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
     return timestamp"""
 
-def keepGetting(headers,count,url):    #,extraParams):
-    n = min(count,1000)
-    params= {'search':1,
-             'cursor':-1,
-             'count':n}
-    r = requests.get(url, params=params, headers=headers)
-    resp = json.loads(r.content)
-    items = resp['items']
-    expected_results = min(resp['total'],count)
-    while len(items) < expected_results:
-        params= {'search':1,
-                 'cursor':resp['next_cursor'],
-                 'count':n}
-        r = requests.get(url, headers=headers)
-        resp = json.loads(r.content)
-        items.extend(resp['items'])
-    return items
+def newEntity(user,entityName,data):
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/",entityName)
+    r = requests.post(url, json=data, headers=headers)
+    #handleError(r)
+    return json.loads(r.content)
+
+def getEntity(user,entityName,id):
+    params = {'is_deleted': 'both'}
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
+    r = requests.get(url, headers=headers, params=params)
+    #handleError(r)
+    return json.loads(r.content)
+
+def editEntity(user,entityName,id,data):
+    headers = {'apikey': user['api_key']} 
+    url = url_join(API_ROOT,'/api/generic/',entityName,str(id))
+    r = requests.put(url, json=data, headers=headers)
+    #handleError(r)
+    return json.loads(r.content)
+
 
 ####################        login()
 def login(username,password):
@@ -162,7 +172,46 @@ def getExperiment(user,experiment_id):
 
 
 ####################        getMany()
-def getExperiments(user,count=100):     #,created_at):
+def getEntities(user,entityName,count,metadata):
+    '''
+    Parameters
+    ----------
+    user (str)
+        The Labstep user.
+    entityName (str)
+        Currents options for entity name are: 'experiment-workflow',
+        'resource', 'protocol-collection', 'tag'
+    count
+        ??
+    metadata
+        ??
+
+    Returns
+    -------
+    user
+        An object representing a user on Labstep.
+    '''
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/",entityName)
+    n = min(count,1000)
+    search_params = {'search':1,
+                     'cursor':-1,
+                     'count':n}
+    #params = dict(search_params, **metadata)   # Merging dicts in python2
+    params = {**search_params, **metadata}      # Merging dicts in python3
+    r = requests.get(url, params=params, headers=headers)
+    #handleError(r)
+    resp = json.loads(r.content)
+    items = resp['items']
+    expected_results = min(resp['total'],count)
+    while len(items) < expected_results:
+        params['cursor']= resp['next_cursor']
+        r = requests.get(url, headers=headers, params=params)
+        resp = json.loads(r.content)
+        items.extend(resp['items'])
+    return items
+    
+def getExperiments(user,count=100,search_query=None):
     '''
     Retrieve a list of a user's Experiments on Labstep.
   
@@ -179,13 +228,11 @@ def getExperiments(user,count=100):     #,created_at):
     experiment
         A list of Experiment objects.
     '''
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/experiment-workflow")
-    #extraParams = {'created_at': created_at}
-    experiments = keepGetting(headers,count,url)#,extraParams)
+    metadata = {'search_query': search_query}
+    experiments = getEntities(user,'experiment-workflow',count,metadata=metadata)
     return experiments
 
-def getResources(user,count=100):
+def getResources(user,count=100,search_query=None):
     '''
     Retrieve a list of a user's Resources on Labstep.
   
@@ -202,12 +249,11 @@ def getResources(user,count=100):
     resources
         A list of Resource objects.
     '''
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/resource")
-    resources = keepGetting(headers,count,url)
+    metadata = {'search_query': search_query}
+    resources = getEntities(user,'resource',count,metadata=metadata)
     return resources
 
-def getProtocols(user,count=100):
+def getProtocols(user,count=100,search_query=None):
     '''
     Retrieve a list of a user's Protocols on Labstep.
   
@@ -224,19 +270,18 @@ def getProtocols(user,count=100):
     protocols
         A list of Protocol objects.
     '''
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/protocol-collection")
-    protocols = keepGetting(headers,count,url)
+    metadata = {'search_query': search_query}
+    protocols = getEntities(user,'protocol-collection',count,metadata=metadata)
     return protocols
 
-def getTags(user,name=None,count=1000):
+def getTags(user,count=1000,search_query=None):
     '''
     Retrieve a list of the user's tags. 
   
     Parameters
     ----------
     user (obj)
-        The Labstep user to comment as.
+        The Labstep user.
         Must have property 'api_key'. See 'login'.
     name (str)
         Search for tags with a specific name.
@@ -248,30 +293,9 @@ def getTags(user,name=None,count=1000):
     tags
         A list of tags matching the search query.
     '''
-    headers = {'apikey': user['api_key']}
-    n = min(count,1000)
-    url = url_join(API_ROOT,"/api/generic/tag")
-    params = {'search': 1,
-              'cursor':-1,
-              'count':n}
-
-    if name is not None:
-        params['search_query']=name
-
-    r = requests.get(url, params=params, headers=headers)
-    resp = json.loads(r.content)
-    items = resp['items']
-  
-    expected_results = min(resp['total'],count)
-    while len(items)<expected_results:
-        cursor = resp['next_cursor']
-        params= {'search':1,
-             'cursor':cursor,
-             'count':n}
-        r = requests.get(url, params=params, headers=headers)
-        resp = json.loads(r.content)
-        items.extend(resp['items'])    
-    return items
+    metadata = {'search_query': search_query}
+    tags = getEntities(user,'tag',count,metadata=metadata)
+    return tags
 
 
 ####################        newEntity()
@@ -293,10 +317,7 @@ def newResource(user,name):
         An object representing the new Labstep Resource.
     '''
     data = {'name':name}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/resource")
-    r = requests.post(url, json=data, headers=headers)
-    return json.loads(r.content)
+    return newEntity(user,'resource',data)
 
 def newProtocol(user,name):
     '''
