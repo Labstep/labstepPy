@@ -7,12 +7,12 @@ import json
 user = LS.login('demo@labstep.com','demopassword')
 
 
-workspace = LS.getWorkspaces(user,count=5)
-print(len(workspace),'WORKSPACES FOUND \n\n')
-print(workspace)
+# workspace = LS.getWorkspaces(user,count=5)
+# print(len(workspace),'WORKSPACES FOUND \n\n')
+# print(workspace)
 
 
-# # Get Tags
-# tags = LS.getTags(user, name='Hello')
-# print(len(tags),'TAGS FOUND \n\n')
-# print(tags)
+# Get Tag
+tags = LS.getTag(user,1266)
+print(len(tags),'TAGS FOUND \n\n')
+print(tags)

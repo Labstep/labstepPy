@@ -33,12 +33,6 @@ timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3]
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
     return timestamp"""
 
-def newEntity(user,entityName,data):
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/",entityName)
-    r = requests.post(url, json=data, headers=headers)
-    #handleError(r)
-    return json.loads(r.content)
 
 def editEntity(user,entityName,id,data):
     headers = {'apikey': user['api_key']} 
@@ -233,8 +227,7 @@ def getExperiments(user,count=100,search_query=None):
         A list of Experiment objects.
     '''
     metadata = {'search_query': search_query}
-    experiments = getEntities(user,'experiment-workflow',count,metadata)
-    return experiments
+    return getEntities(user,'experiment-workflow',count,metadata)
 
 def getResources(user,count=100,search_query=None):
     '''
@@ -254,8 +247,7 @@ def getResources(user,count=100,search_query=None):
         A list of Resource objects.
     '''
     metadata = {'search_query': search_query}
-    resources = getEntities(user,'resource',count,metadata)
-    return resources
+    return getEntities(user,'resource',count,metadata)
 
 def getProtocols(user,count=100,search_query=None):
     '''
@@ -275,8 +267,7 @@ def getProtocols(user,count=100,search_query=None):
         A list of Protocol objects.
     '''
     metadata = {'search_query': search_query}
-    protocols = getEntities(user,'protocol-collection',count,metadata)
-    return protocols
+    return getEntities(user,'protocol-collection',count,metadata)
 
 def getTags(user,count=1000,search_query=None):
     '''
@@ -298,8 +289,7 @@ def getTags(user,count=1000,search_query=None):
         A list of tags matching the search query.
     '''
     metadata = {'search_query': search_query}
-    tags = getEntities(user,'tag',count,metadata)
-    return tags
+    return getEntities(user,'tag',count,metadata)
 
 def getWorkspaces(user,count=100,search_query=None):
     '''
@@ -319,10 +309,17 @@ def getWorkspaces(user,count=100,search_query=None):
         A list of Workspace objects.
     '''
     metadata = {'search_query': search_query}
-    workspaces = getEntities(user,'group',count,metadata)
-    return workspaces
+    return getEntities(user,'group',count,metadata)
+
 
 ####################        newEntity()
+def newEntity(user,entityName,data):
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/",entityName)
+    r = requests.post(url, json=data, headers=headers)
+    #handleError(r)
+    return json.loads(r.content)
+
 def newResource(user,name):
     '''
     Create a new Labstep Resource.
@@ -340,7 +337,7 @@ def newResource(user,name):
     protocol
         An object representing the new Labstep Resource.
     '''
-    data = {'name':name}
+    data = {'name': name}
     return newEntity(user,'resource',data)
 
 def newProtocol(user,name):
