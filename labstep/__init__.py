@@ -40,14 +40,6 @@ def newEntity(user,entityName,data):
     #handleError(r)
     return json.loads(r.content)
 
-def getEntity(user,entityName,id):
-    params = {'is_deleted': 'both'}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
-    r = requests.get(url, headers=headers, params=params)
-    #handleError(r)
-    return json.loads(r.content)
-
 def editEntity(user,entityName,id,data):
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,'/api/generic/',entityName,str(id))
@@ -82,6 +74,30 @@ def login(username,password):
 
 
 ####################        getSingle()
+def getEntity(user,entityName,id):
+    '''
+    Parameters
+    ----------
+    user (str)
+        The Labstep user.
+    entityName (str)
+        Options for entity name are: 'experiment-workflow',
+        'resource', 'protocol-collection', 'tag'
+    id
+        The id of the entity.
+
+    Returns
+    -------
+    returns?
+        ?.
+    '''
+    params = {'is_deleted': 'both'}
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
+    r = requests.get(url, headers=headers, params=params)
+    #handleError(r)
+    return json.loads(r.content)
+    
 def getResource(user,resource_id):
     '''
     Retrieve a specific Labstep Resource.
@@ -98,11 +114,8 @@ def getResource(user,resource_id):
     resource
         An object representing a Labstep Resource.
     '''
-    params = {'is_deleted': 'both'}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/resource/",str(resource_id))
-    r = requests.get(url, headers=headers, params=params)
-    return json.loads(r.content)
+    resource = getEntity(user,'resource',id=resource_id)
+    return resource
 
 def getProtocol(user,protocol_id):
     '''
@@ -120,11 +133,8 @@ def getProtocol(user,protocol_id):
     protocol
         An object representing a Labstep Protocol.
     '''
-    params = {'is_deleted': 'both'}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/protocol-collection/",str(protocol_id))
-    r = requests.get(url, headers=headers, params=params)
-    return json.loads(r.content)
+    protocol = getEntity(user,'protocol-collection',id=protocol_id)
+    return protocol
 
 def getWorkspace(user,workspace_id):
     '''
@@ -142,11 +152,8 @@ def getWorkspace(user,workspace_id):
     workspace
         An object representing a Labstep Workspace.
     '''
-    params = {'is_deleted': 'both'}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/group/",str(workspace_id))
-    r = requests.get(url, headers=headers, params=params)
-    return json.loads(r.content)
+    workspace = getEntity(user,'group',id=workspace_id)
+    return workspace
  
 def getExperiment(user,experiment_id):
     '''
@@ -164,15 +171,12 @@ def getExperiment(user,experiment_id):
     experiment
         An object representing a Labstep Experiment.
     '''
-    params = {'is_deleted': 'both'}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/experiment-workflow/",str(experiment_id))
-    r = requests.get(url, headers=headers, params=params)
-    return json.loads(r.content)
+    experiment = getEntity(user,'experiment-workflow',id=experiment_id)
+    return experiment
 
 
 ####################        getMany()
-def getEntities(user,entityName,count,metadata):
+def getEntities(user,entityName,count,metadata=None):
     '''
     Parameters
     ----------
@@ -180,7 +184,7 @@ def getEntities(user,entityName,count,metadata):
         The Labstep user.
     entityName (str)
         Currents options for entity name are: 'experiment-workflow',
-        'resource', 'protocol-collection', 'tag'
+        'resource', 'protocol-collection', 'tag', 'group'
     count
         ??
     metadata
@@ -188,8 +192,8 @@ def getEntities(user,entityName,count,metadata):
 
     Returns
     -------
-    user
-        An object representing a user on Labstep.
+    returns?
+        ?.
     '''
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName)
@@ -229,7 +233,7 @@ def getExperiments(user,count=100,search_query=None):
         A list of Experiment objects.
     '''
     metadata = {'search_query': search_query}
-    experiments = getEntities(user,'experiment-workflow',count,metadata=metadata)
+    experiments = getEntities(user,'experiment-workflow',count,metadata)
     return experiments
 
 def getResources(user,count=100,search_query=None):
@@ -250,7 +254,7 @@ def getResources(user,count=100,search_query=None):
         A list of Resource objects.
     '''
     metadata = {'search_query': search_query}
-    resources = getEntities(user,'resource',count,metadata=metadata)
+    resources = getEntities(user,'resource',count,metadata)
     return resources
 
 def getProtocols(user,count=100,search_query=None):
@@ -271,7 +275,7 @@ def getProtocols(user,count=100,search_query=None):
         A list of Protocol objects.
     '''
     metadata = {'search_query': search_query}
-    protocols = getEntities(user,'protocol-collection',count,metadata=metadata)
+    protocols = getEntities(user,'protocol-collection',count,metadata)
     return protocols
 
 def getTags(user,count=1000,search_query=None):
@@ -294,9 +298,29 @@ def getTags(user,count=1000,search_query=None):
         A list of tags matching the search query.
     '''
     metadata = {'search_query': search_query}
-    tags = getEntities(user,'tag',count,metadata=metadata)
+    tags = getEntities(user,'tag',count,metadata)
     return tags
 
+def getWorkspaces(user,count=100,search_query=None):
+    '''
+    Retrieve a list of a user's Workspaces on Labstep.
+  
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user whose Workspaces you want to retrieve.
+        Must have property 'api_key'. See 'login'. 
+    count (int)
+        The number of Workspaces to retrieve. 
+
+    Returns
+    -------
+    workspaces
+        A list of Workspace objects.
+    '''
+    metadata = {'search_query': search_query}
+    workspaces = getEntities(user,'group',count,metadata)
+    return workspaces
 
 ####################        newEntity()
 def newResource(user,name):
