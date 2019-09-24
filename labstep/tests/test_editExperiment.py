@@ -11,6 +11,6 @@ print('\n GET EXPERIMENT = \n')
 print(exp)
 
 # Edit it
-edits = LS.editExperiment(user,exp,name='EDITTED',description='MY DESCRIPTION')
+edits = LS.editExperiment(user,exp,name='MIXED',description='NEW DESCRIPTION')
 print('\n EDITTED = \n')
 print(edits)

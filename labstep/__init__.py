@@ -69,7 +69,7 @@ def getEntity(user,entityName,id):
     entityName (str)
         Options for entity name are: 'experiment-workflow',
         'resource', 'protocol-collection', 'tag'
-    id
+    id (obj)
         The id of the entity.
 
     Returns
@@ -600,32 +600,30 @@ def editComment(user,comment_id,comment):
         An object representing the editted comment.
     '''
     data = {'body': comment}
-    comment = editEntity(user,'comment',id=comment_id,data)
+    comment = editEntity(user,'comment',comment_id,data)
     return comment
 
 def editTag(user,tag,name):
     '''
-    Edit the name of an existing tag.
+    Edit the name of an existing Tag.
   
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property 'api_key'. See 'login'. 
     tag (obj)
-        The current tag to edit.
+        The current Tag to edit.
     name (str)
-        The new name of the tag.
+        The new name of the Tag.
 
     Returns
     -------
     tag
-        An object representing the editted tag.
+        An object representing the editted Tag.
     '''
     data = {'name': name}
-    headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,'/api/generic/tag/',str(tag['id']))
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
+    tag = editEntity(user,'tag',(tag['id']),data)
+    return tag
 
 def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     '''
@@ -647,11 +645,9 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     '''
     data = {'name': name,
             'description': description,
-            'deleted_at': deleted_at}  
-    headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,"/api/generic/experiment-workflow/",str(experiment['id']))
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
+            'deleted_at': deleted_at}
+    experiment = editEntity(user,'experiment-workflow',experiment['id'],data)
+    return experiment
 
 def editProtocol(user,protocol,deleted_at=None):
     '''
@@ -672,10 +668,8 @@ def editProtocol(user,protocol,deleted_at=None):
         An object representing the Protocol to edit.
     '''
     data = {'deleted_at': deleted_at}
-    headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,"/api/generic/protocol-collection/",str(protocol['id']))
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
+    protocol = editEntity(user,'protocol-collection',protocol['id'],data)
+    return protocol
 
 def editResource(user,resource,deleted_at=None):
     '''
@@ -696,10 +690,8 @@ def editResource(user,resource,deleted_at=None):
         An object representing the Resource to edit.
     '''
     data = {'deleted_at': deleted_at}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/resource/",str(resource['id']))
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
+    resource = editEntity(user,'resource',resource['id'],data)
+    return resource
 
 def editWorkspace(user,workspace,deleted_at=None):
     '''
@@ -720,10 +712,8 @@ def editWorkspace(user,workspace,deleted_at=None):
         An object representing the Workspace to edit.
     '''
     data = {'deleted_at': deleted_at}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/group/",str(workspace['id']))
-    r = requests.put(url, json=data, headers=headers)
-    return json.loads(r.content)
+    workspace = editEntity(user,'group',workspace['id'],data)
+    return workspace
 
 
 ####################        deleteEntity()
