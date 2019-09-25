@@ -556,7 +556,7 @@ def uploadFile(user,filepath):
 
 
 ####################        editEntity()
-def editEntity(user,entityName,id,data):
+def editEntity(user,entityName,id,metadata):
     '''
     Parameters
     ----------
@@ -567,8 +567,8 @@ def editEntity(user,entityName,id,data):
         'resource', 'protocol-collection', 'tag', 'group', 'comment'
     id
         The id of the entity.
-    data (dict)
-        The data of the entity being editted.
+    metadata (dict)
+        The metadata being editted.
 
     Returns
     -------
@@ -577,7 +577,7 @@ def editEntity(user,entityName,id,data):
     '''
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,'/api/generic/',entityName,str(id))
-    r = requests.put(url, json=data, headers=headers)
+    r = requests.put(url, json=metadata, headers=headers)
     #handleError(r)
     return json.loads(r.content)
 
@@ -599,8 +599,8 @@ def editComment(user,comment_id,comment):
     comment
         An object representing the editted comment.
     '''
-    data = {'body': comment}
-    comment = editEntity(user,'comment',comment_id,data)
+    metadata = {'body': comment}
+    comment = editEntity(user,'comment',comment_id,metadata)
     return comment
 
 def editTag(user,tag,name):
@@ -622,7 +622,7 @@ def editTag(user,tag,name):
         An object representing the editted Tag.
     '''
     data = {'name': name}
-    tag = editEntity(user,'tag',(tag['id']),data)
+    tag = editEntity(user,'tag',(tag['id']),metadata)
     return tag
 
 def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
@@ -635,6 +635,10 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
         The labstep user. Must have property 'api_key'. See 'login'. 
     experiment (obj)
         The Experiment to edit.
+    name (str)
+        The new name of the Experiment.
+    description (str)
+        The new editted description of the Experiment.
     deleted_at (obj)
         The timestamp at which the Experiment is deleted/archived.
 
@@ -643,13 +647,13 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     experiment
         An object representing the Experiment to edit.
     '''
-    data = {'name': name,
-            'description': description,
-            'deleted_at': deleted_at}
-    experiment = editEntity(user,'experiment-workflow',experiment['id'],data)
+    metadata = {'name': name,
+                'description': description,
+                'deleted_at': deleted_at}
+    experiment = editEntity(user,'experiment-workflow',experiment['id'],metadata)
     return experiment
 
-def editProtocol(user,protocol,deleted_at=None):
+def editProtocol(user,protocol,name=None,deleted_at=None):
     '''
     Edit an existing Protocol.
   
@@ -667,11 +671,12 @@ def editProtocol(user,protocol,deleted_at=None):
     protocol
         An object representing the Protocol to edit.
     '''
-    data = {'deleted_at': deleted_at}
-    protocol = editEntity(user,'protocol-collection',protocol['id'],data)
+    metadata = {'name':name,
+                'deleted_at': deleted_at}
+    protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
     return protocol
 
-def editResource(user,resource,deleted_at=None):
+def editResource(user,resource,name=None,deleted_at=None):
     '''
     Edit an existing Resource.
   
@@ -689,11 +694,12 @@ def editResource(user,resource,deleted_at=None):
     resource
         An object representing the Resource to edit.
     '''
-    data = {'deleted_at': deleted_at}
-    resource = editEntity(user,'resource',resource['id'],data)
+    metadata = {'name':name,
+                'deleted_at': deleted_at}
+    resource = editEntity(user,'resource',resource['id'],metadata)
     return resource
 
-def editWorkspace(user,workspace,deleted_at=None):
+def editWorkspace(user,workspace,name=None,deleted_at=None):
     '''
     Edit an existing Workspace.
   
@@ -711,8 +717,9 @@ def editWorkspace(user,workspace,deleted_at=None):
     workspace
         An object representing the Workspace to edit.
     '''
-    data = {'deleted_at': deleted_at}
-    workspace = editEntity(user,'group',workspace['id'],data)
+    metadata = {'name':name,
+                'deleted_at': deleted_at}
+    workspace = editEntity(user,'group',workspace['id'],metadata)
     return workspace
 
 
