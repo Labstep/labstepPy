@@ -6,35 +6,18 @@ import json
 
 user = LS.login('demo@labstep.com','demopassword')
 
-# Keep this for use for handle error
-# Get Tag
-# tags = LS.getTag(user,1266)
-# print(len(tags),'TAGS FOUND \n\n')
-# print(tags)
 
 
+dictOfNames = {
+   7 : 'None',
+   8 : 'john',
+   9 : 'mathew',
+   10: 'None',
+   11: 'aadi',
+   12: 'sachin'
+}
 
-
-
-
-
-
-# Get resource
-resource = LS.getResource(user, 404897)
-print('\n GET \n')
-print(resource)
-
-# Edit status
-renamed = LS.editResource(user,resource,name='OMG')#,status=resource['status'])
-print('\n RENAMED \n')
-print(renamed)
-
-# Edit status
-# edits = LS.editResource(user,resource,status='requested')
-# print('\n EDITTED \n')
-# print(edits)
-
-# Get updated
-# updated = LS.getResource(user, 404897)
-# print('\n UPDATED \n')
-# print(updated)
+newDict = dict(filter(lambda elem: elem[1] != 'None', dictOfNames.items()))
+ 
+print('Filtered Dictionary : ')
+print(newDict)

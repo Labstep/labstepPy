@@ -572,8 +572,10 @@ def editEntity(user,entityName,id,metadata):
         ?.
     '''
     headers = {'apikey': user['api_key']} 
-    url = url_join(API_ROOT,'/api/generic/',entityName,str(id))
-    r = requests.put(url, json=metadata, headers=headers)
+    url = url_join(API_ROOT,'/api/generic/',entityName,str(id))  
+    # Filter the 'metadata' dictionary by removing {'field':None} 
+    new_metadata = dict(filter(lambda field: field[1]!=None, metadata.items()))
+    r = requests.put(url, json=new_metadata, headers=headers)
     #handleError(r)
     return json.loads(r.content)
 
@@ -621,7 +623,7 @@ def editTag(user,tag,name):
     tag = editEntity(user,'tag',(tag['id']),metadata)
     return tag
 
-def editExperiment(user,experiment,name,description=None,deleted_at=None):
+def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     '''
     Edit an existing Experiment.
   
@@ -648,22 +650,6 @@ def editExperiment(user,experiment,name,description=None,deleted_at=None):
                 'deleted_at': deleted_at}
     experiment = editEntity(user,'experiment-workflow',experiment['id'],metadata)
     return experiment
-
-"""def editExperiment(user,experiment,deleted_at=None,**optional_kwargs):
-    if 'name' in optional_kwargs:
-        name = optional_kwargs['name']
-    elif 'description' in optional_kwargs:
-        description = optional_kwargs['description']
-
-    metadata = {'name': name,
-                'description': description,
-                'deleted_at': deleted_at}
-
-    experiment = editEntity(user,'experiment-workflow',experiment['id'],metadata)
-    return experiment"""
-
-
-
 
 def editProtocol(user,protocol,name=None,deleted_at=None):
     '''
