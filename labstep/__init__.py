@@ -14,9 +14,8 @@ from time import gmtime, strftime
         raise Exception('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
     return"""
 
-####################        url_join()
+####################        Helper functions
 API_ROOT='https://api.labstep.com/'
-
 def url_join(*args):
     '''
     Join a set of args with a slash (/) between them. Instead of
@@ -25,13 +24,10 @@ def url_join(*args):
     '''
     return "/".join(arg.strip("/") for arg in args)
 
-####################        getTime(), keepGetting()
-timezone = strftime('%z', gmtime())
-timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
-"""def getTime(timestamp):
+def getTime():
     timezone = strftime('%z', gmtime())
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
-    return timestamp"""
+    return timestamp
 
 
 ####################        login()
@@ -625,7 +621,7 @@ def editTag(user,tag,name):
     tag = editEntity(user,'tag',(tag['id']),metadata)
     return tag
 
-def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
+def editExperiment(user,experiment,name,description=None,deleted_at=None):
     '''
     Edit an existing Experiment.
   
@@ -638,7 +634,7 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     name (str)
         The new name of the Experiment.
     description (str)
-        The new editted description of the Experiment.
+        The new description for the Experiment.
     deleted_at (obj)
         The timestamp at which the Experiment is deleted/archived.
 
@@ -653,6 +649,22 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     experiment = editEntity(user,'experiment-workflow',experiment['id'],metadata)
     return experiment
 
+"""def editExperiment(user,experiment,deleted_at=None,**optional_kwargs):
+    if 'name' in optional_kwargs:
+        name = optional_kwargs['name']
+    elif 'description' in optional_kwargs:
+        description = optional_kwargs['description']
+
+    metadata = {'name': name,
+                'description': description,
+                'deleted_at': deleted_at}
+
+    experiment = editEntity(user,'experiment-workflow',experiment['id'],metadata)
+    return experiment"""
+
+
+
+
 def editProtocol(user,protocol,name=None,deleted_at=None):
     '''
     Edit an existing Protocol.
@@ -663,6 +675,8 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
         The labstep user. Must have property 'api_key'. See 'login'. 
     protocol (obj)
         The Protocol to edit.
+    name (str)
+        The new name of the Experiment.
     deleted_at (obj)
         The timestamp at which the Protocol is deleted/archived.
 
@@ -671,12 +685,12 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     protocol
         An object representing the Protocol to edit.
     '''
-    metadata = {'name':name,
+    metadata = {'name': name,
                 'deleted_at': deleted_at}
     protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
     return protocol
 
-def editResource(user,resource,name=None,deleted_at=None):
+def editResource(user,resource,name=None,status=None,deleted_at=None):
     '''
     Edit an existing Resource.
   
@@ -686,6 +700,11 @@ def editResource(user,resource,name=None,deleted_at=None):
         The labstep user. Must have property 'api_key'. See 'login'. 
     resource (obj)
         The Resource to edit.
+    name (str)
+        The new name of the Experiment.
+    status (str)
+        Current options to change the status to are:
+        'available', 'unavailable', 'requested', 'ordered'.
     deleted_at (obj)
         The timestamp at which the Resource is deleted/archived.
 
@@ -694,7 +713,8 @@ def editResource(user,resource,name=None,deleted_at=None):
     resource
         An object representing the Resource to edit.
     '''
-    metadata = {'name':name,
+    metadata = {'name': name,
+                'status': status,
                 'deleted_at': deleted_at}
     resource = editEntity(user,'resource',resource['id'],metadata)
     return resource
@@ -740,7 +760,7 @@ def deleteExperiment(user,experiment):
     experiment
         An object representing the Experiment to delete.
     '''
-    experiment = editExperiment(user,experiment,deleted_at=timestamp)
+    experiment = editExperiment(user,experiment,deleted_at=getTime())
     return experiment
 
 def deleteProtocol(user,protocol):
@@ -759,7 +779,7 @@ def deleteProtocol(user,protocol):
     protocol
         An object representing the Protocol to delete.
     '''
-    protocol = editProtocol(user,protocol,deleted_at=timestamp)
+    protocol = editProtocol(user,protocol,deleted_at=getTime())
     return protocol
 
 def deleteResource(user,resource):
@@ -778,7 +798,7 @@ def deleteResource(user,resource):
     resource
         An object representing the Resource to delete.
     '''
-    resource = editResource(user,resource,deleted_at=timestamp)
+    resource = editResource(user,resource,deleted_at=getTime())
     return resource
 
 def deleteWorkspace(user,workspace):
@@ -797,7 +817,7 @@ def deleteWorkspace(user,workspace):
     workspace
         An object representing the Workspace to delete.
     '''
-    workspace = editWorkspace(user,workspace,deleted_at=timestamp)
+    workspace = editWorkspace(user,workspace,deleted_at=getTime())
     return workspace
 
 def deleteTag(user,tag):
