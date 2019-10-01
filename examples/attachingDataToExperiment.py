@@ -11,6 +11,5 @@ experiment = LS.createExperiment(user,'Add file no caption')
 filename = 'attachingDataToExperiment.py'
 comment = LS.attachFile(user,experiment,filename)
 
-
 updatedExperiment = LS.getExperiment(user,experiment['id'])
 print(updatedExperiment)
