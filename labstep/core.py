@@ -9,13 +9,13 @@ from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo
 
 ####################        getSingle()
 def getEntity(user,entityName,id):
-    '''
+    """
     Parameters
     ----------
     user (str)
         The Labstep user.
     entityName (str)
-        Options for entity name are: 'experiment-workflow',
+        Options for the entity name are: 'experiment-workflow',
         'resource', 'protocol-collection', 'tag'
     id (obj)
         The id of the entity.
@@ -24,7 +24,7 @@ def getEntity(user,entityName,id):
     -------
     returns?
         ?.
-    '''
+    """
     params = {'is_deleted': 'both'}
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
@@ -33,7 +33,7 @@ def getEntity(user,entityName,id):
     return json.loads(r.content)
 
 def getExperiment(user,experiment_id):
-    '''
+    """
     Retrieve a specific Labstep Experiment.
   
     Parameters
@@ -47,12 +47,12 @@ def getExperiment(user,experiment_id):
     -------
     experiment
         An object representing a Labstep Experiment.
-    '''
+    """
     experiment = getEntity(user,'experiment-workflow',id=experiment_id)
     return experiment
 
 def getProtocol(user,protocol_id):
-    '''
+    """
     Retrieve a specific Labstep Protocol.
   
     Parameters
@@ -66,12 +66,12 @@ def getProtocol(user,protocol_id):
     -------
     protocol
         An object representing a Labstep Protocol.
-    '''
+    """
     protocol = getEntity(user,'protocol-collection',id=protocol_id)
     return protocol
 
 def getResource(user,resource_id):
-    '''
+    """
     Retrieve a specific Labstep Resource.
     
     Parameters
@@ -85,12 +85,12 @@ def getResource(user,resource_id):
     -------
     resource
         An object representing a Labstep Resource.
-    '''
+    """
     resource = getEntity(user,'resource',id=resource_id)
     return resource
 
 def getWorkspace(user,workspace_id):
-    '''
+    """
     Retrieve a specific Labstep Workspace.
   
     Parameters
@@ -104,14 +104,14 @@ def getWorkspace(user,workspace_id):
     -------
     workspace
         An object representing a Labstep Workspace.
-    '''
+    """
     workspace = getEntity(user,'group',id=workspace_id)
     return workspace
 
 
 ####################        getMany()
 def getEntities(user,entityName,count,metadata=None):
-    '''
+    """
     Parameters
     ----------
     user (str)
@@ -128,7 +128,7 @@ def getEntities(user,entityName,count,metadata=None):
     -------
     returns?
         ?.
-    '''
+    """
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName)
     n = min(count,1000)
@@ -151,7 +151,7 @@ def getEntities(user,entityName,count,metadata=None):
 
 def getExperiments(user,count=100,search_query=None,
                    created_at_from=None,created_at_to=None,tag_id=None):
-    '''
+    """
     Retrieve a list of a user's Experiments on Labstep.
   
     Parameters
@@ -172,7 +172,7 @@ def getExperiments(user,count=100,search_query=None,
     -------
     experiment
         A list of Experiment objects.
-    '''
+    """
     metadata = {'search_query': search_query,
                 'created_at_from': createdAtFrom(created_at_from),
                 'created_at_to': createdAtTo(created_at_to),
@@ -183,7 +183,7 @@ def getExperiments(user,count=100,search_query=None,
 
 def getProtocols(user,count=100,search_query=None,
                  created_at_from=None,created_at_to=None,tag_id=None):
-    '''
+    """
     Retrieve a list of a user's Protocols on Labstep.
   
     Parameters
@@ -198,7 +198,7 @@ def getProtocols(user,count=100,search_query=None,
     -------
     protocols
         A list of Protocol objects.
-    '''
+    """
     metadata = {'search_query': search_query,
                 'created_at_from': createdAtFrom(created_at_from),
                 'created_at_to': createdAtTo(created_at_to),
@@ -208,7 +208,7 @@ def getProtocols(user,count=100,search_query=None,
     return protocols
 
 def getResources(user,count=100,search_query=None,tag_id=None,status=None):
-    '''
+    """
     Retrieve a list of a user's Resources on Labstep.
   
     Parameters
@@ -228,7 +228,7 @@ def getResources(user,count=100,search_query=None,tag_id=None,status=None):
     -------
     resources
         A list of Resource objects.
-    '''
+    """
     metadata = {'search_query': search_query,
                 'tag_id': tag_id,
                 'status': status,
@@ -237,7 +237,7 @@ def getResources(user,count=100,search_query=None,tag_id=None,status=None):
     return resources
 
 def getTags(user,count=1000,search_query=None):
-    '''
+    """
     Retrieve a list of the user's tags. 
   
     Parameters
@@ -254,13 +254,13 @@ def getTags(user,count=1000,search_query=None):
     -------
     tags
         A list of tags matching the search query.
-    '''
+    """
     metadata = {'search_query': search_query}
     tags = getEntities(user,'tag',count,metadata)
     return tags
 
 def getWorkspaces(user,count=100,search_query=None):
-    '''
+    """
     Retrieve a list of a user's Workspaces on Labstep.
   
     Parameters
@@ -275,7 +275,7 @@ def getWorkspaces(user,count=100,search_query=None):
     -------
     workspaces
         A list of Workspace objects.
-    '''
+    """
     metadata = {'search_query': search_query}
     workspaces = getEntities(user,'group',count,metadata)
     return workspaces
@@ -283,7 +283,7 @@ def getWorkspaces(user,count=100,search_query=None):
 
 ####################        newEntity()
 def newEntity(user,entityName,data):
-    '''
+    """
     Parameters
     ----------
     user (str)
@@ -298,7 +298,7 @@ def newEntity(user,entityName,data):
     -------
     returns?
         ?.
-    '''
+    """
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName)
     r = requests.post(url, json=data, headers=headers)
@@ -306,7 +306,7 @@ def newEntity(user,entityName,data):
     return json.loads(r.content)
 
 def newExperiment(user,name,description=None):
-    '''
+    """
     Create a new Labstep Experiment.
 
     Parameters
@@ -323,14 +323,14 @@ def newExperiment(user,name,description=None):
     -------
     experiment
         An object representing the new Labstep Experiment.
-    '''
+    """
     data = {'name': name,
             'description': description}
     experiment = newEntity(user,'experimental-workflow',data)
     return experiment
 
 def newProtocol(user,name):
-    '''
+    """
     Create a new Labstep Protocol.
 
     Parameters
@@ -345,13 +345,13 @@ def newProtocol(user,name):
     -------
     protocol
         An object representing the new Labstep Protocol.
-    '''
+    """
     data = {'name':name}
     protocol = newEntity(user,'protocol-collection',data)
     return protocol
 
 def newResource(user,name):
-    '''
+    """
     Create a new Labstep Resource.
 
     Parameters
@@ -366,13 +366,13 @@ def newResource(user,name):
     -------
     protocol
         An object representing the new Labstep Resource.
-    '''
+    """
     data = {'name': name}
     resource = newEntity(user,'resource',data)
     return resource
 
 def newTag(user,name):
-    '''
+    """
     Create a new Tag.
 
     Parameters
@@ -386,13 +386,13 @@ def newTag(user,name):
     -------
     tag
         An object representing the new Labstep Tag.
-    '''
+    """
     data = {'name':name}
     tag = newEntity(user,'tag',data)
     return tag
 
 def newWorkspace(user,name):
-    '''
+    """
     Create a new Labstep Workspace.
 
     Parameters
@@ -407,7 +407,7 @@ def newWorkspace(user,name):
     -------
     workspace
         An object representing the new Labstep Workspace.
-    '''
+    """
     data = {'name':name} 
     workspace = newEntity(user,'group',data)
     return workspace
@@ -415,7 +415,7 @@ def newWorkspace(user,name):
 
 ####################        editEntity()
 def editEntity(user,entityName,id,metadata):
-    '''
+    """
     Parameters
     ----------
     user (str)
@@ -432,7 +432,7 @@ def editEntity(user,entityName,id,metadata):
     -------
     returns?
         ?.
-    '''
+    """
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,'/api/generic/',entityName,str(id))  
     # Filter the 'metadata' dictionary by removing {'field':None} 
@@ -442,7 +442,7 @@ def editEntity(user,entityName,id,metadata):
     return json.loads(r.content)
 
 def editComment(user,comment_id,comment):
-    '''
+    """
     Edit an existing comment/caption.
   
     Parameters
@@ -458,13 +458,13 @@ def editComment(user,comment_id,comment):
     -------
     comment
         An object representing the editted comment.
-    '''
+    """
     metadata = {'body': comment}
     comment = editEntity(user,'comment',comment_id,metadata)
     return comment
 
 def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
-    '''
+    """
     Edit an existing Experiment.
   
     Parameters
@@ -484,7 +484,7 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     -------
     experiment
         An object representing the Experiment to edit.
-    '''
+    """
     metadata = {'name': name,
                 'description': description,
                 'deleted_at': deleted_at}
@@ -492,7 +492,7 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     return experiment
 
 def editProtocol(user,protocol,name=None,deleted_at=None):
-    '''
+    """
     Edit an existing Protocol.
   
     Parameters
@@ -510,14 +510,14 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     -------
     protocol
         An object representing the Protocol to edit.
-    '''
+    """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
     protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
     return protocol
 
 def editResource(user,resource,name=None,status=None,deleted_at=None,location=None):
-    '''
+    """
     Edit an existing Resource.
   
     Parameters
@@ -540,7 +540,7 @@ def editResource(user,resource,name=None,status=None,deleted_at=None,location=No
     -------
     resource
         An object representing the Resource to edit.
-    '''
+    """
     metadata = {'name': name,
                 'status': status,
                 'deleted_at': deleted_at,
@@ -550,7 +550,7 @@ def editResource(user,resource,name=None,status=None,deleted_at=None,location=No
     return resource
 
 def editTag(user,tag,name):
-    '''
+    """
     Edit the name of an existing Tag.
   
     Parameters
@@ -566,13 +566,13 @@ def editTag(user,tag,name):
     -------
     tag
         An object representing the editted Tag.
-    '''
+    """
     data = {'name': name}
     tag = editEntity(user,'tag',(tag['id']),metadata)
     return tag
 
 def editWorkspace(user,workspace,name=None,deleted_at=None):
-    '''
+    """
     Edit an existing Workspace.
   
     Parameters
@@ -588,7 +588,7 @@ def editWorkspace(user,workspace,name=None,deleted_at=None):
     -------
     workspace
         An object representing the Workspace to edit.
-    '''
+    """
     metadata = {'name':name,
                 'deleted_at': deleted_at}
     workspace = editEntity(user,'group',workspace['id'],metadata)
@@ -597,7 +597,7 @@ def editWorkspace(user,workspace,name=None,deleted_at=None):
 
 ####################        deleteEntity()
 def deleteExperiment(user,experiment):
-    '''
+    """
     Delete an existing Experiment.
   
     Parameters
@@ -611,12 +611,12 @@ def deleteExperiment(user,experiment):
     -------
     experiment
         An object representing the Experiment to delete.
-    '''
+    """
     experiment = editExperiment(user,experiment,deleted_at=getTime())
     return experiment
 
 def deleteProtocol(user,protocol):
-    '''
+    """
     Delete an existing Protocol.
   
     Parameters
@@ -630,12 +630,12 @@ def deleteProtocol(user,protocol):
     -------
     protocol
         An object representing the Protocol to delete.
-    '''
+    """
     protocol = editProtocol(user,protocol,deleted_at=getTime())
     return protocol
 
 def deleteResource(user,resource):
-    '''
+    """
     Delete an existing Resource.
   
     Parameters
@@ -649,12 +649,12 @@ def deleteResource(user,resource):
     -------
     resource
         An object representing the Resource to delete.
-    '''
+    """
     resource = editResource(user,resource,deleted_at=getTime())
     return resource
 
 def deleteWorkspace(user,workspace):
-    '''
+    """
     Delete an existing Workspace.
   
     Parameters
@@ -668,12 +668,12 @@ def deleteWorkspace(user,workspace):
     -------
     workspace
         An object representing the Workspace to delete.
-    '''
+    """
     workspace = editWorkspace(user,workspace,deleted_at=getTime())
     return workspace
 
 def deleteTag(user,tag):
-    '''
+    """
     Delete an existing tag.
   
     Parameters
@@ -687,7 +687,7 @@ def deleteTag(user,tag):
     -------
     tag
         An object representing the tag to delete.
-    '''
+    """
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id']))
     r = requests.delete(url, headers=headers)
@@ -696,7 +696,7 @@ def deleteTag(user,tag):
 
 ####################        Compound functions
 def tag(user,entity,name):
-    '''
+    """
     Simple tagging of a Labstep entity (creates a 
     new tag if none exists).
   
@@ -715,7 +715,7 @@ def tag(user,entity,name):
     -------
     entity
         Returns the tagged entity.
-    '''
+    """
     tags = getTags(user,name)
     matchingTags = list(filter(lambda x: x['name']==name,tags))
 
@@ -728,7 +728,7 @@ def tag(user,entity,name):
     return entity
 
 def addFile(user,entity,filepath,caption):
-    '''
+    """
     Upload a file to a Labstep entity such as an Experiment
     or Resource, and add a caption to the uploading file.
 
@@ -749,7 +749,7 @@ def addFile(user,entity,filepath,caption):
     -------
     caption
         Returns an uploaded file with a caption.
-    '''
+    """
     lsFile = uploadFile(user,filepath)
     caption = addComment(user,caption,lsFile)  
     return caption
