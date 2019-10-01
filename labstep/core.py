@@ -12,11 +12,13 @@ def getEntity(user,entityName,id):
     """
     Parameters
     ----------
-    user (str)
-        The Labstep user.
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     entityName (str)
-        Options for the entity name are: 'experiment-workflow',
-        'resource', 'protocol-collection', 'tag'
+        Options for the entity name are:
+        'experiment-workflow', 'resource',
+        'protocol-collection', 'tag'
     id (obj)
         The id of the entity.
 
@@ -26,7 +28,8 @@ def getEntity(user,entityName,id):
         ?.
     """
     params = {'is_deleted': 'both'}
-    headers = {'apikey': user.api_key}
+    # headers = {'apikey': user.api_key}
+    headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
     r = requests.get(url, headers=headers, params=params)
     handleError(r)
@@ -39,8 +42,9 @@ def getExperiment(user,experiment_id):
     Parameters
     ----------
     user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'. 
-    experiment_id (int)
+        The Labstep user. Must have property
+        'api_key'. See 'login'. 
+    experiment_id (obj)
         The id of the Experiment to retrieve. 
 
     Returns
@@ -58,7 +62,8 @@ def getProtocol(user,protocol_id):
     Parameters
     ----------
     user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'. 
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     protocol_id (int)
         The id of the Protocol to retrieve. 
 
@@ -77,7 +82,8 @@ def getResource(user,resource_id):
     Parameters
     ----------
     user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'. 
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     resource_id (int)
         The id of the Resource to retrieve. 
 
@@ -96,7 +102,8 @@ def getWorkspace(user,workspace_id):
     Parameters
     ----------
     user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'. 
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     workspace_id (int)
         The id of the Workspace to retrieve. 
 
@@ -114,10 +121,11 @@ def getEntities(user,entityName,count,metadata=None):
     """
     Parameters
     ----------
-    user (str)
-        The Labstep user.
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     entityName (str)
-        Currents options for entity name are: 'experiment-workflow',
+        Options for entity name are: 'experiment-workflow',
         'resource', 'protocol-collection', 'tag', 'group'
     count
         ??
@@ -434,7 +442,10 @@ def addComment(user,entity,body,file=None):
         An object representing a comment on labstep.
     """
     threadId = entity['thread']['id']
-    lsFile = [list(file.keys())[0]]      
+    if file != None:
+        lsFile = [list(file.keys())[0]]
+    else:
+        lsFile = None
     data = {'body': body,
             'thread_id': threadId,
             'file_id': lsFile}
@@ -506,8 +517,8 @@ def uploadFile(user,filepath):
     file
         An object to upload a file on Labstep.
     """ 
-    headers = {'apikey': user['api_key']}
     files = {'file': open(filepath, 'rb')}
+    headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)
     handleError(r)
