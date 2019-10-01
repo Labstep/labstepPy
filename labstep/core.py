@@ -129,14 +129,14 @@ def getEntities(user,entityName,count,metadata=None):
     returns?
         ?.
     """
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/",entityName)
     n = min(count,1000)
     search_params = {'search':1,
                      'cursor':-1,
                      'count':n}
-    #params = dict(search_params, **metadata)   # Merging dicts in python2
     params = {**search_params, **metadata}      # Merging dicts in python3
+    
+    headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"/api/generic/",entityName)
     r = requests.get(url, params=params, headers=headers)
     handleError(r)
     resp = json.loads(r.content)
@@ -433,9 +433,7 @@ def addComment(user,entity,body,file=None):
     comment
         An object representing a comment on labstep.
     """
-    headers = {'apikey': user['api_key']}
     threadId = entity['thread']['id']
-  
     lsFile = [list(file.keys())[0]]      
     data = {'body': body,
             'thread_id': threadId,
@@ -489,8 +487,8 @@ def addTagTo(user,entity,tag):
     else:
         raise Exception('Entities of this type cannot be tagged')
 
-    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
     headers = {'apikey': user['api_key']}
+    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
 
@@ -521,7 +519,7 @@ def editEntity(user,entityName,id,metadata):
     """
     Parameters
     ----------
-    user (str)
+    user (obj)
         The Labstep user.
     entityName (str)
         Currents options for entity name are: 'experiment-workflow',
@@ -536,12 +534,14 @@ def editEntity(user,entityName,id,metadata):
     returns?
         ?.
     """
+    # Filter the 'metadata' dictionary by removing {'fields': None}
+    # to preserve the existing data in the 'fields', otherwise
+    # the 'fields' will be overwritten to 'None'.
+    new_metadata = dict(filter(lambda field: field[1] != None, metadata.items()))
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,'/api/generic/',entityName,str(id))  
-    # Filter the 'metadata' dictionary by removing {'field':None} 
-    new_metadata = dict(filter(lambda field: field[1] != None, metadata.items()))
     r = requests.put(url, json=new_metadata, headers=headers)
-    #handleError(r)
+    handleError(r)
     return json.loads(r.content)
 
 def editComment(user,comment_id,comment):
