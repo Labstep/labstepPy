@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from time import gmtime, strftime
 
-import core
+
 
 user = LS.login('demo@labstep.com','demopassword')
 
@@ -26,6 +26,12 @@ for i in range(len(entity)):
 """
 
 
-getEntity(user,'experiment_workflow',12)
+def getTime():
+    timezone = strftime('%z', gmtime())
+    tz_hour = timezone[:3]
+    tz_minute = timezone[3:]
+    timestamp = datetime.now().strftime("%Y-%m-%d" + "T" + "%H:%M:%S" +
+                                        "{}:{}".format(tz_hour,tz_minute))
+    return timestamp
 
 
