@@ -9,7 +9,7 @@ from time import gmtime, strftime
 
 user = LS.login('demo@labstep.com','demopassword')
 
-
+"""
 # Get Experiments
 entity = LS.getProtocols(user,
                         #  search_query='new',
@@ -17,10 +17,14 @@ entity = LS.getProtocols(user,
                          created_at_to='2019-09-30',
                         #  tag_id=241,
                          )
-
 # Print details
 for i in range(len(entity)):
     print('\n GETTING PROTOCOLS {} ='.format(i+1))
     print(entity[i]['name'])
     print(entity[i]['last_version']['created_at'])
+"""
+
+
+LS.getEntity(user,'experiment_workflow',12)
+
 

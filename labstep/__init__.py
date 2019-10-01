@@ -44,11 +44,10 @@ def createdAtTo(created_at_to):
         created_at_to = created_at_to + "T00:00:00{}".format(timezone)
         return created_at_to
 
-"""def handleError(r):
-    if r['status_code'] != 200:
-        Throw Error('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
-        #raise Exception('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
-    return"""
+def handleError(r):
+    if r.status_code != 200:
+        raise Exception('Request Error {code}: {message}'.format(code=r.status_code,message=r.content))
+    return
 
 
 ####################        login()
@@ -98,7 +97,7 @@ def getEntity(user,entityName,id):
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
     r = requests.get(url, headers=headers, params=params)
-    #handleError(r)
+    handleError(r)
     return json.loads(r.content)
     
 def getResource(user,resource_id):
@@ -207,7 +206,7 @@ def getEntities(user,entityName,count,metadata=None):
     #params = dict(search_params, **metadata)   # Merging dicts in python2
     params = {**search_params, **metadata}      # Merging dicts in python3
     r = requests.get(url, params=params, headers=headers)
-    #handleError(r)
+    handleError(r)
     resp = json.loads(r.content)
     items = resp['items']
     expected_results = min(resp['total'],count)
@@ -218,7 +217,8 @@ def getEntities(user,entityName,count,metadata=None):
         items.extend(resp['items'])
     return items
     
-def getExperiments(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
+def getExperiments(user,count=100,search_query=None,
+                   created_at_from=None,created_at_to=None,tag_id=None):
     '''
     Retrieve a list of a user's Experiments on Labstep.
   
@@ -249,7 +249,7 @@ def getExperiments(user,count=100,search_query=None,created_at_from=None,created
     experiments = getEntities(user,'experiment-workflow',count,metadata)
     return experiments
 
-def getResources(user,count=100,search_query=None):
+def getResources(user,count=100,search_query=None,tag_id=None,status=None):
     '''
     Retrieve a list of a user's Resources on Labstep.
   
@@ -259,18 +259,27 @@ def getResources(user,count=100,search_query=None):
         The Labstep user whose Resources you want to retrieve.
         Must have property 'api_key'. See 'login'. 
     count (int)
-        The number of Resources to retrieve. 
+        The number of Resources to retrieve.
+    tag_id (obj/int)
+        Retrieve Resources that have a specific tag.
+    status (str)
+        Current options to search the status of Resources are:
+        'available', 'unavailable', 'requested', 'ordered'.
 
     Returns
     -------
     resources
         A list of Resource objects.
     '''
-    metadata = {'search_query': search_query}
+    metadata = {'search_query': search_query,
+                'tag_id': tag_id,
+                'status': status,
+                }
     resources = getEntities(user,'resource',count,metadata)
     return resources
 
-def getProtocols(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
+def getProtocols(user,count=100,search_query=None,
+                 created_at_from=None,created_at_to=None,tag_id=None):
     '''
     Retrieve a list of a user's Protocols on Labstep.
   
@@ -361,7 +370,7 @@ def newEntity(user,entityName,data):
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/",entityName)
     r = requests.post(url, json=data, headers=headers)
-    #handleError(r)
+    handleError(r)
     return json.loads(r.content)
 
 def newResource(user,name):
@@ -490,11 +499,8 @@ def addProtocol(user,experiment,protocol):
         An object representing the Protocol attached to the Experiment.
     '''
     data = {'experiment_workflow_id':experiment['id'],
-            'protocol_id': protocol['last_version']['id']}
-    headers = {'apikey': user['api_key']}
-    url = url_join(API_ROOT,"/api/generic/experiment")
-    r = requests.post(url, json=data, headers=headers)  
-    return json.loads(r.content)
+            'protocol_id': protocol['last_version']['id']}  
+    return newEntity(user,'experiment',data)
 
 def addComment(user,entity,body,file=None):
     '''
@@ -523,10 +529,7 @@ def addComment(user,entity,body,file=None):
     data = {'body': body,
             'thread_id': threadId,
             'file_id': lsFile}
-  
-    url = url_join(API_ROOT,"/api/generic/comment")
-    r = requests.post(url, json=data, headers=headers)
-    return json.loads(r.content)
+    return newEntity(user,'comment',data)
 
 def addTagTo(user,entity,tag):
     '''
@@ -582,7 +585,8 @@ def uploadFile(user,filepath):
     headers = {'apikey': user['api_key']}
     files = {'file': open(filepath, 'rb')}
     url = url_join(API_ROOT,"/api/generic/file/upload")
-    r = requests.post(url, headers=headers, files=files)  
+    r = requests.post(url, headers=headers, files=files)
+    handleError(r)
     return json.loads(r.content)
 
 
