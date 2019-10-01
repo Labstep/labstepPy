@@ -8,11 +8,6 @@ from datetime import datetime
 from time import gmtime, strftime
 
 
-"""def handleError(r):
-    if r['status_code'] !== 200:
-        #Throw Error('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
-        raise Exception('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
-    return"""
 
 ####################        Helper functions
 API_ROOT='https://api.labstep.com/'
@@ -26,8 +21,34 @@ def url_join(*args):
 
 def getTime():
     timezone = strftime('%z', gmtime())
-    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(timezone[:3],timezone[3:]))
+    tz_hour = timezone[:3]
+    tz_minute = timezone[3:]
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S{}:{}'.format(tz_hour,tz_minute))
     return timestamp
+
+def createdAtFrom(created_at_from):
+    if created_at_from == None:
+        #created_at_from = None
+        return None
+    else:
+        timezone = getTime()[-6:]
+        created_at_from = created_at_from + "T00:00:00{}".format(timezone)
+        return created_at_from
+
+def createdAtTo(created_at_to):
+    if created_at_to == None:
+        #created_at_to = None
+        return None
+    else:
+        timezone = getTime()[-6:]
+        created_at_to = created_at_to + "T00:00:00{}".format(timezone)
+        return created_at_to
+
+"""def handleError(r):
+    if r['status_code'] != 200:
+        Throw Error('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
+        #raise Exception('Request Error {Status Code}: r["resp"]'.format(r['status_code']))
+    return"""
 
 
 ####################        login()
@@ -197,7 +218,7 @@ def getEntities(user,entityName,count,metadata=None):
         items.extend(resp['items'])
     return items
     
-def getExperiments(user,count=100,search_query=None):
+def getExperiments(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
     '''
     Retrieve a list of a user's Experiments on Labstep.
   
@@ -207,14 +228,24 @@ def getExperiments(user,count=100,search_query=None):
         The Labstep user whose Experiments you want to retrieve.
         Must have property 'api_key'. See 'login'. 
     count (int)
-        The number of Experiments to retrieve. 
+        The number of Experiments to retrieve.
+    created_at_from (str)
+        The start date of the search range, must be 
+        in the format of YYYY-MM-DD.
+    created_at_to (str)
+        The end date of the search range, must be 
+        in the format of YYYY-MM-DD.
 
     Returns
     -------
     experiment
         A list of Experiment objects.
     '''
-    metadata = {'search_query': search_query}
+    metadata = {'search_query': search_query,
+                'created_at_from': createdAtFrom(created_at_from),
+                'created_at_to': createdAtTo(created_at_to),
+                'tag_id': tag_id,
+                }
     experiments = getEntities(user,'experiment-workflow',count,metadata)
     return experiments
 
@@ -574,7 +605,7 @@ def editEntity(user,entityName,id,metadata):
     headers = {'apikey': user['api_key']} 
     url = url_join(API_ROOT,'/api/generic/',entityName,str(id))  
     # Filter the 'metadata' dictionary by removing {'field':None} 
-    new_metadata = dict(filter(lambda field: field[1]!=None, metadata.items()))
+    new_metadata = dict(filter(lambda field: field[1] != None, metadata.items()))
     r = requests.put(url, json=new_metadata, headers=headers)
     #handleError(r)
     return json.loads(r.content)
@@ -676,7 +707,7 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
     return protocol
 
-def editResource(user,resource,name=None,status=None,deleted_at=None):
+def editResource(user,resource,name=None,status=None,deleted_at=None,location=None):
     '''
     Edit an existing Resource.
   
@@ -691,6 +722,8 @@ def editResource(user,resource,name=None,status=None,deleted_at=None):
     status (str)
         Current options to change the status to are:
         'available', 'unavailable', 'requested', 'ordered'.
+    location (str)
+        The location of the Resource.
     deleted_at (obj)
         The timestamp at which the Resource is deleted/archived.
 
@@ -701,7 +734,9 @@ def editResource(user,resource,name=None,status=None,deleted_at=None):
     '''
     metadata = {'name': name,
                 'status': status,
-                'deleted_at': deleted_at}
+                'deleted_at': deleted_at,
+                'resource_location': {'name': location},
+                }
     resource = editEntity(user,'resource',resource['id'],metadata)
     return resource
 

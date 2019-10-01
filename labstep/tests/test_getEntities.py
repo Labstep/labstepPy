@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-import json
 
 user = LS.login('demo@labstep.com','demopassword')
 

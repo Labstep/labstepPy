@@ -3,21 +3,24 @@
 
 import labstep as LS
 import json
+from datetime import datetime
+from time import gmtime, strftime
+
 
 user = LS.login('demo@labstep.com','demopassword')
 
 
+# Get Experiments
+entity = LS.getProtocols(user,
+                         search_query='new',
+                        #  created_at_from='2019-09-01',
+                        #  created_at_to='2019-09-30',
+                        #  tag_id=241,
+                         )
 
-dictOfNames = {
-   7 : 'None',
-   8 : 'john',
-   9 : 'mathew',
-   10: 'None',
-   11: 'aadi',
-   12: 'sachin'
-}
+# Print details
+for i in range(len(entity)):
+    print('\n GETTING PROTOCOLS {} ='.format(i+1))
+    print(entity[i]['name'])
+    # print(entity[i]['created_at'])
 
-newDict = dict(filter(lambda elem: elem[1] != 'None', dictOfNames.items()))
- 
-print('Filtered Dictionary : ')
-print(newDict)
