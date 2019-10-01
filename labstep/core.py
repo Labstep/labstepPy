@@ -413,6 +413,109 @@ def newWorkspace(user,name):
     return workspace
 
 
+####################        addEntity()
+def addComment(user,entity,body,file=None):
+    """
+    Add a comment to a Labstep entity such as an Experiment or Resource.
+  
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user to comment as. Must have property 'api_key'. See 'login'.
+    entity (obj)
+        The Labstep entity to comment on. Must have 'thread' property with property 'id'.
+    body (str)
+        The body of the comment.
+    file (obj)
+        A Labstep File entity to attach to the comment. Must have 'id'.
+    Returns
+    -------
+    comment
+        An object representing a comment on labstep.
+    """
+    headers = {'apikey': user['api_key']}
+    threadId = entity['thread']['id']
+  
+    lsFile = [list(file.keys())[0]]      
+    data = {'body': body,
+            'thread_id': threadId,
+            'file_id': lsFile}
+    return newEntity(user,'comment',data)
+
+def addProtocol(user,experiment,protocol):
+    """
+    Add a Labstep Protocol to a Labstep Experiment.
+  
+    Parameters
+    ----------
+    experiment (obj)
+        The Labstep Experiment to attach the Protocol to. Must have property 'id'.
+    protocol (obj) 
+        The Labstep Protocol to attach. Must have property 'id'.
+    Returns
+    -------
+    experiment_protocol
+        An object representing the Protocol attached to the Experiment.
+    """
+    data = {'experiment_workflow_id':experiment['id'],
+            'protocol_id': protocol['last_version']['id']}  
+    return newEntity(user,'experiment',data)
+
+def addTagTo(user,entity,tag):
+    """
+    Attach an existing tag to a Labstep entity. (See 'tag' for simplified tagging).
+    Parameters
+    ----------
+    user (obj)
+    The Labstep user adding a tag. Must have property 'api_key'. See 'login'.
+    entity (obj)
+    The Labstep entity to tag. Can be Resource, Experiment, or Protocol. Must have 'id'.
+    tag (str)
+    The tag to attach. Must have an 'id' property.
+    Returns
+    -------
+    entity
+        Returns the tagged entity.
+    """
+    if 'experiments' in entity:
+        entityType = 'experiment-workflow'
+    elif 'parent_protocol' in entity:
+        entityType = 'protocol-collection'
+    elif 'resource_location' in entity:
+        entityType = 'resource'
+    elif 'collection' in entity:
+        entityType = 'protocol-collection'
+        entity = entity['collection']
+    else:
+        raise Exception('Entities of this type cannot be tagged')
+
+    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
+    headers = {'apikey': user['api_key']}
+    r = requests.put(url, headers=headers)
+    return json.loads(r.content)
+
+def uploadFile(user,filepath):
+    """
+    Upload a file to the Labstep entity Data.
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user. Must have property 'api_key'. See 'login'.
+    filepath (str)
+        The filepath to the file to attach.
+    Returns
+    -------
+    file
+        An object to upload a file on Labstep.
+    """ 
+    headers = {'apikey': user['api_key']}
+    files = {'file': open(filepath, 'rb')}
+    url = url_join(API_ROOT,"/api/generic/file/upload")
+    r = requests.post(url, headers=headers, files=files)
+    handleError(r)
+    return json.loads(r.content)
+
+
 ####################        editEntity()
 def editEntity(user,entityName,id,metadata):
     """
@@ -653,25 +756,6 @@ def deleteResource(user,resource):
     resource = editResource(user,resource,deleted_at=getTime())
     return resource
 
-def deleteWorkspace(user,workspace):
-    """
-    Delete an existing Workspace.
-  
-    Parameters
-    ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
-    workspace (obj)
-        The Workspace to delete.
-
-    Returns
-    -------
-    workspace
-        An object representing the Workspace to delete.
-    """
-    workspace = editWorkspace(user,workspace,deleted_at=getTime())
-    return workspace
-
 def deleteTag(user,tag):
     """
     Delete an existing tag.
@@ -692,6 +776,25 @@ def deleteTag(user,tag):
     url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id']))
     r = requests.delete(url, headers=headers)
     return json.loads(r.content)
+
+def deleteWorkspace(user,workspace):
+    """
+    Delete an existing Workspace.
+  
+    Parameters
+    ----------
+    user (obj)
+        The labstep user. Must have property 'api_key'. See 'login'. 
+    workspace (obj)
+        The Workspace to delete.
+
+    Returns
+    -------
+    workspace
+        An object representing the Workspace to delete.
+    """
+    workspace = editWorkspace(user,workspace,deleted_at=getTime())
+    return workspace
 
 
 ####################        Compound functions
