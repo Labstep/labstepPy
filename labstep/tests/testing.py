@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from time import gmtime, strftime
 
+import core
 
 user = LS.login('demo@labstep.com','demopassword')
 
@@ -25,6 +26,6 @@ for i in range(len(entity)):
 """
 
 
-LS.getEntity(user,'experiment_workflow',12)
+getEntity(user,'experiment_workflow',12)
 
 
