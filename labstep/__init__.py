@@ -270,7 +270,7 @@ def getResources(user,count=100,search_query=None):
     resources = getEntities(user,'resource',count,metadata)
     return resources
 
-def getProtocols(user,count=100,search_query=None):
+def getProtocols(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
     '''
     Retrieve a list of a user's Protocols on Labstep.
   
@@ -287,7 +287,11 @@ def getProtocols(user,count=100,search_query=None):
     protocols
         A list of Protocol objects.
     '''
-    metadata = {'search_query': search_query}
+    metadata = {'search_query': search_query,
+                'created_at_from': createdAtFrom(created_at_from),
+                'created_at_to': createdAtTo(created_at_to),
+                'tag_id': tag_id,
+                }
     protocols = getEntities(user,'protocol-collection',count,metadata)
     return protocols
 
