@@ -355,7 +355,7 @@ def newProtocol(user,name):
     protocol = newEntity(user,'protocol-collection',data)
     return protocol
 
-def newResource(user,name,status=None,location=None):
+def newResource(user,name,status=None):
     """
     Create a new Labstep Resource.
 
@@ -369,8 +369,6 @@ def newResource(user,name,status=None,location=None):
     status (str)
         Current options of the status to select are:
         'available', 'unavailable', 'requested', 'ordered'.
-    location (str)
-        The location of the Resource.
 
     Returns
     -------
@@ -378,9 +376,7 @@ def newResource(user,name,status=None,location=None):
         An object representing the new Labstep Resource.
     """
     data = {'name': name,
-            'status': status.lower(),
-            'resource_location': {'name': location},
-            }
+            'status': status.lower()}
     resource = newEntity(user,'resource',data)
     return resource
 
@@ -635,7 +631,7 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
     return protocol
 
-def editResource(user,resource,name=None,status=None,location=None,deleted_at=None,):
+def editResource(user,resource,name=None,status=None,deleted_at=None,):
     """
     Edit an existing Resource.
   
@@ -650,8 +646,6 @@ def editResource(user,resource,name=None,status=None,location=None,deleted_at=No
     status (str)
         Current options to change the status to are:
         'available', 'unavailable', 'requested', 'ordered'.
-    location (str)
-        The location of the Resource.
     deleted_at (obj)
         The timestamp at which the Resource is deleted/archived.
 
@@ -662,9 +656,7 @@ def editResource(user,resource,name=None,status=None,location=None,deleted_at=No
     """
     metadata = {'name': name,
                 'status': status.lower(),
-                'deleted_at': deleted_at,
-                'resource_location': {'name': location},
-                }
+                'deleted_at': deleted_at}
     resource = editEntity(user,'resource',resource['id'],metadata)
     return resource
 
@@ -686,7 +678,7 @@ def editTag(user,tag,name):
     tag
         An object representing the editted Tag.
     """
-    data = {'name': name}
+    metadata = {'name': name}
     tag = editEntity(user,'tag',(tag['id']),metadata)
     return tag
 

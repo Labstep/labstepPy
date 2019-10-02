@@ -30,6 +30,4 @@ def login(username,password):
     url = url_join(API_ROOT,"/public-api/user/login")
     r = requests.post(url, json=data, headers={}) 
     handleError(r)
-    #return json.loads(r.content)
     return User(json.loads(r.content))
-
