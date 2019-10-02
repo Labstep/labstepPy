@@ -792,6 +792,7 @@ def deleteTag(user,tag):
     headers = {'apikey': user['api_key']}
     url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id']))
     r = requests.delete(url, headers=headers)
+    handleError(r)
     return json.loads(r.content)
 
 def deleteWorkspace(user,workspace):
