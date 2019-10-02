@@ -356,8 +356,7 @@ def newProtocol(user,name):
     protocol = newEntity(user,'protocol-collection',data)
     return protocol
 
-def newResource(user,name,status=None):
-# def newResource(user,name,status=None,location=None):
+def newResource(user,name,status=None): #,location=None):
     """
     Create a new Labstep Resource.
 
@@ -663,7 +662,7 @@ def editResource(user,resource,name=None,status=None,location=None,deleted_at=No
         An object representing the Resource to edit.
     """
     metadata = {'name': name,
-                'status': status,
+                'status': status.lower(),
                 'deleted_at': deleted_at,
                 'resource_location': {'name': location},
                 }
