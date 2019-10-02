@@ -7,9 +7,12 @@ import labstep.core as LSC
 user = LS.login('demo@labstep.com','demopassword')
 
 
-#
-resource = LSC.newResource(user,'Test Ordered',status='Ordered')
-#print(resource)
+# Get It
+get = LSC.getWorkspaces(user,name='first')
+#print(get)
+
+for i in range(24):
+    LSC.deleteWorkspace(user,get[i])
 
 
 

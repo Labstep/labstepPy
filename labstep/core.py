@@ -237,7 +237,7 @@ def getResources(user,count=100,search_query=None,status=None,tag_id=None):
     """
     metadata = {'search_query': search_query,
                 'tag_id': tag_id,
-                'status': status,
+                'status': status.lower(),
                 }
     resources = getEntities(user,'resource',count,metadata)
     return resources
@@ -265,7 +265,7 @@ def getTags(user,count=1000,search_query=None):
     tags = getEntities(user,'tag',count,metadata)
     return tags
 
-def getWorkspaces(user,count=100,search_query=None):
+def getWorkspaces(user,count=100,name=None):
     """
     Retrieve a list of a user's Workspaces on Labstep.
   
@@ -282,7 +282,7 @@ def getWorkspaces(user,count=100,search_query=None):
     workspaces
         A list of Workspace objects.
     """
-    metadata = {'search_query': search_query}
+    metadata = {'name': name}
     workspaces = getEntities(user,'group',count,metadata)
     return workspaces
 
