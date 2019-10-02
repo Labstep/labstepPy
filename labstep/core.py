@@ -157,8 +157,7 @@ def getEntities(user,entityName,count,metadata=None):
         items.extend(resp['items'])
     return items
 
-def getExperiments(user,count=100,search_query=None,
-                   created_at_from=None,created_at_to=None,tag_id=None):
+def getExperiments(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
     """
     Retrieve a list of a user's Experiments on Labstep.
   
@@ -189,8 +188,7 @@ def getExperiments(user,count=100,search_query=None,
     experiments = getEntities(user,'experiment-workflow',count,metadata)
     return experiments
 
-def getProtocols(user,count=100,search_query=None,
-                 created_at_from=None,created_at_to=None,tag_id=None):
+def getProtocols(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
     """
     Retrieve a list of a user's Protocols on Labstep.
   
@@ -215,7 +213,7 @@ def getProtocols(user,count=100,search_query=None,
     protocols = getEntities(user,'protocol-collection',count,metadata)
     return protocols
 
-def getResources(user,count=100,search_query=None,tag_id=None,status=None):
+def getResources(user,count=100,search_query=None,status=None,tag_id=None):
     """
     Retrieve a list of a user's Resources on Labstep.
   
@@ -358,7 +356,8 @@ def newProtocol(user,name):
     protocol = newEntity(user,'protocol-collection',data)
     return protocol
 
-def newResource(user,name):
+def newResource(user,name,status=None):
+# def newResource(user,name,status=None,location=None):
     """
     Create a new Labstep Resource.
 
@@ -369,13 +368,21 @@ def newResource(user,name):
         Must have property 'api_key'. See 'login'.
     name (str)
         Give your resource a name.
+    status (str)
+        Current options of the status to select are:
+        'available', 'unavailable', 'requested', 'ordered'.
+    location (str)
+        The location of the Resource.
 
     Returns
     -------
     protocol
         An object representing the new Labstep Resource.
     """
-    data = {'name': name}
+    data = {'name': name,
+            'status': status.lower(),
+            #'resource_location': {'name': location},
+            }
     resource = newEntity(user,'resource',data)
     return resource
 
@@ -630,7 +637,7 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
     return protocol
 
-def editResource(user,resource,name=None,status=None,deleted_at=None,location=None):
+def editResource(user,resource,name=None,status=None,location=None,deleted_at=None,):
     """
     Edit an existing Resource.
   
