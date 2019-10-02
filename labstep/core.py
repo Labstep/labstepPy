@@ -28,8 +28,7 @@ def getEntity(user,entityName,id):
         ?.
     """
     params = {'is_deleted': 'both'}
-    # headers = {'apikey': user.api_key}
-    headers = {'apikey': user['api_key']}
+    headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
     r = requests.get(url, headers=headers, params=params)
     handleError(r)
@@ -143,7 +142,7 @@ def getEntities(user,entityName,count,metadata=None):
                      'count':n}
     params = {**search_params, **metadata}      # Merging dicts in python3
     
-    headers = {'apikey': user['api_key']}
+    headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/",entityName)
     r = requests.get(url, params=params, headers=headers)
     handleError(r)
@@ -305,7 +304,7 @@ def newEntity(user,entityName,data):
     returns?
         ?.
     """
-    headers = {'apikey': user['api_key']}
+    headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/",entityName)
     r = requests.post(url, json=data, headers=headers)
     handleError(r)
@@ -356,7 +355,7 @@ def newProtocol(user,name):
     protocol = newEntity(user,'protocol-collection',data)
     return protocol
 
-def newResource(user,name,status=None): #,location=None):
+def newResource(user,name,status=None,location=None):
     """
     Create a new Labstep Resource.
 
@@ -380,7 +379,7 @@ def newResource(user,name,status=None): #,location=None):
     """
     data = {'name': name,
             'status': status.lower(),
-            #'resource_location': {'name': location},
+            'resource_location': {'name': location},
             }
     resource = newEntity(user,'resource',data)
     return resource
@@ -504,7 +503,7 @@ def addTagTo(user,entity,tag):
     else:
         raise Exception('Entities of this type cannot be tagged')
 
-    headers = {'apikey': user['api_key']}
+    headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
@@ -524,7 +523,7 @@ def uploadFile(user,filepath):
         An object to upload a file on Labstep.
     """ 
     files = {'file': open(filepath, 'rb')}
-    headers = {'apikey': user['api_key']}
+    headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)
     handleError(r)
@@ -555,7 +554,7 @@ def editEntity(user,entityName,id,metadata):
     # to preserve the existing data in the 'fields', otherwise
     # the 'fields' will be overwritten to 'None'.
     new_metadata = dict(filter(lambda field: field[1] != None, metadata.items()))
-    headers = {'apikey': user['api_key']} 
+    headers = {'apikey': user.api_key} 
     url = url_join(API_ROOT,'/api/generic/',entityName,str(id))  
     r = requests.put(url, json=new_metadata, headers=headers)
     handleError(r)
@@ -789,7 +788,7 @@ def deleteTag(user,tag):
     tag
         An object representing the tag to delete.
     """
-    headers = {'apikey': user['api_key']}
+    headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id']))
     r = requests.delete(url, headers=headers)
     handleError(r)

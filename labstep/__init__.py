@@ -5,7 +5,7 @@ import requests
 import json
 from .config import *
 from .helpers import url_join, handleError
-
+from .user import User
 
 ####################        login()
 def login(username,password):
@@ -30,6 +30,6 @@ def login(username,password):
     url = url_join(API_ROOT,"/public-api/user/login")
     r = requests.post(url, json=data, headers={}) 
     handleError(r)
-    return json.loads(r.content)
-    #return User(json.loads(r.content))
+    #return json.loads(r.content)
+    return User(json.loads(r.content))
 

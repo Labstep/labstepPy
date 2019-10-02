@@ -2,18 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-import labstep.core as LSC
 
 user = LS.login('demo@labstep.com','demopassword')
 
 
 # Get It
-get = LSC.getWorkspaces(user,name='first')
-#print(get)
+workspaces = user.getWorkspaces()
 
-for i in range(24):
-    LSC.deleteWorkspace(user,get[i])
-
+print(workspaces)
 
 
 
