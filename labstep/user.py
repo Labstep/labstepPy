@@ -15,13 +15,13 @@ class User:
 
     ####################        getSingle()
     def getExperiment(self,experiment_id):
-        return getExperiments(self,experiment_id)
+        return getExperiment(self,experiment_id)
 
     def getProtocol(self,protocol_id):
-        return getProtocols(self,protocol_id)
+        return getProtocol(self,protocol_id)
     
     def getResource(self,resource_id):
-        return getResources(self,resource_id)
+        return getResource(self,resource_id)
 
     def getWorkspace(self,workspace_id):
         return getWorkspace(self,workspace_id)

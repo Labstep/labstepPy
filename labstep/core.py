@@ -331,7 +331,7 @@ def newExperiment(user,name,description=None):
     """
     data = {'name': name,
             'description': description}
-    experiment = newEntity(user,'experimental-workflow',data)
+    experiment = newEntity(user,'experiment-workflow',data)
     return experiment
 
 def newProtocol(user,name):

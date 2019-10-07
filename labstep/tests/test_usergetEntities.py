@@ -6,11 +6,14 @@ import labstep as LS
 user = LS.login('demo@labstep.com','demopassword')
 
 
-# Get It
-things = user.getExperiments(search_query='hello')
+entity = user.newExperiment('A Labstep Experiment')
+get = user.getExperiment(entity)
+print(get)
 
-for i in range(len(things)):
-    print('\n GETTING EXPERIMENTS[{}]\n'.format(i),things[i])
+
+# Get many
+# for i in range(len(entity)):
+#     print('\n GETTING EXPERIMENT[{}] \n'.format(i), entity[i])
 
 
 
