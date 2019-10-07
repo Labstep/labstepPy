@@ -45,14 +45,14 @@ class User:
     
 
     ####################        newEntity()
-    def newExperiment(self,name):
-        return newExperiment(self,name)
+    def newExperiment(self,name,description=None):
+        return newExperiment(self,name,description)
 
     def newProtocol(self,name):
         return newProtocol(self,name)
     
-    def newResource(self,name):
-        return newResource(self,name)
+    def newResource(self,name,status=None):
+        return newResource(self,name,status)
     
     def newTag(self,name):
         return newTag(self,name)
