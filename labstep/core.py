@@ -3,7 +3,7 @@
 
 import requests
 import json
-from .config import *
+from .config import API_ROOT
 from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo
 
 

@@ -7,8 +7,10 @@ user = LS.login('demo@labstep.com','demopassword')
 
 
 # Get It
-workspaces = user.getWorkspaces()
-print(workspaces)
+things = user.getExperiments(search_query='hello')
+
+for i in range(len(things)):
+    print('\n GETTING EXPERIMENTS[{}]\n'.format(i),things[i])
 
 
 

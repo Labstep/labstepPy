@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
-from .core import (getExperiment, getProtocol, getResource, getWorkspace, 
-    getExperiments, getProtocols, getResources, getTags, getWorkspaces,
-    newExperiment, newProtocol, newResource, newTag, newWorkspace,
+from .core import (getExperiment, getProtocol, getResource, getWorkspace,   # getSingle()
+    getExperiments, getProtocols, getResources, getTags, getWorkspaces,     # getMany()
+    newExperiment, newProtocol, newResource, newTag, newWorkspace,          # newEntity()
     uploadFile)
 
 
@@ -28,20 +28,20 @@ class User:
 
 
     ####################        getMany()
-    def getExperiments(self):
-        return getExperiments(self)
+    def getExperiments(self,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
+        return getExperiments(self,count,search_query,created_at_from,created_at_to,tag_id)
 
-    def getProtocols(self):
-        return getProtocols(self)
+    def getProtocols(self,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
+        return getProtocols(self,count,search_query,created_at_from,created_at_to,tag_id)
     
-    def getResources(self):
-        return getResources(self)
+    def getResources(self,count=100,search_query=None,status=None,tag_id=None):
+        return getResources(self,count,search_query,status,tag_id)
     
-    def getTags(self):
-        return getTags(self)
+    def getTags(self,count=1000,search_query=None):
+        return getTags(self,count,search_query)
     
-    def getWorkspaces(self):
-        return getWorkspaces(self)
+    def getWorkspaces(self,count=100,name=None):
+        return getWorkspaces(self,count,name)
     
 
     ####################        newEntity()
