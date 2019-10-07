@@ -5,4 +5,4 @@ import labstep as LS
 
 user = LS.login('demo@labstep.com','demopassword')
 
-new = user.newProtocol('My Labstep Protocol')
+new = user.newFile('./labstep/tests/test_all.py')

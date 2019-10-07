@@ -862,6 +862,6 @@ def addFile(user,entity,filepath,caption):
     caption
         Returns an uploaded file with a caption.
     """
-    lsFile = uploadFile(user,filepath)
+    lsFile = newFile(user,filepath)
     caption = addComment(user,caption,lsFile)  
     return caption

@@ -4,8 +4,8 @@
 
 from .core import (getExperiment, getProtocol, getResource, getWorkspace,   # getSingle()
     getExperiments, getProtocols, getResources, getTags, getWorkspaces,     # getMany()
-    newExperiment, newProtocol, newResource, newTag, newWorkspace,          # newEntity()
-    uploadFile)
+    newExperiment, newProtocol, newResource, newTag, newWorkspace, newFile  # newEntity()
+    )
 
 
 class User:
@@ -60,7 +60,5 @@ class User:
     def newWorkspace(self,name):
         return newWorkspace(self,name)
     
-
-    ####################        addEntity()
-    def uploadFile(self,filepath):
-        return uploadFile(self,filepath)
+    def newFile(self,filepath):
+        return newFile(self,filepath)
