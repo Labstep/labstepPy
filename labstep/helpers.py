@@ -55,3 +55,12 @@ def createdAtTo(created_at_to):
         timezone = getTime()[-6:]
         created_at_to = created_at_to + "T00:00:00{tz}".format(tz=timezone)
         return created_at_to
+
+def handleStatus(status):
+    """
+    Lowercase all the alphabets in the 'status' of the Resource.
+    """
+    if status == None:
+        return None
+    else:
+        return status.lower()

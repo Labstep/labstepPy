@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo
+from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo, handleStatus
 
 
 ####################        getSingle()
@@ -236,7 +236,7 @@ def getResources(user,count=100,search_query=None,status=None,tag_id=None):
     """
     metadata = {'search_query': search_query,
                 'tag_id': tag_id,
-                'status': status.lower(),
+                'status': handleStatus(status),
                 }
     resources = getEntities(user,'resource',count,metadata)
     return resources
@@ -376,7 +376,7 @@ def newResource(user,name,status=None):
         An object representing the new Labstep Resource.
     """
     data = {'name': name,
-            'status': status.lower()}
+            'status': handleStatus(status)}
     resource = newEntity(user,'resource',data)
     return resource
 
@@ -655,7 +655,7 @@ def editResource(user,resource,name=None,status=None,deleted_at=None,):
         An object representing the Resource to edit.
     """
     metadata = {'name': name,
-                'status': status.lower(),
+                'status': handleStatus(status),
                 'deleted_at': deleted_at}
     resource = editEntity(user,'resource',resource['id'],metadata)
     return resource
