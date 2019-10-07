@@ -287,7 +287,7 @@ def getWorkspaces(user,count=100,name=None):
 
 
 ####################        newEntity()
-def newEntity(user,entityName,data):
+def newEntity(user,entityName,metadata):
     """
     Parameters
     ----------
@@ -306,7 +306,7 @@ def newEntity(user,entityName,data):
     """
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/",entityName)
-    r = requests.post(url, json=data, headers=headers)
+    r = requests.post(url, headers=headers, json=data)
     handleError(r)
     return json.loads(r.content)
 
@@ -329,9 +329,9 @@ def newExperiment(user,name,description=None):
     experiment
         An object representing the new Labstep Experiment.
     """
-    data = {'name': name,
-            'description': description}
-    experiment = newEntity(user,'experiment-workflow',data)
+    metadata = {'name': name,
+                'description': description}
+    experiment = newEntity(user,'experiment-workflow',metadata)
     return experiment
 
 def newProtocol(user,name):
@@ -351,8 +351,8 @@ def newProtocol(user,name):
     protocol
         An object representing the new Labstep Protocol.
     """
-    data = {'name':name}
-    protocol = newEntity(user,'protocol-collection',data)
+    metadata = {'name': name}
+    protocol = newEntity(user,'protocol-collection',metadata)
     return protocol
 
 def newResource(user,name,status=None):
@@ -375,9 +375,9 @@ def newResource(user,name,status=None):
     protocol
         An object representing the new Labstep Resource.
     """
-    data = {'name': name,
-            'status': handleStatus(status)}
-    resource = newEntity(user,'resource',data)
+    metadata = {'name': name,
+                'status': handleStatus(status)}
+    resource = newEntity(user,'resource',metadata)
     return resource
 
 def newTag(user,name):
@@ -396,8 +396,8 @@ def newTag(user,name):
     tag
         An object representing the new Labstep Tag.
     """
-    data = {'name':name}
-    tag = newEntity(user,'tag',data)
+    metadata = {'name': name}
+    tag = newEntity(user,'tag',metadata)
     return tag
 
 def newWorkspace(user,name):
@@ -417,9 +417,30 @@ def newWorkspace(user,name):
     workspace
         An object representing the new Labstep Workspace.
     """
-    data = {'name':name} 
-    workspace = newEntity(user,'group',data)
+    metadata = {'name': name} 
+    workspace = newEntity(user,'group',metadata)
     return workspace
+
+def newFile(user,filepath):
+    """
+    Upload a file to the Labstep entity Data.
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user. Must have property 'api_key'. See 'login'.
+    filepath (str)
+        The filepath to the file to attach.
+    Returns
+    -------
+    file
+        An object to upload a file on Labstep.
+    """ 
+    files = {'file': open(filepath, 'rb')}
+    headers = {'apikey': user.api_key}
+    url = url_join(API_ROOT,"/api/generic/file/upload")
+    r = requests.post(url, headers=headers, files=files)
+    handleError(r)
+    return json.loads(r.content)
 
 
 ####################        addEntity()
@@ -502,27 +523,6 @@ def addTagTo(user,entity,tag):
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
     r = requests.put(url, headers=headers)
-    return json.loads(r.content)
-
-def uploadFile(user,filepath):
-    """
-    Upload a file to the Labstep entity Data.
-    Parameters
-    ----------
-    user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'.
-    filepath (str)
-        The filepath to the file to attach.
-    Returns
-    -------
-    file
-        An object to upload a file on Labstep.
-    """ 
-    files = {'file': open(filepath, 'rb')}
-    headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"/api/generic/file/upload")
-    r = requests.post(url, headers=headers, files=files)
-    handleError(r)
     return json.loads(r.content)
 
 

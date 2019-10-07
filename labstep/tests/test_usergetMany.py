@@ -7,7 +7,7 @@ user = LS.login('demo@labstep.com','demopassword')
 
 
 # Get experiments
-experiments = user.getExperiments(count=2)
+experiments = user.getExperiments(count=3)
 for i in range(len(experiments)):
     print('\n GETTING EXPERIMENTS[{}] \n'.format(i), experiments[i])
 
@@ -30,6 +30,3 @@ for i in range(len(tags)):
 workspaces = user.getWorkspaces(count=3)
 for i in range(len(workspaces)):
     print('\n GETTING WORKSPACES[{}] \n'.format(i), workspaces[i])
-
-
-
