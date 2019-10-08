@@ -10,8 +10,9 @@ from .core import (getExperiment, getProtocol, getResource, getWorkspace,   # ge
 
 class User:
     def __init__(self,user):
-        self.api_key = user['api_key']
-
+        self.workspace = user['primary_group']
+        for key in user:
+            setattr(self, key, user[key])
 
     ####################        getSingle()
     def getExperiment(self,experiment_id):
