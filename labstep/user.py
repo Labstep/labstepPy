@@ -10,7 +10,7 @@ from .core import (getExperiment, getProtocol, getResource, getWorkspace,   # ge
 
 class User:
     def __init__(self,user):
-        self.workspace = user['primary_group']
+        self.workspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
 
