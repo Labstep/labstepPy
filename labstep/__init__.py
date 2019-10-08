@@ -6,6 +6,10 @@ import json
 from .config import *
 from .helpers import url_join, handleError
 from .user import User
+from .experiment import Experiment
+from .protocol import Protocol
+from .resource import Resource
+
 
 ####################        login()
 def login(username,password):
