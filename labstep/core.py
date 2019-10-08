@@ -4,6 +4,8 @@
 import requests
 import json
 from .config import API_ROOT
+from .constants import (commentEntityName, experimentEntityName, protocolEntityName, 
+    resourceEntityName, tagEntityName, workspaceEntityName)
 from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo, handleStatus
 
 
@@ -17,8 +19,8 @@ def getEntity(user,entityName,id):
         'api_key'. See 'login'.
     entityName (str)
         Options for the entity name are:
-        'experiment-workflow', 'resource',
-        'protocol-collection', 'tag'
+        experimentEntityName, resourceEntityName,
+        protocolEntityName, tagEntityName
     id (obj)
         The id of the entity.
 
@@ -51,7 +53,7 @@ def getExperiment(user,experiment_id):
     experiment
         An object representing a Labstep Experiment.
     """
-    experiment = getEntity(user,'experiment-workflow',id=experiment_id)
+    experiment = getEntity(user,experimentEntityName,id=experiment_id)
     return experiment
 
 def getProtocol(user,protocol_id):
@@ -71,7 +73,7 @@ def getProtocol(user,protocol_id):
     protocol
         An object representing a Labstep Protocol.
     """
-    protocol = getEntity(user,'protocol-collection',id=protocol_id)
+    protocol = getEntity(user,protocolEntityName,id=protocol_id)
     return protocol
 
 def getResource(user,resource_id):
@@ -91,7 +93,7 @@ def getResource(user,resource_id):
     resource
         An object representing a Labstep Resource.
     """
-    resource = getEntity(user,'resource',id=resource_id)
+    resource = getEntity(user,resourceEntityName,id=resource_id)
     return resource
 
 def getWorkspace(user,workspace_id):
@@ -111,7 +113,7 @@ def getWorkspace(user,workspace_id):
     workspace
         An object representing a Labstep Workspace.
     """
-    workspace = getEntity(user,'group',id=workspace_id)
+    workspace = getEntity(user,workspaceEntityName,id=workspace_id)
     return workspace
 
 
@@ -124,8 +126,8 @@ def getEntities(user,entityName,count,metadata=None):
         The Labstep user. Must have property
         'api_key'. See 'login'.
     entityName (str)
-        Options for entity name are: 'experiment-workflow',
-        'resource', 'protocol-collection', 'tag', 'group'
+        Options for entity name are: experimentEntityName,
+        resourceEntityName, protocolEntityName, tagEntityName, workspaceEntityName
     count
         ??
     metadata
@@ -184,7 +186,7 @@ def getExperiments(user,count=100,search_query=None,created_at_from=None,created
                 'created_at_to': createdAtTo(created_at_to),
                 'tag_id': tag_id,
                 }
-    experiments = getEntities(user,'experiment-workflow',count,metadata)
+    experiments = getEntities(user,experimentEntityName,count,metadata)
     return experiments
 
 def getProtocols(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
@@ -209,7 +211,7 @@ def getProtocols(user,count=100,search_query=None,created_at_from=None,created_a
                 'created_at_to': createdAtTo(created_at_to),
                 'tag_id': tag_id,
                 }
-    protocols = getEntities(user,'protocol-collection',count,metadata)
+    protocols = getEntities(user,protocolEntityName,count,metadata)
     return protocols
 
 def getResources(user,count=100,search_query=None,status=None,tag_id=None):
@@ -238,7 +240,7 @@ def getResources(user,count=100,search_query=None,status=None,tag_id=None):
                 'tag_id': tag_id,
                 'status': handleStatus(status),
                 }
-    resources = getEntities(user,'resource',count,metadata)
+    resources = getEntities(user,resourceEntityName,count,metadata)
     return resources
 
 def getTags(user,count=1000,search_query=None):
@@ -261,7 +263,7 @@ def getTags(user,count=1000,search_query=None):
         A list of tags matching the search query.
     """
     metadata = {'search_query': search_query}
-    tags = getEntities(user,'tag',count,metadata)
+    tags = getEntities(user,tagEntityName,count,metadata)
     return tags
 
 def getWorkspaces(user,count=100,name=None):
@@ -282,7 +284,7 @@ def getWorkspaces(user,count=100,name=None):
         A list of Workspace objects.
     """
     metadata = {'name': name}
-    workspaces = getEntities(user,'group',count,metadata)
+    workspaces = getEntities(user,workspaceEntityName,count,metadata)
     return workspaces
 
 
@@ -294,8 +296,8 @@ def newEntity(user,entityName,metadata):
     user (str)
         The Labstep user.
     entityName (str)
-        Currents options for entity name are: 'experiment-workflow',
-        'resource', 'protocol-collection', 'tag', 'group'
+        Currents options for entity name are: experimentEntityName,
+        resourceEntityName, protocolEntityName, tagEntityName, workspaceEntityName
     data
         The name of the entity.
 
@@ -306,7 +308,7 @@ def newEntity(user,entityName,metadata):
     """
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT,"/api/generic/",entityName)
-    r = requests.post(url, headers=headers, json=data)
+    r = requests.post(url, headers=headers, json=metadata)
     handleError(r)
     return json.loads(r.content)
 
@@ -331,7 +333,7 @@ def newExperiment(user,name,description=None):
     """
     metadata = {'name': name,
                 'description': description}
-    experiment = newEntity(user,'experiment-workflow',metadata)
+    experiment = newEntity(user,experimentEntityName,metadata)
     return experiment
 
 def newProtocol(user,name):
@@ -352,7 +354,7 @@ def newProtocol(user,name):
         An object representing the new Labstep Protocol.
     """
     metadata = {'name': name}
-    protocol = newEntity(user,'protocol-collection',metadata)
+    protocol = newEntity(user,protocolEntityName,metadata)
     return protocol
 
 def newResource(user,name,status=None):
@@ -377,7 +379,7 @@ def newResource(user,name,status=None):
     """
     metadata = {'name': name,
                 'status': handleStatus(status)}
-    resource = newEntity(user,'resource',metadata)
+    resource = newEntity(user,resourceEntityName,metadata)
     return resource
 
 def newTag(user,name):
@@ -397,7 +399,7 @@ def newTag(user,name):
         An object representing the new Labstep Tag.
     """
     metadata = {'name': name}
-    tag = newEntity(user,'tag',metadata)
+    tag = newEntity(user,tagEntityName,metadata)
     return tag
 
 def newWorkspace(user,name):
@@ -418,7 +420,7 @@ def newWorkspace(user,name):
         An object representing the new Labstep Workspace.
     """
     metadata = {'name': name} 
-    workspace = newEntity(user,'group',metadata)
+    workspace = newEntity(user,workspaceEntityName,metadata)
     return workspace
 
 def newFile(user,filepath):
@@ -471,7 +473,7 @@ def addComment(user,entity,body,file=None):
     data = {'body': body,
             'thread_id': threadId,
             'file_id': lsFile}
-    return newEntity(user,'comment',data)
+    return newEntity(user,commentEntityName,data)
 
 def addProtocol(user,experiment,protocol):
     """
@@ -509,13 +511,13 @@ def addTagTo(user,entity,tag):
         Returns the tagged entity.
     """
     if 'experiments' in entity:
-        entityType = 'experiment-workflow'
+        entityType = experimentEntityName
     elif 'parent_protocol' in entity:
-        entityType = 'protocol-collection'
+        entityType = protocolEntityName
     elif 'resource_location' in entity:
-        entityType = 'resource'
+        entityType = resourceEntityName
     elif 'collection' in entity:
-        entityType = 'protocol-collection'
+        entityType = protocolEntityName
         entity = entity['collection']
     else:
         raise Exception('Entities of this type cannot be tagged')
@@ -534,8 +536,8 @@ def editEntity(user,entityName,id,metadata):
     user (obj)
         The Labstep user.
     entityName (str)
-        Currents options for entity name are: 'experiment-workflow',
-        'resource', 'protocol-collection', 'tag', 'group', 'comment'
+        Currents options for entity name are: experimentEntityName,
+        resourceEntityName, protocolEntityName, tagEntityName, workspaceEntityName, commentEntityName
     id
         The id of the entity.
     metadata (dict)
@@ -575,7 +577,7 @@ def editComment(user,comment_id,comment):
         An object representing the editted comment.
     """
     metadata = {'body': comment}
-    comment = editEntity(user,'comment',comment_id,metadata)
+    comment = editEntity(user,commentEntityName,comment_id,metadata)
     return comment
 
 def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
@@ -603,7 +605,7 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     metadata = {'name': name,
                 'description': description,
                 'deleted_at': deleted_at}
-    experiment = editEntity(user,'experiment-workflow',experiment['id'],metadata)
+    experiment = editEntity(user,experimentEntityName,experiment['id'],metadata)
     return experiment
 
 def editProtocol(user,protocol,name=None,deleted_at=None):
@@ -628,7 +630,7 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    protocol = editEntity(user,'protocol-collection',protocol['id'],metadata)
+    protocol = editEntity(user,protocolEntityName,protocol['id'],metadata)
     return protocol
 
 def editResource(user,resource,name=None,status=None,deleted_at=None,):
@@ -657,7 +659,7 @@ def editResource(user,resource,name=None,status=None,deleted_at=None,):
     metadata = {'name': name,
                 'status': handleStatus(status),
                 'deleted_at': deleted_at}
-    resource = editEntity(user,'resource',resource['id'],metadata)
+    resource = editEntity(user,resourceEntityName,resource['id'],metadata)
     return resource
 
 def editTag(user,tag,name):
@@ -679,7 +681,7 @@ def editTag(user,tag,name):
         An object representing the editted Tag.
     """
     metadata = {'name': name}
-    tag = editEntity(user,'tag',(tag['id']),metadata)
+    tag = editEntity(user,tagEntityName,(tag['id']),metadata)
     return tag
 
 def editWorkspace(user,workspace,name=None,deleted_at=None):
@@ -702,7 +704,7 @@ def editWorkspace(user,workspace,name=None,deleted_at=None):
     """
     metadata = {'name':name,
                 'deleted_at': deleted_at}
-    workspace = editEntity(user,'group',workspace['id'],metadata)
+    workspace = editEntity(user,workspaceEntityName,workspace['id'],metadata)
     return workspace
 
 
