@@ -475,7 +475,7 @@ def addComment(user,entity,body,file=None):
             'file_id': lsFile}
     return newEntity(user,commentEntityName,data)
 
-def addProtocol(user,experiment,protocol):
+def addProtocolToExperiment(user,experiment,protocol):
     """
     Add a Labstep Protocol to a Labstep Experiment.
   
@@ -841,29 +841,9 @@ def tag(user,entity,name):
     entity = addTagTo(user,entity,tag)
     return entity
 
-def addFile(user,entity,filepath,caption):
-    """
-    Upload a file to a Labstep entity such as an Experiment
-    or Resource, and add a caption to the uploading file.
-
-    Parameters
-    ----------
-    user (obj)
-        The Labstep user to attach as. Must have 
-        property 'api_key'. See 'login'.
-    entity (obj)
-        The Labstep entity to attach to. Must have 
-        'thread' property with property 'id'.
-    filepath (str)
-        The path to the file to attach.
-    caption (str)
-        A caption for the file.
-
-    Returns
-    -------
-    caption
-        Returns an uploaded file with a caption.
-    """
-    lsFile = newFile(user,filepath)
-    caption = addComment(user,caption,lsFile)  
-    return caption
+def addCommentWithFile(user,entity,body,filepath):
+    if filepath != None:
+        lsFile = newFile(user,filepath)
+    else:
+        lsFile = None
+    return addComment(user,entity,body,lsFile)
