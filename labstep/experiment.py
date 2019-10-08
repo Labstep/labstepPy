@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
+import requests
+import json
 from .config import API_ROOT
-from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo, handleStatus
+from .constants import commentEntityName, experimentEntityName, tagEntityName
+from .helpers import url_join, getTime
 from .core import (editEntity, editExperiment,
     newEntity, newFile, newTag,
     addComment, addTagTo, getTags)
-import requests
-import json
 
 
 class Experiment:
@@ -23,7 +23,7 @@ class Experiment:
         metadata = {'name': name,
                     'description': description,
                     'deleted_at': deleted_at}
-        experiment = editEntity(self.__user__,'experiment-workflow',experiment['id'],metadata)
+        experiment = editEntity(self.__user__,experimentEntityName,experiment['id'],metadata)
         return experiment
     
     def delete(self,experiment):
@@ -44,7 +44,7 @@ class Experiment:
         data = {'body': body,
                 'thread_id': threadId,
                 'file_id': lsFile}
-        return newEntity(self.__user__,'comment',data)
+        return newEntity(self.__user__,commentEntityName,data)
 
     def addFile(self,entity,filepath,caption):
         lsFile = newFile(self.__user__,filepath)
@@ -65,5 +65,5 @@ class Experiment:
     
     def editTag(self,tag,name):
         metadata = {'name': name}
-        tag = editEntity(self.__user__,'tag',(tag['id']),metadata)
+        tag = editEntity(self.__user__,tagEntityName,(tag['id']),metadata)
         return tag

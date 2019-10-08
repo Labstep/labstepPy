@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
 from .core import (getExperiment, getProtocol, getResource, getWorkspace,   # getSingle()
     getExperiments, getProtocols, getResources, getTags, getWorkspaces,     # getMany()
     newExperiment, newProtocol, newResource, newTag, newWorkspace, newFile  # newEntity()
@@ -13,6 +12,7 @@ class User:
         self.workspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
+
 
     ####################        getSingle()
     def getExperiment(self,experiment_id):
