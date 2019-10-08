@@ -2,36 +2,31 @@
 # -*- coding: utf-8 -*-
 
 from .config import API_ROOT
-from .constants import commentEntityName, experimentEntityName, tagEntityName
-from .helpers import url_join, getTime
-from .core import (editEntity, editExperiment,
+from .constants import commentEntityName, resourceEntityName, tagEntityName
+from .helpers import url_join, getTime, handleStatus
+from .core import (editEntity, editResource,
     newEntity, newFile, newTag,
     addComment, addTagTo, getTags)
 
 
-class Experiment:
-    def __init__(self,experiment,user):
+class Resource:
+    def __init__(self,resource,user):
         self.__user__ = user
-        for key in experiment:
-            setattr(self, key, experiment[key])
+        for key in resource:
+            setattr(self, key, resource[key])
 
 
     ####################        functions()
-    def edit(self,experiment,name=None,description=None,deleted_at=None):
+    def edit(self,resource,name=None,status=None,deleted_at=None):
         metadata = {'name': name,
-                    'description': description,
+                    'status': handleStatus(status),
                     'deleted_at': deleted_at}
-        experiment = editEntity(self.__user__,experimentEntityName,experiment['id'],metadata)
-        return experiment
+        resource = editEntity(self.__user__,resourceEntityName,resource['id'],metadata)
+        return resource
     
-    def delete(self,experiment):
-        experiment = editExperiment(self.__user__,experiment,deleted_at=getTime())
-        return experiment
-    
-    def addProtocol(self,experiment,protocol):
-        data = {'experiment_workflow_id':experiment['id'],
-                'protocol_id': protocol['last_version']['id']}  
-        return newEntity(self.__user__,'experiment',data)
+    def delete(self,resource):
+        resource = editResource(self.__user__,resource,deleted_at=getTime())
+        return resource
     
     def addComment(self,entity,body,file=None):
         threadId = entity['thread']['id']

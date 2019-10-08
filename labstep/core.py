@@ -633,7 +633,7 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     protocol = editEntity(user,protocolEntityName,protocol['id'],metadata)
     return protocol
 
-def editResource(user,resource,name=None,status=None,deleted_at=None,):
+def editResource(user,resource,name=None,status=None,deleted_at=None):
     """
     Edit an existing Resource.
   

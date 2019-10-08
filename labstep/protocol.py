@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
-import json
 from .config import API_ROOT
 from .constants import commentEntityName, protocolEntityName, tagEntityName
 from .helpers import url_join, getTime
