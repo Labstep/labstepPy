@@ -7,15 +7,19 @@ from .helpers import url_join, getTime, handleStatus
 from .core import editResource, addCommentWithFile, tag
 
 
-class Resource:
-    def __init__(self,resource,user):
+def update(entity,newData):
+    for key in newData:
+        setattr(entity, key, newData[key])
+    return entity
+
+class Experiment:
+    def __init__(self,data,user):
         self.__user__ = user
-        for key in resource:
-            setattr(self, key, resource[key])
+        update(self,data)
 
 
     ####################        functions()
-    def edit(self,resource,name=None,status=None):
+    def edit(self,name=None,status=None):
         return editResource(self.__user__,self,name,status)
     
     def delete(self):

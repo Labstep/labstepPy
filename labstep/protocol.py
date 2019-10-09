@@ -7,11 +7,15 @@ from .helpers import url_join, getTime
 from .core import editProtocol, tag, addCommentWithFile
 
 
-class Protocol:
-    def __init__(self,protocol,user):
+def update(entity,newData):
+    for key in newData:
+        setattr(entity, key, newData[key])
+    return entity
+
+class Experiment:
+    def __init__(self,data,user):
         self.__user__ = user
-        for key in protocol:
-            setattr(self, key, protocol[key])
+        update(self,data)
 
 
     ####################        functions()
