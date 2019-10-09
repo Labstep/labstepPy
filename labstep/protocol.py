@@ -12,7 +12,7 @@ def update(entity,newData):
         setattr(entity, key, newData[key])
     return entity
 
-class Experiment:
+class Protocol:
     def __init__(self,data,user):
         self.__user__ = user
         update(self,data)
