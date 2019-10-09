@@ -4,7 +4,7 @@
 from .config import API_ROOT
 from .constants import commentEntityName, protocolEntityName, tagEntityName
 from .helpers import url_join, getTime
-from .core import editProtocol, tag, addCommentWithFile
+from .core import editProtocol, addCommentWithFile, tag
 
 
 def update(entity,newData):
