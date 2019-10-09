@@ -490,7 +490,7 @@ def addProtocolToExperiment(user,experiment,protocol):
     experiment_protocol
         An object representing the Protocol attached to the Experiment.
     """
-    data = {'experiment_workflow_id':experiment['id'],
+    data = {'experiment_workflow_id':experiment.id,
             'protocol_id': protocol['last_version']['id']}  
     return newEntity(user,'experiment',data)
 
@@ -605,7 +605,7 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     metadata = {'name': name,
                 'description': description,
                 'deleted_at': deleted_at}
-    experiment = editEntity(user,experimentEntityName,experiment['id'],metadata)
+    experiment = editEntity(user,experimentEntityName,experiment.id,metadata)
     return experiment
 
 def editProtocol(user,protocol,name=None,deleted_at=None):
@@ -630,7 +630,7 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    protocol = editEntity(user,protocolEntityName,protocol['id'],metadata)
+    protocol = editEntity(user,protocolEntityName,protocol.id,metadata)
     return protocol
 
 def editResource(user,resource,name=None,status=None,deleted_at=None):
@@ -659,7 +659,7 @@ def editResource(user,resource,name=None,status=None,deleted_at=None):
     metadata = {'name': name,
                 'status': handleStatus(status),
                 'deleted_at': deleted_at}
-    resource = editEntity(user,resourceEntityName,resource['id'],metadata)
+    resource = editEntity(user,resourceEntityName,resource.id,metadata)
     return resource
 
 def editTag(user,tag,name):
