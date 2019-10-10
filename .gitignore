@@ -15,3 +15,5 @@ _static
 _templates
 
 .DS_Store
+
+venv/
