@@ -149,7 +149,7 @@ def getEntities(user, entityName, count, metadata=None):
     search_params = {'search': 1,
                      'cursor': -1,
                      'count': n}
-    params = {**search_params, **metadata}      # Merging dicts in python3
+    params = {**search_params, **metadata}
 
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, "/api/generic/", entityName)
@@ -180,10 +180,10 @@ def getExperiments(user, count=100, search_query=None,
         The number of Experiments to retrieve.
     created_at_from (str)
         The start date of the search range, must be
-        in the format of YYYY-MM-DD.
+        in the format of 'YYYY-MM-DD'.
     created_at_to (str)
         The end date of the search range, must be
-        in the format of YYYY-MM-DD.
+        in the format of 'YYYY-MM-DD'.
 
     Returns
     -------
@@ -586,7 +586,7 @@ def editEntity(user, entityName, id, metadata):
     # to preserve the existing data in the 'fields', otherwise
     # the 'fields' will be overwritten to 'None'.
     new_metadata = dict(
-        filter(lambda field: field[1] != None, metadata.items()))
+        filter(lambda field: field[1] is not None, metadata.items()))
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, '/api/generic/', entityName, str(id))
     r = requests.put(url, json=new_metadata, headers=headers)
@@ -760,7 +760,7 @@ def deleteExperiment(user, experiment):
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     experiment (obj)
         The Experiment to delete.
 
@@ -780,7 +780,7 @@ def deleteProtocol(user, protocol):
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     protocol (obj)
         The Protocol to delete.
 
@@ -800,7 +800,7 @@ def deleteResource(user, resource):
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     resource (obj)
         The Resource to delete.
 
@@ -820,7 +820,7 @@ def deleteTag(user, tag):
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     tag (obj)
         The tag to delete.
 
