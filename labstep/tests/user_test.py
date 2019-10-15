@@ -22,7 +22,7 @@ new_res = testUser.newResource(name='api pytest newresource',
 new_wksp = testUser.newWorkspace(name='api pytest newworkspace')
 
 # Create a new file
-new_file = testUser.newFile(filepath='./api_pytest_newfile.py')
+# new_file = testUser.newFile(filepath='./api_pytest_newfile.py')
 
 
 class TestUser:
