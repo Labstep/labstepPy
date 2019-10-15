@@ -3,7 +3,7 @@
 
 import labstep as LS
 
-user = LS.login('demo@labstep.com','demopassword')
+user = LS.login('demo@labstep.com', 'demopassword')
 
 n = 2
 

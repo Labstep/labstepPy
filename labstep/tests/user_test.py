@@ -8,9 +8,19 @@ testUser = LS.login('demo@labstep.com', 'demopassword')
 
 
 class TestUser:
-    def test_get_experiment(self):
-        exp = testUser.getExperiment(23450)
-        assert exp['name'] == "API Test Experiment", \
-            "INCORRECT EXPERIMENT NAME!"
-        assert exp['description'] == "<p>API Test Description</p>", \
-            "INCORRECT EXPERIMENT DESCRIPTION!"
+    def test_newExperiment(self):
+        new_exp = testUser.newExperiment(name='api test newexp',
+                                         description='api test description')
+
+        assert new_exp['name'] == 'api test newexp', \
+            'INCORRECT NEW EXPERIMENT NAME!'
+        assert new_exp['description'] == 'api test description', \
+            'INCORRECT NEW EXPERIMENT NAME!'
+
+    def test_getExperiment(self):
+        get_exp = testUser.getExperiment(23451)
+
+        assert get_exp['name'] == 'api test newexp', \
+            'INCORRECT EXPERIMENT NAME!'
+        assert get_exp['description'] == 'api test description', \
+            'INCORRECT EXPERIMENT DESCRIPTION!'
