@@ -9,6 +9,5 @@ from helpers import url_join
 
 class TestHelpers:
     def test_urljoin(self):
-        assert url_join(API_ROOT,
-                        "/public-api/user/login") == "https://api-staging." \
-                        "labstep.com/public-api/user/login"
+        assert url_join(API_ROOT, "/public-api/user/login") == \
+            "https://api-staging.labstep.com/public-api/user/login"
