@@ -162,8 +162,8 @@ class User:
         name (str)
             Give your Resource a name.
         status (str)
-            Current options to set the status of Resources to are:
-            'available', 'unavailable', 'requested', 'ordered'.
+            Current options to set the status of a Resource to are:
+            'available' or 'unavailable'.
         """
         return newResource(self, name, status)
 

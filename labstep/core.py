@@ -241,8 +241,8 @@ def getResources(user, count=100, search_query=None,
     tag_id (obj/int)
         Retrieve Resources that have a specific tag.
     status (str)
-        Current options to search the status of Resources are:
-        'available', 'unavailable', 'requested', 'ordered'.
+        Current options to set the status of a Resource to are:
+        'available' or 'unavailable'.
 
     Returns
     -------
@@ -388,8 +388,8 @@ def newResource(user, name, status=None):
     name (str)
         Give your resource a name.
     status (str)
-        Current options of the status to select are:
-        'available', 'unavailable', 'requested', 'ordered'.
+        Current options to set the status of a Resource to are:
+        'available' or 'unavailable'.
 
     Returns
     -------
@@ -687,8 +687,8 @@ def editResource(user, resource, name=None, status=None, deleted_at=None):
     name (str)
         The new name of the Experiment.
     status (str)
-        Current options to change the status to are:
-        'available', 'unavailable', 'requested', 'ordered'.
+        Current options to set the status of a Resource to are:
+        'available' or 'unavailable'.
     deleted_at (obj)
         The timestamp at which the Resource is deleted/archived.
 
