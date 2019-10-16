@@ -491,7 +491,7 @@ def addComment(user, entity, body, file=None):
     comment
         An object representing a comment on labstep.
     """
-    threadId = entity['thread']['id']
+    threadId = entity.thread['id']
     if file is None:
         lsFile = None
     else:
