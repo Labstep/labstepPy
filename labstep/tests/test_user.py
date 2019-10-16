@@ -60,15 +60,15 @@ class TestUser:
         assert result[0]['name'], \
             'FAILED TO GET RESOURCES'
 
-    def test_getWorkspaces(self):
-        result = testUser.getWorkspaces(name=testSearch)
-        assert result[0]['name'], \
-            'FAILED TO GET WORKSPACES'
-
     def test_getTags(self):
         result = testUser.getTags(search_query=testSearch)
         assert result[0]['name'], \
             'FAILED TO GET TAGS'
+
+    def test_getWorkspaces(self):
+        result = testUser.getWorkspaces(name=testSearch)
+        assert result[0]['name'], \
+            'FAILED TO GET WORKSPACES'
 
     # newEntity()
     def test_newExperiment(self):
@@ -89,6 +89,11 @@ class TestUser:
             'INCORRECT NEW RESOURCE NAME!'
         assert result['status'] == testNewStatus, \
             'INCORRECT NEW RESOURCE STATUS!'
+
+    def test_newTag(self):
+        result = testUser.newTag(testNewName)
+        assert result['name'] == testNewName, \
+            'INCORRECT NEW TAG NAME!'
 
     def test_newWorkspace(self):
         result = testUser.newWorkspace(testNewName)
