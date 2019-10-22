@@ -8,7 +8,6 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Variables as in test_setup.py
 testName = 'Api Default Name'
-testStatus = 'available'
 testComment = 'Api Default Comment'
 testFilePath = './labstep/tests/test_setup.py'
 
@@ -17,7 +16,7 @@ getOne = testUser.getExperiment(23976)
 experiment = LS.Experiment(getOne, testUser)
 
 # Set variables for editting
-randomNum = randrange(1, 5)
+randomNum = randrange(1, 9)
 editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
 editDescription = 'Api Pytest Description Edit {n}'.format(n=randomNum)
 

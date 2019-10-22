@@ -5,7 +5,7 @@
 import sys
 sys.path.append('./labstep/')
 from config import API_ROOT
-from helpers import (url_join, handleError, getTime, 
+from helpers import (url_join, getTime,
                      createdAtFrom, createdAtTo, handleStatus)
 
 testDate = '2020-01-01'
