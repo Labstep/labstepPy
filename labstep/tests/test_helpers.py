@@ -30,7 +30,7 @@ class TestHelpers:
     def test_createdAtTo(self):
         timezone = getTime()[-6:]
         assert createdAtTo(testDate) == \
-            testDate + 'T00:00:00{tz}'.format(tz=timezone), \
+            testDate + 'T23:59:59{tz}'.format(tz=timezone), \
             'FAILED TO CREATE TIME TO'
 
     def test_handleStatus(self):

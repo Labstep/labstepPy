@@ -72,7 +72,7 @@ def createdAtTo(created_at_to):
         return None
     else:
         timezone = getTime()[-6:]
-        created_at_to = created_at_to + "T00:00:00{tz}".format(tz=timezone)
+        created_at_to = created_at_to + "T23:59:59{tz}".format(tz=timezone)
         return created_at_to
 
 
