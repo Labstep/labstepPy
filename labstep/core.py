@@ -555,8 +555,8 @@ def addTagTo(user, entity, tag):
         raise Exception('Entities of this type cannot be tagged')
 
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, "api/generic/", entityType, "/",
-                   str(entity['id']), "/tag/", str(tag['id']))
+    url = url_join(API_ROOT, "api/generic/", entityType,
+                   str(entity['id']), tagEntityName, str(tag['id']))
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
 
