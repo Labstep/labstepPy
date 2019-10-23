@@ -4,17 +4,15 @@
 
 import sys
 sys.path.append('./labstep/')
-from config import API_ROOT
 from helpers import (url_join, getTime,
                      createdAtFrom, createdAtTo, handleStatus)
-
-testDate = '2020-01-01'
 
 
 class TestHelpers:
     def test_url_join(self):
-        assert url_join(API_ROOT, '/public-api/user/login') == \
-            'https://api.labstep.com/public-api/user/login', \
+        assert url_join('https://api-staging.labstep.com/',
+                        '/public-api/user/login') == \
+            'https://api-staging.labstep.com/public-api/user/login', \
             'FAILED TO JOIN URL'
 
     def test_getTime(self):
@@ -23,14 +21,14 @@ class TestHelpers:
 
     def test_createdAtFrom(self):
         timezone = getTime()[-6:]
-        assert createdAtFrom(testDate) == \
-            testDate + 'T00:00:00{tz}'.format(tz=timezone), \
+        assert createdAtFrom('2020-01-01') == \
+            '2020-01-01' + 'T00:00:00{tz}'.format(tz=timezone), \
             'FAILED TO CREATE TIME FROM'
 
     def test_createdAtTo(self):
         timezone = getTime()[-6:]
-        assert createdAtTo(testDate) == \
-            testDate + 'T23:59:59{tz}'.format(tz=timezone), \
+        assert createdAtTo('2020-01-01') == \
+            '2020-01-01' + 'T23:59:59{tz}'.format(tz=timezone), \
             'FAILED TO CREATE TIME TO'
 
     def test_handleStatus(self):
