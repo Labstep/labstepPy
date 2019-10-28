@@ -20,6 +20,9 @@ randomNum = randrange(1, 9)
 editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
 editDescription = 'Api Pytest Description Edit {n}'.format(n=randomNum)
 
+get_protocol = testUser.getProtocol(4926)
+result = experiment.addProtocol(get_protocol)
+
 
 class TestExperiment:
     def test_edit(self):
@@ -31,11 +34,8 @@ class TestExperiment:
 
     def test_delete(self):
         # test_delete the 1st experiment from the getMany list
-        getMany = testUser.getExperiments(search_query='pytest')
-        getOne = testUser.getExperiment(getMany[0]['id'])
-        experiment = LS.Experiment(getOne, testUser)
-
-        result = experiment.delete()
+        experimentToDelete = testUser.newExperiment('testDelete')
+        result = experimentToDelete.delete()
         assert result['deleted_at'] is not None, \
             'FAILED TO DELETE EXPERIMENT'
 

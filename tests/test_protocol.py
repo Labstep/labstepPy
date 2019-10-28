@@ -28,11 +28,8 @@ class TestProtocol:
 
     def test_delete(self):
         # test_delete the 1st protocol from the getMany list
-        getMany = testUser.getProtocols(search_query='pytest')
-        getOne = testUser.getProtocol(getMany[0]['id'])
-        protocol = LS.Protocol(getOne, testUser)
-
-        result = protocol.delete()
+        protocolToDelete = testUser.newProtocol('testDelete')
+        result = protocolToDelete.delete()
         assert result['deleted_at'] is not None, \
             'FAILED TO DELETE PROTOCOL'
 

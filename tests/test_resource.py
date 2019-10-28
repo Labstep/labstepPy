@@ -28,11 +28,8 @@ class TestResource:
 
     def test_delete(self):
         # test_delete the 1st resource from the getMany list
-        getMany = testUser.getResources(search_query='pytest')
-        getOne = testUser.getResource(getMany[0]['id'])
-        resource = LS.Resource(getOne, testUser)
-
-        result = resource.delete()
+        resourceToDelete = testUser.newResource('testDelete')
+        result = resourceToDelete.delete()
         assert result['deleted_at'] is not None, \
             'FAILED TO DELETE RESOURCE'
 
