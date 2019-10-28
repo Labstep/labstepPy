@@ -38,6 +38,7 @@ def login(username, password):
     handleError(r)
     return User(json.loads(r.content))
 
+
 class User:
     def __init__(self, user):
         self.workspace = user['group']['id']
