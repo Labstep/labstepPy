@@ -5,7 +5,6 @@ from datetime import datetime
 from time import gmtime, strftime
 
 
-# helperFunctions()
 def url_join(*args):
     """
     Join a set of args with a slash (/) between them. Instead of

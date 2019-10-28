@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 import requests
 import json
-
 from .config import API_ROOT
+from .core import newFile
 from .helpers import url_join, handleError
-
-from .core import (getExperiment, getProtocol, getResource, getWorkspace,
-                   getExperiments, getProtocols, getResources, getTags,
-                   getWorkspaces,
-                   newExperiment, newProtocol, newResource, newTag,
-                   newWorkspace, newFile
-                   )
+from .experiment import getExperiment, getExperiments, newExperiment
+from .protocol import getProtocol, getProtocols, newProtocol
+from .resource import getResource, getResources, newResource
+from .tag import getTags, newTag
+from .workspace import getWorkspace, getWorkspaces, newWorkspace
 
 
 def login(username, password):
@@ -125,8 +124,7 @@ class User:
         return getProtocols(self, count, search_query, created_at_from,
                             created_at_to, tag_id)
 
-    def getResources(self, count=100, search_query=None,
-                     status=None, tag_id=None):
+    def getResources(self, count=100, search_query=None, tag_id=None):
         """
         Parameters
         ----------
@@ -134,13 +132,10 @@ class User:
             The number of Resources to retrieve.
         search_query (str)
             Search for Resources with this 'name'.
-        status (str)
-            Current options to search the status of Resources are:
-            'available', 'unavailable', 'requested', 'ordered'.
         tag_id (int)
             The id of the Tag to retrieve.
         """
-        return getResources(self, count, search_query, status, tag_id)
+        return getResources(self, count, search_query, tag_id)
 
     def getTags(self, count=1000, search_query=None):
         """
@@ -191,9 +186,6 @@ class User:
         ----------
         name (str)
             Give your Resource a name.
-        status (str)
-            Current options to set the status of a Resource to are:
-            'available' or 'unavailable'.
         """
         return newResource(self, name)
 

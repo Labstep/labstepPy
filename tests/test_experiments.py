@@ -20,9 +20,6 @@ randomNum = randrange(1, 9)
 editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
 editDescription = 'Api Pytest Description Edit {n}'.format(n=randomNum)
 
-get_protocol = testUser.getProtocol(4926)
-result = experiment.addProtocol(get_protocol)
-
 
 class TestExperiment:
     def test_edit(self):
@@ -33,7 +30,6 @@ class TestExperiment:
             'INCORRECT EDITTED EXPERIMENT DESCRIPTION!'
 
     def test_delete(self):
-        # test_delete the 1st experiment from the getMany list
         experimentToDelete = testUser.newExperiment('testDelete')
         result = LS.Experiment(experimentToDelete, testUser).delete()
         assert result['deleted_at'] is not None, \
