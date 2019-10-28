@@ -4,13 +4,15 @@
 import requests
 import json
 from .config import API_ROOT
-from .constants import (commentEntityName, experimentEntityName, protocolEntityName, 
-    resourceEntityName, tagEntityName, workspaceEntityName)
-from .helpers import url_join, handleError, getTime, createdAtFrom, createdAtTo, handleStatus
+from .constants import (commentEntityName, experimentEntityName,
+                        protocolEntityName, resourceEntityName,
+                        tagEntityName, workspaceEntityName)
+from .helpers import (url_join, handleError, getTime,
+                      createdAtFrom, createdAtTo, handleStatus)
 
 
-####################        getSingle()
-def getEntity(user,entityName,id):
+# getSingle()
+def getEntity(user, entityName, id):
     """
     Parameters
     ----------
@@ -31,94 +33,98 @@ def getEntity(user,entityName,id):
     """
     params = {'is_deleted': 'both'}
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"/api/generic/",entityName,str(id))
+    url = url_join(API_ROOT, "/api/generic/", entityName, str(id))
     r = requests.get(url, headers=headers, params=params)
     handleError(r)
     return json.loads(r.content)
 
-def getExperiment(user,experiment_id):
+
+def getExperiment(user, experiment_id):
     """
     Retrieve a specific Labstep Experiment.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
-        'api_key'. See 'login'. 
+        'api_key'. See 'login'.
     experiment_id (obj)
-        The id of the Experiment to retrieve. 
+        The id of the Experiment to retrieve.
 
     Returns
     -------
     experiment
         An object representing a Labstep Experiment.
     """
-    experiment = getEntity(user,experimentEntityName,id=experiment_id)
+    experiment = getEntity(user, experimentEntityName, id=experiment_id)
     return experiment
 
-def getProtocol(user,protocol_id):
+
+def getProtocol(user, protocol_id):
     """
     Retrieve a specific Labstep Protocol.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
     protocol_id (int)
-        The id of the Protocol to retrieve. 
+        The id of the Protocol to retrieve.
 
     Returns
     -------
     protocol
         An object representing a Labstep Protocol.
     """
-    protocol = getEntity(user,protocolEntityName,id=protocol_id)
+    protocol = getEntity(user, protocolEntityName, id=protocol_id)
     return protocol
 
-def getResource(user,resource_id):
+
+def getResource(user, resource_id):
     """
     Retrieve a specific Labstep Resource.
-    
+
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
     resource_id (int)
-        The id of the Resource to retrieve. 
+        The id of the Resource to retrieve.
 
     Returns
     -------
     resource
         An object representing a Labstep Resource.
     """
-    resource = getEntity(user,resourceEntityName,id=resource_id)
+    resource = getEntity(user, resourceEntityName, id=resource_id)
     return resource
 
-def getWorkspace(user,workspace_id):
+
+def getWorkspace(user, workspace_id):
     """
     Retrieve a specific Labstep Workspace.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
     workspace_id (int)
-        The id of the Workspace to retrieve. 
+        The id of the Workspace to retrieve.
 
     Returns
     -------
     workspace
         An object representing a Labstep Workspace.
     """
-    workspace = getEntity(user,workspaceEntityName,id=workspace_id)
+    workspace = getEntity(user, workspaceEntityName, id=workspace_id)
     return workspace
 
 
-####################        getMany()
-def getEntities(user,entityName,count,metadata=None):
+# getMany()
+def getEntities(user, entityName, count, metadata=None):
     """
     Parameters
     ----------
@@ -127,7 +133,8 @@ def getEntities(user,entityName,count,metadata=None):
         'api_key'. See 'login'.
     entityName (str)
         Options for entity name are: experimentEntityName,
-        resourceEntityName, protocolEntityName, tagEntityName, workspaceEntityName
+        resourceEntityName, protocolEntityName, tagEntityName,
+        workspaceEntityName
     count
         ??
     metadata
@@ -138,43 +145,45 @@ def getEntities(user,entityName,count,metadata=None):
     returns?
         ?.
     """
-    n = min(count,1000)
-    search_params = {'search':1,
-                     'cursor':-1,
-                     'count':n}
-    params = {**search_params, **metadata}      # Merging dicts in python3
-    
+    n = min(count, 1000)
+    search_params = {'search': 1,
+                     'cursor': -1,
+                     'count': n}
+    params = {**search_params, **metadata}
+
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"/api/generic/",entityName)
+    url = url_join(API_ROOT, "/api/generic/", entityName)
     r = requests.get(url, params=params, headers=headers)
     handleError(r)
     resp = json.loads(r.content)
     items = resp['items']
-    expected_results = min(resp['total'],count)
+    expected_results = min(resp['total'], count)
     while len(items) < expected_results:
-        params['cursor']= resp['next_cursor']
+        params['cursor'] = resp['next_cursor']
         r = requests.get(url, headers=headers, params=params)
         resp = json.loads(r.content)
         items.extend(resp['items'])
     return items
 
-def getExperiments(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
+
+def getExperiments(user, count=100, search_query=None,
+                   created_at_from=None, created_at_to=None, tag_id=None):
     """
     Retrieve a list of a user's Experiments on Labstep.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user whose Experiments you want to retrieve.
-        Must have property 'api_key'. See 'login'. 
+        Must have property 'api_key'. See 'login'.
     count (int)
         The number of Experiments to retrieve.
     created_at_from (str)
-        The start date of the search range, must be 
-        in the format of YYYY-MM-DD.
+        The start date of the search range, must be
+        in the format of 'YYYY-MM-DD'.
     created_at_to (str)
-        The end date of the search range, must be 
-        in the format of YYYY-MM-DD.
+        The end date of the search range, must be
+        in the format of 'YYYY-MM-DD'.
 
     Returns
     -------
@@ -186,20 +195,22 @@ def getExperiments(user,count=100,search_query=None,created_at_from=None,created
                 'created_at_to': createdAtTo(created_at_to),
                 'tag_id': tag_id,
                 }
-    experiments = getEntities(user,experimentEntityName,count,metadata)
+    experiments = getEntities(user, experimentEntityName, count, metadata)
     return experiments
 
-def getProtocols(user,count=100,search_query=None,created_at_from=None,created_at_to=None,tag_id=None):
+
+def getProtocols(user, count=100, search_query=None,
+                 created_at_from=None, created_at_to=None, tag_id=None):
     """
     Retrieve a list of a user's Protocols on Labstep.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user whose Protocols you want to retrieve.
-        Must have property 'api_key'. See 'login'. 
+        Must have property 'api_key'. See 'login'.
     count (int)
-        The number of Protocols to retrieve. 
+        The number of Protocols to retrieve.
 
     Returns
     -------
@@ -211,25 +222,27 @@ def getProtocols(user,count=100,search_query=None,created_at_from=None,created_a
                 'created_at_to': createdAtTo(created_at_to),
                 'tag_id': tag_id,
                 }
-    protocols = getEntities(user,protocolEntityName,count,metadata)
+    protocols = getEntities(user, protocolEntityName, count, metadata)
     return protocols
 
-def getResources(user,count=100,search_query=None,status=None,tag_id=None):
+
+def getResources(user, count=100, search_query=None,
+                 status=None, tag_id=None):
     """
     Retrieve a list of a user's Resources on Labstep.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user whose Resources you want to retrieve.
-        Must have property 'api_key'. See 'login'. 
+        Must have property 'api_key'. See 'login'.
     count (int)
         The number of Resources to retrieve.
     tag_id (obj/int)
         Retrieve Resources that have a specific tag.
     status (str)
-        Current options to search the status of Resources are:
-        'available', 'unavailable', 'requested', 'ordered'.
+        Current options to set the status of a Resource to are:
+        'available' or 'unavailable'.
 
     Returns
     -------
@@ -240,13 +253,14 @@ def getResources(user,count=100,search_query=None,status=None,tag_id=None):
                 'tag_id': tag_id,
                 'status': handleStatus(status),
                 }
-    resources = getEntities(user,resourceEntityName,count,metadata)
+    resources = getEntities(user, resourceEntityName, count, metadata)
     return resources
 
-def getTags(user,count=1000,search_query=None):
+
+def getTags(user, count=1000, search_query=None):
     """
-    Retrieve a list of the user's tags. 
-  
+    Retrieve a list of the user's tags.
+
     Parameters
     ----------
     user (obj)
@@ -263,20 +277,21 @@ def getTags(user,count=1000,search_query=None):
         A list of tags matching the search query.
     """
     metadata = {'search_query': search_query}
-    tags = getEntities(user,tagEntityName,count,metadata)
+    tags = getEntities(user, tagEntityName, count, metadata)
     return tags
 
-def getWorkspaces(user,count=100,name=None):
+
+def getWorkspaces(user, count=100, name=None):
     """
     Retrieve a list of a user's Workspaces on Labstep.
-  
+
     Parameters
     ----------
     user (obj)
         The Labstep user whose Workspaces you want to retrieve.
-        Must have property 'api_key'. See 'login'. 
+        Must have property 'api_key'. See 'login'.
     count (int)
-        The number of Workspaces to retrieve. 
+        The number of Workspaces to retrieve.
 
     Returns
     -------
@@ -284,12 +299,12 @@ def getWorkspaces(user,count=100,name=None):
         A list of Workspace objects.
     """
     metadata = {'name': name}
-    workspaces = getEntities(user,workspaceEntityName,count,metadata)
+    workspaces = getEntities(user, workspaceEntityName, count, metadata)
     return workspaces
 
 
-####################        newEntity()
-def newEntity(user,entityName,metadata):
+# newEntity()
+def newEntity(user, entityName, metadata):
     """
     Parameters
     ----------
@@ -297,7 +312,8 @@ def newEntity(user,entityName,metadata):
         The Labstep user.
     entityName (str)
         Currents options for entity name are: experimentEntityName,
-        resourceEntityName, protocolEntityName, tagEntityName, workspaceEntityName
+        resourceEntityName, protocolEntityName, tagEntityName,
+        workspaceEntityName.
     data
         The name of the entity.
 
@@ -307,12 +323,13 @@ def newEntity(user,entityName,metadata):
         ?.
     """
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"/api/generic/",entityName)
+    url = url_join(API_ROOT, "/api/generic/", entityName)
     r = requests.post(url, headers=headers, json=metadata)
     handleError(r)
     return json.loads(r.content)
 
-def newExperiment(user,name,description=None):
+
+def newExperiment(user, name, description=None):
     """
     Create a new Labstep Experiment.
 
@@ -323,7 +340,7 @@ def newExperiment(user,name,description=None):
         Must have property 'api_key'. See 'login'.
     name (str)
         Give your Experiment a name.
-    description : 
+    description (str)
         Give your Experiment a description.
 
     Returns
@@ -333,10 +350,11 @@ def newExperiment(user,name,description=None):
     """
     metadata = {'name': name,
                 'description': description}
-    experiment = newEntity(user,experimentEntityName,metadata)
+    experiment = newEntity(user, experimentEntityName, metadata)
     return experiment
 
-def newProtocol(user,name):
+
+def newProtocol(user, name):
     """
     Create a new Labstep Protocol.
 
@@ -354,42 +372,44 @@ def newProtocol(user,name):
         An object representing the new Labstep Protocol.
     """
     metadata = {'name': name}
-    protocol = newEntity(user,protocolEntityName,metadata)
+    protocol = newEntity(user, protocolEntityName, metadata)
     return protocol
 
-def newResource(user,name,status=None):
+
+def newResource(user, name):
     """
     Create a new Labstep Resource.
 
     Parameters
     ----------
     user (obj)
-        The Labstep user creating the protocol.
+        The Labstep user creating the Resource.
         Must have property 'api_key'. See 'login'.
     name (str)
         Give your resource a name.
     status (str)
-        Current options of the status to select are:
-        'available', 'unavailable', 'requested', 'ordered'.
+        Current options to set the status of a Resource to are:
+        'available' or 'unavailable'.
 
     Returns
     -------
     protocol
         An object representing the new Labstep Resource.
     """
-    metadata = {'name': name,
-                'status': handleStatus(status)}
-    resource = newEntity(user,resourceEntityName,metadata)
+    metadata = {'name': name}
+    resource = newEntity(user, resourceEntityName, metadata)
     return resource
 
-def newTag(user,name):
+
+def newTag(user, name):
     """
     Create a new Tag.
 
     Parameters
     ----------
     user (obj)
-        The Labstep user creating the Tag. Must have property 'api_key'. See 'login'.
+        The Labstep user creating the Tag.
+        Must have property 'api_key'. See 'login'.
     name (str)
         Name of the new Tag.
 
@@ -399,10 +419,11 @@ def newTag(user,name):
         An object representing the new Labstep Tag.
     """
     metadata = {'name': name}
-    tag = newEntity(user,tagEntityName,metadata)
+    tag = newEntity(user, tagEntityName, metadata)
     return tag
 
-def newWorkspace(user,name):
+
+def newWorkspace(user, name):
     """
     Create a new Labstep Workspace.
 
@@ -419,43 +440,47 @@ def newWorkspace(user,name):
     workspace
         An object representing the new Labstep Workspace.
     """
-    metadata = {'name': name} 
-    workspace = newEntity(user,workspaceEntityName,metadata)
+    metadata = {'name': name}
+    workspace = newEntity(user, workspaceEntityName, metadata)
     return workspace
 
-def newFile(user,filepath):
+
+def newFile(user, filepath):
     """
     Upload a file to the Labstep entity Data.
     Parameters
     ----------
     user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'.
+        The Labstep user uploading the file.
+        Must have property 'api_key'. See 'login'.
     filepath (str)
         The filepath to the file to attach.
     Returns
     -------
     file
         An object to upload a file on Labstep.
-    """ 
+    """
     files = {'file': open(filepath, 'rb')}
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"/api/generic/file/upload")
+    url = url_join(API_ROOT, "/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)
     handleError(r)
     return json.loads(r.content)
 
 
-####################        addEntity()
-def addComment(user,entity,body,file=None):
+# addEntity()
+def addComment(user, entity, body, file=None):
     """
     Add a comment to a Labstep entity such as an Experiment or Resource.
-  
+
     Parameters
     ----------
     user (obj)
-        The Labstep user to comment as. Must have property 'api_key'. See 'login'.
+        The Labstep user adding a comment.
+        Must have property 'api_key'. See 'login'.
     entity (obj)
-        The Labstep entity to comment on. Must have 'thread' property with property 'id'.
+        The Labstep entity to comment on. Must have
+        'thread' property with property 'id'.
     body (str)
         The body of the comment.
     file (obj)
@@ -465,71 +490,71 @@ def addComment(user,entity,body,file=None):
     comment
         An object representing a comment on labstep.
     """
-    threadId = entity['thread']['id']
-    if file != None:
-        lsFile = [list(file.keys())[0]]
-    else:
+    threadId = entity.thread['id']
+    if file is None:
         lsFile = None
+    else:
+        lsFile = [list(file.keys())[0]]
     data = {'body': body,
             'thread_id': threadId,
             'file_id': lsFile}
-    return newEntity(user,commentEntityName,data)
+    return newEntity(user, commentEntityName, data)
 
-def addProtocolToExperiment(user,experiment,protocol):
+
+def addProtocolToExperiment(user, experiment, protocol):
     """
     Add a Labstep Protocol to a Labstep Experiment.
-  
+
     Parameters
     ----------
     experiment (obj)
-        The Labstep Experiment to attach the Protocol to. Must have property 'id'.
-    protocol (obj) 
+        The Labstep Experiment to attach the Protocol to.
+        Must have property 'id'.
+    protocol (obj)
         The Labstep Protocol to attach. Must have property 'id'.
     Returns
     -------
     experiment_protocol
         An object representing the Protocol attached to the Experiment.
     """
-    data = {'experiment_workflow_id':experiment.id,
-            'protocol_id': protocol['last_version']['id']}  
-    return newEntity(user,'experiment',data)
+    data = {'experiment_workflow_id': experiment.id,
+            'protocol_id': protocol['last_version']['id']}
+    return newEntity(user, 'experiment', data)
 
-def addTagTo(user,entity,tag):
+
+def addTagTo(user, entity, tag):
     """
-    Attach an existing tag to a Labstep entity. (See 'tag' for simplified tagging).
+    Attach an existing tag to a Labstep entity.
+    (See 'tag' for simplified tagging).
     Parameters
     ----------
     user (obj)
-    The Labstep user adding a tag. Must have property 'api_key'. See 'login'.
+        The Labstep user adding a tag.
+        Must have property 'api_key'. See 'login'.
     entity (obj)
-    The Labstep entity to tag. Can be Resource, Experiment, or Protocol. Must have 'id'.
+        The Labstep entity to tag. Can be Resource,
+        Experiment, or Protocol. Must have 'id'.
     tag (str)
-    The tag to attach. Must have an 'id' property.
+        The tag to attach. Must have an 'id' property.
     Returns
     -------
     entity
         Returns the tagged entity.
     """
-    if 'experiments' in entity:
-        entityType = experimentEntityName
-    elif 'parent_protocol' in entity:
-        entityType = protocolEntityName
-    elif 'resource_location' in entity:
-        entityType = resourceEntityName
-    elif 'collection' in entity:
-        entityType = protocolEntityName
-        entity = entity['collection']
-    else:
+    entityName = entity.__entityName__
+    if entityName not in [experimentEntityName, protocolEntityName,
+                          resourceEntityName]:
         raise Exception('Entities of this type cannot be tagged')
 
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"api/generic/",entityType,"/",str(entity['id']),"/tag/",str(tag['id']))
+    url = url_join(API_ROOT, "api/generic/", entityName,
+                   str(entity.id), tagEntityName, str(tag['id']))
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
 
 
-####################        editEntity()
-def editEntity(user,entityName,id,metadata):
+# editEntity()
+def editEntity(user, entityName, id, metadata):
     """
     Parameters
     ----------
@@ -537,7 +562,8 @@ def editEntity(user,entityName,id,metadata):
         The Labstep user.
     entityName (str)
         Currents options for entity name are: experimentEntityName,
-        resourceEntityName, protocolEntityName, tagEntityName, workspaceEntityName, commentEntityName
+        resourceEntityName, protocolEntityName, tagEntityName,
+        workspaceEntityName, commentEntityName
     id
         The id of the entity.
     metadata (dict)
@@ -551,17 +577,19 @@ def editEntity(user,entityName,id,metadata):
     # Filter the 'metadata' dictionary by removing {'fields': None}
     # to preserve the existing data in the 'fields', otherwise
     # the 'fields' will be overwritten to 'None'.
-    new_metadata = dict(filter(lambda field: field[1] != None, metadata.items()))
-    headers = {'apikey': user.api_key} 
-    url = url_join(API_ROOT,'/api/generic/',entityName,str(id))  
+    new_metadata = dict(
+        filter(lambda field: field[1] is not None, metadata.items()))
+    headers = {'apikey': user.api_key}
+    url = url_join(API_ROOT, '/api/generic/', entityName, str(id))
     r = requests.put(url, json=new_metadata, headers=headers)
     handleError(r)
     return json.loads(r.content)
 
-def editComment(user,comment_id,comment):
+
+def editComment(user, comment_id, comment):
     """
     Edit an existing comment/caption.
-  
+
     Parameters
     ----------
     user (obj)
@@ -577,17 +605,19 @@ def editComment(user,comment_id,comment):
         An object representing the editted comment.
     """
     metadata = {'body': comment}
-    comment = editEntity(user,commentEntityName,comment_id,metadata)
+    comment = editEntity(user, commentEntityName, comment_id, metadata)
     return comment
 
-def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
+
+def editExperiment(user, experiment, name=None, description=None,
+                   deleted_at=None):
     """
     Edit an existing Experiment.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     experiment (obj)
         The Experiment to edit.
     name (str)
@@ -605,17 +635,19 @@ def editExperiment(user,experiment,name=None,description=None,deleted_at=None):
     metadata = {'name': name,
                 'description': description,
                 'deleted_at': deleted_at}
-    experiment = editEntity(user,experimentEntityName,experiment.id,metadata)
+    experiment = editEntity(user, experimentEntityName,
+                            experiment.id, metadata)
     return experiment
 
-def editProtocol(user,protocol,name=None,deleted_at=None):
+
+def editProtocol(user, protocol, name=None, deleted_at=None):
     """
     Edit an existing Protocol.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     protocol (obj)
         The Protocol to edit.
     name (str)
@@ -630,24 +662,25 @@ def editProtocol(user,protocol,name=None,deleted_at=None):
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    protocol = editEntity(user,protocolEntityName,protocol.id,metadata)
+    protocol = editEntity(user, protocolEntityName, protocol.id, metadata)
     return protocol
 
-def editResource(user,resource,name=None,status=None,deleted_at=None):
+
+def editResource(user, resource, name=None, deleted_at=None):
     """
     Edit an existing Resource.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     resource (obj)
         The Resource to edit.
     name (str)
         The new name of the Experiment.
     status (str)
-        Current options to change the status to are:
-        'available', 'unavailable', 'requested', 'ordered'.
+        Current options to set the status of a Resource to are:
+        'available' or 'unavailable'.
     deleted_at (obj)
         The timestamp at which the Resource is deleted/archived.
 
@@ -657,19 +690,19 @@ def editResource(user,resource,name=None,status=None,deleted_at=None):
         An object representing the Resource to edit.
     """
     metadata = {'name': name,
-                'status': handleStatus(status),
                 'deleted_at': deleted_at}
-    resource = editEntity(user,resourceEntityName,resource.id,metadata)
+    resource = editEntity(user, resourceEntityName, resource.id, metadata)
     return resource
 
-def editTag(user,tag,name):
+
+def editTag(user, tag, name):
     """
     Edit the name of an existing Tag.
-  
+
     Parameters
     ----------
     user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'. 
+        The Labstep user. Must have property 'api_key'. See 'login'.
     tag (obj)
         The current Tag to edit.
     name (str)
@@ -681,17 +714,18 @@ def editTag(user,tag,name):
         An object representing the editted Tag.
     """
     metadata = {'name': name}
-    tag = editEntity(user,tagEntityName,(tag['id']),metadata)
+    tag = editEntity(user, tagEntityName, (tag['id']), metadata)
     return tag
 
-def editWorkspace(user,workspace,name=None,deleted_at=None):
+
+def editWorkspace(user, workspace, name=None, deleted_at=None):
     """
     Edit an existing Workspace.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     workspace (obj)
         The Workspace to edit.
     deleted_at (obj)
@@ -702,21 +736,22 @@ def editWorkspace(user,workspace,name=None,deleted_at=None):
     workspace
         An object representing the Workspace to edit.
     """
-    metadata = {'name':name,
+    metadata = {'name': name,
                 'deleted_at': deleted_at}
-    workspace = editEntity(user,workspaceEntityName,workspace['id'],metadata)
+    workspace = editEntity(user, workspaceEntityName,
+                           workspace['id'], metadata)
     return workspace
 
 
-####################        deleteEntity()
-def deleteExperiment(user,experiment):
+# deleteEntity()
+def deleteExperiment(user, experiment):
     """
     Delete an existing Experiment.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     experiment (obj)
         The Experiment to delete.
 
@@ -725,17 +760,18 @@ def deleteExperiment(user,experiment):
     experiment
         An object representing the Experiment to delete.
     """
-    experiment = editExperiment(user,experiment,deleted_at=getTime())
+    experiment = editExperiment(user, experiment, deleted_at=getTime())
     return experiment
 
-def deleteProtocol(user,protocol):
+
+def deleteProtocol(user, protocol):
     """
     Delete an existing Protocol.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     protocol (obj)
         The Protocol to delete.
 
@@ -744,17 +780,18 @@ def deleteProtocol(user,protocol):
     protocol
         An object representing the Protocol to delete.
     """
-    protocol = editProtocol(user,protocol,deleted_at=getTime())
+    protocol = editProtocol(user, protocol, deleted_at=getTime())
     return protocol
 
-def deleteResource(user,resource):
+
+def deleteResource(user, resource):
     """
     Delete an existing Resource.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     resource (obj)
         The Resource to delete.
 
@@ -763,17 +800,18 @@ def deleteResource(user,resource):
     resource
         An object representing the Resource to delete.
     """
-    resource = editResource(user,resource,deleted_at=getTime())
+    resource = editResource(user, resource, deleted_at=getTime())
     return resource
 
-def deleteTag(user,tag):
+
+def deleteTag(user, tag):
     """
     Delete an existing tag.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     tag (obj)
         The tag to delete.
 
@@ -783,19 +821,20 @@ def deleteTag(user,tag):
         An object representing the tag to delete.
     """
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT,"/api/generic/tag/",str(tag['id']))
+    url = url_join(API_ROOT, "/api/generic/tag/", str(tag['id']))
     r = requests.delete(url, headers=headers)
     handleError(r)
     return json.loads(r.content)
 
-def deleteWorkspace(user,workspace):
+
+def deleteWorkspace(user, workspace):
     """
     Delete an existing Workspace.
-  
+
     Parameters
     ----------
     user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'. 
+        The labstep user. Must have property 'api_key'. See 'login'.
     workspace (obj)
         The Workspace to delete.
 
@@ -804,23 +843,23 @@ def deleteWorkspace(user,workspace):
     workspace
         An object representing the Workspace to delete.
     """
-    workspace = editWorkspace(user,workspace,deleted_at=getTime())
+    workspace = editWorkspace(user, workspace, deleted_at=getTime())
     return workspace
 
 
-####################        Compound functions
-def tag(user,entity,name):
+# Compound functions
+def tag(user, entity, name):
     """
-    Simple tagging of a Labstep entity (creates a 
+    Simple tagging of a Labstep entity (creates a
     new tag if none exists).
-  
+
     Parameters
     ----------
     user (obj)
-        The Labstep user to comment as. Must have 
+        The Labstep user to comment as. Must have
         property 'api_key'. See 'login'.
     entity (obj)
-        The Labstep entity to tag. Can be Resource, 
+        The Labstep entity to tag. Can be Resource,
         Experiment, or Protocol. Must have 'id'.
     name (str)
         The name of the tag to create.
@@ -830,20 +869,20 @@ def tag(user,entity,name):
     entity
         Returns the tagged entity.
     """
-    tags = getTags(user,name)
-    matchingTags = list(filter(lambda x: x['name']==name,tags))
+    tags = getTags(user, search_query=name)
+    matchingTags = list(filter(lambda x: x['name'] == name, tags))
 
-    if len(matchingTags)== 0:
-        tag = newTag(user,name)
-    else: 
+    if len(matchingTags) == 0:
+        tag = newTag(user, name)
+    else:
         tag = matchingTags[0]
 
-    entity = addTagTo(user,entity,tag)
-    return entity
+    return addTagTo(user, entity, tag)
 
-def addCommentWithFile(user,entity,body,filepath):
-    if filepath != None:
-        lsFile = newFile(user,filepath)
+
+def addCommentWithFile(user, entity, body, filepath):
+    if filepath is not None:
+        lsFile = newFile(user, filepath)
     else:
         lsFile = None
-    return addComment(user,entity,body,lsFile)
+    return addComment(user, entity, body, lsFile)
