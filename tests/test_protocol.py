@@ -29,7 +29,7 @@ class TestProtocol:
     def test_delete(self):
         # test_delete the 1st protocol from the getMany list
         protocolToDelete = testUser.newProtocol('testDelete')
-        result = protocolToDelete.delete()
+        result = LS.Protocol(protocolToDelete, testUser).delete()
         assert result['deleted_at'] is not None, \
             'FAILED TO DELETE PROTOCOL'
 

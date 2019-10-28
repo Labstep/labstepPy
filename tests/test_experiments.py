@@ -35,7 +35,7 @@ class TestExperiment:
     def test_delete(self):
         # test_delete the 1st experiment from the getMany list
         experimentToDelete = testUser.newExperiment('testDelete')
-        result = experimentToDelete.delete()
+        result = LS.Experiment(experimentToDelete, testUser).delete()
         assert result['deleted_at'] is not None, \
             'FAILED TO DELETE EXPERIMENT'
 

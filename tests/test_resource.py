@@ -29,7 +29,7 @@ class TestResource:
     def test_delete(self):
         # test_delete the 1st resource from the getMany list
         resourceToDelete = testUser.newResource('testDelete')
-        result = resourceToDelete.delete()
+        result = LS.Resource(resourceToDelete, testUser).delete()
         assert result['deleted_at'] is not None, \
             'FAILED TO DELETE RESOURCE'
 
