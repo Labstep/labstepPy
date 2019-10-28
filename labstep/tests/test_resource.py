@@ -19,6 +19,7 @@ resource = LS.Resource(getOne, testUser)
 randomNum = randrange(1, 9)
 editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
 
+
 class TestResource:
     def test_edit(self):
         result = resource.edit(editName)

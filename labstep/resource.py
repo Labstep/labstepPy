@@ -5,6 +5,7 @@ from .helpers import getTime, update
 from .core import editResource, addCommentWithFile, tag
 from .constants import resourceEntityName
 
+
 class Resource:
     def __init__(self, data, user):
         self.__user__ = user
