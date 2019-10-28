@@ -155,7 +155,7 @@ class User:
         """
         return newProtocol(self, name)
 
-    def newResource(self, name, status=None):
+    def newResource(self, name):
         """
         Parameters
         ----------
@@ -165,7 +165,7 @@ class User:
             Current options to set the status of a Resource to are:
             'available' or 'unavailable'.
         """
-        return newResource(self, name, status)
+        return newResource(self, name)
 
     def newTag(self, name):
         """

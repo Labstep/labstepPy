@@ -3,11 +3,14 @@
 
 from .helpers import getTime, update
 from .core import editProtocol, addCommentWithFile, tag
+from .constants import protocolEntityName
 
 
 class Protocol:
     def __init__(self, data, user):
         self.__user__ = user
+        self.__entityName__ = protocolEntityName
+
         update(self, data)
 
     # functions()

@@ -4,11 +4,13 @@
 from .helpers import getTime, update
 from .core import (editExperiment, addProtocolToExperiment,
                    addCommentWithFile, tag)
+from .constants import experimentEntityName
 
 
 class Experiment:
     def __init__(self, data, user):
         self.__user__ = user
+        self.__entityName__ = experimentEntityName
         update(self, data)
 
     # functions()

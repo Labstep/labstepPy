@@ -18,8 +18,7 @@ new_exp = testUser.newExperiment(name=testName,
 new_pro = testUser.newProtocol(name=testName)
 
 # Create a new resource
-new_res = testUser.newResource(name=testName,
-                               status=testStatus)
+new_res = testUser.newResource(name=testName)
 
 # Create a new tag
 new_tag = testUser.newTag(name=testName)

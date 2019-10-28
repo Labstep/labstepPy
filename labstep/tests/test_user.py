@@ -9,12 +9,11 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 testName = 'Api Default Name'
 testDescription = 'Api Default Description'
 testStatus = 'available'
-testFilePath = './labstep/tests/test_setup.py'
+testFilePath = './labstep/tests/test_user.py'
 
 # New variables for this script
 testNewName = 'Api Pytest New Name'
 testNewDescription = 'Api Pytest New Description'
-testNewStatus = 'unavailable'
 testSearch = 'api'
 
 
@@ -36,8 +35,6 @@ class TestUser:
         result = testUser.getResource(405412)
         assert result['name'] == testName, \
             'INCORRECT RESOURCE NAME!'
-        assert result['status'] == testStatus, \
-            'INCORRECT RESOURCE STATUS!'
 
     def test_getWorkspace(self):
         result = testUser.getWorkspace(11339)
@@ -84,16 +81,15 @@ class TestUser:
             'INCORRECT NEW PROTOCOL NAME!'
 
     def test_newResource(self):
-        result = testUser.newResource(testNewName, testNewStatus)
+        result = testUser.newResource(testNewName)
         assert result['name'] == testNewName, \
             'INCORRECT NEW RESOURCE NAME!'
-        assert result['status'] == testNewStatus, \
-            'INCORRECT NEW RESOURCE STATUS!'
 
-    def test_newTag(self):
+    """ def test_newTag(self):
         result = testUser.newTag(testNewName)
+        result.delete()
         assert result['name'] == testNewName, \
-            'INCORRECT NEW TAG NAME!'
+            'INCORRECT NEW TAG NAME!' """
 
     def test_newWorkspace(self):
         result = testUser.newWorkspace(testNewName)

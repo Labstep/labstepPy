@@ -9,7 +9,7 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 # Variables as in test_setup.py
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
-testFilePath = './labstep/tests/test_setup.py'
+testFilePath = './labstep/tests/test_protocol.py'
 
 # Get the entity
 getOne = testUser.getProtocol(10924)
@@ -41,7 +41,7 @@ class TestProtocol:
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
-    # def test_addTag(self):
-    #     result = protocol.addTag(testName)
-    #     assert result, \
-    #         'FAILED TO ADD TAG'
+    def test_addTag(self):
+        result = protocol.addTag(testName)
+        assert result, \
+            'FAILED TO ADD TAG'

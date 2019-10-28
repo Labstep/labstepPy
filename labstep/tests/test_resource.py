@@ -9,7 +9,7 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 # Variables as in test_setup.py
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
-testFilePath = './labstep/tests/test_setup.py'
+testFilePath = './labstep/tests/test_resource.py'
 
 # Get the entity
 getOne = testUser.getResource(405415)
@@ -18,16 +18,12 @@ resource = LS.Resource(getOne, testUser)
 # Set variables for editting
 randomNum = randrange(1, 9)
 editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
-editStatus = 'available'
-
 
 class TestResource:
     def test_edit(self):
-        result = resource.edit(editName, editStatus)
+        result = resource.edit(editName)
         assert result['name'] == editName, \
             'INCORRECT RESOURCE NAME!'
-        assert result['status'] == editStatus, \
-            'INCORRECT RESOURCE STATUS!'
 
     def test_delete(self):
         # test_delete the 1st resource from the getMany list
@@ -44,7 +40,7 @@ class TestResource:
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
-    # def test_addTag(self):
-    #     result = resource.addTag(testName)
-    #     assert result, \
-    #         'FAILED TO ADD TAG'
+    def test_addTag(self):
+        result = resource.addTag(testName)
+        assert result, \
+            'FAILED TO ADD TAG'

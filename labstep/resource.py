@@ -3,16 +3,17 @@
 
 from .helpers import getTime, update
 from .core import editResource, addCommentWithFile, tag
-
+from .constants import resourceEntityName
 
 class Resource:
     def __init__(self, data, user):
         self.__user__ = user
+        self.__entityName__ = resourceEntityName
         update(self, data)
 
     # functions()
-    def edit(self, name=None, status=None):
-        return editResource(self.__user__, self, name, status)
+    def edit(self, name=None):
+        return editResource(self.__user__, self, name)
 
     def delete(self):
         return editResource(self.__user__, self, deleted_at=getTime())

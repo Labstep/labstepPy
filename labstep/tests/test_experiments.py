@@ -9,7 +9,7 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 # Variables as in test_setup.py
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
-testFilePath = './labstep/tests/test_setup.py'
+testFilePath = './labstep/tests/test_experiments.py'
 
 # Get the entity
 getOne = testUser.getExperiment(23976)
@@ -50,7 +50,7 @@ class TestExperiment:
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
-    # def test_addTag(self):
-    #     result = experiment.addTag(testName)
-    #     assert result, \
-    #         'FAILED TO ADD TAG'
+    def test_addTag(self):
+        result = experiment.addTag(testName)
+        assert result, \
+            'FAILED TO ADD TAG'

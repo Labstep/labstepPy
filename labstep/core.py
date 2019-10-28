@@ -376,7 +376,7 @@ def newProtocol(user, name):
     return protocol
 
 
-def newResource(user, name, status=None):
+def newResource(user, name):
     """
     Create a new Labstep Resource.
 
@@ -396,8 +396,7 @@ def newResource(user, name, status=None):
     protocol
         An object representing the new Labstep Resource.
     """
-    metadata = {'name': name,
-                'status': handleStatus(status)}
+    metadata = {'name': name}
     resource = newEntity(user, resourceEntityName, metadata)
     return resource
 
@@ -542,21 +541,14 @@ def addTagTo(user, entity, tag):
     entity
         Returns the tagged entity.
     """
-    if 'experiments' in entity:
-        entityType = experimentEntityName
-    elif 'parent_protocol' in entity:
-        entityType = protocolEntityName
-    elif 'resource_location' in entity:
-        entityType = resourceEntityName
-    elif 'collection' in entity:
-        entityType = protocolEntityName
-        entity = entity['collection']
-    else:
+    entityName = entity.__entityName__
+    if entityName not in [experimentEntityName, protocolEntityName,
+                          resourceEntityName]:
         raise Exception('Entities of this type cannot be tagged')
 
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, "api/generic/", entityType,
-                   str(entity['id']), tagEntityName, str(tag['id']))
+    url = url_join(API_ROOT, "api/generic/", entityName,
+                   str(entity.id), tagEntityName, str(tag['id']))
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
 
@@ -674,7 +666,7 @@ def editProtocol(user, protocol, name=None, deleted_at=None):
     return protocol
 
 
-def editResource(user, resource, name=None, status=None, deleted_at=None):
+def editResource(user, resource, name=None, deleted_at=None):
     """
     Edit an existing Resource.
 
@@ -698,7 +690,6 @@ def editResource(user, resource, name=None, status=None, deleted_at=None):
         An object representing the Resource to edit.
     """
     metadata = {'name': name,
-                'status': handleStatus(status),
                 'deleted_at': deleted_at}
     resource = editEntity(user, resourceEntityName, resource.id, metadata)
     return resource
@@ -878,7 +869,7 @@ def tag(user, entity, name):
     entity
         Returns the tagged entity.
     """
-    tags = getTags(user, name)
+    tags = getTags(user, search_query=name)
     matchingTags = list(filter(lambda x: x['name'] == name, tags))
 
     if len(matchingTags) == 0:
@@ -886,8 +877,7 @@ def tag(user, entity, name):
     else:
         tag = matchingTags[0]
 
-    entity = addTagTo(user, entity, tag)
-    return entity
+    return addTagTo(user, entity, tag)
 
 
 def addCommentWithFile(user, entity, body, filepath):
