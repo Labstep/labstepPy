@@ -9,7 +9,7 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 testName = 'Api Default Name'
 testDescription = 'Api Default Description'
 testStatus = 'available'
-testFilePath = './labstep/tests/test_user.py'
+testFilePath = './tests/test_user.py'
 
 # New variables for this script
 testNewName = 'Api Pytest New Name'

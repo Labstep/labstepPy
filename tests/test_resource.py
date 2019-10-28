@@ -9,7 +9,7 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 # Variables as in test_setup.py
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
-testFilePath = './labstep/tests/test_resource.py'
+testFilePath = './tests/test_resource.py'
 
 # Get the entity
 getOne = testUser.getResource(405415)

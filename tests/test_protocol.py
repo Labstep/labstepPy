@@ -9,7 +9,7 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 # Variables as in test_setup.py
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
-testFilePath = './labstep/tests/test_protocol.py'
+testFilePath = './tests/test_protocol.py'
 
 # Get the entity
 getOne = testUser.getProtocol(10924)
