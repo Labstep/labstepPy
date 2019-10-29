@@ -7,6 +7,7 @@ from .file import newFile
 
 commentEntityName = 'comment'
 
+
 def addComment(user, entity, body, file=None):
     """
     Add a comment to a Labstep entity such as an Experiment or Resource.
