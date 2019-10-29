@@ -4,9 +4,6 @@
 import requests
 import json
 from .config import API_ROOT
-from .experiment import experimentEntityName
-from .protocol import protocolEntityName
-from .resource import resourceEntityName
 from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
@@ -77,9 +74,6 @@ def addTagTo(user, entity, tag):
         Returns the tagged entity.
     """
     entityName = entity.__entityName__
-    if entityName not in [experimentEntityName, protocolEntityName,
-                          resourceEntityName]:
-        raise Exception('Entities of this type cannot be tagged')
 
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, "api/generic/", entityName,
