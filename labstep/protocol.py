@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .constants import protocolEntityName
-from .core import getEntity, getEntities, newEntity, editEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, createdAtFrom, createdAtTo, update
 from .comment import addCommentWithFile
 from .tag import tag
+
+protocolEntityName = 'protocol-collection'
 
 
 def getProtocol(user, protocol_id):

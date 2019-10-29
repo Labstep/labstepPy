@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .constants import resourceEntityName
-from .core import getEntity, getEntities, newEntity, editEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update
 from .comment import addCommentWithFile
 from .tag import tag
+
+resourceEntityName = 'resource'
 
 
 def getResource(user, resource_id):
