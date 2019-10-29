@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .constants import workspaceEntityName
-from .core import getEntity, getEntities, newEntity, editEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import update
 
 

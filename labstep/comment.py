@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .constants import commentEntityName
-from .core import editEntity, newEntity
+from .entity import editEntity, newEntity
 from .helpers import update
 from .file import newFile
 

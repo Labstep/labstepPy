@@ -6,7 +6,7 @@ import json
 from .config import API_ROOT
 from .constants import (experimentEntityName, protocolEntityName,
                         resourceEntityName, tagEntityName)
-from .core import getEntities, newEntity, editEntity
+from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
 

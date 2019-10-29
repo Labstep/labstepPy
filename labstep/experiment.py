@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .constants import experimentEntityName
-from .core import getEntity, getEntities, newEntity, editEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, createdAtFrom, createdAtTo, update
 from .comment import addCommentWithFile
 from .tag import tag
