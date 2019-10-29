@@ -4,8 +4,9 @@
 import requests
 import json
 from .config import API_ROOT
-from .constants import (experimentEntityName, protocolEntityName,
-                        resourceEntityName)
+from .experiment import experimentEntityName
+from .protocol import protocolEntityName
+from .resource import resourceEntityName
 from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
