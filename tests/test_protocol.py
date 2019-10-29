@@ -6,7 +6,7 @@ from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in test_setup.py
+# Variables as in setup for test
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
 testFilePath = './tests/test_protocol.py'
@@ -27,7 +27,6 @@ class TestProtocol:
             'INCORRECT EDITTED PROTOCOL NAME!'
 
     def test_delete(self):
-        # test_delete the 1st protocol from the getMany list
         protocolToDelete = testUser.newProtocol('testDelete')
         result = LS.Protocol(protocolToDelete, testUser).delete()
         assert result['deleted_at'] is not None, \

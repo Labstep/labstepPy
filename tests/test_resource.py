@@ -6,7 +6,7 @@ from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in test_setup.py
+# Variables as in setup for test
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
 testFilePath = './tests/test_resource.py'
@@ -27,7 +27,6 @@ class TestResource:
             'INCORRECT RESOURCE NAME!'
 
     def test_delete(self):
-        # test_delete the 1st resource from the getMany list
         resourceToDelete = testUser.newResource('testDelete')
         result = LS.Resource(resourceToDelete, testUser).delete()
         assert result['deleted_at'] is not None, \
