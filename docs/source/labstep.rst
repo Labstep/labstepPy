@@ -12,30 +12,6 @@ labstep.comment module
    :undoc-members:
    :show-inheritance:
 
-labstep.config module
----------------------
-
-.. automodule:: labstep.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-labstep.constants module
-------------------------
-
-.. automodule:: labstep.constants
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-labstep.core module
--------------------
-
-.. automodule:: labstep.core
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 labstep.experiment module
 -------------------------
 
@@ -48,14 +24,6 @@ labstep.file module
 -------------------
 
 .. automodule:: labstep.file
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-labstep.helpers module
-----------------------
-
-.. automodule:: labstep.helpers
    :members:
    :undoc-members:
    :show-inheritance:
