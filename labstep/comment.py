@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .constants import commentEntityName
 from .entity import editEntity, newEntity
 from .helpers import update
 from .file import newFile
 
+commentEntityName = 'comment'
 
 def addComment(user, entity, body, file=None):
     """

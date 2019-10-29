@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .constants import experimentEntityName
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, createdAtFrom, createdAtTo, update
 from .comment import addCommentWithFile
 from .tag import tag
+
+experimentEntityName = 'experiment-workflow'
 
 
 def getExperiment(user, experiment_id):

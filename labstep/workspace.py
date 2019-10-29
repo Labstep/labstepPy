@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .constants import workspaceEntityName
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import update
+
+workspaceEntityName = 'group'
 
 
 def getWorkspace(user, workspace_id):

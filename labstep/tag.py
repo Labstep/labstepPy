@@ -9,6 +9,8 @@ from .constants import (experimentEntityName, protocolEntityName,
 from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
+tagEntityName = 'tag'
+
 
 def getTags(user, count=1000, search_query=None):
     """
