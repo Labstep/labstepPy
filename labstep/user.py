@@ -4,13 +4,13 @@
 import requests
 import json
 from .config import API_ROOT
-from .core import newFile
 from .helpers import url_join, handleError
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
 from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
+from .file import newFile
 
 
 def login(username, password):

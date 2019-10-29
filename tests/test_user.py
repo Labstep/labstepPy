@@ -5,7 +5,7 @@ import labstep as LS
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in test_setup.py
+# Variables as in setup for test
 testName = 'Api Default Name'
 testDescription = 'Api Default Description'
 testFilePath = './tests/test_user.py'

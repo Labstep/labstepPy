@@ -6,7 +6,7 @@ from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in test_setup.py
+# Variables as in setup for test
 testName = 'Api Default Name'
 testComment = 'Api Default Comment'
 testFilePath = './tests/test_experiments.py'

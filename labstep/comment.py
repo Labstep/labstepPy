@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from .constants import commentEntityName
-from .core import editEntity, newEntity, newFile
+from .core import editEntity, newEntity
 from .helpers import update
+from .file import newFile
 
 
 def addComment(user, entity, body, file=None):
