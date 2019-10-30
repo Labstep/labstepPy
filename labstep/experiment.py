@@ -151,7 +151,7 @@ class Experiment:
         name (str)
             The new name of the Experiment.
         description (str)
-            The new description for the Experiment.
+            The new description of the Experiment.
 
         Example
         -------
@@ -207,9 +207,9 @@ class Experiment:
 
         Parameters
         ----------
-        body(str)
+        body (str)
             The body of the comment.
-        file(obj)
+        file (obj)
             A Labstep File entity to attach to the comment.
 
         Example
@@ -237,6 +237,6 @@ class Experiment:
         .. code-block:: python
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
-            my_experiment.addTag(body='My Tag')
+            my_experiment.addTag(name='My Tag')
         """
         return tag(self.__user__, self, name)

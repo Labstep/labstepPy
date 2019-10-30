@@ -1,7 +1,7 @@
 import labstep as LS
 
 # Login to your Labstep account
-user = LS.login('apitest@labstep.com', 'apitestpass')
+user = LS.login('myaccount@labstep.com', 'mypassword')
 
 # Get a list of your experiments
 experiments = user.getExperiments(count=10)

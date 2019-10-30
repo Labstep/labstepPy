@@ -27,3 +27,5 @@ sys.path.insert(0, os.path.abspath('../'))
 make clean
 make html
 
+# View the generated documentation:
+# labstep/docs/_build/html/index.html

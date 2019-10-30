@@ -65,7 +65,6 @@ labstep.user module
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: 
 
 labstep.workspace module
 ------------------------

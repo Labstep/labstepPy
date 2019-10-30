@@ -104,18 +104,76 @@ class Protocol:
     def __init__(self, data, user):
         self.__user__ = user
         self.__entityName__ = protocolEntityName
-
         update(self, data)
 
     # functions()
     def edit(self, name=None):
+        """
+        Edit an existing Protocol.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the Protocol.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol.edit(name='A New Protocol Name')
+        """
         return editProtocol(self.__user__, self, name)
 
     def delete(self):
+        """
+        Delete an existing Protocol.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol.delete()
+        """
         return editProtocol(self.__user__, self, deleted_at=getTime())
 
     def comment(self, body, filepath=None):
+        """
+        Add a comment to a Labstep Protocol.
+
+        Parameters
+        ----------
+        body (str)
+            The body of the comment.
+        file (obj)
+            A Labstep File entity to attach to the comment.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol.comment(body='I am commenting!',
+                                filepath='pwd/file_to_upload.dat')
+        """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
     def addTag(self, name):
+        """
+        Add a tag to the Protocol (creates a
+        new tag if none exists).
+
+        Parameters
+        ----------
+        name (str)
+            The name of the tag to create.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol.addTag(name='My Tag')
+        """
         return tag(self.__user__, self, name)
