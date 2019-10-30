@@ -105,7 +105,7 @@ def editExperiment(user, experiment, name=None, description=None,
     Returns
     -------
     experiment
-        An object representing the Experiment to edit.
+        An object representing the editted Experiment.
     """
     metadata = {'name': name,
                 'description': description,
@@ -124,6 +124,7 @@ def addProtocolToExperiment(user, experiment, protocol):
         Must have property 'id'.
     protocol (obj)
         The Labstep Protocol to attach. Must have property 'id'.
+
     Returns
     -------
     experiment_protocol
@@ -142,17 +143,100 @@ class Experiment:
 
     # functions()
     def edit(self, name=None, description=None):
+        """
+        Edit an existing Experiment.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the Experiment.
+        description (str)
+            The new description for the Experiment.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment.edit(name='A New Experiment Name', description='This
+                               is my new experiment description!')
+        """
         newData = editExperiment(self.__user__, self, name, description)
         return update(self, newData)
 
     def delete(self):
+        """
+        Delete an existing Experiment.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment.delete()
+        """
         return editExperiment(self.__user__, self, deleted_at=getTime())
 
     def addProtocol(self, protocol):
+        """
+        Add a Labstep Protocol to a Labstep Experiment.
+
+        Parameters
+        ----------
+        protocol (obj)
+            The Labstep Protocol to attach.
+
+        Example
+        -------
+        .. code-block:: python
+
+            # Get an experiment
+            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+
+            # Get a protocol
+            my_protocol = user.getProtocol(10000)
+
+            # Attach the protocol to the experiment
+            my_experiment.addProtocol(my_protocol)
+        """
         return addProtocolToExperiment(self.__user__, self, protocol)
 
     def comment(self, body, filepath=None):
+        """
+        Add a comment to a Labstep Experiment.
+
+        Parameters
+        ----------
+        body(str)
+            The body of the comment.
+        file(obj)
+            A Labstep File entity to attach to the comment.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment.comment(body='I am commenting!',
+                                  filepath='pwd/file_to_upload.dat')
+        """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
     def addTag(self, name):
+        """
+        Add a tag to the Experiment (creates a
+        new tag if none exists).
+
+        Parameters
+        ----------
+        name (str)
+            The name of the tag to create.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment.addTag(body='My Tag')
+        """
         return tag(self.__user__, self, name)

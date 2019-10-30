@@ -11,6 +11,7 @@ labstep.comment module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: addComment, addCommentWithFile, editComment
 
 labstep.experiment module
 -------------------------
@@ -19,6 +20,7 @@ labstep.experiment module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: getExperiment, getExperiments, newExperiment, editExperiment, addProtocolToExperiment
 
 labstep.file module
 -------------------
@@ -27,6 +29,7 @@ labstep.file module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: newFile
 
 labstep.protocol module
 -----------------------
@@ -35,6 +38,7 @@ labstep.protocol module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: getProtocol, getProtocols, newProtocol, editProtocol
 
 labstep.resource module
 -----------------------
@@ -43,6 +47,7 @@ labstep.resource module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: getResource, getResources, newResource, editResource
 
 labstep.tag module
 ------------------
@@ -51,6 +56,7 @@ labstep.tag module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: getTags, newTag, addTagTo, tag, editTag, deleteTag
 
 labstep.user module
 -------------------
@@ -59,6 +65,7 @@ labstep.user module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: 
 
 labstep.workspace module
 ------------------------
@@ -67,6 +74,7 @@ labstep.workspace module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: getWorkspace, getWorkspaces, newWorkspace, editWorkspace
 
 
 Module contents

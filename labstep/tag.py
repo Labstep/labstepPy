@@ -58,6 +58,7 @@ def addTagTo(user, entity, tag):
     """
     Attach an existing tag to a Labstep entity.
     (See 'tag' for simplified tagging).
+
     Parameters
     ----------
     user (obj)
@@ -68,6 +69,7 @@ def addTagTo(user, entity, tag):
         Experiment, or Protocol. Must have 'id'.
     tag (str)
         The tag to attach. Must have an 'id' property.
+
     Returns
     -------
     entity
