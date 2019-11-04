@@ -32,21 +32,23 @@ def getExperiment(user, experiment_id):
 def getExperiments(user, count=100, search_query=None,
                    created_at_from=None, created_at_to=None, tag_id=None):
     """
-    Retrieve a list of a user's Experiments on Labstep.
+    Retrieve a list of a user's Experiments on Labstep,
+    which can be filtered using the parameters:
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user whose Experiments you want to retrieve.
-        Must have property 'api_key'. See 'login'.
     count (int)
         The number of Experiments to retrieve.
+    search_query (str)
+        Search for Experiments with this 'name'.
     created_at_from (str)
         The start date of the search range, must be
         in the format of 'YYYY-MM-DD'.
     created_at_to (str)
         The end date of the search range, must be
         in the format of 'YYYY-MM-DD'.
+    tag_id (int)
+        The id of the Tag to retrieve.
 
     Returns
     -------
@@ -209,8 +211,9 @@ class Experiment:
         ----------
         body (str)
             The body of the comment.
-        file (obj)
-            A Labstep File entity to attach to the comment.
+        filepath (obj)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
 
         Example
         -------

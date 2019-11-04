@@ -31,17 +31,17 @@ def getResource(user, resource_id):
 
 def getResources(user, count=100, search_query=None, tag_id=None):
     """
-    Retrieve a list of a user's Resources on Labstep.
+    Retrieve a list of a user's Resources on Labstep,
+    which can be filtered using the parameters:
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user whose Resources you want to retrieve.
-        Must have property 'api_key'. See 'login'.
     count (int)
         The number of Resources to retrieve.
-    tag_id (obj/int)
-        Retrieve Resources that have a specific tag.
+    search_query (str)
+        Search for Resources with this 'name'.
+    tag_id (int)
+        The id of the Tag to retrieve.
 
     Returns
     -------
@@ -67,7 +67,7 @@ def newResource(user, name):
 
     Returns
     -------
-    protocol
+    resource
         An object representing the new Labstep Resource.
     """
     metadata = {'name': name}
@@ -107,13 +107,73 @@ class Resource:
 
     # functions()
     def edit(self, name=None):
+        """
+        Edit an existing Resource.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the Resource.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource.edit(name='A New Resource Name')
+        """
         return editResource(self.__user__, self, name)
 
     def delete(self):
+        """
+        Delete an existing Resource.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource.delete()
+        """
         return editResource(self.__user__, self, deleted_at=getTime())
 
     def comment(self, body, filepath=None):
+        """
+        Add a comment to a Labstep Resource.
+
+        Parameters
+        ----------
+        body (str)
+            The body of the comment.
+        filepath (obj)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource.comment(body='I am commenting!',
+                                filepath='pwd/file_to_upload.dat')
+        """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
     def addTag(self, name):
+        """
+        Add a tag to the Resource (creates a
+        new tag if none exists).
+
+        Parameters
+        ----------
+        name (str)
+            The name of the tag to create.
+
+        Example
+        -------
+        .. code-block:: python
+
+            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource.addTag(name='My Tag')
+        """
         return tag(self.__user__, self, name)

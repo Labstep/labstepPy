@@ -335,7 +335,7 @@ class User:
         -------
         .. code-block:: python
 
-            entity = user.newResource(name='Group Aspirin')
+            entity = user.newWorkspace(name='Aspirin Project')
         """
         return newWorkspace(self, name)
 

@@ -32,15 +32,23 @@ def getProtocol(user, protocol_id):
 def getProtocols(user, count=100, search_query=None,
                  created_at_from=None, created_at_to=None, tag_id=None):
     """
-    Retrieve a list of a user's Protocols on Labstep.
+    Retrieve a list of a user's Protocols on Labstep,
+    which can be filtered using the parameters:
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user whose Protocols you want to retrieve.
-        Must have property 'api_key'. See 'login'.
     count (int)
         The number of Protocols to retrieve.
+    search_query (str)
+        Search for Protocols with this 'name'.
+    created_at_from (str)
+        The start date of the search range, must be
+        in the format of 'YYYY-MM-DD'.
+    created_at_to (str)
+        The end date of the search range, must be
+        in the format of 'YYYY-MM-DD'.
+    tag_id (int)
+        The id of the Tag to retrieve.
 
     Returns
     -------
@@ -86,7 +94,7 @@ def editProtocol(user, protocol, name=None, deleted_at=None):
     protocol (obj)
         The Protocol to edit.
     name (str)
-        The new name of the Experiment.
+        The new name of the Protocol.
     deleted_at (obj)
         The timestamp at which the Protocol is deleted/archived.
 
@@ -146,8 +154,9 @@ class Protocol:
         ----------
         body (str)
             The body of the comment.
-        file (obj)
-            A Labstep File entity to attach to the comment.
+        filepath (obj)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
 
         Example
         -------
