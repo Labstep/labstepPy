@@ -126,10 +126,11 @@ class Protocol:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.edit(name='A New Protocol Name')
+
         """
         return editProtocol(self.__user__, self, name)
 
@@ -139,10 +140,11 @@ class Protocol:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.delete()
+
         """
         return editProtocol(self.__user__, self, deleted_at=getTime())
 
@@ -160,11 +162,12 @@ class Protocol:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.comment(body='I am commenting!',
                                 filepath='pwd/file_to_upload.dat')
+
         """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
@@ -180,9 +183,10 @@ class Protocol:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.addTag(name='My Tag')
+
         """
         return tag(self.__user__, self, name)

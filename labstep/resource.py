@@ -117,10 +117,11 @@ class Resource:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.edit(name='A New Resource Name')
+
         """
         return editResource(self.__user__, self, name)
 
@@ -130,10 +131,11 @@ class Resource:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.delete()
+
         """
         return editResource(self.__user__, self, deleted_at=getTime())
 
@@ -151,11 +153,12 @@ class Resource:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.comment(body='I am commenting!',
                                 filepath='pwd/file_to_upload.dat')
+
         """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
@@ -171,9 +174,10 @@ class Resource:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.addTag(name='My Tag')
+
         """
         return tag(self.__user__, self, name)

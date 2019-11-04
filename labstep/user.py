@@ -14,7 +14,7 @@ from .file import newFile
 
 
 def login(username, password):
-    '''
+    """
     Returns an authenticated Labstep User object to allow
     you to interact with the Labstep API.
 
@@ -32,10 +32,11 @@ def login(username, password):
 
     Example
     -------
-    .. code-block:: python
+    .. code-block::
 
         user = LS.login('myaccount@labstep.com', 'mypassword')
-    '''
+
+    """
     data = {'username': username,
             'password': password}
     url = url_join(API_ROOT, "/public-api/user/login")
@@ -62,9 +63,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getExperiment(17000)
+
         """
         return getExperiment(self, experiment_id)
 
@@ -79,9 +81,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getProtocol(17000)
+
         """
         return getProtocol(self, protocol_id)
 
@@ -96,9 +99,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getResource(17000)
+
         """
         return getResource(self, resource_id)
 
@@ -113,9 +117,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getWorkspace(17000)
+
         """
         return getWorkspace(self, workspace_id)
 
@@ -143,12 +148,13 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getExperiments(search_query='bacteria',
                                          created_at_from='2019-01-01',
                                          created_at_to='2019-01-31',
                                          tag_id=800)
+
         """
         return getExperiments(self, count, search_query,
                               created_at_from, created_at_to, tag_id)
@@ -176,12 +182,13 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getProtocols(search_query='bacteria',
                                        created_at_from='2019-01-01',
                                        created_at_to='2019-01-31',
                                        tag_id=800)
+
         """
         return getProtocols(self, count, search_query, created_at_from,
                             created_at_to, tag_id)
@@ -202,10 +209,11 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getResources(search_query='bacteria',
                                        tag_id=800)
+
         """
         return getResources(self, count, search_query, tag_id)
 
@@ -223,9 +231,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getTags(search_query='bacteria')
+
         """
         return getTags(self, count, search_query)
 
@@ -243,9 +252,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.getWorkspaces(name='bacteria')
+
         """
         return getWorkspaces(self, count, name)
 
@@ -263,11 +273,12 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.newExperiment(name='The Synthesis of Aspirin',
                                         description='Aspirin is an analgesic
                                         used to reduce pain.')
+
         """
         return newExperiment(self, name, description)
 
@@ -282,9 +293,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.newProtocol(name='Synthesising Aspirin')
+
         """
         return newProtocol(self, name)
 
@@ -299,9 +311,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.newResource(name='salicylic acid')
+
         """
         return newResource(self, name)
 
@@ -316,9 +329,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.newTag(name='Aspirin')
+
         """
         return newTag(self, name)
 
@@ -333,9 +347,10 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.newWorkspace(name='Aspirin Project')
+
         """
         return newWorkspace(self, name)
 
@@ -350,8 +365,9 @@ class User:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             entity = user.newFile('./structure_of_aspirin.png')
+
         """
         return newFile(self, filepath)

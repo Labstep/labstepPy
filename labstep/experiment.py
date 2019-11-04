@@ -157,7 +157,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.edit(name='A New Experiment Name', description='This
@@ -172,10 +172,11 @@ class Experiment:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.delete()
+
         """
         return editExperiment(self.__user__, self, deleted_at=getTime())
 
@@ -190,7 +191,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             # Get an experiment
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
@@ -200,6 +201,7 @@ class Experiment:
 
             # Attach the protocol to the experiment
             my_experiment.addProtocol(my_protocol)
+
         """
         return addProtocolToExperiment(self.__user__, self, protocol)
 
@@ -217,11 +219,12 @@ class Experiment:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.comment(body='I am commenting!',
                                   filepath='pwd/file_to_upload.dat')
+
         """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
@@ -237,9 +240,10 @@ class Experiment:
 
         Example
         -------
-        .. code-block:: python
+        .. code-block::
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.addTag(name='My Tag')
+
         """
         return tag(self.__user__, self, name)
