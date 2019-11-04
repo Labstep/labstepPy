@@ -4,16 +4,15 @@ labstep package
 Submodules
 ----------
 
-labstep.comment module
-----------------------
+User class
+-------------------
 
-.. automodule:: labstep.comment
+.. automodule:: labstep.user
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: addComment, addCommentWithFile, editComment
 
-labstep.experiment module
+Experiment class
 -------------------------
 
 .. automodule:: labstep.experiment
@@ -22,16 +21,7 @@ labstep.experiment module
    :show-inheritance:
    :exclude-members: getExperiment, getExperiments, newExperiment, editExperiment, addProtocolToExperiment
 
-labstep.file module
--------------------
-
-.. automodule:: labstep.file
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :exclude-members: newFile
-
-labstep.protocol module
+Protocol class
 -----------------------
 
 .. automodule:: labstep.protocol
@@ -40,7 +30,7 @@ labstep.protocol module
    :show-inheritance:
    :exclude-members: getProtocol, getProtocols, newProtocol, editProtocol
 
-labstep.resource module
+Resource class
 -----------------------
 
 .. automodule:: labstep.resource
@@ -49,7 +39,25 @@ labstep.resource module
    :show-inheritance:
    :exclude-members: getResource, getResources, newResource, editResource
 
-labstep.tag module
+File class
+-------------------
+
+.. automodule:: labstep.file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :exclude-members: newFile
+
+Comment class
+----------------------
+
+.. automodule:: labstep.comment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :exclude-members: addComment, addCommentWithFile, editComment
+
+Tag class
 ------------------
 
 .. automodule:: labstep.tag
@@ -58,15 +66,7 @@ labstep.tag module
    :show-inheritance:
    :exclude-members: getTags, newTag, addTagTo, tag, editTag, deleteTag
 
-labstep.user module
--------------------
-
-.. automodule:: labstep.user
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-labstep.workspace module
+Workspace class
 ------------------------
 
 .. automodule:: labstep.workspace
@@ -76,7 +76,7 @@ labstep.workspace module
    :exclude-members: getWorkspace, getWorkspaces, newWorkspace, editWorkspace
 
 
-Module contents
+Class contents
 ---------------
 
 .. automodule:: labstep

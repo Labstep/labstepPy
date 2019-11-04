@@ -16,7 +16,7 @@ def newFile(user, filepath):
     user (obj)
         The Labstep user uploading the file.
         Must have property 'api_key'. See 'login'.
-    filepath (str)
+    filepath (obj)
         The filepath to the file to attach.
 
     Returns
@@ -35,5 +35,23 @@ def newFile(user, filepath):
 class File:
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = 'file'
+        self.__entityName__ = 'file/upload'
         update(self, data)
+
+    def upload(self, filepath=None):
+        """
+        Upload a file to the Labstep entity Data.
+
+        Parameters
+        ----------
+        filepath (obj)
+            The filepath to the file to attach.
+
+        Example
+        -------
+        .. code-block::
+
+            File.upload(filepath='pwd/results.dat')
+
+        """
+        return newFile(self.__user__, self, filepath)
