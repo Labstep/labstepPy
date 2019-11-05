@@ -21,7 +21,7 @@ def getExperiment(user, experiment_id):
 
     Returns
     -------
-    experiment
+    :class:`~labstep.experiment.Experiment`
         An object representing a Labstep Experiment.
     """
     return getEntity(user, Experiment, id=experiment_id)
@@ -50,7 +50,7 @@ def getExperiments(user, count=100, search_query=None,
 
     Returns
     -------
-    experiment
+    List[:class:`~labstep.experiment.Experiment`]
         A list of Experiment objects.
     """
     metadata = {'search_query': search_query,
@@ -76,7 +76,7 @@ def newExperiment(user, name, description=None):
 
     Returns
     -------
-    experiment
+    :class:`~labstep.experiment.Experiment`
         An object representing the new Labstep Experiment.
     """
     metadata = {'name': name,
@@ -104,7 +104,7 @@ def editExperiment(experiment, name=None, description=None,
 
     Returns
     -------
-    experiment
+    :class:`~labstep.experiment.Experiment`
         An object representing the editted Experiment.
     """
     metadata = {'name': name,
@@ -162,6 +162,11 @@ class Experiment:
         description (str)
             The new description of the Experiment.
 
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            An object representing the edited Experiment.
+
         Example
         -------
         .. code-block::
@@ -195,6 +200,11 @@ class Experiment:
         protocol (obj)
             The Labstep Protocol to attach.
 
+        Returns
+        -------
+        experiment_protocol
+            An object representing the Protocol attached to the Experiment.
+
         Example
         -------
         .. code-block::
@@ -223,6 +233,11 @@ class Experiment:
             A Labstep File entity to attach to the comment,
             including the filepath.
 
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
         Example
         -------
         .. code-block::
@@ -243,6 +258,11 @@ class Experiment:
         ----------
         name (str)
             The name of the tag to create.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            The Experiment that was tagged.
 
         Example
         -------
