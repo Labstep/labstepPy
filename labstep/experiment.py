@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, createdAtFrom, createdAtTo, update
+from .helpers import update, getTime, createdAtFrom, createdAtTo
 from .comment import addCommentWithFile
 from .tag import tag
-
-experimentEntityName = 'experiment-workflow'
 
 
 def getExperiment(user, experiment_id):
@@ -23,10 +21,10 @@ def getExperiment(user, experiment_id):
 
     Returns
     -------
-    experiment
+    :class:`~labstep.experiment.Experiment`
         An object representing a Labstep Experiment.
     """
-    return getEntity(user, experimentEntityName, id=experiment_id)
+    return getEntity(user, Experiment, id=experiment_id)
 
 
 def getExperiments(user, count=100, search_query=None,
@@ -52,14 +50,14 @@ def getExperiments(user, count=100, search_query=None,
 
     Returns
     -------
-    experiment
+    List[:class:`~labstep.experiment.Experiment`]
         A list of Experiment objects.
     """
     metadata = {'search_query': search_query,
                 'created_at_from': createdAtFrom(created_at_from),
                 'created_at_to': createdAtTo(created_at_to),
                 'tag_id': tag_id}
-    return getEntities(user, experimentEntityName, count, metadata)
+    return getEntities(user, Experiment, count, metadata)
 
 
 def newExperiment(user, name, description=None):
@@ -78,15 +76,15 @@ def newExperiment(user, name, description=None):
 
     Returns
     -------
-    experiment
+    :class:`~labstep.experiment.Experiment`
         An object representing the new Labstep Experiment.
     """
     metadata = {'name': name,
                 'description': description}
-    return newEntity(user, experimentEntityName, metadata)
+    return newEntity(user, Experiment, metadata)
 
 
-def editExperiment(user, experiment, name=None, description=None,
+def editExperiment(experiment, name=None, description=None,
                    deleted_at=None):
     """
     Edit an existing Experiment.
@@ -106,16 +104,16 @@ def editExperiment(user, experiment, name=None, description=None,
 
     Returns
     -------
-    experiment
+    :class:`~labstep.experiment.Experiment`
         An object representing the editted Experiment.
     """
     metadata = {'name': name,
                 'description': description,
                 'deleted_at': deleted_at}
-    return editEntity(user, experimentEntityName, experiment.id, metadata)
+    return editEntity(experiment, metadata)
 
 
-def addProtocolToExperiment(user, experiment, protocol):
+def addProtocolToExperiment(experiment, protocol):
     """
     Add a Labstep Protocol to a Labstep Experiment.
 
@@ -133,14 +131,23 @@ def addProtocolToExperiment(user, experiment, protocol):
         An object representing the Protocol attached to the Experiment.
     """
     data = {'experiment_workflow_id': experiment.id,
-            'protocol_id': protocol['last_version']['id']}
-    return newEntity(user, 'experiment', data)
+            'protocol_id': protocol.last_version['id']}
+    return newEntity(experiment.__user__, SubExperiment, data)
+
+
+class SubExperiment:
+    __entityName__ = 'experiment'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
 
 
 class Experiment:
+    __entityName__ = 'experiment-workflow'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = experimentEntityName
         update(self, data)
 
     # functions()
@@ -155,16 +162,20 @@ class Experiment:
         description (str)
             The new description of the Experiment.
 
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            An object representing the edited Experiment.
+
         Example
         -------
         .. code-block::
 
-            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment = user.getExperiment(17000)
             my_experiment.edit(name='A New Experiment Name', description='This
                                is my new experiment description!')
         """
-        newData = editExperiment(self.__user__, self, name, description)
-        return update(self, newData)
+        return editExperiment(self, name, description)
 
     def delete(self):
         """
@@ -174,11 +185,11 @@ class Experiment:
         -------
         .. code-block::
 
-            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment = user.getExperiment(17000)
             my_experiment.delete()
 
         """
-        return editExperiment(self.__user__, self, deleted_at=getTime())
+        return editExperiment(self, deleted_at=getTime())
 
     def addProtocol(self, protocol):
         """
@@ -189,12 +200,17 @@ class Experiment:
         protocol (obj)
             The Labstep Protocol to attach.
 
+        Returns
+        -------
+        experiment_protocol
+            An object representing the Protocol attached to the Experiment.
+
         Example
         -------
         .. code-block::
 
             # Get an experiment
-            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment = user.getExperiment(17000)
 
             # Get a protocol
             my_protocol = user.getProtocol(10000)
@@ -203,9 +219,9 @@ class Experiment:
             my_experiment.addProtocol(my_protocol)
 
         """
-        return addProtocolToExperiment(self.__user__, self, protocol)
+        return addProtocolToExperiment(self, protocol)
 
-    def comment(self, body, filepath=None):
+    def addComment(self, body, filepath=None):
         """
         Add a comment to a Labstep Experiment.
 
@@ -217,16 +233,21 @@ class Experiment:
             A Labstep File entity to attach to the comment,
             including the filepath.
 
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
         Example
         -------
         .. code-block::
 
-            my_experiment = LS.Experiment(user.getExperiment(17000), user)
-            my_experiment.comment(body='I am commenting!',
+            my_experiment = user.getExperiment(17000)
+            my_experiment.addComment(body='I am commenting!',
                                   filepath='pwd/file_to_upload.dat')
 
         """
-        return addCommentWithFile(self.__user__, self, body, filepath)
+        return addCommentWithFile(self, body, filepath)
 
     def addTag(self, name):
         """
@@ -238,12 +259,18 @@ class Experiment:
         name (str)
             The name of the tag to create.
 
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            The Experiment that was tagged.
+
         Example
         -------
         .. code-block::
 
-            my_experiment = LS.Experiment(user.getExperiment(17000), user)
+            my_experiment = user.getExperiment(17000)
             my_experiment.addTag(name='My Tag')
 
         """
-        return tag(self.__user__, self, name)
+        tag(self, name)
+        return self

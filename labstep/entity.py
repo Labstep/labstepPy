@@ -4,20 +4,18 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import url_join, handleError
+from .helpers import update, url_join, handleError
 
 
-def getEntity(user, entityName, id):
+def getEntity(user, entityClass, id):
     """
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    entityName (str)
-        Options for the entity name are:
-        experimentEntityName, resourceEntityName,
-        protocolEntityName, tagEntityName
+    entityClass (class)
+
     id (obj)
         The id of the entity.
 
@@ -28,23 +26,22 @@ def getEntity(user, entityName, id):
     """
     params = {'is_deleted': 'both'}
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, "/api/generic/", entityName, str(id))
+    url = url_join(API_ROOT, "/api/generic/",
+                   entityClass.__entityName__, str(id))
     r = requests.get(url, headers=headers, params=params)
     handleError(r)
-    return json.loads(r.content)
+    return entityClass(json.loads(r.content), user)
 
 
-def getEntities(user, entityName, count, metadata=None):
+def getEntities(user, entityClass, count, metadata=None):
     """
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    entityName (str)
-        Options for entity name are: experimentEntityName,
-        resourceEntityName, protocolEntityName, tagEntityName,
-        workspaceEntityName
+    entityClass (class)
+        The Class of entity to get
     count
         ??
     metadata
@@ -62,7 +59,7 @@ def getEntities(user, entityName, count, metadata=None):
     params = {**search_params, **metadata}
 
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, "/api/generic/", entityName)
+    url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
     r = requests.get(url, params=params, headers=headers)
     handleError(r)
     resp = json.loads(r.content)
@@ -73,16 +70,16 @@ def getEntities(user, entityName, count, metadata=None):
         r = requests.get(url, headers=headers, params=params)
         resp = json.loads(r.content)
         items.extend(resp['items'])
-    return items
+    return list(map(lambda x: entityClass(x, user), items))
 
 
-def newEntity(user, entityName, metadata):
+def newEntity(user, entityClass, data):
     """
     Parameters
     ----------
-    user (str)
+    user (User)
         The Labstep user.
-    entityName (str)
+    entityClass (Class)
         Currents options for entity name are: experimentEntityName,
         resourceEntityName, protocolEntityName, tagEntityName,
         workspaceEntityName.
@@ -95,19 +92,19 @@ def newEntity(user, entityName, metadata):
         ?.
     """
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, "/api/generic/", entityName)
-    r = requests.post(url, headers=headers, json=metadata)
+    url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
+    r = requests.post(url, headers=headers, json=data)
     handleError(r)
-    return json.loads(r.content)
+    return entityClass(json.loads(r.content), user)
 
 
-def editEntity(user, entityName, id, metadata):
+def editEntity(entity, metadata):
     """
     Parameters
     ----------
-    user (obj)
+    user (User)
         The Labstep user.
-    entityName (str)
+    entityClass (Class)
         Currents options for entity name are: experimentEntityName,
         resourceEntityName, protocolEntityName, tagEntityName,
         workspaceEntityName, commentEntityName
@@ -126,8 +123,9 @@ def editEntity(user, entityName, id, metadata):
     # the 'fields' will be overwritten to 'None'.
     new_metadata = dict(
         filter(lambda field: field[1] is not None, metadata.items()))
-    headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, '/api/generic/', entityName, str(id))
+    headers = {'apikey': entity.__user__.api_key}
+    url = url_join(API_ROOT, '/api/generic/',
+                   entity.__entityName__, str(entity.id))
     r = requests.put(url, json=new_metadata, headers=headers)
     handleError(r)
-    return json.loads(r.content)
+    return update(entity, json.loads(r.content))

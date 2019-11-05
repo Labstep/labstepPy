@@ -5,10 +5,8 @@ from .entity import editEntity, newEntity
 from .helpers import update
 from .file import newFile
 
-commentEntityName = 'comment'
 
-
-def addComment(user, entity, body, file=None):
+def addComment(entity, body, file=None):
     """
     Add a comment to a Labstep entity such as an Experiment or Resource.
 
@@ -37,18 +35,18 @@ def addComment(user, entity, body, file=None):
     data = {'body': body,
             'thread_id': threadId,
             'file_id': lsFile}
-    return newEntity(user, commentEntityName, data)
+    return newEntity(entity.__user__, Comment, data)
 
 
-def addCommentWithFile(user, entity, body, filepath):
+def addCommentWithFile(entity, body, filepath):
     if filepath is not None:
-        lsFile = newFile(user, filepath)
+        lsFile = newFile(entity.__user__, filepath)
     else:
         lsFile = None
-    return addComment(user, entity, body, lsFile)
+    return addComment(entity, body, lsFile)
 
 
-def editComment(user, comment_id, comment):
+def editComment(comment, body):
     """
     Edit an existing comment/caption.
 
@@ -58,7 +56,7 @@ def editComment(user, comment_id, comment):
         The labstep user. Must have property 'api_key'. See 'login'.
     comment_id (obj)
         The id of the comment/caption to edit.
-    comment (str)
+    body (str)
         The body of the new comment.
 
     Returns
@@ -66,12 +64,16 @@ def editComment(user, comment_id, comment):
     comment
         An object representing the editted comment.
     """
-    metadata = {'body': comment}
-    return editEntity(user, commentEntityName, comment_id, metadata)
+    metadata = {'body': body}
+    return editEntity(comment, metadata)
 
 
 class Comment:
+    __entityName__ = 'comment'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = commentEntityName
         update(self, data)
+
+    def edit(self, body):
+        editComment(self, body)

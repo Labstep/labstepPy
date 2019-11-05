@@ -27,7 +27,7 @@ def login(username, password):
 
     Returns
     -------
-    user
+    :class:`~labstep.user.User`
         An object representing a user on Labstep.
 
     Example
@@ -61,6 +61,11 @@ class User:
         experiment_id (obj)
             The id of the Experiment to retrieve.
 
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            An object representing an Experiment on Labstep.
+
         Example
         -------
         .. code-block::
@@ -78,6 +83,11 @@ class User:
         ----------
         protocol_id (obj)
             The id of the Protocol to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.protocol.Protocol`
+            An object representing a Protocol on Labstep.
 
         Example
         -------
@@ -97,6 +107,11 @@ class User:
         resource_id (obj)
             The id of the Resource to retrieve.
 
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            An object representing a Resource on Labstep.
+
         Example
         -------
         .. code-block::
@@ -114,6 +129,11 @@ class User:
         ----------
         workspace_id (obj)
             The id of the Workspace to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.workspace.Workspace`
+            An object representing a Workspace on Labstep.
 
         Example
         -------
@@ -145,6 +165,12 @@ class User:
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of the Tag to retrieve.
+
+        Returns
+        -------
+
+        List[:class:`~labstep.experiment.Experiment`]
+            List of Labstep Experiments
 
         Example
         -------
@@ -180,6 +206,12 @@ class User:
         tag_id (int)
             The id of the Tag to retrieve.
 
+        Returns
+        -------
+
+        List[:class:`~labstep.protocol.Protocol`]
+            List of Labstep Protocols
+
         Example
         -------
         .. code-block::
@@ -207,6 +239,12 @@ class User:
         tag_id (int)
             The id of the Tag to retrieve.
 
+        Returns
+        -------
+
+        List[:class:`~labstep.resource.Resource`]
+            List of Labstep Resources
+
         Example
         -------
         .. code-block::
@@ -229,6 +267,12 @@ class User:
         search_query (str)
             Search for Tags with this 'name'.
 
+        Returns
+        -------
+
+        List[:class:`~labstep.tag.Tag`]
+            List of Labstep Tags
+
         Example
         -------
         .. code-block::
@@ -249,6 +293,12 @@ class User:
             The number of Workspaces to retrieve.
         name (str)
             Search for Workspaces with this 'name'.
+
+        Returns
+        -------
+
+        List[:class:`~labstep.workspace.Workspace`]
+            List of Labstep Workspaces
 
         Example
         -------
@@ -271,6 +321,11 @@ class User:
         description (str)
             Give your Experiment a description.
 
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            An object representing an Experiment on Labstep.
+
         Example
         -------
         .. code-block::
@@ -291,6 +346,11 @@ class User:
         name (str)
             Give your Protocol a name.
 
+        Returns
+        -------
+        :class:`~labstep.protocol.Protocol`
+            An object representing an Protocol on Labstep.
+
         Example
         -------
         .. code-block::
@@ -308,6 +368,11 @@ class User:
         ----------
         name (str)
             Give your Resource a name.
+
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            An object representing an Resource on Labstep.
 
         Example
         -------
@@ -327,6 +392,11 @@ class User:
         name (str)
             Give your Tag a name.
 
+        Returns
+        -------
+        :class:`~labstep.tag.Tag`
+            An object representing an Tag on Labstep.
+
         Example
         -------
         .. code-block::
@@ -344,6 +414,11 @@ class User:
         ----------
         name (str)
             Give your Workspace a name.
+
+        Returns
+        -------
+        :class:`~labstep.workspace.Workspace`
+            An object representing an Workspace on Labstep.
 
         Example
         -------

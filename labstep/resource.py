@@ -6,8 +6,6 @@ from .helpers import getTime, update
 from .comment import addCommentWithFile
 from .tag import tag
 
-resourceEntityName = 'resource'
-
 
 def getResource(user, resource_id):
     """
@@ -26,7 +24,7 @@ def getResource(user, resource_id):
     resource
         An object representing a Labstep Resource.
     """
-    return getEntity(user, resourceEntityName, id=resource_id)
+    return getEntity(user, Resource, id=resource_id)
 
 
 def getResources(user, count=100, search_query=None, tag_id=None):
@@ -50,7 +48,7 @@ def getResources(user, count=100, search_query=None, tag_id=None):
     """
     metadata = {'search_query': search_query,
                 'tag_id': tag_id}
-    return getEntities(user, resourceEntityName, count, metadata)
+    return getEntities(user, Resource, count, metadata)
 
 
 def newResource(user, name):
@@ -71,10 +69,10 @@ def newResource(user, name):
         An object representing the new Labstep Resource.
     """
     metadata = {'name': name}
-    return newEntity(user, resourceEntityName, metadata)
+    return newEntity(user, Resource, metadata)
 
 
-def editResource(user, resource, name=None, deleted_at=None):
+def editResource(resource, name=None, deleted_at=None):
     """
     Edit an existing Resource.
 
@@ -96,13 +94,14 @@ def editResource(user, resource, name=None, deleted_at=None):
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    return editEntity(user, resourceEntityName, resource.id, metadata)
+    return editEntity(resource, metadata)
 
 
 class Resource:
+    __entityName__ = 'resource'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = resourceEntityName
         update(self, data)
 
     # functions()
@@ -119,11 +118,11 @@ class Resource:
         -------
         .. code-block::
 
-            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource = user.getResource(17000)
             my_resource.edit(name='A New Resource Name')
 
         """
-        return editResource(self.__user__, self, name)
+        return editResource(self, name)
 
     def delete(self):
         """
@@ -133,13 +132,13 @@ class Resource:
         -------
         .. code-block::
 
-            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource = user.getResource(17000)
             my_resource.delete()
 
         """
-        return editResource(self.__user__, self, deleted_at=getTime())
+        return editResource(self, deleted_at=getTime())
 
-    def comment(self, body, filepath=None):
+    def addComment(self, body, filepath=None):
         """
         Add a comment to a Labstep Resource.
 
@@ -155,12 +154,12 @@ class Resource:
         -------
         .. code-block::
 
-            my_resource = LS.Resource(user.getResource(17000), user)
-            my_resource.comment(body='I am commenting!',
+            my_resource = user.getResource(17000)
+            my_resource.addComment(body='I am commenting!',
                                 filepath='pwd/file_to_upload.dat')
 
         """
-        return addCommentWithFile(self.__user__, self, body, filepath)
+        return addCommentWithFile(self, body, filepath)
 
     def addTag(self, name):
         """
@@ -176,8 +175,8 @@ class Resource:
         -------
         .. code-block::
 
-            my_resource = LS.Resource(user.getResource(17000), user)
+            my_resource = user.getResource(17000)
             my_resource.addTag(name='My Tag')
 
         """
-        return tag(self.__user__, self, name)
+        return tag(self, name)
