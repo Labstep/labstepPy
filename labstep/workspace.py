@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import update
+from .helpers import getTime, update
 
 workspaceEntityName = 'group'
 
@@ -94,7 +94,7 @@ def editWorkspace(user, workspace, name=None, deleted_at=None):
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    return editEntity(user, workspaceEntityName, workspace['id'], metadata)
+    return editEntity(user, workspaceEntityName, workspace.id, metadata)
 
 
 class Workspace:
@@ -102,3 +102,36 @@ class Workspace:
         self.__user__ = user
         self.__entityName__ = workspaceEntityName
         update(self, data)
+
+    # functions()
+    def edit(self, name=None):
+        """
+        Edit an existing Workspace.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the Workspace.
+
+        Example
+        -------
+        .. code-block::
+
+            my_workspace = LS.Workspace(user.getWorkspace(17000), user)
+            my_workspace.edit(name='A New Workspace Name')
+        """
+        newData = editWorkspace(self.__user__, self, name)
+        return update(self, newData)
+
+    def delete(self):
+        """
+        Delete an existing Workspace.
+
+        Example
+        -------
+        .. code-block::
+
+            my_workspace = LS.Workspace(user.getWorkspace(17000), user)
+            my_workspace.delete()
+        """
+        return editWorkspace(self.__user__, self, deleted_at=getTime())

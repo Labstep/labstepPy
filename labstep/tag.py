@@ -4,10 +4,30 @@
 import requests
 import json
 from .config import API_ROOT
-from .entity import getEntities, newEntity, editEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
 tagEntityName = 'tag'
+
+
+def getTag(user, tag_id):
+    """
+    Retrieve a specific Labstep Tag.
+
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
+    tag_id (int)
+        The id of the Tag to retrieve.
+
+    Returns
+    -------
+    tag
+        An object representing a Labstep Tag.
+    """
+    return getEntity(user, tagEntityName, id=tag_id)
 
 
 def getTags(user, count=1000, search_query=None):
@@ -135,7 +155,7 @@ def editTag(user, tag, name):
         An object representing the editted Tag.
     """
     metadata = {'name': name}
-    return editEntity(user, tagEntityName, (tag['id']), metadata)
+    return editEntity(user, tagEntityName, tag.id, metadata)
 
 
 def deleteTag(user, tag):
@@ -155,7 +175,7 @@ def deleteTag(user, tag):
         An object representing the tag to delete.
     """
     headers = {'apikey': user.api_key}
-    url = url_join(API_ROOT, "/api/generic/tag/", str(tag['id']))
+    url = url_join(API_ROOT, "/api/generic/tag/", str(tag.id))
     r = requests.delete(url, headers=headers)
     handleError(r)
     return json.loads(r.content)
@@ -166,3 +186,35 @@ class Tag:
         self.__user__ = user
         self.__entityName__ = tagEntityName
         update(self, data)
+
+    # functions()
+    def edit(self, name=None):
+        """
+        Edit the name of an existing Tag.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the Tag.
+
+        Example
+        -------
+        .. code-block::
+
+            my_tag = LS.Tag(user.getTag(17000), user)
+            my_tag.edit(name='A New Tag Name')
+        """
+        newData = editTag(self.__user__, self, name)
+        return update(self, newData)
+
+    def delete(self):
+        """
+        Delete an existing Tag.
+
+        Example
+        -------
+        .. code-block::
+
+            my_tag.delete()
+        """
+        return deleteTag(self.__user__, self)
