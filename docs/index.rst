@@ -9,22 +9,30 @@ Welcome to labstepPy's documentation!
 Installation
 ------------
 
-.. code-block:: c
+On the ``Terminal``:
 
-    pip install labstep
+.. code-block:: bash
+
+    $ pip install labstep
+
 
 Example Usage
 -------------
 
 .. literalinclude:: ../examples/example.py
-  
 
-Available Methods
------------------
-    
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+
+Classes
+-------
+
+- :class:`~labstep.user.User`
+- :class:`~labstep.experiment.Experiment`
+- :class:`~labstep.protocol.Protocol`
+- :class:`~labstep.resource.Resource`
+- :class:`~labstep.workspace.Workspace`
+- :class:`~labstep.file.File`
+- :class:`~labstep.comment.Comment`
+- :class:`~labstep.tag.Tag`
 
 
 Indices and tables

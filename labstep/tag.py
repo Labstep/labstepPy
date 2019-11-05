@@ -25,7 +25,7 @@ def getTag(user, tag_id):
     tag
         An object representing a Labstep Tag.
     """
-    return getEntity(user, tagEntityName, id=tag_id)
+    return getEntity(user, Tag, id=tag_id)
 
 
 def getTags(user, count=1000, search_query=None):
@@ -79,9 +79,6 @@ def addTagTo(entity, tag):
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user adding a tag.
-        Must have property 'api_key'. See 'login'.
     entity (obj)
         The Labstep entity to tag. Can be Resource,
         Experiment, or Protocol. Must have 'id'.
@@ -109,9 +106,6 @@ def tag(entity, name):
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user to comment as. Must have
-        property 'api_key'. See 'login'.
     entity (obj)
         The Labstep entity to tag. Can be Resource,
         Experiment, or Protocol. Must have 'id'.
@@ -141,8 +135,6 @@ def editTag(tag, name):
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user. Must have property 'api_key'. See 'login'.
     tag (obj)
         The Tag to edit.
     name (str)
@@ -151,7 +143,7 @@ def editTag(tag, name):
     Returns
     -------
     tag
-        An object representing the editted Tag.
+        An object representing the edited Tag.
     """
     data = {'name': name}
     return editEntity(tag, data)
@@ -163,8 +155,6 @@ def deleteTag(tag):
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     tag (obj)
         The tag to delete.
 
@@ -197,11 +187,16 @@ class Tag:
         name (str)
             The new name of the Tag.
 
+        Returns
+        -------
+        :class:`~labstep.tag.Tag`
+            An object representing the edited Tag.
+
         Example
         -------
         .. code-block::
 
-            my_tag = LS.Tag(user.getTag(17000), user)
+            my_tag = user.getTag(17000)
             my_tag.edit(name='A New Tag Name')
         """
         return editTag(self, name)
@@ -214,6 +209,7 @@ class Tag:
         -------
         .. code-block::
 
+            my_tag = user.getTag(17000)
             my_tag.delete()
         """
         return deleteTag(self)

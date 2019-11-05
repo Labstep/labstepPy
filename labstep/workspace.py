@@ -76,8 +76,6 @@ def editWorkspace(workspace, name=None, deleted_at=None):
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     workspace (obj)
         The Workspace to edit.
     name (str)
@@ -92,7 +90,6 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     """
     data = {'name': name,
             'deleted_at': deleted_at}
-
     return editEntity(workspace, data)
 
 
@@ -113,15 +110,19 @@ class Workspace:
         name (str)
             The new name of the Workspace.
 
+        Returns
+        -------
+        :class:`~labstep.workspace.Workspace`
+            An object representing the edited Workspace.
+
         Example
         -------
         .. code-block::
 
-            my_workspace = LS.Workspace(user.getWorkspace(17000), user)
+            my_workspace = user.getWorkspace(17000)
             my_workspace.edit(name='A New Workspace Name')
         """
-        newData = editWorkspace(self.__user__, self, name)
-        return update(self, newData)
+        return editWorkspace(self, name)
 
     def delete(self):
         """
@@ -131,7 +132,7 @@ class Workspace:
         -------
         .. code-block::
 
-            my_workspace = LS.Workspace(user.getWorkspace(17000), user)
+            my_workspace = user.getWorkspace(17000)
             my_workspace.delete()
         """
-        return editWorkspace(self.__user__, self, deleted_at=getTime())
+        return editWorkspace(self, deleted_at=getTime())

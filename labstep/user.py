@@ -166,9 +166,8 @@ class User:
 
         Returns
         -------
-
         List[:class:`~labstep.experiment.Experiment`]
-            List of Labstep Experiments
+            A list of Labstep Experiments.
 
         Example
         -------
@@ -205,9 +204,8 @@ class User:
 
         Returns
         -------
-
         List[:class:`~labstep.protocol.Protocol`]
-            List of Labstep Protocols
+            A list of Labstep Protocols.
 
         Example
         -------
@@ -237,9 +235,8 @@ class User:
 
         Returns
         -------
-
         List[:class:`~labstep.resource.Resource`]
-            List of Labstep Resources
+            A list of Labstep Resources.
 
         Example
         -------
@@ -264,9 +261,8 @@ class User:
 
         Returns
         -------
-
         List[:class:`~labstep.tag.Tag`]
-            List of Labstep Tags
+            A list of Labstep Tags.
 
         Example
         -------
@@ -292,7 +288,7 @@ class User:
         -------
 
         List[:class:`~labstep.workspace.Workspace`]
-            List of Labstep Workspaces
+            A list of Labstep Workspaces.
 
         Example
         -------
@@ -341,7 +337,7 @@ class User:
         Returns
         -------
         :class:`~labstep.protocol.Protocol`
-            An object representing an Protocol on Labstep.
+            An object representing a Protocol on Labstep.
 
         Example
         -------
@@ -363,7 +359,7 @@ class User:
         Returns
         -------
         :class:`~labstep.resource.Resource`
-            An object representing an Resource on Labstep.
+            An object representing a Resource on Labstep.
 
         Example
         -------
@@ -385,7 +381,7 @@ class User:
         Returns
         -------
         :class:`~labstep.tag.Tag`
-            An object representing an Tag on Labstep.
+            An object representing a Tag on Labstep.
 
         Example
         -------
@@ -407,7 +403,7 @@ class User:
         Returns
         -------
         :class:`~labstep.workspace.Workspace`
-            An object representing an Workspace on Labstep.
+            An object representing a Workspace on Labstep.
 
         Example
         -------

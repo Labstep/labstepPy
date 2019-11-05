@@ -12,9 +12,6 @@ def addComment(entity, body, file=None):
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user adding a comment.
-        Must have property 'api_key'. See 'login'.
     entity (obj)
         The Labstep entity to comment on. Must have
         'thread' property with property 'id'.
@@ -45,9 +42,6 @@ def addCommentWithFile(entity, body, filepath):
 
     Parameters
     ----------
-    user (obj)
-        The Labstep user adding a comment.
-        Must have property 'api_key'. See 'login'.
     entity (obj)
         The Labstep entity to comment on. Must have
         'thread' property with property 'id'.
@@ -69,17 +63,15 @@ def editComment(comment, body):
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
-    comment_id (int)
-        The id of the comment/caption to edit.
+    comment (obj)
+        The comment/caption to edit.
     body (str)
         The body of the new comment.
 
     Returns
     -------
     comment
-        An object representing the editted comment.
+        An object representing the edited comment.
     """
     metadata = {'body': body}
     return editEntity(comment, metadata)
@@ -93,4 +85,23 @@ class Comment:
         update(self, data)
 
     def edit(self, body):
-        editComment(self, body)
+        """
+        Edit an existing comment/caption.
+
+        Parameters
+        ----------
+        body (str)
+            The body of the new comment.
+
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            An object representing the edited comment.
+
+        Example
+        -------
+        .. code-block::
+
+            my_comment.edit(body='My new comment.')
+        """
+        return editComment(self, body)

@@ -81,8 +81,6 @@ def editResource(resource, name=None, deleted_at=None):
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     resource (obj)
         The Resource to edit.
     name (str)
@@ -93,7 +91,7 @@ def editResource(resource, name=None, deleted_at=None):
     Returns
     -------
     resource
-        An object representing the Resource to edit.
+        An object representing the edited Resource.
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
@@ -116,6 +114,11 @@ class Resource:
         ----------
         name (str)
             The new name of the Resource.
+
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            An object representing the edited Resource.
 
         Example
         -------
@@ -151,6 +154,11 @@ class Resource:
             A Labstep File entity to attach to the comment,
             including the filepath.
 
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
         Example
         -------
         .. code-block::
@@ -171,6 +179,11 @@ class Resource:
         name (str)
             The name of the tag to create.
 
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            The Resource that was tagged.
+
         Example
         -------
         .. code-block::
@@ -178,4 +191,5 @@ class Resource:
             my_resource = user.getResource(17000)
             my_resource.addTag(name='My Tag')
         """
-        return tag(self, name)
+        tag(self, name)
+        return self

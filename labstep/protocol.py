@@ -90,8 +90,6 @@ def editProtocol(protocol, name=None, deleted_at=None):
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     protocol (obj)
         The Protocol to edit.
     name (str)
@@ -102,7 +100,7 @@ def editProtocol(protocol, name=None, deleted_at=None):
     Returns
     -------
     protocol
-        An object representing the Protocol to edit.
+        An object representing the edited Protocol.
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
@@ -125,6 +123,11 @@ class Protocol:
         ----------
         name (str)
             The new name of the Protocol.
+
+        Returns
+        -------
+        :class:`~labstep.protocol.Protocol`
+            An object representing the edited Protocol.
 
         Example
         -------
@@ -150,7 +153,7 @@ class Protocol:
 
     def addComment(self, body, filepath=None):
         """
-        Add a comment to a Labstep Protocol.
+        Add a comment and/or file to a Labstep Protocol.
 
         Parameters
         ----------
@@ -160,13 +163,18 @@ class Protocol:
             A Labstep File entity to attach to the comment,
             including the filepath.
 
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
         Example
         -------
         .. code-block::
 
             my_protocol = user.getProtocol(17000)
             my_protocol.addComment(body='I am commenting!',
-                                filepath='pwd/file_to_upload.dat')
+                                   filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
 
@@ -179,6 +187,11 @@ class Protocol:
         ----------
         name (str)
             The name of the tag to create.
+
+        Returns
+        -------
+        :class:`~labstep.protocol.Protocol`
+            The Protocol that was tagged.
 
         Example
         -------

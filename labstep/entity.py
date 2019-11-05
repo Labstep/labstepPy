@@ -11,11 +11,10 @@ def getEntity(user, entityClass, id):
     """
     Parameters
     ----------
-    user (obj)
-        The Labstep user. Must have property
-        'api_key'. See 'login'.
+    user (User)
+        The Labstep user.
     entityClass (class)
-
+        The Class of entity to retrieve.
     id (int)
         The id of the entity.
 
@@ -37,14 +36,13 @@ def getEntities(user, entityClass, count, metadata=None):
     """
     Parameters
     ----------
-    user (obj)
-        The Labstep user. Must have property
-        'api_key'. See 'login'.
+    user (User)
+        The Labstep user.
     entityClass (class)
-        The Class of entity to get
+        The Class of the entity to retrieve.
     count (int)
-        The number of Tags to retrieve.
-    metadata
+        The amount to retrieve.
+    metadata (dict)
         The metadata of the entity.
 
     Returns
@@ -79,11 +77,9 @@ def newEntity(user, entityClass, data):
     ----------
     user (User)
         The Labstep user.
-    entityClass (Class)
-        Currents options for entity name are: experimentEntityName,
-        resourceEntityName, protocolEntityName, tagEntityName,
-        workspaceEntityName.
-    metadata (dict)
+    entityClass (class)
+        The Class of the entity to retrieve.
+    data (dict)
         The metadata of the entity.
 
     Returns
@@ -102,21 +98,15 @@ def editEntity(entity, metadata):
     """
     Parameters
     ----------
-    user (User)
-        The Labstep user.
-    entityClass (Class)
-        Currents options for entity name are: experimentEntityName,
-        resourceEntityName, protocolEntityName, tagEntityName,
-        workspaceEntityName, commentEntityName
-    id (int)
-        The id of the entity.
+    entity (obj)
+        The entity to edit.
     metadata (dict)
-        The metadata being editted.
+        The metadata being edited.
 
     Returns
     -------
     entity
-        An object representing the editted Entity.
+        An object representing the edited Entity.
     """
     # Filter the 'metadata' dictionary by removing {'fields': None}
     # to preserve the existing data in the 'fields', otherwise

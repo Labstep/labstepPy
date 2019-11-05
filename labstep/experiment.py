@@ -21,7 +21,7 @@ def getExperiment(user, experiment_id):
 
     Returns
     -------
-    :class:`~labstep.experiment.Experiment`
+    experiment
         An object representing a Labstep Experiment.
     """
     return getEntity(user, Experiment, id=experiment_id)
@@ -79,7 +79,7 @@ def newExperiment(user, name, description=None):
 
     Returns
     -------
-    :class:`~labstep.experiment.Experiment`
+    experiment
         An object representing the new Labstep Experiment.
     """
     metadata = {'name': name,
@@ -94,8 +94,6 @@ def editExperiment(experiment, name=None, description=None,
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     experiment (obj)
         The Experiment to edit.
     name (str)
@@ -107,8 +105,8 @@ def editExperiment(experiment, name=None, description=None,
 
     Returns
     -------
-    :class:`~labstep.experiment.Experiment`
-        An object representing the editted Experiment.
+    experiment
+        An object representing the edited Experiment.
     """
     metadata = {'name': name,
                 'description': description,
@@ -122,8 +120,6 @@ def addProtocolToExperiment(experiment, protocol):
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     experiment (obj)
         The Labstep Experiment to attach the Protocol to.
         Must have property 'id'.
@@ -177,8 +173,8 @@ class Experiment:
         .. code-block::
 
             my_experiment = user.getExperiment(17000)
-            my_experiment.edit(name='A New Experiment Name', description='This
-                               is my new experiment description!')
+            my_experiment.edit(name='A New Experiment Name',
+                               description='A new description!')
         """
         return editExperiment(self, name, description)
 
@@ -206,7 +202,7 @@ class Experiment:
 
         Returns
         -------
-        experiment_protocol
+        :class:`~labstep.protocol.Protocol`
             An object representing the Protocol attached to the Experiment.
 
         Example
@@ -226,7 +222,7 @@ class Experiment:
 
     def addComment(self, body, filepath=None):
         """
-        Add a comment to a Labstep Experiment.
+        Add a comment and/or file to a Labstep Experiment.
 
         Parameters
         ----------
@@ -247,7 +243,7 @@ class Experiment:
 
             my_experiment = user.getExperiment(17000)
             my_experiment.addComment(body='I am commenting!',
-                                  filepath='pwd/file_to_upload.dat')
+                                     filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
 

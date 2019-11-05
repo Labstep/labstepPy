@@ -7,8 +7,7 @@ from random import randrange
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Get the entity
-getOne = testUser.getWorkspace(11339)
-workspace = LS.Workspace(getOne, testUser)
+workspace = testUser.getWorkspace(11339)
 
 # Set variables for editting
 randomNum = randrange(1, 9)
@@ -23,6 +22,6 @@ class TestWorkspace:
 
     def test_delete(self):
         workspaceToDelete = testUser.newWorkspace('testDelete')
-        result = LS.Workspace(workspaceToDelete, testUser).delete()
-        assert result['deleted_at'] is not None, \
+        result = workspaceToDelete.delete()
+        assert result.deleted_at is not None, \
             'FAILED TO DELETE WORKSPACE'

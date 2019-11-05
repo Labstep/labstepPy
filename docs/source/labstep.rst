@@ -1,85 +1,75 @@
 labstep package
 ===============
 
-Submodules
-----------
-
-User class
--------------------
-
-.. automodule:: labstep.user
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Experiment class
+Installation
 -------------------------
 
-.. automodule:: labstep.experiment
+On the ``Terminal``:
+
+.. code-block:: bash
+
+    $ pip install labstep
+
+Login
+-------------------------
+
+.. autofunction:: labstep.user.login
+
+Classes
+-------------------------
+
+User
++++++++++++++++++++++++++
+
+.. autoclass:: labstep.user.User
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: getExperiment, getExperiments, newExperiment, editExperiment, addProtocolToExperiment
 
-Protocol class
------------------------
+Experiment
++++++++++++++++++++++++++
 
-.. automodule:: labstep.protocol
+.. autoclass:: labstep.experiment.Experiment
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: getProtocol, getProtocols, newProtocol, editProtocol
 
-Resource class
------------------------
+Protocol
++++++++++++++++++++++++++
 
-.. automodule:: labstep.resource
+.. autoclass:: labstep.protocol.Protocol
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: getResource, getResources, newResource, editResource
 
-File class
--------------------
+Resource
++++++++++++++++++++++++++
 
-.. automodule:: labstep.file
+.. autoclass:: labstep.resource.Resource
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: newFile
 
-Comment class
-----------------------
+Workspace
++++++++++++++++++++++++++
 
-.. automodule:: labstep.comment
+.. autoclass:: labstep.workspace.Workspace
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: addComment, addCommentWithFile, editComment
 
-Tag class
-------------------
+File
++++++++++++++++++++++++++
 
-.. automodule:: labstep.tag
+.. autoclass:: labstep.file.File
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: getTags, newTag, addTagTo, tag, editTag, deleteTag
 
-Workspace class
-------------------------
+Comment
++++++++++++++++++++++++++
 
-.. automodule:: labstep.workspace
+.. autoclass:: labstep.comment.Comment
    :members:
    :undoc-members:
-   :show-inheritance:
-   :exclude-members: getWorkspace, getWorkspaces, newWorkspace, editWorkspace
 
+Tag
++++++++++++++++++++++++++
 
-Class contents
----------------
-
-.. automodule:: labstep
+.. autoclass:: labstep.tag.Tag
    :members:
    :undoc-members:
-   :show-inheritance:
