@@ -7,8 +7,6 @@ from .config import API_ROOT
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
-tagEntityName = 'tag'
-
 
 def getTag(user, tag_id):
     """
@@ -50,7 +48,7 @@ def getTags(user, count=1000, search_query=None):
         A list of tag objects.
     """
     metadata = {'search_query': search_query}
-    return getEntities(user, tagEntityName, count, metadata)
+    return getEntities(user, Tag, count, metadata)
 
 
 def newTag(user, name):
@@ -71,10 +69,10 @@ def newTag(user, name):
         An object representing the new Labstep Tag.
     """
     metadata = {'name': name}
-    return newEntity(user, tagEntityName, metadata)
+    return newEntity(user, Tag, metadata)
 
 
-def addTagTo(user, entity, tag):
+def addTagTo(entity, tag):
     """
     Attach an existing tag to a Labstep entity.
     (See 'tag' for simplified tagging).
@@ -97,14 +95,14 @@ def addTagTo(user, entity, tag):
     """
     entityName = entity.__entityName__
 
-    headers = {'apikey': user.api_key}
+    headers = {'apikey': entity.__user__.api_key}
     url = url_join(API_ROOT, "api/generic/", entityName,
-                   str(entity.id), tagEntityName, str(tag['id']))
+                   str(entity.id), tag.__entityName__, str(tag.id))
     r = requests.put(url, headers=headers)
     return json.loads(r.content)
 
 
-def tag(user, entity, name):
+def tag(entity, name):
     """
     Simple tagging of a Labstep entity (creates a
     new tag if none exists).
@@ -125,18 +123,19 @@ def tag(user, entity, name):
     entity
         An object representing the tagged entity.
     """
+    user = entity.__user__
     tags = getTags(user, search_query=name)
-    matchingTags = list(filter(lambda x: x['name'] == name, tags))
+    matchingTags = list(filter(lambda x: x.name == name, tags))
 
     if len(matchingTags) == 0:
         tag = newTag(user, name)
     else:
         tag = matchingTags[0]
 
-    return addTagTo(user, entity, tag)
+    return addTagTo(entity, tag)
 
 
-def editTag(user, tag, name):
+def editTag(tag, name):
     """
     Edit the name of an existing Tag.
 
@@ -154,11 +153,11 @@ def editTag(user, tag, name):
     tag
         An object representing the editted Tag.
     """
-    metadata = {'name': name}
-    return editEntity(user, tagEntityName, tag.id, metadata)
+    data = {'name': name}
+    return editEntity(tag, data)
 
 
-def deleteTag(user, tag):
+def deleteTag(tag):
     """
     Delete an existing tag.
 
@@ -174,21 +173,22 @@ def deleteTag(user, tag):
     tag
         An object representing the tag to delete.
     """
-    headers = {'apikey': user.api_key}
+    headers = {'apikey': tag.__user__.api_key}
     url = url_join(API_ROOT, "/api/generic/tag/", str(tag.id))
     r = requests.delete(url, headers=headers)
     handleError(r)
-    return json.loads(r.content)
+    return None
 
 
 class Tag:
+    __entityName__ = 'tag'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = tagEntityName
         update(self, data)
 
     # functions()
-    def edit(self, name=None):
+    def edit(self, name):
         """
         Edit the name of an existing Tag.
 
@@ -204,8 +204,7 @@ class Tag:
             my_tag = LS.Tag(user.getTag(17000), user)
             my_tag.edit(name='A New Tag Name')
         """
-        newData = editTag(self.__user__, self, name)
-        return update(self, newData)
+        return editTag(self, name)
 
     def delete(self):
         """
@@ -217,4 +216,4 @@ class Tag:
 
             my_tag.delete()
         """
-        return deleteTag(self.__user__, self)
+        return deleteTag(self)

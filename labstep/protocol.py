@@ -6,8 +6,6 @@ from .helpers import getTime, createdAtFrom, createdAtTo, update
 from .comment import addCommentWithFile
 from .tag import tag
 
-protocolEntityName = 'protocol-collection'
-
 
 def getProtocol(user, protocol_id):
     """
@@ -26,7 +24,7 @@ def getProtocol(user, protocol_id):
     protocol
         An object representing a Labstep Protocol.
     """
-    return getEntity(user, protocolEntityName, id=protocol_id)
+    return getEntity(user, Protocol, id=protocol_id)
 
 
 def getProtocols(user, count=100, search_query=None,
@@ -62,7 +60,7 @@ def getProtocols(user, count=100, search_query=None,
                 'created_at_from': createdAtFrom(created_at_from),
                 'created_at_to': createdAtTo(created_at_to),
                 'tag_id': tag_id}
-    return getEntities(user, protocolEntityName, count, metadata)
+    return getEntities(user, Protocol, count, metadata)
 
 
 def newProtocol(user, name):
@@ -83,10 +81,10 @@ def newProtocol(user, name):
         An object representing the new Labstep Protocol.
     """
     metadata = {'name': name}
-    return newEntity(user, protocolEntityName, metadata)
+    return newEntity(user, Protocol, metadata)
 
 
-def editProtocol(user, protocol, name=None, deleted_at=None):
+def editProtocol(protocol, name=None, deleted_at=None):
     """
     Edit an existing Protocol.
 
@@ -108,13 +106,14 @@ def editProtocol(user, protocol, name=None, deleted_at=None):
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    return editEntity(user, protocolEntityName, protocol.id, metadata)
+    return editEntity(protocol, metadata)
 
 
 class Protocol:
+    __entityName__ = 'protocol-collection'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = protocolEntityName
         update(self, data)
 
     # functions()
@@ -131,10 +130,10 @@ class Protocol:
         -------
         .. code-block::
 
-            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        return editProtocol(self.__user__, self, name)
+        return editProtocol(self, name)
 
     def delete(self):
         """
@@ -144,12 +143,12 @@ class Protocol:
         -------
         .. code-block::
 
-            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol = user.getProtocol(17000)
             my_protocol.delete()
         """
-        return editProtocol(self.__user__, self, deleted_at=getTime())
+        return editProtocol(self, deleted_at=getTime())
 
-    def comment(self, body, filepath=None):
+    def addComment(self, body, filepath=None):
         """
         Add a comment to a Labstep Protocol.
 
@@ -165,11 +164,11 @@ class Protocol:
         -------
         .. code-block::
 
-            my_protocol = LS.Protocol(user.getProtocol(17000), user)
-            my_protocol.comment(body='I am commenting!',
+            my_protocol = user.getProtocol(17000)
+            my_protocol.addComment(body='I am commenting!',
                                 filepath='pwd/file_to_upload.dat')
         """
-        return addCommentWithFile(self.__user__, self, body, filepath)
+        return addCommentWithFile(self, body, filepath)
 
     def addTag(self, name):
         """
@@ -185,7 +184,8 @@ class Protocol:
         -------
         .. code-block::
 
-            my_protocol = LS.Protocol(user.getProtocol(17000), user)
+            my_protocol = user.getProtocol(17000)
             my_protocol.addTag(name='My Tag')
         """
-        return tag(self.__user__, self, name)
+        tag(self, name)
+        return self

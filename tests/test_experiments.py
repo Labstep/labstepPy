@@ -12,8 +12,7 @@ testComment = 'Api Default Comment'
 testFilePath = './tests/test_experiments.py'
 
 # Get the entity
-getOne = testUser.getExperiment(23976)
-experiment = LS.Experiment(getOne, testUser)
+experiment = testUser.getExperiment(23976)
 
 # Set variables for editting
 randomNum = randrange(1, 9)
@@ -31,8 +30,8 @@ class TestExperiment:
 
     def test_delete(self):
         experimentToDelete = testUser.newExperiment('testDelete')
-        result = LS.Experiment(experimentToDelete, testUser).delete()
-        assert result['deleted_at'] is not None, \
+        result = experimentToDelete.delete()
+        assert result.deleted_at is not None, \
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
@@ -42,7 +41,7 @@ class TestExperiment:
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
     def test_comment(self):
-        result = experiment.comment(testComment, testFilePath)
+        result = experiment.addComment(testComment, testFilePath)
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
