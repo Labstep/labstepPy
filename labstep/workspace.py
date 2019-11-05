@@ -29,7 +29,8 @@ def getWorkspace(user, workspace_id):
 
 def getWorkspaces(user, count=100, name=None):
     """
-    Retrieve a list of a user's Workspaces on Labstep.
+    Retrieve a list of a user's Workspaces on Labstep,
+    which can be filtered using the parameters:
 
     Parameters
     ----------
@@ -38,6 +39,8 @@ def getWorkspaces(user, count=100, name=None):
         Must have property 'api_key'. See 'login'.
     count (int)
         The number of Workspaces to retrieve.
+    name (str)
+        Search for Workspaces with this 'name'.
 
     Returns
     -------
@@ -79,7 +82,9 @@ def editWorkspace(user, workspace, name=None, deleted_at=None):
         The labstep user. Must have property 'api_key'. See 'login'.
     workspace (obj)
         The Workspace to edit.
-    deleted_at (obj)
+    name (str)
+        The new name of the Workspace.
+    deleted_at (str)
         The timestamp at which the Workspace is deleted/archived.
 
     Returns

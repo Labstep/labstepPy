@@ -36,6 +36,9 @@ def getResources(user, count=100, search_query=None, tag_id=None):
 
     Parameters
     ----------
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     count (int)
         The number of Resources to retrieve.
     search_query (str)
@@ -86,7 +89,7 @@ def editResource(user, resource, name=None, deleted_at=None):
         The Resource to edit.
     name (str)
         The new name of the Experiment.
-    deleted_at (obj)
+    deleted_at (str)
         The timestamp at which the Resource is deleted/archived.
 
     Returns
@@ -121,7 +124,6 @@ class Resource:
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.edit(name='A New Resource Name')
-
         """
         return editResource(self.__user__, self, name)
 
@@ -135,19 +137,18 @@ class Resource:
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.delete()
-
         """
         return editResource(self.__user__, self, deleted_at=getTime())
 
     def comment(self, body, filepath=None):
         """
-        Add a comment to a Labstep Resource.
+        Add a comment and/or file to a Labstep Resource.
 
         Parameters
         ----------
         body (str)
             The body of the comment.
-        filepath (obj)
+        filepath (str)
             A Labstep File entity to attach to the comment,
             including the filepath.
 
@@ -158,7 +159,6 @@ class Resource:
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.comment(body='I am commenting!',
                                 filepath='pwd/file_to_upload.dat')
-
         """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
@@ -178,6 +178,5 @@ class Resource:
 
             my_resource = LS.Resource(user.getResource(17000), user)
             my_resource.addTag(name='My Tag')
-
         """
         return tag(self.__user__, self, name)

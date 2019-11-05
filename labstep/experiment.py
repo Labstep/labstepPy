@@ -18,7 +18,7 @@ def getExperiment(user, experiment_id):
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    experiment_id (obj)
+    experiment_id (int)
         The id of the Experiment to retrieve.
 
     Returns
@@ -37,6 +37,9 @@ def getExperiments(user, count=100, search_query=None,
 
     Parameters
     ----------
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     count (int)
         The number of Experiments to retrieve.
     search_query (str)
@@ -101,7 +104,7 @@ def editExperiment(user, experiment, name=None, description=None,
         The new name of the Experiment.
     description (str)
         The new description for the Experiment.
-    deleted_at (obj)
+    deleted_at (str)
         The timestamp at which the Experiment is deleted/archived.
 
     Returns
@@ -121,6 +124,8 @@ def addProtocolToExperiment(user, experiment, protocol):
 
     Parameters
     ----------
+    user (obj)
+        The labstep user. Must have property 'api_key'. See 'login'.
     experiment (obj)
         The Labstep Experiment to attach the Protocol to.
         Must have property 'id'.
@@ -176,7 +181,6 @@ class Experiment:
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.delete()
-
         """
         return editExperiment(self.__user__, self, deleted_at=getTime())
 
@@ -201,7 +205,6 @@ class Experiment:
 
             # Attach the protocol to the experiment
             my_experiment.addProtocol(my_protocol)
-
         """
         return addProtocolToExperiment(self.__user__, self, protocol)
 
@@ -213,7 +216,7 @@ class Experiment:
         ----------
         body (str)
             The body of the comment.
-        filepath (obj)
+        filepath (str)
             A Labstep File entity to attach to the comment,
             including the filepath.
 
@@ -224,7 +227,6 @@ class Experiment:
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.comment(body='I am commenting!',
                                   filepath='pwd/file_to_upload.dat')
-
         """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
@@ -244,6 +246,5 @@ class Experiment:
 
             my_experiment = LS.Experiment(user.getExperiment(17000), user)
             my_experiment.addTag(name='My Tag')
-
         """
         return tag(self.__user__, self, name)

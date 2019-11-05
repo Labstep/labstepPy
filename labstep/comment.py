@@ -22,8 +22,9 @@ def addComment(user, entity, body, file=None):
         'thread' property with property 'id'.
     body (str)
         The body of the comment.
-    file (obj)
+    file (str)
         A Labstep File entity to attach to the comment. Must have 'id'.
+
     Returns
     -------
     comment
@@ -41,6 +42,22 @@ def addComment(user, entity, body, file=None):
 
 
 def addCommentWithFile(user, entity, body, filepath):
+    """
+    Add a comment with an attaching file.
+
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user adding a comment.
+        Must have property 'api_key'. See 'login'.
+    entity (obj)
+        The Labstep entity to comment on. Must have
+        'thread' property with property 'id'.
+    body (str)
+        The body of the comment.
+    filepath (str)
+        A Labstep File entity to attach to the comment.
+    """
     if filepath is not None:
         lsFile = newFile(user, filepath)
     else:
@@ -56,7 +73,7 @@ def editComment(user, comment_id, comment):
     ----------
     user (obj)
         The labstep user. Must have property 'api_key'. See 'login'.
-    comment_id (obj)
+    comment_id (int)
         The id of the comment/caption to edit.
     comment (str)
         The body of the new comment.

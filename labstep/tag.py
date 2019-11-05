@@ -19,15 +19,15 @@ def getTags(user, count=1000, search_query=None):
     user (obj)
         The Labstep user.
         Must have property 'api_key'. See 'login'.
-    name (str)
-        Search for tags with a specific name.
     count (int)
-        Total number of results to return. Defaults to 1000.
+        The number of Tags to retrieve.
+    search_query (str)
+        Search for Tags with this 'name'.
 
     Returns
     -------
     tags
-        A list of tags matching the search query.
+        A list of tag objects.
     """
     metadata = {'search_query': search_query}
     return getEntities(user, tagEntityName, count, metadata)
@@ -73,7 +73,7 @@ def addTagTo(user, entity, tag):
     Returns
     -------
     entity
-        Returns the tagged entity.
+        An object representing the tagged entity.
     """
     entityName = entity.__entityName__
 
@@ -103,7 +103,7 @@ def tag(user, entity, name):
     Returns
     -------
     entity
-        Returns the tagged entity.
+        An object representing the tagged entity.
     """
     tags = getTags(user, search_query=name)
     matchingTags = list(filter(lambda x: x['name'] == name, tags))
@@ -125,7 +125,7 @@ def editTag(user, tag, name):
     user (obj)
         The Labstep user. Must have property 'api_key'. See 'login'.
     tag (obj)
-        The current Tag to edit.
+        The Tag to edit.
     name (str)
         The new name of the Tag.
 

@@ -37,6 +37,9 @@ def getProtocols(user, count=100, search_query=None,
 
     Parameters
     ----------
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     count (int)
         The number of Protocols to retrieve.
     search_query (str)
@@ -95,7 +98,7 @@ def editProtocol(user, protocol, name=None, deleted_at=None):
         The Protocol to edit.
     name (str)
         The new name of the Protocol.
-    deleted_at (obj)
+    deleted_at (str)
         The timestamp at which the Protocol is deleted/archived.
 
     Returns
@@ -130,7 +133,6 @@ class Protocol:
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.edit(name='A New Protocol Name')
-
         """
         return editProtocol(self.__user__, self, name)
 
@@ -144,7 +146,6 @@ class Protocol:
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.delete()
-
         """
         return editProtocol(self.__user__, self, deleted_at=getTime())
 
@@ -156,7 +157,7 @@ class Protocol:
         ----------
         body (str)
             The body of the comment.
-        filepath (obj)
+        filepath (str)
             A Labstep File entity to attach to the comment,
             including the filepath.
 
@@ -167,7 +168,6 @@ class Protocol:
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.comment(body='I am commenting!',
                                 filepath='pwd/file_to_upload.dat')
-
         """
         return addCommentWithFile(self.__user__, self, body, filepath)
 
@@ -187,6 +187,5 @@ class Protocol:
 
             my_protocol = LS.Protocol(user.getProtocol(17000), user)
             my_protocol.addTag(name='My Tag')
-
         """
         return tag(self.__user__, self, name)

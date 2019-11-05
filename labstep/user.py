@@ -35,7 +35,6 @@ def login(username, password):
     .. code-block::
 
         user = LS.login('myaccount@labstep.com', 'mypassword')
-
     """
     data = {'username': username,
             'password': password}
@@ -58,7 +57,7 @@ class User:
 
         Parameters
         ----------
-        experiment_id (obj)
+        experiment_id (int)
             The id of the Experiment to retrieve.
 
         Example
@@ -66,7 +65,6 @@ class User:
         .. code-block::
 
             entity = user.getExperiment(17000)
-
         """
         return getExperiment(self, experiment_id)
 
@@ -76,7 +74,7 @@ class User:
 
         Parameters
         ----------
-        protocol_id (obj)
+        protocol_id (int)
             The id of the Protocol to retrieve.
 
         Example
@@ -84,7 +82,6 @@ class User:
         .. code-block::
 
             entity = user.getProtocol(17000)
-
         """
         return getProtocol(self, protocol_id)
 
@@ -94,7 +91,7 @@ class User:
 
         Parameters
         ----------
-        resource_id (obj)
+        resource_id (int)
             The id of the Resource to retrieve.
 
         Example
@@ -102,7 +99,6 @@ class User:
         .. code-block::
 
             entity = user.getResource(17000)
-
         """
         return getResource(self, resource_id)
 
@@ -112,7 +108,7 @@ class User:
 
         Parameters
         ----------
-        workspace_id (obj)
+        workspace_id (int)
             The id of the Workspace to retrieve.
 
         Example
@@ -120,7 +116,6 @@ class User:
         .. code-block::
 
             entity = user.getWorkspace(17000)
-
         """
         return getWorkspace(self, workspace_id)
 
@@ -154,7 +149,6 @@ class User:
                                          created_at_from='2019-01-01',
                                          created_at_to='2019-01-31',
                                          tag_id=800)
-
         """
         return getExperiments(self, count, search_query,
                               created_at_from, created_at_to, tag_id)
@@ -188,7 +182,6 @@ class User:
                                        created_at_from='2019-01-01',
                                        created_at_to='2019-01-31',
                                        tag_id=800)
-
         """
         return getProtocols(self, count, search_query, created_at_from,
                             created_at_to, tag_id)
@@ -213,7 +206,6 @@ class User:
 
             entity = user.getResources(search_query='bacteria',
                                        tag_id=800)
-
         """
         return getResources(self, count, search_query, tag_id)
 
@@ -234,7 +226,6 @@ class User:
         .. code-block::
 
             entity = user.getTags(search_query='bacteria')
-
         """
         return getTags(self, count, search_query)
 
@@ -255,7 +246,6 @@ class User:
         .. code-block::
 
             entity = user.getWorkspaces(name='bacteria')
-
         """
         return getWorkspaces(self, count, name)
 
@@ -278,7 +268,6 @@ class User:
             entity = user.newExperiment(name='The Synthesis of Aspirin',
                                         description='Aspirin is an analgesic
                                         used to reduce pain.')
-
         """
         return newExperiment(self, name, description)
 
@@ -296,7 +285,6 @@ class User:
         .. code-block::
 
             entity = user.newProtocol(name='Synthesising Aspirin')
-
         """
         return newProtocol(self, name)
 
@@ -314,7 +302,6 @@ class User:
         .. code-block::
 
             entity = user.newResource(name='salicylic acid')
-
         """
         return newResource(self, name)
 
@@ -332,7 +319,6 @@ class User:
         .. code-block::
 
             entity = user.newTag(name='Aspirin')
-
         """
         return newTag(self, name)
 
@@ -350,7 +336,6 @@ class User:
         .. code-block::
 
             entity = user.newWorkspace(name='Aspirin Project')
-
         """
         return newWorkspace(self, name)
 
@@ -368,6 +353,5 @@ class User:
         .. code-block::
 
             entity = user.newFile('./structure_of_aspirin.png')
-
         """
         return newFile(self, filepath)

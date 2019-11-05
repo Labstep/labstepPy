@@ -16,13 +16,13 @@ def newFile(user, filepath):
     user (obj)
         The Labstep user uploading the file.
         Must have property 'api_key'. See 'login'.
-    filepath (obj)
+    filepath (str)
         The filepath to the file to attach.
 
     Returns
     -------
     file
-        An object to upload a file on Labstep.
+        An object representing the uploaded file to Labstep.
     """
     files = {'file': open(filepath, 'rb')}
     headers = {'apikey': user.api_key}
@@ -44,7 +44,7 @@ class File:
 
         Parameters
         ----------
-        filepath (obj)
+        filepath (str)
             The filepath to the file to attach.
 
         Example
