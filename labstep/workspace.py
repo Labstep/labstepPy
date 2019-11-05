@@ -4,8 +4,6 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import update
 
-workspaceEntityName = 'group'
-
 
 def getWorkspace(user, workspace_id):
     """
@@ -24,7 +22,7 @@ def getWorkspace(user, workspace_id):
     workspace
         An object representing a Labstep Workspace.
     """
-    return getEntity(user, workspaceEntityName, id=workspace_id)
+    return getEntity(user, Workspace, id=workspace_id)
 
 
 def getWorkspaces(user, count=100, name=None):
@@ -45,7 +43,7 @@ def getWorkspaces(user, count=100, name=None):
         A list of Workspace objects.
     """
     metadata = {'name': name}
-    return getEntities(user, workspaceEntityName, count, metadata)
+    return getEntities(user, Workspace, count, metadata)
 
 
 def newWorkspace(user, name):
@@ -66,10 +64,10 @@ def newWorkspace(user, name):
         An object representing the new Labstep Workspace.
     """
     metadata = {'name': name}
-    return newEntity(user, workspaceEntityName, metadata)
+    return newEntity(user, Workspace, metadata)
 
 
-def editWorkspace(user, workspace, name=None, deleted_at=None):
+def editWorkspace(workspace, name=None, deleted_at=None):
     """
     Edit an existing Workspace.
 
@@ -87,13 +85,15 @@ def editWorkspace(user, workspace, name=None, deleted_at=None):
     workspace
         An object representing the Workspace to edit.
     """
-    metadata = {'name': name,
-                'deleted_at': deleted_at}
-    return editEntity(user, workspaceEntityName, workspace['id'], metadata)
+    data = {'name': name,
+            'deleted_at': deleted_at}
+
+    return editEntity(workspace, data)
 
 
 class Workspace:
+    __entityName__ = 'group'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = workspaceEntityName
         update(self, data)
