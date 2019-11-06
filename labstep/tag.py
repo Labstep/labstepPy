@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .entity import getEntity, getEntities, newEntity, editEntity
+from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
 
@@ -176,8 +176,13 @@ class Tag:
         -------
         .. code-block::
 
-            my_tag = user.getTag(17000)
-            my_tag.edit(name='A New Tag Name')
+            # Get all tags, since there is no function
+            # to get one tag
+            tags = user.getTags()
+
+            # Select the tag by using
+            # python indexing
+            tags[1].edit(name='A New Tag Name')
         """
         return editTag(self, name)
 
@@ -189,7 +194,12 @@ class Tag:
         -------
         .. code-block::
 
-            my_tag = user.getTag(17000)
-            my_tag.delete()
+            # Get all tags, since there is
+            # no function to get one tag
+            tags = user.getTags()
+
+            # Select the tag by using
+            # python indexing
+            tags[1].delete()
         """
         return deleteTag(self)
