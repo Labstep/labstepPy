@@ -1,4 +1,4 @@
-*labstep* package
+The *labstep* package
 ==============================================
 
 Installation
@@ -25,7 +25,7 @@ the *labstep* module and logging into your Labstep account:
 
 
 Login
-----------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autofunction:: labstep.user.login
 
