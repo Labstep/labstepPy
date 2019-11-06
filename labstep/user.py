@@ -34,7 +34,7 @@ def login(username, password):
     -------
     .. code-block::
 
-        user = LS.login('myaccount@labstep.com', 'mypassword')
+        user = labstep.login('myaccount@labstep.com', 'mypassword')
     """
     data = {'username': username,
             'password': password}
