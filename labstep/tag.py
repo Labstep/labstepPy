@@ -8,26 +8,6 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
 
-def getTag(user, tag_id):
-    """
-    Retrieve a specific Labstep Tag.
-
-    Parameters
-    ----------
-    user (obj)
-        The Labstep user. Must have property
-        'api_key'. See 'login'.
-    tag_id (int)
-        The id of the Tag to retrieve.
-
-    Returns
-    -------
-    tag
-        An object representing a Labstep Tag.
-    """
-    return getEntity(user, Tag, id=tag_id)
-
-
 def getTags(user, count=1000, search_query=None):
     """
     Retrieve a list of the user's tags.

@@ -8,7 +8,7 @@ from .helpers import url_join, handleError
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
-from .tag import getTag, getTags, newTag
+from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
 from .file import newFile
 
@@ -116,9 +116,6 @@ class User:
             entity = user.getResource(17000)
         """
         return getResource(self, resource_id)
-
-    def getTag(self, tag_id):
-        return getTag(self, tag_id)
 
     def getWorkspace(self, workspace_id):
         """

@@ -7,7 +7,7 @@ from random import randrange
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Get the entity
-workspace = testUser.getWorkspace(11339)
+workspace = testUser.getWorkspace(11344)
 
 # Set variables for editting
 randomNum = randrange(1, 9)
