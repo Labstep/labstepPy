@@ -4,12 +4,13 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import url_join, handleError
+from .helpers import url_join, handleError, update
 
 
 def newFile(user, filepath):
     """
     Upload a file to the Labstep entity Data.
+
     Parameters
     ----------
     user (obj)
@@ -17,10 +18,11 @@ def newFile(user, filepath):
         Must have property 'api_key'. See 'login'.
     filepath (str)
         The filepath to the file to attach.
+
     Returns
     -------
     file
-        An object to upload a file on Labstep.
+        An object representing the uploaded file to Labstep.
     """
     files = {'file': open(filepath, 'rb')}
     headers = {'apikey': user.api_key}
@@ -28,3 +30,9 @@ def newFile(user, filepath):
     r = requests.post(url, headers=headers, files=files)
     handleError(r)
     return json.loads(r.content)
+
+
+class File:
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)

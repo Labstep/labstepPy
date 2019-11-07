@@ -80,7 +80,7 @@ def handleStatus(status):
     Returns
     -------
     status
-        The status of the Resource all in lowercase.
+        The status of the Resource in lowercase.
     """
     if status is None:
         return None

@@ -6,8 +6,6 @@ from .helpers import getTime, update
 from .comment import addCommentWithFile
 from .tag import tag
 
-resourceEntityName = 'resource'
-
 
 def getResource(user, resource_id):
     """
@@ -26,22 +24,25 @@ def getResource(user, resource_id):
     resource
         An object representing a Labstep Resource.
     """
-    return getEntity(user, resourceEntityName, id=resource_id)
+    return getEntity(user, Resource, id=resource_id)
 
 
 def getResources(user, count=100, search_query=None, tag_id=None):
     """
-    Retrieve a list of a user's Resources on Labstep.
+    Retrieve a list of a user's Resources on Labstep,
+    which can be filtered using the parameters:
 
     Parameters
     ----------
     user (obj)
-        The Labstep user whose Resources you want to retrieve.
-        Must have property 'api_key'. See 'login'.
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
     count (int)
         The number of Resources to retrieve.
-    tag_id (obj/int)
-        Retrieve Resources that have a specific tag.
+    search_query (str)
+        Search for Resources with this 'name'.
+    tag_id (int)
+        The id of the Tag to retrieve.
 
     Returns
     -------
@@ -50,7 +51,7 @@ def getResources(user, count=100, search_query=None, tag_id=None):
     """
     metadata = {'search_query': search_query,
                 'tag_id': tag_id}
-    return getEntities(user, resourceEntityName, count, metadata)
+    return getEntities(user, Resource, count, metadata)
 
 
 def newResource(user, name):
@@ -67,53 +68,128 @@ def newResource(user, name):
 
     Returns
     -------
-    protocol
+    resource
         An object representing the new Labstep Resource.
     """
     metadata = {'name': name}
-    return newEntity(user, resourceEntityName, metadata)
+    return newEntity(user, Resource, metadata)
 
 
-def editResource(user, resource, name=None, deleted_at=None):
+def editResource(resource, name=None, deleted_at=None):
     """
     Edit an existing Resource.
 
     Parameters
     ----------
-    user (obj)
-        The labstep user. Must have property 'api_key'. See 'login'.
     resource (obj)
         The Resource to edit.
     name (str)
         The new name of the Experiment.
-    deleted_at (obj)
+    deleted_at (str)
         The timestamp at which the Resource is deleted/archived.
 
     Returns
     -------
     resource
-        An object representing the Resource to edit.
+        An object representing the edited Resource.
     """
     metadata = {'name': name,
                 'deleted_at': deleted_at}
-    return editEntity(user, resourceEntityName, resource.id, metadata)
+    return editEntity(resource, metadata)
 
 
 class Resource:
+    __entityName__ = 'resource'
+
     def __init__(self, data, user):
         self.__user__ = user
-        self.__entityName__ = resourceEntityName
         update(self, data)
 
     # functions()
     def edit(self, name=None):
-        return editResource(self.__user__, self, name)
+        """
+        Edit an existing Resource.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the Resource.
+
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            An object representing the edited Resource.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            my_resource.edit(name='A New Resource Name')
+        """
+        return editResource(self, name)
 
     def delete(self):
-        return editResource(self.__user__, self, deleted_at=getTime())
+        """
+        Delete an existing Resource.
 
-    def comment(self, body, filepath=None):
-        return addCommentWithFile(self.__user__, self, body, filepath)
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            my_resource.delete()
+        """
+        return editResource(self, deleted_at=getTime())
+
+    def addComment(self, body, filepath=None):
+        """
+        Add a comment and/or file to a Labstep Resource.
+
+        Parameters
+        ----------
+        body (str)
+            The body of the comment.
+        filepath (str)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
+
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            my_resource.addComment(body='I am commenting!',
+                                filepath='pwd/file_to_upload.dat')
+        """
+        return addCommentWithFile(self, body, filepath)
 
     def addTag(self, name):
-        return tag(self.__user__, self, name)
+        """
+        Add a tag to the Resource (creates a
+        new tag if none exists).
+
+        Parameters
+        ----------
+        name (str)
+            The name of the tag to create.
+
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            The Resource that was tagged.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            my_resource.addTag(name='My Tag')
+        """
+        tag(self, name)
+        return self
