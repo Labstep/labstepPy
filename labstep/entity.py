@@ -32,7 +32,7 @@ def getEntity(user, entityClass, id):
     return entityClass(json.loads(r.content), user)
 
 
-def getEntities(user, entityClass, count, filterParams=None):
+def getEntities(user, entityClass, count, filterParams={}):
     """
     Parameters
     ----------
@@ -54,6 +54,7 @@ def getEntities(user, entityClass, count, filterParams=None):
     search_params = {'search': 1,
                      'cursor': -1,
                      'count': n}
+
     params = {**search_params, **filterParams}
 
     headers = {'apikey': user.api_key}

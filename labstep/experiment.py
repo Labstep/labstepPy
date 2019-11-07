@@ -28,7 +28,7 @@ def getExperiment(user, experiment_id):
 
 
 def getExperiments(user, count=100, search_query=None,
-                   created_at_from=None, created_at_to=None, tag_id=None, extraParams=None):
+                   created_at_from=None, created_at_to=None, tag_id=None, extraParams={}):
     """
     Retrieve a list of a user's Experiments on Labstep,
     which can be filtered using the parameters:

@@ -7,7 +7,7 @@ from random import randrange
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Create a new entity
-tag = testUser.newTag('Api Pytest')
+tag = testUser.getTags()[0]
 
 # Set variables for editting
 randomNum = randrange(1, 9)

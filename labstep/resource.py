@@ -27,7 +27,7 @@ def getResource(user, resource_id):
     return getEntity(user, Resource, id=resource_id)
 
 
-def getResources(user, count=100, search_query=None, tag_id=None, extraParams=None):
+def getResources(user, count=100, search_query=None, tag_id=None, extraParams={}):
     """
     Retrieve a list of a user's Resources on Labstep,
     which can be filtered using the parameters:
