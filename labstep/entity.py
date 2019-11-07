@@ -32,7 +32,7 @@ def getEntity(user, entityClass, id):
     return entityClass(json.loads(r.content), user)
 
 
-def getEntities(user, entityClass, count, metadata=None):
+def getEntities(user, entityClass, count, filterParams=None):
     """
     Parameters
     ----------
@@ -42,8 +42,8 @@ def getEntities(user, entityClass, count, metadata=None):
         The Class of the entity to retrieve.
     count (int)
         The amount to retrieve.
-    metadata (dict)
-        The metadata of the entity.
+    filterParams (dict)
+        The filterParams of the entity.
 
     Returns
     -------
@@ -54,7 +54,7 @@ def getEntities(user, entityClass, count, metadata=None):
     search_params = {'search': 1,
                      'cursor': -1,
                      'count': n}
-    params = {**search_params, **metadata}
+    params = {**search_params, **filterParams}
 
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
@@ -71,7 +71,7 @@ def getEntities(user, entityClass, count, metadata=None):
     return list(map(lambda x: entityClass(x, user), items))
 
 
-def newEntity(user, entityClass, data):
+def newEntity(user, entityClass, fields):
     """
     Parameters
     ----------
@@ -79,8 +79,8 @@ def newEntity(user, entityClass, data):
         The Labstep user.
     entityClass (class)
         The Class of the entity to retrieve.
-    data (dict)
-        The metadata of the entity.
+    fields (dict)
+        The fields to set on the new entity.
 
     Returns
     -------
@@ -89,33 +89,35 @@ def newEntity(user, entityClass, data):
     """
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
-    r = requests.post(url, headers=headers, json=data)
+
+    fields['group_id'] = user.activeWorkspace
+    r = requests.post(url, headers=headers, json=fields)
     handleError(r)
     return entityClass(json.loads(r.content), user)
 
 
-def editEntity(entity, metadata):
+def editEntity(entity, fields):
     """
     Parameters
     ----------
     entity (obj)
         The entity to edit.
-    metadata (dict)
-        The metadata being edited.
+    fields (dict)
+        The fields being edited.
 
     Returns
     -------
     entity
         An object representing the edited Entity.
     """
-    # Filter the 'metadata' dictionary by removing {'fields': None}
+    # Filter the 'fields' dictionary by removing {'fields': None}
     # to preserve the existing data in the 'fields', otherwise
     # the 'fields' will be overwritten to 'None'.
-    new_metadata = dict(
-        filter(lambda field: field[1] is not None, metadata.items()))
+    new_fields = dict(
+        filter(lambda field: field[1] is not None, fields.items()))
     headers = {'apikey': entity.__user__.api_key}
     url = url_join(API_ROOT, '/api/generic/',
                    entity.__entityName__, str(entity.id))
-    r = requests.put(url, json=new_metadata, headers=headers)
+    r = requests.put(url, json=new_fields, headers=headers)
     handleError(r)
     return update(entity, json.loads(r.content))

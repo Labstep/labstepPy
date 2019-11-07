@@ -28,7 +28,7 @@ def getExperiment(user, experiment_id):
 
 
 def getExperiments(user, count=100, search_query=None,
-                   created_at_from=None, created_at_to=None, tag_id=None):
+                   created_at_from=None, created_at_to=None, tag_id=None, extraParams=None):
     """
     Retrieve a list of a user's Experiments on Labstep,
     which can be filtered using the parameters:
@@ -50,17 +50,23 @@ def getExperiments(user, count=100, search_query=None,
         in the format of 'YYYY-MM-DD'.
     tag_id (int)
         The id of the Tag to retrieve.
+    extraParams (dict)
+        Dictionary of extra filter parameters
 
     Returns
     -------
     List[:class:`~labstep.experiment.Experiment`]
         A list of Experiment objects.
     """
-    metadata = {'search_query': search_query,
+    filterParams = {'search_query': search_query,
                 'created_at_from': createdAtFrom(created_at_from),
                 'created_at_to': createdAtTo(created_at_to),
-                'tag_id': tag_id}
-    return getEntities(user, Experiment, count, metadata)
+                'tag_id': tag_id,
+                }
+
+    params = {**filterParams, **extraParams}
+
+    return getEntities(user, Experiment, count, params)
 
 
 def newExperiment(user, name, description=None):
@@ -82,9 +88,9 @@ def newExperiment(user, name, description=None):
     experiment
         An object representing the new Labstep Experiment.
     """
-    metadata = {'name': name,
+    fields = {'name': name,
                 'description': description}
-    return newEntity(user, Experiment, metadata)
+    return newEntity(user, Experiment, fields)
 
 
 def editExperiment(experiment, name=None, description=None,
@@ -108,10 +114,10 @@ def editExperiment(experiment, name=None, description=None,
     experiment
         An object representing the edited Experiment.
     """
-    metadata = {'name': name,
+    fields = {'name': name,
                 'description': description,
                 'deleted_at': deleted_at}
-    return editEntity(experiment, metadata)
+    return editEntity(experiment, fields)
 
 
 def addProtocolToExperiment(experiment, protocol):
@@ -131,25 +137,25 @@ def addProtocolToExperiment(experiment, protocol):
     experiment_protocol
         An object representing the Protocol attached to the Experiment.
     """
-    data = {'experiment_workflow_id': experiment.id,
+    fields = {'experiment_workflow_id': experiment.id,
             'protocol_id': protocol.last_version['id']}
-    return newEntity(experiment.__user__, SubExperiment, data)
+    return newEntity(experiment.__user__, SubExperiment, fields)
 
 
 class SubExperiment:
     __entityName__ = 'experiment'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
 
 class Experiment:
     __entityName__ = 'experiment-workflow'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     # functions()
     def edit(self, name=None, description=None):

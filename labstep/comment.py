@@ -30,10 +30,10 @@ def addComment(entity, body, file=None):
         lsFile = None
     else:
         lsFile = [list(file.keys())[0]]
-    data = {'body': body,
+    fields = {'body': body,
             'thread_id': threadId,
             'file_id': lsFile}
-    return newEntity(entity.__user__, Comment, data)
+    return newEntity(entity.__user__, Comment, fields)
 
 
 def addCommentWithFile(entity, body, filepath):
@@ -73,16 +73,16 @@ def editComment(comment, body):
     comment
         An object representing the edited comment.
     """
-    metadata = {'body': body}
-    return editEntity(comment, metadata)
+    fields = {'body': body}
+    return editEntity(comment, fields)
 
 
 class Comment:
     __entityName__ = 'comment'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     def edit(self, body):
         """

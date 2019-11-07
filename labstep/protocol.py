@@ -28,7 +28,7 @@ def getProtocol(user, protocol_id):
 
 
 def getProtocols(user, count=100, search_query=None,
-                 created_at_from=None, created_at_to=None, tag_id=None):
+                 created_at_from=None, created_at_to=None, tag_id=None, extraParams=None):
     """
     Retrieve a list of a user's Protocols on Labstep,
     which can be filtered using the parameters:
@@ -49,18 +49,24 @@ def getProtocols(user, count=100, search_query=None,
         The end date of the search range, must be
         in the format of 'YYYY-MM-DD'.
     tag_id (int)
-        The id of the Tag to retrieve.
+        The id of the Tag to filter by.
+    extraParams (dict)
+        Dictionary of extra filter parameters
 
     Returns
     -------
     protocols
         A list of Protocol objects.
     """
-    metadata = {'search_query': search_query,
-                'created_at_from': createdAtFrom(created_at_from),
-                'created_at_to': createdAtTo(created_at_to),
-                'tag_id': tag_id}
-    return getEntities(user, Protocol, count, metadata)
+    filterParams = {'search_query': search_query,
+                    'created_at_from': createdAtFrom(created_at_from),
+                    'created_at_to': createdAtTo(created_at_to),
+                    'tag_id': tag_id,
+                    }
+
+    params = {**filterParams, **extraParams}
+
+    return getEntities(user, Protocol, count, params)
 
 
 def newProtocol(user, name):
@@ -80,8 +86,8 @@ def newProtocol(user, name):
     protocol
         An object representing the new Labstep Protocol.
     """
-    metadata = {'name': name}
-    return newEntity(user, Protocol, metadata)
+    fields = {'name': name}
+    return newEntity(user, Protocol, fields)
 
 
 def editProtocol(protocol, name=None, deleted_at=None):
@@ -102,9 +108,9 @@ def editProtocol(protocol, name=None, deleted_at=None):
     protocol
         An object representing the edited Protocol.
     """
-    metadata = {'name': name,
-                'deleted_at': deleted_at}
-    return editEntity(protocol, metadata)
+    fields = {'name': name,
+              'deleted_at': deleted_at}
+    return editEntity(protocol, fields)
 
 
 class Protocol:

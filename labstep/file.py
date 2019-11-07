@@ -33,6 +33,6 @@ def newFile(user, filepath):
 
 
 class File:
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)

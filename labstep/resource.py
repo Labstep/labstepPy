@@ -27,7 +27,7 @@ def getResource(user, resource_id):
     return getEntity(user, Resource, id=resource_id)
 
 
-def getResources(user, count=100, search_query=None, tag_id=None):
+def getResources(user, count=100, search_query=None, tag_id=None, extraParams=None):
     """
     Retrieve a list of a user's Resources on Labstep,
     which can be filtered using the parameters:
@@ -43,15 +43,20 @@ def getResources(user, count=100, search_query=None, tag_id=None):
         Search for Resources with this 'name'.
     tag_id (int)
         The id of the Tag to retrieve.
+    extraParams (dict)
+        Dictionary of extra filter parameters
 
     Returns
     -------
     resources
         A list of Resource objects.
     """
-    metadata = {'search_query': search_query,
+    filterParams = {'search_query': search_query,
                 'tag_id': tag_id}
-    return getEntities(user, Resource, count, metadata)
+    
+    params = {**filterParams, **extraParams}
+
+    return getEntities(user, Resource, count, params)
 
 
 def newResource(user, name):
@@ -71,8 +76,8 @@ def newResource(user, name):
     resource
         An object representing the new Labstep Resource.
     """
-    metadata = {'name': name}
-    return newEntity(user, Resource, metadata)
+    fields = {'name': name}
+    return newEntity(user, Resource, fields)
 
 
 def editResource(resource, name=None, deleted_at=None):
@@ -93,9 +98,9 @@ def editResource(resource, name=None, deleted_at=None):
     resource
         An object representing the edited Resource.
     """
-    metadata = {'name': name,
+    fields = {'name': name,
                 'deleted_at': deleted_at}
-    return editEntity(resource, metadata)
+    return editEntity(resource, fields)
 
 
 class Resource:

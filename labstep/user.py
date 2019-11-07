@@ -46,10 +46,12 @@ def login(username, password):
 
 class User:
     def __init__(self, user):
-        self.workspace = user['group']['id']
+        self.activeWorkspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
 
+    def setWorkspace(self,workspace):
+        self.activeWorkspace = workspace.id
     # getSingle()
     def getExperiment(self, experiment_id):
         """

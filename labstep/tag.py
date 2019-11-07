@@ -27,8 +27,8 @@ def getTags(user, count=1000, search_query=None):
     tags
         A list of tag objects.
     """
-    metadata = {'search_query': search_query}
-    return getEntities(user, Tag, count, metadata)
+    filterParams = {'search_query': search_query}
+    return getEntities(user, Tag, count, filterParams)
 
 
 def newTag(user, name):
@@ -48,8 +48,8 @@ def newTag(user, name):
     tag
         An object representing the new Labstep Tag.
     """
-    metadata = {'name': name}
-    return newEntity(user, Tag, metadata)
+    fields = {'name': name}
+    return newEntity(user, Tag, fields)
 
 
 def addTagTo(entity, tag):
@@ -125,8 +125,8 @@ def editTag(tag, name):
     tag
         An object representing the edited Tag.
     """
-    data = {'name': name}
-    return editEntity(tag, data)
+    fields = {'name': name}
+    return editEntity(tag, fields)
 
 
 def deleteTag(tag):
@@ -153,9 +153,9 @@ def deleteTag(tag):
 class Tag:
     __entityName__ = 'tag'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     # functions()
     def edit(self, name):
