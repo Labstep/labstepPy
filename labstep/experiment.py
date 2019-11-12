@@ -143,6 +143,21 @@ class SubExperiment:
         self.__user__ = user
         update(self, data)
 
+class ExperimentValue:
+    __entityName__ = 'experiment_value'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+    
+    def edit(self, value=None, unit=None, resource=None, resourceItem=None):
+        fields = { 'value': value, 'unit': unit }
+        if resource is not None:
+            fields['resource_id'] = resource.id
+        if resourceItem is not None:
+            fields['resource_item_id'] = resourceItem.id
+
+        return editEntity(self, fields)
 
 class Experiment:
     __entityName__ = 'experiment-workflow'
