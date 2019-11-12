@@ -10,6 +10,7 @@ from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
 from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
+from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 from .file import newFile
 
 
@@ -138,6 +139,28 @@ class User:
             entity = user.getWorkspace(17000)
         """
         return getWorkspace(self, workspace_id)
+
+    def getOrderRequest(self, order_request_id):
+        """
+        Retrieve a specific Labstep OrderRequest.
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the OrderRequest to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.orderRequest.OrderRequest`
+            An object representing a OrderRequest on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getOrderRequest(17000)
+        """
+
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
@@ -294,6 +317,32 @@ class User:
             entity = user.getWorkspaces(name='bacteria')
         """
         return getWorkspaces(self, count, name)
+    
+    def getOrderRequests(self, count=100, name=None):
+        """
+        Retrieve a list of a user's OrderRequests on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of OrderRequests to retrieve.
+        name (str)
+            Search for OrderRequests with this 'name'.
+
+        Returns
+        -------
+
+        List[:class:`~labstep.orderRequest.OrderRequest`]
+            A list of Labstep OrderRequests.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getOrderRequests(name='polymerase')
+        """
+        return getWorkspaces(self, count, name)
 
     # newEntity()
     def newExperiment(self, name, description=None):
@@ -409,6 +458,28 @@ class User:
             entity = user.newWorkspace(name='Aspirin Project')
         """
         return newWorkspace(self, name)
+    
+    def newOrderRequest(self, name):
+        """
+        Create a new Labstep OrderRequest.
+
+        Parameters
+        ----------
+        name (str)
+            Give your OrderRequest a name.
+
+        Returns
+        -------
+        :class:`~labstep.orderRequest.OrderRequest`
+            An object representing a OrderRequest on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.newOrderRequest(name='Aspirin Project')
+        """
+        return newOrderRequest(self, name)
 
     def newFile(self, filepath):
         """
