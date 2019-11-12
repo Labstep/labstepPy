@@ -75,7 +75,7 @@ def newOrderRequest(user, name):
     return newEntity(user, OrderRequest, metadata)
 
 
-def editOrderRequest(orderRequest, name=None, deleted_at=None):
+def editOrderRequest(orderRequest, status=None, resource=None, quantity=None, price=None, currency=None, deleted_at=None):
     """
     Edit an existing OrderRequest.
 
@@ -93,9 +93,17 @@ def editOrderRequest(orderRequest, name=None, deleted_at=None):
     OrderRequest
         An object representing the edited OrderRequest.
     """
-    metadata = {'name': name,
-                'deleted_at': deleted_at}
-    return editEntity(orderRequest, metadata)
+    fields = {
+                'status': status,
+                'quantity': quantity,
+                'price': price,
+                'currency': currency,
+                'deleted_at': deleted_at
+            }
+    if resource is not None:
+        fields['resource_id'] = resource.id
+
+    return editEntity(orderRequest, fields)
 
 
 class OrderRequest:
@@ -106,15 +114,20 @@ class OrderRequest:
         update(self, data)
 
     # functions()
-    def edit(self, name=None):
+    def edit(self, status=None, resource=None, quantity=None, price=None, currency=None):
         """
         Edit an existing OrderRequest.
 
         Parameters
         ----------
-        name (str)
-            The new name of the OrderRequest.
-
+        status (str)
+            The status of the OrderRequest.
+        resource (:class:`~labstep.resource.Resource`)
+            The Resource being requested
+        quantity (int)
+            The number of items of the resource requested
+        
+        
         Returns
         -------
         :class:`~labstep.orderRequest.OrderRequest`
@@ -127,7 +140,7 @@ class OrderRequest:
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.edit(name='A New OrderRequest Name')
         """
-        return editOrderRequest(self, name)
+        return editOrderRequest(self, status, resource, quantity, price, currency)
 
     def delete(self):
         """
