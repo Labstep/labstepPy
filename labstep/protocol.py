@@ -113,12 +113,10 @@ class ProtocolValue:
         self.__user__ = user
         update(self, data)
     
-    def edit(self, label=None, value=None, unit=None, resource=None, resourceItem=None):
+    def edit(self, label=None, value=None, unit=None, resource=None):
         fields = { 'label': label, 'value': value, 'unit': unit }
         if resource is not None:
             fields['resource_id'] = resource.id
-        if resourceItem is not None:
-            fields['resource_item_id'] = resourceItem.id
 
         return editEntity(self, fields)
 
