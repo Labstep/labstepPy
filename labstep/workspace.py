@@ -92,9 +92,9 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     workspace
         An object representing the Workspace to edit.
     """
-    data = {'name': name,
-            'deleted_at': deleted_at}
-    return editEntity(workspace, data)
+    fields = {'name': name,
+              'deleted_at': deleted_at}
+    return editEntity(workspace, fields)
 
 
 class Workspace:
@@ -174,12 +174,13 @@ class Workspace:
         .. code-block::
 
             entity = workspace.getExperiments(search_query='bacteria',
-                                         created_at_from='2019-01-01',
-                                         created_at_to='2019-01-31',
-                                         tag_id=800)
+                                              created_at_from='2019-01-01',
+                                              created_at_to='2019-01-31',
+                                              tag_id=800)
         """
         return getExperiments(self, count, search_query,
-                              created_at_from, created_at_to, tag_id, extraParams={ 'group_id': self.id })
+                              created_at_from, created_at_to, tag_id,
+                              extraParams={'group_id': self.id})
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None):
@@ -212,12 +213,13 @@ class Workspace:
         .. code-block::
 
             entity = workspace.getProtocols(search_query='bacteria',
-                                       created_at_from='2019-01-01',
-                                       created_at_to='2019-01-31',
-                                       tag_id=800)
+                                            created_at_from='2019-01-01',
+                                            created_at_to='2019-01-31',
+                                            tag_id=800)
         """
-        return getProtocols(self, count, search_query, created_at_from,
-                            created_at_to, tag_id, extraParams={ 'group_id': self.id })
+        return getProtocols(self, count, search_query,
+                            created_at_from, created_at_to, tag_id,
+                            extraParams={'group_id': self.id})
 
     def getResources(self, count=100, search_query=None, tag_id=None):
         """
@@ -243,6 +245,32 @@ class Workspace:
         .. code-block::
 
             entity = workspace.getResources(search_query='bacteria',
-                                       tag_id=800)
+                                            tag_id=800)
         """
-        return getResources(self, count, search_query, tag_id, extraParams={ 'group_id': self.id })
+        return getResources(self, count, search_query,
+                            tag_id, extraParams={'group_id': self.id})
+
+    def getTags(self, count=1000, search_query=None):
+        """
+        Retrieve a list of a user's Tags on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Tags to retrieve.
+        search_query (str)
+            Search for Tags with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            A list of Labstep Tags.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = workspace.getTags(search_query='bacteria')
+        """
+        return getTags(self, count, search_query)

@@ -50,8 +50,29 @@ class User:
         for key in user:
             setattr(self, key, user[key])
 
-    def setWorkspace(self,workspace):
+    def setWorkspace(self, workspace):
+        """
+        Set a Workspace as the active Workspace.
+
+        Parameters
+        ----------
+        workspace (obj)
+            The Workspace to set as active.
+
+        Returns
+        -------
+        :class:`~labstep.workspace.Workspace`
+            An object representing a Workspace on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getWorkspace(17000)
+            my_workspace = user.setWorkspace(entity)
+        """
         self.activeWorkspace = workspace.id
+
     # getSingle()
     def getExperiment(self, experiment_id):
         """
