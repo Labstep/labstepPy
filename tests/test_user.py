@@ -17,6 +17,14 @@ testSearch = 'api'
 
 
 class TestUser:
+    def test_setWorkspace(self):
+        my_workspace = testUser.getWorkspace(11339)
+        testUser.setWorkspace(my_workspace)
+        my_experiment = testUser.newExperiment('Test')
+        workspace_experiments = my_workspace.getExperiments()
+        assert workspace_experiments[0].id == my_experiment.id, \
+            'FAILED TO SET WORKSPACE!'
+
     # getSingle()
     def test_getExperiment(self):
         result = testUser.getExperiment(23973)

@@ -100,10 +100,10 @@ def editWorkspace(workspace, name=None, deleted_at=None):
 class Workspace:
     __entityName__ = 'group'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.id = None
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     # functions()
     def edit(self, name=None):
@@ -178,7 +178,7 @@ class Workspace:
                                               created_at_to='2019-01-31',
                                               tag_id=800)
         """
-        return getExperiments(self, count, search_query,
+        return getExperiments(self.__user__, count, search_query,
                               created_at_from, created_at_to, tag_id,
                               extraParams={'group_id': self.id})
 
@@ -217,7 +217,7 @@ class Workspace:
                                             created_at_to='2019-01-31',
                                             tag_id=800)
         """
-        return getProtocols(self, count, search_query,
+        return getProtocols(self.__user__, count, search_query,
                             created_at_from, created_at_to, tag_id,
                             extraParams={'group_id': self.id})
 
@@ -247,7 +247,7 @@ class Workspace:
             entity = workspace.getResources(search_query='bacteria',
                                             tag_id=800)
         """
-        return getResources(self, count, search_query,
+        return getResources(self.__user__, count, search_query,
                             tag_id, extraParams={'group_id': self.id})
 
     def getTags(self, count=1000, search_query=None):
@@ -273,4 +273,4 @@ class Workspace:
 
             entity = workspace.getTags(search_query='bacteria')
         """
-        return getTags(self, count, search_query)
+        return getTags(self.__user__, count, search_query, extraParams={'group_id': self.id})

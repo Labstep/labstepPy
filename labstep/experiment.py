@@ -28,7 +28,8 @@ def getExperiment(user, experiment_id):
 
 
 def getExperiments(user, count=100, search_query=None,
-                   created_at_from=None, created_at_to=None, tag_id=None, extraParams={}):
+                   created_at_from=None, created_at_to=None, tag_id=None,
+                   extraParams={}):
     """
     Retrieve a list of a user's Experiments on Labstep,
     which can be filtered using the parameters:
@@ -51,7 +52,7 @@ def getExperiments(user, count=100, search_query=None,
     tag_id (int)
         The id of the Tag to retrieve.
     extraParams (dict)
-        Dictionary of extra filter parameters
+        Dictionary of extra filter parameters.
 
     Returns
     -------
@@ -59,10 +60,9 @@ def getExperiments(user, count=100, search_query=None,
         A list of Experiment objects.
     """
     filterParams = {'search_query': search_query,
-                'created_at_from': createdAtFrom(created_at_from),
-                'created_at_to': createdAtTo(created_at_to),
-                'tag_id': tag_id,
-                }
+                    'created_at_from': createdAtFrom(created_at_from),
+                    'created_at_to': createdAtTo(created_at_to),
+                    'tag_id': tag_id}
 
     params = {**filterParams, **extraParams}
 
@@ -89,7 +89,7 @@ def newExperiment(user, name, description=None):
         An object representing the new Labstep Experiment.
     """
     fields = {'name': name,
-                'description': description}
+              'description': description}
     return newEntity(user, Experiment, fields)
 
 
@@ -115,8 +115,8 @@ def editExperiment(experiment, name=None, description=None,
         An object representing the edited Experiment.
     """
     fields = {'name': name,
-                'description': description,
-                'deleted_at': deleted_at}
+              'description': description,
+              'deleted_at': deleted_at}
     return editEntity(experiment, fields)
 
 
@@ -138,7 +138,7 @@ def addProtocolToExperiment(experiment, protocol):
         An object representing the Protocol attached to the Experiment.
     """
     fields = {'experiment_workflow_id': experiment.id,
-            'protocol_id': protocol.last_version['id']}
+              'protocol_id': protocol.last_version['id']}
     return newEntity(experiment.__user__, SubExperiment, fields)
 
 

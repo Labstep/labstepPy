@@ -116,9 +116,9 @@ def editProtocol(protocol, name=None, deleted_at=None):
 class Protocol:
     __entityName__ = 'protocol-collection'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     # functions()
     def edit(self, name=None):

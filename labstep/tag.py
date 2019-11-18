@@ -8,7 +8,7 @@ from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update
 
 
-def getTags(user, count=1000, search_query=None):
+def getTags(user, count=1000, search_query=None, extraParams={}):
     """
     Retrieve a list of the user's tags.
 
@@ -28,7 +28,9 @@ def getTags(user, count=1000, search_query=None):
         A list of tag objects.
     """
     filterParams = {'search_query': search_query}
-    return getEntities(user, Tag, count, filterParams)
+    params = {**filterParams, **extraParams}
+
+    return getEntities(user, Tag, count, params)
 
 
 def newTag(user, name):

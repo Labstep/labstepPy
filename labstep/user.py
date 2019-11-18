@@ -36,10 +36,10 @@ def login(username, password):
 
         user = labstep.login('myaccount@labstep.com', 'mypassword')
     """
-    data = {'username': username,
-            'password': password}
+    fields = {'username': username,
+              'password': password}
     url = url_join(API_ROOT, "/public-api/user/login")
-    r = requests.post(url, json=data, headers={})
+    r = requests.post(url, json=fields, headers={})
     handleError(r)
     return User(json.loads(r.content))
 
