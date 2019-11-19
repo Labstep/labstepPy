@@ -28,7 +28,8 @@ def getProtocol(user, protocol_id):
 
 
 def getProtocols(user, count=100, search_query=None,
-                 created_at_from=None, created_at_to=None, tag_id=None, extraParams={}):
+                 created_at_from=None, created_at_to=None, tag_id=None,
+                 extraParams={}):
     """
     Retrieve a list of a user's Protocols on Labstep,
     which can be filtered using the parameters:

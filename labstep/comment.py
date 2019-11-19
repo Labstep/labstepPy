@@ -31,8 +31,8 @@ def addComment(entity, body, file=None):
     else:
         lsFile = [list(file.keys())[0]]
     fields = {'body': body,
-            'thread_id': threadId,
-            'file_id': lsFile}
+              'thread_id': threadId,
+              'file_id': lsFile}
     return newEntity(entity.__user__, Comment, fields)
 
 

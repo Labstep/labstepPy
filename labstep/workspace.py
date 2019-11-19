@@ -273,4 +273,5 @@ class Workspace:
 
             entity = workspace.getTags(search_query='bacteria')
         """
-        return getTags(self.__user__, count, search_query, extraParams={'group_id': self.id})
+        return getTags(self.__user__, count, search_query,
+                       extraParams={'group_id': self.id})
