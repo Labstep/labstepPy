@@ -62,7 +62,7 @@ class User:
 
         The output should look something like this:
 
-        .. program-output:: python labstep/attributes/user_attributes.py
+        .. program-output:: python ../labstep/attributes/user_attributes.py
 
         To inspect specific attributes of the user,
         for example, the user's 'username', 'activeWorkspace', etc.:

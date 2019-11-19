@@ -174,7 +174,7 @@ class Tag:
 
         The output should look something like this:
 
-        .. program-output:: python labstep/attributes/tag_attributes.py
+        .. program-output:: python ../labstep/attributes/tag_attributes.py
 
         To inspect specific attributes of a tag,
         for example, the tag 'name', 'id', etc.:

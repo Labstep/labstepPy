@@ -133,7 +133,7 @@ class Protocol:
 
         The output should look something like this:
 
-        .. program-output:: python labstep/attributes/protocol_attributes.py
+        .. program-output:: python ../labstep/attributes/protocol_attributes.py
 
         To inspect specific attributes of a protocol,
         for example, the protocol 'name', 'id', etc.:

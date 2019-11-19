@@ -123,7 +123,7 @@ class Resource:
 
         The output should look something like this:
 
-        .. program-output:: python labstep/attributes/resource_attributes.py
+        .. program-output:: python ../labstep/attributes/resource_attributes.py
 
         To inspect specific attributes of a resource,
         for example, the resource 'name', 'id', etc.:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (update, getTime, createdAtFrom, createdAtTo,
@@ -170,7 +171,7 @@ class Experiment:
 
         The output should look something like this:
 
-        .. program-output:: python labstep/attributes/experiment_attributes.py
+        .. program-output:: python ../labstep/attributes/experiment_attributes.py
 
         To inspect specific attributes of an experiment,
         for example, the experiment 'name', 'id', etc.:

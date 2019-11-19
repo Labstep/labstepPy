@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
@@ -119,7 +120,7 @@ class Workspace:
 
         The output should look something like this:
 
-        .. program-output:: python labstep/attributes/workspace_attributes.py
+        .. program-output:: python ../labstep/attributes/workspace_attributes.py
 
         To inspect specific attributes of a workspace,
         for example, the workspace 'name', 'id', etc.:

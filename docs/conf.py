@@ -35,7 +35,8 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
-              'sphinx.ext.napoleon', 'sphinx_rtd_theme']
+              'sphinx.ext.napoleon', 'sphinx_rtd_theme',
+              'sphinxcontrib.programoutput']
 
 # Napoleon settings
 napoleon_google_docstring = True
@@ -76,7 +77,9 @@ html_theme_options = {
     'style_external_links': True,
     # 'vcs_pageview_mode': '',
     # 'style_nav_header_background': 'white',
+    # -----------
     # Toc options
+    # -----------
     'collapse_navigation': False,
     'sticky_navigation': False,
     'navigation_depth': 4,
