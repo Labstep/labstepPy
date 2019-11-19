@@ -2,26 +2,25 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Get the entity
-workspace = testUser.getWorkspace(11344)
+# Set variables
+testName = 'Api Default Name'
 
-# Set variables for editting
-randomNum = randrange(1, 9)
-editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
+# Make new entity
+new_entity = testUser.newWorkspace(testName)
+entity = testUser.getWorkspace(new_entity.id)
 
 
 class TestWorkspace:
     def test_edit(self):
-        result = workspace.edit(editName)
-        assert result.name == editName, \
-            'INCORRECT EDITTED WORKSPACE NAME!'
+        result = entity.edit('Edited Name')
+        assert result.name == 'Edited Name', \
+            'FAILED TO EDIT WORKSPACE'
 
     def test_delete(self):
-        workspaceToDelete = testUser.newWorkspace('testDelete')
-        result = workspaceToDelete.delete()
+        entityToDelete = testUser.newWorkspace(testName)
+        result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE WORKSPACE'

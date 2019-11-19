@@ -84,7 +84,7 @@ def editResourceLocation(resourceLocation, name=None, deleted_at=None):
     resourceLocation (obj)
         The ResourceLocation to edit.
     name (str)
-        The new name of the Experiment.
+        The new name of the ResourceLocation.
     deleted_at (str)
         The timestamp at which the ResourceLocation is deleted/archived.
 

@@ -5,97 +5,90 @@ import labstep as LS
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in setup for test
+# Set variables
 testName = 'Api Default Name'
-testDescription = 'Api Default Description'
-testFilePath = './tests/test_user.py'
-
-# New variables for this script
-testNewName = 'Api Pytest New Name'
-testNewDescription = 'Api Pytest New Description'
-testSearch = 'api'
 
 
 class TestUser:
     # getSingle()
     def test_getExperiment(self):
-        result = testUser.getExperiment(23973)
+        entity = testUser.newExperiment(testName)
+        result = testUser.getExperiment(entity.id)
         assert result.name == testName, \
-            'INCORRECT EXPERIMENT NAME!'
-        assert result.description == testDescription, \
-            'INCORRECT EXPERIMENT DESCRIPTION!'
+            'FAILED TO GET EXPERIMENT'
 
     def test_getProtocol(self):
-        result = testUser.getProtocol(10918)
+        entity = testUser.newProtocol(testName)
+        result = testUser.getProtocol(entity.id)
         assert result.name == testName, \
-            'INCORRECT PROTOCOL NAME!'
+            'FAILED TO GET PROTOCOL'
 
     def test_getResource(self):
-        result = testUser.getResource(405412)
+        entity = testUser.newResource(testName)
+        result = testUser.getResource(entity.id)
         assert result.name == testName, \
-            'INCORRECT RESOURCE NAME!'
+            'FAILED TO GET RESOURCE'
 
     def test_getWorkspace(self):
-        result = testUser.getWorkspace(11339)
+        entity = testUser.newWorkspace(testName)
+        result = testUser.getWorkspace(entity.id)
         assert result.name == testName, \
-            'INCORRECT WORKSPACE NAME!'
+            'FAILED TO GET WORKSPACE'
 
     # getMany()
     def test_getExperiments(self):
-        result = testUser.getExperiments(search_query=testSearch)
+        result = testUser.getExperiments()
         assert result[0].name, \
             'FAILED TO GET EXPERIMENTS'
 
     def test_getProtocols(self):
-        result = testUser.getProtocols(search_query=testSearch)
+        result = testUser.getProtocols()
         assert result[0].name, \
             'FAILED TO GET PROTOCOLS'
 
     def test_getResources(self):
-        result = testUser.getResources(search_query=testSearch)
+        result = testUser.getResources()
         assert result[0].name, \
             'FAILED TO GET RESOURCES'
 
     def test_getTags(self):
-        result = testUser.getTags(search_query=testSearch)
+        result = testUser.getTags()
         assert result[0].name, \
             'FAILED TO GET TAGS'
 
     def test_getWorkspaces(self):
-        result = testUser.getWorkspaces(name=testSearch)
+        result = testUser.getWorkspaces()
         assert result[0].name, \
             'FAILED TO GET WORKSPACES'
 
     # newEntity()
     def test_newExperiment(self):
-        result = testUser.newExperiment(testNewName, testNewDescription)
-        assert result.name == testNewName, \
-            'INCORRECT NEW EXPERIMENT NAME!'
-        assert result.description == testNewDescription, \
-            'INCORRECT NEW EXPERIMENT DESCRIPTION!'
+        result = testUser.newExperiment(testName)
+        assert result.name == testName, \
+            'FAILED TO CREATE NEW EXPERIMENT'
 
     def test_newProtocol(self):
-        result = testUser.newProtocol(testNewName)
-        assert result.name == testNewName, \
-            'INCORRECT NEW PROTOCOL NAME!'
+        result = testUser.newProtocol(testName)
+        assert result.name == testName, \
+            'INCORRECT NEW PROTOCOL NAME'
 
     def test_newResource(self):
-        result = testUser.newResource(testNewName)
-        assert result.name == testNewName, \
-            'INCORRECT NEW RESOURCE NAME!'
+        result = testUser.newResource(testName)
+        assert result.name == testName, \
+            'INCORRECT NEW RESOURCE NAME'
 
     """ def test_newTag(self):
-        result = testUser.newTag(testNewName)
+        result = testUser.newTag(testName)
         result.delete()
-        assert result.name == testNewName, \
-            'INCORRECT NEW TAG NAME!' """
+        assert result.name == testName, \
+            'INCORRECT NEW TAG NAME' """
 
     def test_newWorkspace(self):
-        result = testUser.newWorkspace(testNewName)
-        assert result.name == testNewName, \
-            'INCORRECT NEW WORKSPACE NAME!'
+        result = testUser.newWorkspace(testName)
+        assert result.name == testName, \
+            'INCORRECT NEW WORKSPACE NAME'
 
     def test_newFile(self):
-        result = testUser.newFile(testFilePath)
+        result = testUser.newFile('./tests/test_user.py')
         assert result, \
             'FAILED TO ADD NEW FILE'
