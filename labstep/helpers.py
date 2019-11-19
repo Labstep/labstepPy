@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from time import gmtime, strftime
+import inspect
 
 
 def url_join(*args):
@@ -92,3 +93,11 @@ def update(entity, newData):
     for key in newData:
         setattr(entity, key, newData[key])
     return entity
+
+
+def showAttributes(entity):
+    all_attributes = inspect.getmembers(
+        entity, lambda a: not(inspect.isroutine(a)))
+    entity_attributes = {k: v for k,
+                         v in all_attributes if not (k.startswith('__'))}
+    return entity_attributes

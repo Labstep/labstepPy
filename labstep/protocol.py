@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, createdAtFrom, createdAtTo, update
+from .helpers import (getTime, createdAtFrom, createdAtTo, update,
+                      showAttributes)
 from .comment import addCommentWithFile
 from .tag import tag
 
@@ -52,7 +53,7 @@ def getProtocols(user, count=100, search_query=None,
     tag_id (int)
         The id of the Tag to filter by.
     extraParams (dict)
-        Dictionary of extra filter parameters
+        Dictionary of extra filter parameters.
 
     Returns
     -------
@@ -62,11 +63,8 @@ def getProtocols(user, count=100, search_query=None,
     filterParams = {'search_query': search_query,
                     'created_at_from': createdAtFrom(created_at_from),
                     'created_at_to': createdAtTo(created_at_to),
-                    'tag_id': tag_id,
-                    }
-
+                    'tag_id': tag_id}
     params = {**filterParams, **extraParams}
-
     return getEntities(user, Protocol, count, params)
 
 
@@ -122,6 +120,31 @@ class Protocol:
         update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of a Protocol.
+
+        Example
+        -------
+        .. code-block::
+
+            my_protocol = user.getProtocol(17000)
+            my_protocol.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python labstep/attributes/protocol_attributes.py
+
+        To inspect specific attributes of a protocol,
+        for example, the protocol 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_protocol.name)
+            print(my_protocol.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name=None):
         """
         Edit an existing Protocol.

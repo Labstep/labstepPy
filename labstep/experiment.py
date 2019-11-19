@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import update, getTime, createdAtFrom, createdAtTo
+from .helpers import (update, getTime, createdAtFrom, createdAtTo,
+                      showAttributes)
 from .comment import addCommentWithFile
 from .tag import tag
 
@@ -63,9 +64,7 @@ def getExperiments(user, count=100, search_query=None,
                     'created_at_from': createdAtFrom(created_at_from),
                     'created_at_to': createdAtTo(created_at_to),
                     'tag_id': tag_id}
-
     params = {**filterParams, **extraParams}
-
     return getEntities(user, Experiment, count, params)
 
 
@@ -158,6 +157,31 @@ class Experiment:
         update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of an Experiment.
+
+        Example
+        -------
+        .. code-block::
+
+            my_experiment = user.getExperiment(17000)
+            my_experiment.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python labstep/attributes/experiment_attributes.py
+
+        To inspect specific attributes of an experiment,
+        for example, the experiment 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_experiment.name)
+            print(my_experiment.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name=None, description=None):
         """
         Edit an existing Experiment.

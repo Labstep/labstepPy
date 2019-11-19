@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update
+from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
 from .tag import tag
 
@@ -45,7 +45,7 @@ def getResources(user, count=100, search_query=None, tag_id=None,
     tag_id (int)
         The id of the Tag to retrieve.
     extraParams (dict)
-        Dictionary of extra filter parameters
+        Dictionary of extra filter parameters.
 
     Returns
     -------
@@ -54,9 +54,7 @@ def getResources(user, count=100, search_query=None, tag_id=None,
     """
     filterParams = {'search_query': search_query,
                     'tag_id': tag_id}
-
     params = {**filterParams, **extraParams}
-
     return getEntities(user, Resource, count, params)
 
 
@@ -112,6 +110,31 @@ class Resource:
         update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of a Resource.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            my_resource.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python labstep/attributes/resource_attributes.py
+
+        To inspect specific attributes of a resource,
+        for example, the resource 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_resource.name)
+            print(my_resource.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name=None):
         """
         Edit an existing Resource.

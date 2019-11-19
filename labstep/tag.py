@@ -5,7 +5,7 @@ import requests
 import json
 from .config import API_ROOT
 from .entity import getEntities, newEntity, editEntity
-from .helpers import url_join, handleError, update
+from .helpers import url_join, handleError, update, showAttributes
 
 
 def getTags(user, count=1000, search_query=None, extraParams={}):
@@ -21,6 +21,8 @@ def getTags(user, count=1000, search_query=None, extraParams={}):
         The number of Tags to retrieve.
     search_query (str)
         Search for Tags with this 'name'.
+    extraParams (dict)
+        Dictionary of extra filter parameters.
 
     Returns
     -------
@@ -29,7 +31,6 @@ def getTags(user, count=1000, search_query=None, extraParams={}):
     """
     filterParams = {'search_query': search_query}
     params = {**filterParams, **extraParams}
-
     return getEntities(user, Tag, count, params)
 
 
@@ -160,6 +161,31 @@ class Tag:
         update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of a Tag.
+
+        Example
+        -------
+        .. code-block::
+
+            my_tag = user.getTags()[0]
+            my_tag.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python labstep/attributes/tag_attributes.py
+
+        To inspect specific attributes of a tag,
+        for example, the tag 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_tag.name)
+            print(my_tag.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name):
         """
         Edit the name of an existing Tag.

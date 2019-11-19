@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update
+from .helpers import getTime, update, showAttributes
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -106,6 +106,31 @@ class Workspace:
         update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of a Workspace.
+
+        Example
+        -------
+        .. code-block::
+
+            my_workspace = user.getWorkspace(17000)
+            my_workspace.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python labstep/attributes/workspace_attributes.py
+
+        To inspect specific attributes of a workspace,
+        for example, the workspace 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_workspace.name)
+            print(my_workspace.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name=None):
         """
         Edit an existing Workspace.

@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import url_join, handleError
+from .helpers import url_join, handleError, showAttributes
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
@@ -49,6 +49,30 @@ class User:
         self.activeWorkspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
+
+    def attributes(self):
+        """
+        Show all attributes of the User.
+
+        Example
+        -------
+        .. code-block::
+
+            user.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python labstep/attributes/user_attributes.py
+
+        To inspect specific attributes of the user,
+        for example, the user's 'username', 'activeWorkspace', etc.:
+
+        .. code-block::
+
+            print(user.username)
+            print(user.activeWorkspace)
+        """
+        return showAttributes(self)
 
     def setWorkspace(self, workspace):
         """
