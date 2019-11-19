@@ -3,6 +3,8 @@
 
 from datetime import datetime
 from time import gmtime, strftime
+import inspect
+import pprint
 
 
 def url_join(*args):
@@ -92,3 +94,18 @@ def update(entity, newData):
     for key in newData:
         setattr(entity, key, newData[key])
     return entity
+
+
+def showAttributes(entity):
+    """
+    Returns
+    -------
+    Return all members of an object as {key: value} pairs, but only
+    return keys that do not start with '__'.
+    """
+    all_attributes = inspect.getmembers(
+        entity, lambda a: not(inspect.isroutine(a)))
+    entity_attributes = {k: v for k,
+                         v in all_attributes if not (k.startswith('__'))}
+    pp = pprint.PrettyPrinter(indent=4)
+    return pp.pprint(entity_attributes)

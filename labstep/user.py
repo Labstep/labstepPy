@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import url_join, handleError
+from .helpers import url_join, handleError, showAttributes
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
@@ -37,19 +37,66 @@ def login(username, password):
 
         user = labstep.login('myaccount@labstep.com', 'mypassword')
     """
-    data = {'username': username,
-            'password': password}
+    fields = {'username': username,
+              'password': password}
     url = url_join(API_ROOT, "/public-api/user/login")
-    r = requests.post(url, json=data, headers={})
+    r = requests.post(url, json=fields, headers={})
     handleError(r)
     return User(json.loads(r.content))
 
 
 class User:
     def __init__(self, user):
-        self.workspace = user['group']['id']
+        self.activeWorkspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
+
+    def attributes(self):
+        """
+        Show all attributes of the User.
+
+        Example
+        -------
+        .. code-block::
+
+            user.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/user_attributes.py
+
+        To inspect specific attributes of the user,
+        for example, the user's 'username', 'activeWorkspace', etc.:
+
+        .. code-block::
+
+            print(user.username)
+            print(user.activeWorkspace)
+        """
+        return showAttributes(self)
+
+    def setWorkspace(self, workspace):
+        """
+        Set a Workspace as the active Workspace.
+
+        Parameters
+        ----------
+        workspace (obj)
+            The Workspace to set as active.
+
+        Returns
+        -------
+        :class:`~labstep.workspace.Workspace`
+            An object representing a Workspace on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getWorkspace(17000)
+            my_workspace = user.setWorkspace(entity)
+        """
+        self.activeWorkspace = workspace.id
 
     # getSingle()
     def getExperiment(self, experiment_id):
@@ -166,7 +213,8 @@ class User:
     def getExperiments(self, count=100, search_query=None,
                        created_at_from=None, created_at_to=None, tag_id=None):
         """
-        Retrieve a list of a user's Experiments on Labstep,
+        Retrieve a list of a User's Experiments
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
@@ -204,7 +252,8 @@ class User:
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None):
         """
-        Retrieve a list of a user's Protocols on Labstep,
+        Retrieve a list of a User's Protocols
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
@@ -241,7 +290,8 @@ class User:
 
     def getResources(self, count=100, search_query=None, tag_id=None):
         """
-        Retrieve a list of a user's Resources on Labstep,
+        Retrieve a list of a User's Resources
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
@@ -269,7 +319,8 @@ class User:
 
     def getTags(self, count=1000, search_query=None):
         """
-        Retrieve a list of a user's Tags on Labstep,
+        Retrieve a list of a User's Tags
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters

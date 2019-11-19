@@ -10,6 +10,14 @@ testName = 'Api Default Name'
 
 
 class TestUser:
+    def test_setWorkspace(self):
+        my_workspace = testUser.getWorkspace(11339)
+        testUser.setWorkspace(my_workspace)
+        my_experiment = testUser.newExperiment('Test')
+        workspace_experiments = my_workspace.getExperiments()
+        assert workspace_experiments[0].id == my_experiment.id, \
+            'FAILED TO SET WORKSPACE!'
+
     # getSingle()
     def test_getExperiment(self):
         entity = testUser.newExperiment(testName)
@@ -39,27 +47,27 @@ class TestUser:
     def test_getExperiments(self):
         result = testUser.getExperiments()
         assert result[0].name, \
-            'FAILED TO GET EXPERIMENTS'
+            'FAILED TO GET EXPERIMENTS!'
 
     def test_getProtocols(self):
         result = testUser.getProtocols()
         assert result[0].name, \
-            'FAILED TO GET PROTOCOLS'
+            'FAILED TO GET PROTOCOLS!'
 
     def test_getResources(self):
         result = testUser.getResources()
         assert result[0].name, \
-            'FAILED TO GET RESOURCES'
+            'FAILED TO GET RESOURCES!'
 
     def test_getTags(self):
         result = testUser.getTags()
         assert result[0].name, \
-            'FAILED TO GET TAGS'
+            'FAILED TO GET TAGS!'
 
     def test_getWorkspaces(self):
         result = testUser.getWorkspaces()
         assert result[0].name, \
-            'FAILED TO GET WORKSPACES'
+            'FAILED TO GET WORKSPACES!'
 
     # newEntity()
     def test_newExperiment(self):
@@ -91,4 +99,4 @@ class TestUser:
     def test_newFile(self):
         result = testUser.newFile('./tests/test_user.py')
         assert result, \
-            'FAILED TO ADD NEW FILE'
+            'FAILED TO ADD NEW FILE!'
