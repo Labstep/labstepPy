@@ -25,3 +25,24 @@ class TestWorkspace:
         result = workspaceToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE WORKSPACE'
+
+    # getMany()
+    def test_getExperiments(self):
+        result = testUser.getExperiments()
+        assert result[0].name, \
+            'FAILED TO GET EXPERIMENTS!'
+
+    def test_getProtocols(self):
+        result = testUser.getProtocols()
+        assert result[0].name, \
+            'FAILED TO GET PROTOCOLS!'
+
+    def test_getResources(self):
+        result = testUser.getResources()
+        assert result[0].name, \
+            'FAILED TO GET RESOURCES!'
+
+    def test_getTags(self):
+        result = testUser.getTags()
+        assert result[0].name, \
+            'FAILED TO GET TAGS!'
