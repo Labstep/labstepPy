@@ -190,7 +190,8 @@ class User:
     def getExperiments(self, count=100, search_query=None,
                        created_at_from=None, created_at_to=None, tag_id=None):
         """
-        Retrieve a list of a user's Experiments on Labstep,
+        Retrieve a list of a User's Experiments
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
@@ -228,7 +229,8 @@ class User:
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None):
         """
-        Retrieve a list of a user's Protocols on Labstep,
+        Retrieve a list of a User's Protocols
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
@@ -265,7 +267,8 @@ class User:
 
     def getResources(self, count=100, search_query=None, tag_id=None):
         """
-        Retrieve a list of a user's Resources on Labstep,
+        Retrieve a list of a User's Resources
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
@@ -293,7 +296,8 @@ class User:
 
     def getTags(self, count=1000, search_query=None):
         """
-        Retrieve a list of a user's Tags on Labstep,
+        Retrieve a list of a User's Tags
+        across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
