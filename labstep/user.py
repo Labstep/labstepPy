@@ -193,7 +193,7 @@ class User:
 
         Parameters
         ----------
-        workspace_id (int)
+        order_request_id (int)
             The id of the OrderRequest to retrieve.
 
         Returns
@@ -207,7 +207,7 @@ class User:
 
             entity = user.getOrderRequest(17000)
         """
-
+        return getOrderRequest(self, order_request_id)
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
@@ -368,7 +368,7 @@ class User:
             entity = user.getWorkspaces(name='bacteria')
         """
         return getWorkspaces(self, count, name)
-    
+
     def getOrderRequests(self, count=100, name=None):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
@@ -393,7 +393,7 @@ class User:
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        return getWorkspaces(self, count, name)
+        return getOrderRequests(self, count, name)
 
     # newEntity()
     def newExperiment(self, name, description=None):
@@ -509,7 +509,7 @@ class User:
             entity = user.newWorkspace(name='Aspirin Project')
         """
         return newWorkspace(self, name)
-    
+
     def newOrderRequest(self, name):
         """
         Create a new Labstep OrderRequest.

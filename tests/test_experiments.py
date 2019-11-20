@@ -6,7 +6,7 @@ import labstep as LS
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
-testName = 'Api Default Name'
+testName = 'Api Pytest'
 
 # Make new entity
 new_entity = testUser.newExperiment(testName)
@@ -15,8 +15,8 @@ entity = testUser.getExperiment(new_entity.id)
 
 class TestExperiment:
     def test_edit(self):
-        result = entity.edit('Edited Name', 'Edited Description')
-        assert result.name == 'Edited Name', \
+        result = entity.edit('Pytest Edited', 'Description Edited')
+        assert result.name == 'Pytest Edited', \
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):

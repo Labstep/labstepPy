@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update
+from .helpers import getTime, handleStatus, update
 from .comment import addCommentWithFile
 from .tag import tag
 
@@ -75,7 +75,8 @@ def newOrderRequest(user, name):
     return newEntity(user, OrderRequest, metadata)
 
 
-def editOrderRequest(orderRequest, status=None, resource=None, quantity=None, price=None, currency=None, deleted_at=None):
+def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
+                     price=None, currency=None, deleted_at=None):
     """
     Edit an existing OrderRequest.
 
@@ -93,13 +94,11 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None, pr
     OrderRequest
         An object representing the edited OrderRequest.
     """
-    fields = {
-                'status': status,
-                'quantity': quantity,
-                'price': price,
-                'currency': currency,
-                'deleted_at': deleted_at
-            }
+    fields = {'status': handleStatus(status),
+              'quantity': quantity,
+              'price': price,
+              'currency': currency,
+              'deleted_at': deleted_at}
     if resource is not None:
         fields['resource_id'] = resource.id
 
@@ -114,7 +113,8 @@ class OrderRequest:
         update(self, data)
 
     # functions()
-    def edit(self, status=None, resource=None, quantity=None, price=None, currency=None):
+    def edit(self, status=None, resource=None, quantity=None,
+             price=None, currency=None):
         """
         Edit an existing OrderRequest.
 
@@ -126,8 +126,8 @@ class OrderRequest:
             The Resource being requested
         quantity (int)
             The number of items of the resource requested
-        
-        
+
+
         Returns
         -------
         :class:`~labstep.orderRequest.OrderRequest`
@@ -140,7 +140,8 @@ class OrderRequest:
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.edit(name='A New OrderRequest Name')
         """
-        return editOrderRequest(self, status, resource, quantity, price, currency)
+        return editOrderRequest(self, status, resource, quantity,
+                                price, currency)
 
     def delete(self):
         """

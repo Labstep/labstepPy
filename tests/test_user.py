@@ -6,7 +6,7 @@ import labstep as LS
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
-testName = 'Api Default Name'
+testName = 'Api Pytest'
 
 
 class TestUser:

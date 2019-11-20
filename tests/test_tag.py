@@ -10,13 +10,13 @@ testName = 'Api Pytest'
 
 # Make new entity
 new_entity = testUser.newTag(testName)
-entity = new_entity
+entity = testUser.getTags()[0]
 
 
 class TestTag:
     def test_edit(self):
-        result = entity.edit('Edited Name')
-        assert result.name == 'Edited Name', \
+        result = entity.edit('Pytest Edited')
+        assert result.name == 'Pytest Edited', \
             'FAILED TO EDIT TAG NAME!'
 
     def test_delete(self):

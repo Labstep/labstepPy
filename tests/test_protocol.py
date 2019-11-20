@@ -6,7 +6,7 @@ import labstep as LS
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
-testName = 'Api Default Name'
+testName = 'Api Pytest'
 
 # Make new entity
 new_entity = testUser.newProtocol(testName)
@@ -15,8 +15,8 @@ entity = testUser.getProtocol(new_entity.id)
 
 class TestProtocol:
     def test_edit(self):
-        result = entity.edit('Edited Name')
-        assert result.name == 'Edited Name', \
+        result = entity.edit('Pytest Edited')
+        assert result.name == 'Pytest Edited', \
             'FAILED TO EDIT PROTOCOL'
 
     def test_delete(self):

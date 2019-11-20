@@ -111,19 +111,23 @@ def editProtocol(protocol, name=None, deleted_at=None):
               'deleted_at': deleted_at}
     return editEntity(protocol, fields)
 
+
 class ProtocolValue:
     __entityName__ = 'protocol_value'
 
     def __init__(self, data, user):
         self.__user__ = user
         update(self, data)
-    
+
     def edit(self, label=None, value=None, unit=None, resource=None):
-        fields = { 'label': label, 'value': value, 'unit': unit }
+        fields = {'label': label,
+                  'value': value,
+                  'unit': unit}
         if resource is not None:
             fields['resource_id'] = resource.id
 
         return editEntity(self, fields)
+
 
 class Protocol:
     __entityName__ = 'protocol-collection'

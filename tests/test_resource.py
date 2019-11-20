@@ -6,7 +6,7 @@ import labstep as LS
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
-testName = 'Api Default Name'
+testName = 'Api Pytest'
 
 # Make new entity
 new_entity = testUser.newResource(testName)
@@ -15,8 +15,8 @@ entity = testUser.getResource(new_entity.id)
 
 class TestResource:
     def test_edit(self):
-        result = entity.edit('Edited Name')
-        assert result.name == 'Edited Name', \
+        result = entity.edit('Pytest Edited')
+        assert result.name == 'Pytest Edited', \
             'FAILED TO EDIT RESOURCE'
 
     def test_delete(self):

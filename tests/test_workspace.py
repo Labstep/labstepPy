@@ -6,17 +6,18 @@ import labstep as LS
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
-testName = 'Api Default Name'
+testName = 'Api Pytest'
 
 # Make new entity
 new_entity = testUser.newWorkspace(testName)
 entity = testUser.getWorkspace(new_entity.id)
+my_workspace = testUser.setWorkspace(entity)
 
 
 class TestWorkspace:
     def test_edit(self):
-        result = entity.edit('Edited Name')
-        assert result.name == 'Edited Name', \
+        result = entity.edit('Pytest Edited')
+        assert result.name == 'Pytest Edited', \
             'FAILED TO EDIT WORKSPACE'
 
     def test_delete(self):
@@ -27,21 +28,25 @@ class TestWorkspace:
 
     # getMany()
     def test_getExperiments(self):
-        result = testUser.getExperiments()
+        test_exp = testUser.newExperiment(testName)
+        test_exp.addTag(testName)
+        result = entity.getExperiments()
         assert result[0].name, \
             'FAILED TO GET EXPERIMENTS!'
 
     def test_getProtocols(self):
-        result = testUser.getProtocols()
+        testUser.newProtocol(testName)
+        result = entity.getProtocols()
         assert result[0].name, \
             'FAILED TO GET PROTOCOLS!'
 
     def test_getResources(self):
-        result = testUser.getResources()
+        testUser.newResource(testName)
+        result = entity.getResources()
         assert result[0].name, \
             'FAILED TO GET RESOURCES!'
 
     def test_getTags(self):
-        result = testUser.getTags()
+        result = entity.getTags()
         assert result[0].name, \
             'FAILED TO GET TAGS!'
