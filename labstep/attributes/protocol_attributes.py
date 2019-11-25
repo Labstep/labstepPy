@@ -6,5 +6,5 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-entity = user.getProtocol(4926)
-entity.attributes()
+entity = user.getProtocols()
+entity[0].attributes()

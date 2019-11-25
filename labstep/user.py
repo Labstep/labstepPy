@@ -510,27 +510,30 @@ class User:
         """
         return newWorkspace(self, name)
 
-    def newOrderRequest(self, name):
+    def newOrderRequest(self, resource, quantity=1):
         """
         Create a new Labstep OrderRequest.
 
         Parameters
         ----------
-        name (str)
-            Give your OrderRequest a name.
+        resource (obj)
+            The Labstep Resource.
+        quantity (int)
+            The quantity of the new OrderRequest.
 
         Returns
         -------
         :class:`~labstep.orderRequest.OrderRequest`
-            An object representing a OrderRequest on Labstep.
+            An object representing the an OrderRequest on Labstep.
 
         Example
         -------
         .. code-block::
 
-            entity = user.newOrderRequest(name='Aspirin Project')
+            my_resource = user.getResource(17000)
+            entity = user.newOrderRequest(my_resource, quantity=3)
         """
-        return newOrderRequest(self, name)
+        return newOrderRequest(self, resource, quantity)
 
     def newFile(self, filepath):
         """

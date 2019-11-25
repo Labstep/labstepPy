@@ -43,6 +43,13 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET WORKSPACE'
 
+    def test_getOrderRequest(self):
+        new_resource = testUser.newResource(testName)
+        entity = testUser.newOrderRequest(new_resource)
+        result = testUser.getOrderRequest(entity.id)
+        assert result.name == testName, \
+            'FAILED TO GET ORDER REQUEST'
+
     # getMany()
     def test_getExperiments(self):
         result = testUser.getExperiments()
@@ -69,6 +76,11 @@ class TestUser:
         assert result[0].name, \
             'FAILED TO GET WORKSPACES!'
 
+    def test_getOrderRequests(self):
+        result = testUser.getOrderRequests()
+        assert result[0].name, \
+            'FAILED TO GET ORDER REQUESTS!'
+
     # newEntity()
     def test_newExperiment(self):
         result = testUser.newExperiment(testName)
@@ -78,23 +90,23 @@ class TestUser:
     def test_newProtocol(self):
         result = testUser.newProtocol(testName)
         assert result.name == testName, \
-            'INCORRECT NEW PROTOCOL NAME'
+            'FAILED TO CREATE NEW PROTOCOL'
 
     def test_newResource(self):
         result = testUser.newResource(testName)
         assert result.name == testName, \
-            'INCORRECT NEW RESOURCE NAME'
+            'FAILED TO CREATE NEW RESOURCE'
 
-    """ def test_newTag(self):
-        result = testUser.newTag(testName)
+    def test_newTag(self):
+        result = testUser.newTag('test_newTag')
         result.delete()
-        assert result.name == testName, \
-            'INCORRECT NEW TAG NAME' """
+        assert result.name == 'test_newTag', \
+            'FAILED TO CREATE NEW TAG'
 
     def test_newWorkspace(self):
         result = testUser.newWorkspace(testName)
         assert result.name == testName, \
-            'INCORRECT NEW WORKSPACE NAME'
+            'FAILED TO CREATE NEW WORKSPACE'
 
     def test_newFile(self):
         result = testUser.newFile('./tests/test_user.py')

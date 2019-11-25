@@ -25,8 +25,9 @@ def getEntity(user, entityClass, id):
     """
     params = {'is_deleted': 'both'}
     headers = {'apikey': user.api_key}
+    query = "?get_single=1&is_deleted=both&id="+str(id)
     url = url_join(API_ROOT, "/api/generic/",
-                   entityClass.__entityName__, str(id))
+                   entityClass.__entityName__ + query)
     r = requests.get(url, headers=headers, params=params)
     handleError(r)
     return entityClass(json.loads(r.content), user)

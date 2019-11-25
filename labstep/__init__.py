@@ -9,3 +9,4 @@ from .protocol import Protocol
 from .resource import Resource
 from .tag import Tag
 from .workspace import Workspace
+from .orderRequest import OrderRequest

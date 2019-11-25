@@ -87,7 +87,7 @@ def handleStatus(status):
     if status is None:
         return None
     else:
-        return status.lower()
+        return status.lower().replace(' ', '_')
 
 
 def update(entity, newData):

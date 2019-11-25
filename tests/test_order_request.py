@@ -2,41 +2,36 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in setup for test
-testName = 'Api Default Name'
-testComment = 'Api Default Comment'
-testFilePath = './tests/test_order_request.py'
+# Set variables
+testName = 'Api Pytest'
 
-# Get the entity
-orderRequest = testUser.getOrderRequest(405415)
-
-# Set variables for editting
-randomNum = randrange(1, 9)
-editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
+# Make new entity
+new_entity = testUser.newOrderRequest(testUser.newResource(testName))
+entity = testUser.getOrderRequest(new_entity.id)
 
 
 class TestOrderRequest:
     def test_edit(self):
-        result = orderRequest.edit(editName)
-        assert result.name == editName, \
-            'INCORRECT RESOURCE NAME!'
+        result = entity.edit(status="Back orDEred")
+        assert result.status == 'back_ordered', \
+            'FAILED TO EDIT ORDER REQUEST!'
 
     def test_delete(self):
-        orderRequestToDelete = testUser.newOrderRequest('testDelete')
-        result = orderRequestToDelete.delete()
+        new_resource = testUser.newResource('testDelete')
+        entityToDelete = testUser.newOrderRequest(new_resource)
+        result = entityToDelete.delete()
         assert result.deleted_at is not None, \
-            'FAILED TO DELETE RESOURCE'
+            'FAILED TO DELETE ORDER REQUEST'
 
     def test_comment(self):
-        result = orderRequest.addComment(testComment, testFilePath)
+        result = entity.addComment(testName, './tests/test_order_request.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_addTag(self):
-        result = orderRequest.addTag(testName)
+        result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'

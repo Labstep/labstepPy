@@ -47,6 +47,8 @@ class TestWorkspace:
             'FAILED TO GET RESOURCES!'
 
     def test_getTags(self):
+        new_tag = testUser.newTag('test_newTag')
         result = entity.getTags()
+        new_tag.delete()
         assert result[0].name, \
             'FAILED TO GET TAGS!'

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, handleStatus, update
+from .helpers import getTime, handleStatus, update, showAttributes
 from .comment import addCommentWithFile
 from .tag import tag
 
@@ -54,7 +55,7 @@ def getOrderRequests(user, count=100, search_query=None, tag_id=None):
     return getEntities(user, OrderRequest, count, metadata)
 
 
-def newOrderRequest(user, name):
+def newOrderRequest(user, resource, quantity=1):
     """
     Create a new Labstep OrderRequest.
 
@@ -63,16 +64,19 @@ def newOrderRequest(user, name):
     user (obj)
         The Labstep user creating the OrderRequest.
         Must have property 'api_key'. See 'login'.
-    name (str)
-        Give your OrderRequest a name.
+    resource (obj)
+        The Labstep Resource.
+    quantity (int)
+        The quantity of the new OrderRequest.
 
     Returns
     -------
     OrderRequest
         An object representing the new Labstep OrderRequest.
     """
-    metadata = {'name': name}
-    return newEntity(user, OrderRequest, metadata)
+    fields = {'resource_id': resource.id,
+              'quantity': quantity}
+    return newEntity(user, OrderRequest, fields)
 
 
 def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
@@ -84,8 +88,19 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     ----------
     orderRequest (obj)
         The OrderRequest to edit.
-    name (str)
-        The new name of the Experiment.
+    status (str)
+        The status of the OrderRequest. Options are: "new", "approved",
+        "ordered", "back_ordered", "received", and "cancelled".
+    resource (obj)
+        The Resource of the OrderRequest.
+    quantity (int)
+        The quantity of the OrderRequest.
+    price (int)
+        The price of the OrderRequest.
+    currency (str)
+        The currency of the price in the format of the 3-letter
+        currency code by country. For example, "EUR" for Euro, "GBP" for
+        British Pound Sterling, "USD" for US Dollar, etc.
     deleted_at (str)
         The timestamp at which the OrderRequest is deleted/archived.
 
@@ -113,6 +128,32 @@ class OrderRequest:
         update(self, data)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of an OrderRequest.
+
+        Example
+        -------
+        .. code-block::
+
+            my_order_request = user.getOrderRequest(17000)
+            my_order_request.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/orderRequest_attributes.py
+
+        To inspect specific attributes of an order request,
+        for example, the order request 'name', 'id', 'status', etc.:
+
+        .. code-block::
+
+            print(my_order_request.name)
+            print(my_order_request.id)
+            print(my_order_request.status)
+        """
+        return showAttributes(self)
+
     def edit(self, status=None, resource=None, quantity=None,
              price=None, currency=None):
         """
@@ -120,13 +161,23 @@ class OrderRequest:
 
         Parameters
         ----------
+        orderRequest (obj)
+            The OrderRequest to edit.
         status (str)
-            The status of the OrderRequest.
-        resource (:class:`~labstep.resource.Resource`)
-            The Resource being requested
+            The status of the OrderRequest. Options are: "new", "approved",
+            "ordered", "back_ordered", "received", and "cancelled".
+        resource (obj)
+            The Resource of the OrderRequest.
         quantity (int)
-            The number of items of the resource requested
-
+            The quantity of the OrderRequest.
+        price (int)
+            The price of the OrderRequest.
+        currency (str)
+            The currency of the price in the format of the 3-letter
+            currency code by country. For example, "EUR" for Euro, "GBP" for
+            British Pound Sterling, "USD" for US Dollar, etc.
+        deleted_at (str)
+            The timestamp at which the OrderRequest is deleted/archived.
 
         Returns
         -------
@@ -138,7 +189,8 @@ class OrderRequest:
         .. code-block::
 
             my_orderRequest = user.getOrderRequest(17000)
-            my_orderRequest.edit(name='A New OrderRequest Name')
+            my_orderRequest.edit(status="back_ordered", quantity=3,
+                                 price=50, currency="GBP")
         """
         return editOrderRequest(self, status, resource, quantity,
                                 price, currency)
@@ -179,7 +231,7 @@ class OrderRequest:
 
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.addComment(body='I am commenting!',
-                                filepath='pwd/file_to_upload.dat')
+                                       filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
 
