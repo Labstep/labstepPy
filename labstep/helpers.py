@@ -59,7 +59,7 @@ def createdAtFrom(created_at_from):
         return None
     else:
         timezone = getTime()[-6:]
-        created_at_from = created_at_from + "T00:00:00{tz}".format(tz=timezone)
+        created_at_from = created_at_from + "T00:00:00" + timezone
         return created_at_from
 
 
@@ -73,8 +73,22 @@ def createdAtTo(created_at_to):
         return None
     else:
         timezone = getTime()[-6:]
-        created_at_to = created_at_to + "T23:59:59{tz}".format(tz=timezone)
+        created_at_to = created_at_to + "T23:59:59" + timezone
         return created_at_to
+
+
+def handleDate(datetime):
+    """
+    Returns
+    -------
+        The datetime in json serializable format.
+    """
+    if datetime is None:
+        return None
+    else:
+        timezone = getTime()[-6:]
+        datetime = datetime.replace(' ', 'T') + ":00" + timezone
+        return datetime
 
 
 def handleStatus(status):

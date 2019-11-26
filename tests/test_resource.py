@@ -34,3 +34,9 @@ class TestResource:
         result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'
+
+    def test_addMetadata(self):
+        new_resource = testUser.newResource(testName)
+        result = new_resource.addMetadata(fieldName=testName, value=testName)
+        assert result.label == testName, \
+            'FAILED TO ADD METADATA'

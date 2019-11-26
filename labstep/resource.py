@@ -4,6 +4,7 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
+from .metadata import addMetadataTo
 from .tag import tag
 
 
@@ -222,3 +223,42 @@ class Resource:
         """
         tag(self, name)
         return self
+
+    def addMetadata(self, fieldType="default", fieldName=None,
+                    value=None, date=None,
+                    quantity_amount=None, quantity_unit=None):
+        """
+        Add Metadata to a Resource.
+
+        Parameters
+        ----------
+        fieldType (str)
+            The Metadata field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        fieldName (str)
+            The name of the field.
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        quantity_amount (float)
+            The quantity.
+        quantity_unit (str)
+            The unit accompanying the quantity_amount entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Metadata.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            metadata = my_resource.addMetadata(fieldName="Refractive Index",
+                                               value="1.73")
+        """
+        return addMetadataTo(self, fieldType, fieldName, value, date,
+                             quantity_amount, quantity_unit)

@@ -4,38 +4,51 @@
 import requests
 from .config import API_ROOT
 from .entity import newEntity, editEntity
-from .helpers import url_join, handleError, update
+from .helpers import (url_join, handleError, handleDate,
+                      update, showAttributes)
 
 
-def addMetadataTo(entity, fieldName, value, fieldType="default"):
+def addMetadataTo(entity, fieldType="default", fieldName=None,
+                  value=None, date=None,
+                  quantity_amount=None, quantity_unit=None):
     """
-    Create a new Metadata.
+    Add Metadata to a Resource.
 
     Parameters
     ----------
     entity (obj)
-        The Labstep user creating the Metadata.
-        Must have property 'api_key'. See 'login'.
-    fieldName (str)
-        Name of the new Metadata.
-    value (obj)
-        Value of the Metadata.
+        The Resource to add Metadata to.
     fieldType (str)
-        Metadata field type. Defaults to Text.
+        The Metadata field type. Options are: "default", "date",
+        "quantity", or "number". The "default" type is "Text".
+    fieldName (str)
+        The name of the field.
+    value (str)
+        The value accompanying the fieldName entry.
+    date (str)
+        The date accompanying the fieldName entry. Must be
+        in the format of "YYYY-MM-DD HH:MM".
+    quantity_amount (float)
+        The quantity.
+    quantity_unit (str)
+        The unit accompanying the quantity_amount entry.
 
     Returns
     -------
     metadata
         An object representing the new Labstep Metadata.
     """
-    fields = {'label': fieldName,
-              'metadata_thread_id': entity.metadata_thread_id,
+    fields = {'metadata_thread_id': entity.metadata_thread['id'],
               'type': fieldType,
-              'value': value}
+              'label': fieldName,
+              'value': value,
+              'date': handleDate(date),
+              'quantity_amount': quantity_amount,
+              'quantity_unit': quantity_unit}
     return newEntity(entity.__user__, Metadata, fields)
 
 
-def editMetadata(metadata, value):
+def editMetadata(metadata, fieldName=None, value=None):
     """
     Edit the value of an existing Metadata.
 
@@ -43,6 +56,8 @@ def editMetadata(metadata, value):
     ----------
     metadata (obj)
         The Metadata to edit.
+    fieldName (str)
+        The new name of the field.
     value (str)
         The new value of the Metadata.
 
@@ -51,18 +66,19 @@ def editMetadata(metadata, value):
     metadata
         An object representing the edited Metadata.
     """
-    fields = {'value': value}
+    fields = {'label': fieldName,
+              'value': value}
     return editEntity(metadata, fields)
 
 
 def deleteMetadata(metadata):
     """
-    Delete an existing metadata.
+    Delete an existing Metadata.
 
     Parameters
     ----------
     metadata (obj)
-        The metadata to delete.
+        The Metadata to delete.
 
     Returns
     -------
@@ -83,12 +99,44 @@ class Metadata:
         update(self, data)
 
     # functions()
-    def edit(self, value):
+    def attributes(self):
+        """
+        Show all attributes of a Metadata.
+
+        Example
+        -------
+        .. code-block::
+
+            # Add metadata to a resource
+            my_resource = user.getResource(17000)
+            metadata = my_resource.addMetadata(fieldName="Refractive Index",
+                                               value="1.73")
+
+            # Show attributes
+            metadata.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/metadata_attributes.py
+
+        To inspect specific attributes of a metadata,
+        for example, the metadata 'label', 'value', etc.:
+
+        .. code-block::
+
+            print(metadata.label)
+            print(metadata.value)
+        """
+        return showAttributes(self)
+
+    def edit(self, fieldName=None, value=None):
         """
         Edit the value of an existing Metadata.
 
         Parameters
         ----------
+        fieldName (str)
+            The new name of the field.
         value (str)
             The new value of the Metadata.
 
@@ -101,11 +149,9 @@ class Metadata:
         -------
         .. code-block::
 
-            # Get metadata for a resource
-            # Edit
-            metadata.edit(value='A New Metadata Value')
+            metadata.edit(value='2.50')
         """
-        return editMetadata(self, value)
+        return editMetadata(self, fieldName, value)
 
     def delete(self):
         """

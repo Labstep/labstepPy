@@ -60,6 +60,20 @@ Resource
    :members:
    :undoc-members:
 
+Metadata
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: labstep.metadata.Metadata
+   :members:
+   :undoc-members:
+
+OrderRequest
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: labstep.orderRequest.OrderRequest
+   :members:
+   :undoc-members:
+
 Workspace
 ++++++++++++++++++++++++++++++++++++++++++++++
 

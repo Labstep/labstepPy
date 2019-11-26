@@ -161,8 +161,6 @@ class OrderRequest:
 
         Parameters
         ----------
-        orderRequest (obj)
-            The OrderRequest to edit.
         status (str)
             The status of the OrderRequest. Options are: "new", "approved",
             "ordered", "back_ordered", "received", and "cancelled".
@@ -176,8 +174,6 @@ class OrderRequest:
             The currency of the price in the format of the 3-letter
             currency code by country. For example, "EUR" for Euro, "GBP" for
             British Pound Sterling, "USD" for US Dollar, etc.
-        deleted_at (str)
-            The timestamp at which the OrderRequest is deleted/archived.
 
         Returns
         -------
