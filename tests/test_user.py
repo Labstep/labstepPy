@@ -16,7 +16,7 @@ class TestUser:
         my_experiment = testUser.newExperiment('Test')
         workspace_experiments = my_workspace.getExperiments()
         assert workspace_experiments[0].id == my_experiment.id, \
-            'FAILED TO SET WORKSPACE!'
+            'FAILED TO SET WORKSPACE'
 
     # getSingle()
     def test_getExperiment(self):
@@ -37,11 +37,11 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET RESOURCE'
 
-    def test_getWorkspace(self):
-        entity = testUser.newWorkspace(testName)
-        result = testUser.getWorkspace(entity.id)
+    def test_getResourceCategory(self):
+        entity = testUser.newResourceCategory(testName)
+        result = testUser.getResourceCategory(entity.id)
         assert result.name == testName, \
-            'FAILED TO GET WORKSPACE'
+            'FAILED TO GET RESOURCE CATEGORY'
 
     def test_getOrderRequest(self):
         new_resource = testUser.newResource(testName)
@@ -50,36 +50,47 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET ORDER REQUEST'
 
+    def test_getWorkspace(self):
+        entity = testUser.newWorkspace(testName)
+        result = testUser.getWorkspace(entity.id)
+        assert result.name == testName, \
+            'FAILED TO GET WORKSPACE'
+
     # getMany()
     def test_getExperiments(self):
         result = testUser.getExperiments()
         assert result[0].name, \
-            'FAILED TO GET EXPERIMENTS!'
+            'FAILED TO GET EXPERIMENTS'
 
     def test_getProtocols(self):
         result = testUser.getProtocols()
         assert result[0].name, \
-            'FAILED TO GET PROTOCOLS!'
+            'FAILED TO GET PROTOCOLS'
 
     def test_getResources(self):
         result = testUser.getResources()
         assert result[0].name, \
-            'FAILED TO GET RESOURCES!'
+            'FAILED TO GET RESOURCES'
 
-    def test_getTags(self):
-        result = testUser.getTags()
+    def test_getResourceCategorys(self):
+        result = testUser.getResourceCategorys()
         assert result[0].name, \
-            'FAILED TO GET TAGS!'
-
-    def test_getWorkspaces(self):
-        result = testUser.getWorkspaces()
-        assert result[0].name, \
-            'FAILED TO GET WORKSPACES!'
+            'FAILED TO GET RESOURCE CATEGORYS'
 
     def test_getOrderRequests(self):
         result = testUser.getOrderRequests()
         assert result[0].name, \
-            'FAILED TO GET ORDER REQUESTS!'
+            'FAILED TO GET ORDER REQUESTS'
+
+    def test_getTags(self):
+        result = testUser.getTags()
+        assert result[0].name, \
+            'FAILED TO GET TAGS'
+
+    def test_getWorkspaces(self):
+        result = testUser.getWorkspaces()
+        assert result[0].name, \
+            'FAILED TO GET WORKSPACES'
 
     # newEntity()
     def test_newExperiment(self):
@@ -97,6 +108,17 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO CREATE NEW RESOURCE'
 
+    def test_newResourceCategory(self):
+        result = testUser.newResourceCategory(testName)
+        assert result.name == testName, \
+            'FAILED TO CREATE NEW RESOURCE CATEGORY'
+
+    def test_newOrderRequest(self):
+        entity = testUser.newResource(testName)
+        result = testUser.newOrderRequest(entity)
+        assert result.name == testName, \
+            'FAILED TO CREATE NEW ORDER REQUEST'
+
     def test_newTag(self):
         result = testUser.newTag('test_newTag')
         result.delete()
@@ -111,4 +133,4 @@ class TestUser:
     def test_newFile(self):
         result = testUser.newFile('./tests/test_user.py')
         assert result, \
-            'FAILED TO ADD NEW FILE!'
+            'FAILED TO ADD NEW FILE'

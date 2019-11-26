@@ -8,9 +8,11 @@ from .helpers import url_join, handleError, showAttributes
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
+from .resourceCategory import (getResourceCategory, getResourceCategorys,
+                               newResourceCategory)
+from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
-from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 from .file import newFile
 
 
@@ -165,27 +167,27 @@ class User:
         """
         return getResource(self, resource_id)
 
-    def getWorkspace(self, workspace_id):
+    def getResourceCategory(self, resourceCategory_id):
         """
-        Retrieve a specific Labstep Workspace.
+        Retrieve a specific Labstep ResourceCategory.
 
         Parameters
         ----------
-        workspace_id (int)
-            The id of the Workspace to retrieve.
+        resourceCategory_id (int)
+            The id of the ResourceCategory to retrieve.
 
         Returns
         -------
-        :class:`~labstep.workspace.Workspace`
-            An object representing a Workspace on Labstep.
+        :class:`~labstep.resourceCategory.ResourceCategory`
+            An object representing a ResourceCategory on Labstep.
 
         Example
         -------
         .. code-block::
 
-            entity = user.getWorkspace(17000)
+            entity = user.getResourceCategory(17000)
         """
-        return getWorkspace(self, workspace_id)
+        return getResourceCategory(self, resourceCategory_id)
 
     def getOrderRequest(self, order_request_id):
         """
@@ -208,6 +210,28 @@ class User:
             entity = user.getOrderRequest(17000)
         """
         return getOrderRequest(self, order_request_id)
+
+    def getWorkspace(self, workspace_id):
+        """
+        Retrieve a specific Labstep Workspace.
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the Workspace to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.workspace.Workspace`
+            An object representing a Workspace on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getWorkspace(17000)
+        """
+        return getWorkspace(self, workspace_id)
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
@@ -317,6 +341,61 @@ class User:
         """
         return getResources(self, count, search_query, tag_id)
 
+    def getResourceCategorys(self, count=100, search_query=None, tag_id=None):
+        """
+        Retrieve a list of a User's Resource Categorys
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of ResourceCategorys to retrieve.
+        search_query (str)
+            Search for ResourceCategorys with this 'name'.
+        tag_id (int)
+            The id of the Tag to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.resourceCategory.ResourceCategory`]
+            A list of Labstep ResourceCategorys.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceCategorys(search_query='properties',
+                                               tag_id=800)
+        """
+        return getResourceCategorys(self, count, search_query, tag_id)
+
+    def getOrderRequests(self, count=100, name=None):
+        """
+        Retrieve a list of a user's OrderRequests on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of OrderRequests to retrieve.
+        name (str)
+            Search for OrderRequests with this 'name'.
+
+        Returns
+        -------
+
+        List[:class:`~labstep.orderRequest.OrderRequest`]
+            A list of Labstep OrderRequests.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getOrderRequests(name='polymerase')
+        """
+        return getOrderRequests(self, count, name)
+
     def getTags(self, count=1000, search_query=None):
         """
         Retrieve a list of a User's Tags
@@ -368,32 +447,6 @@ class User:
             entity = user.getWorkspaces(name='bacteria')
         """
         return getWorkspaces(self, count, name)
-
-    def getOrderRequests(self, count=100, name=None):
-        """
-        Retrieve a list of a user's OrderRequests on Labstep,
-        which can be filtered using the parameters:
-
-        Parameters
-        ----------
-        count (int)
-            The number of OrderRequests to retrieve.
-        name (str)
-            Search for OrderRequests with this 'name'.
-
-        Returns
-        -------
-
-        List[:class:`~labstep.orderRequest.OrderRequest`]
-            A list of Labstep OrderRequests.
-
-        Example
-        -------
-        .. code-block::
-
-            entity = user.getOrderRequests(name='polymerase')
-        """
-        return getOrderRequests(self, count, name)
 
     # newEntity()
     def newExperiment(self, name, description=None):
@@ -466,6 +519,50 @@ class User:
         """
         return newResource(self, name)
 
+    def newResourceCategory(self, name):
+        """
+        Create a new Labstep ResourceCategory.
+
+        Parameters
+        ----------
+        user (obj)
+            The Labstep user creating the ResourceCategory.
+            Must have property 'api_key'. See 'login'.
+        name (str)
+            Give your ResourceCategory a name.
+
+        Returns
+        -------
+        :class:`~labstep.resourceCategory.ResourceCategory`
+            An object representing the new Labstep ResourceCategory.
+        """
+        return newResourceCategory(self, name)
+
+    def newOrderRequest(self, resource, quantity=1):
+        """
+        Create a new Labstep OrderRequest.
+
+        Parameters
+        ----------
+        resource (obj)
+            The Labstep Resource.
+        quantity (int)
+            The quantity of the new OrderRequest.
+
+        Returns
+        -------
+        :class:`~labstep.orderRequest.OrderRequest`
+            An object representing the an OrderRequest on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            entity = user.newOrderRequest(my_resource, quantity=2)
+        """
+        return newOrderRequest(self, resource, quantity)
+
     def newTag(self, name):
         """
         Create a new Labstep Tag.
@@ -509,31 +606,6 @@ class User:
             entity = user.newWorkspace(name='Aspirin Project')
         """
         return newWorkspace(self, name)
-
-    def newOrderRequest(self, resource, quantity=1):
-        """
-        Create a new Labstep OrderRequest.
-
-        Parameters
-        ----------
-        resource (obj)
-            The Labstep Resource.
-        quantity (int)
-            The quantity of the new OrderRequest.
-
-        Returns
-        -------
-        :class:`~labstep.orderRequest.OrderRequest`
-            An object representing the an OrderRequest on Labstep.
-
-        Example
-        -------
-        .. code-block::
-
-            my_resource = user.getResource(17000)
-            entity = user.newOrderRequest(my_resource, quantity=3)
-        """
-        return newOrderRequest(self, resource, quantity)
 
     def newFile(self, filepath):
         """

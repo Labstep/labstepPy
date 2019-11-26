@@ -40,3 +40,8 @@ class TestResource:
         result = new_resource.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
+
+    def test_newOrderRequest(self):
+        result = entity.newOrderRequest()
+        assert result.status, \
+            'FAILED TO MAKE NEW ORDER REQUEST'

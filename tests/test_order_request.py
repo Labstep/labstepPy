@@ -9,7 +9,8 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 testName = 'Api Pytest'
 
 # Make new entity
-new_entity = testUser.newOrderRequest(testUser.newResource(testName))
+new_resource = testUser.newResource(testName)
+new_entity = new_resource.newOrderRequest()
 entity = testUser.getOrderRequest(new_entity.id)
 
 
@@ -20,8 +21,8 @@ class TestOrderRequest:
             'FAILED TO EDIT ORDER REQUEST!'
 
     def test_delete(self):
-        new_resource = testUser.newResource('testDelete')
-        entityToDelete = testUser.newOrderRequest(new_resource)
+        test_resource = testUser.newResource('testDelete')
+        entityToDelete = test_resource.newOrderRequest()
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE ORDER REQUEST'

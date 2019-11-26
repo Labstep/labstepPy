@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update
+from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
 from .tag import tag
 
@@ -84,7 +85,7 @@ def editResourceCategory(resourceCategory, name=None, deleted_at=None):
     resourceCategory (obj)
         The ResourceCategory to edit.
     name (str)
-        The new name of the Experiment.
+        The new name of the ResourceCategory.
     deleted_at (str)
         The timestamp at which the ResourceCategory is deleted/archived.
 
@@ -106,7 +107,32 @@ class ResourceCategory:
         update(self, data)
 
     # functions()
-    def edit(self, name=None):
+    def attributes(self):
+        """
+        Show all attributes of a ResourceCategory.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource_category = user.getResourceCategory(17000)
+            my_resource_category.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/resourceCategory_attributes.py
+
+        To inspect specific attributes of a ResourceCategory,
+        for example, the ResourceCategory 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_resource_category.name)
+            print(my_resource_category.id)
+        """
+        return showAttributes(self)
+
+    def edit(self, name):
         """
         Edit an existing ResourceCategory.
 
@@ -124,8 +150,8 @@ class ResourceCategory:
         -------
         .. code-block::
 
-            my_resourceCategory = user.getResourceCategory(17000)
-            my_resourceCategory.edit(name='A New ResourceCategory Name')
+            my_resource_category = user.getResourceCategory(17000)
+            my_resource_category.edit(name='A New ResourceCategory Name')
         """
         return editResourceCategory(self, name)
 
@@ -137,8 +163,8 @@ class ResourceCategory:
         -------
         .. code-block::
 
-            my_resourceCategory = user.getResourceCategory(17000)
-            my_resourceCategory.delete()
+            my_resource_category = user.getResourceCategory(17000)
+            my_resource_category.delete()
         """
         return editResourceCategory(self, deleted_at=getTime())
 
@@ -163,9 +189,9 @@ class ResourceCategory:
         -------
         .. code-block::
 
-            my_resourceCategory = user.getResourceCategory(17000)
-            my_resourceCategory.addComment(body='I am commenting!',
-                                filepath='pwd/file_to_upload.dat')
+            my_resource_category = user.getResourceCategory(17000)
+            my_resource_category.addComment(body='I am commenting!',
+                                            filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
 
@@ -188,8 +214,8 @@ class ResourceCategory:
         -------
         .. code-block::
 
-            my_resourceCategory = user.getResourceCategory(17000)
-            my_resourceCategory.addTag(name='My Tag')
+            my_resource_category = user.getResourceCategory(17000)
+            my_resource_category.addTag(name='My Tag')
         """
         tag(self, name)
         return self

@@ -5,6 +5,8 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
 from .metadata import addMetadataTo
+from .resourceCategory import newResourceCategory
+from .orderRequest import newOrderRequest
 from .tag import tag
 
 
@@ -262,3 +264,45 @@ class Resource:
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
+
+    def addResourceCategory(self, name):
+        """
+        Create a new Labstep ResourceCategory.
+
+        Parameters
+        ----------
+        user (obj)
+            The Labstep user creating the ResourceCategory.
+            Must have property 'api_key'. See 'login'.
+        name (str)
+            Give your ResourceCategory a name.
+
+        Returns
+        -------
+        :class:`~labstep.resourceCategory.ResourceCategory`
+            An object representing the new Labstep ResourceCategory.
+        """
+        return newResourceCategory(self, name)
+
+    def newOrderRequest(self, quantity=1):
+        """
+        Create a new Labstep OrderRequest.
+
+        Parameters
+        ----------
+        quantity (int)
+            The quantity of the new OrderRequest.
+
+        Returns
+        -------
+        :class:`~labstep.orderRequest.OrderRequest`
+            An object representing the new OrderRequest on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            entity = my_resource.newOrderRequest(quantity=2)
+        """
+        return newOrderRequest(self.__user__, self, quantity)
