@@ -132,7 +132,7 @@ class Workspace:
         """
         return showAttributes(self)
 
-    def edit(self, name=None):
+    def edit(self, name):
         """
         Edit an existing Workspace.
 

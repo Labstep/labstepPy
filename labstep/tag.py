@@ -169,6 +169,8 @@ class Tag:
         -------
         .. code-block::
 
+            # Use python index to select a Tag from the
+            # getTags() list.
             my_tag = user.getTags()[0]
             my_tag.attributes()
 
@@ -205,11 +207,10 @@ class Tag:
         .. code-block::
 
             # Get all tags, since there is no function
-            # to get one tag
+            # to get one tag.
             tags = user.getTags()
 
-            # Select the tag by using
-            # python indexing
+            # Select the tag by using python index.
             tags[1].edit(name='A New Tag Name')
         """
         return editTag(self, name)
@@ -222,12 +223,11 @@ class Tag:
         -------
         .. code-block::
 
-            # Get all tags, since there is
-            # no function to get one tag
+            # Get all tags, since there is no function
+            # to get one tag.
             tags = user.getTags()
 
-            # Select the tag by using
-            # python indexing
+            # Select the tag by using python index.
             tags[1].delete()
         """
         return deleteTag(self)

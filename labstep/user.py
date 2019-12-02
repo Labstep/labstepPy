@@ -10,6 +10,7 @@ from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
 from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
+from .resourceLocation import getResourceLocations, newResourceLocation
 from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
@@ -370,6 +371,34 @@ class User:
         """
         return getResourceCategorys(self, count, search_query, tag_id)
 
+    def getResourceLocations(self, count=100, search_query=None, tag_id=None):
+        """
+        Retrieve a list of a user's ResourceLocations on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of ResourceLocations to retrieve.
+        search_query (str)
+            Search for ResourceLocations with this 'name'.
+        tag_id (int)
+            The id of the Tag to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.resourceLocation.ResourceLocation`]
+            A list of ResourceLocation objects.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceLocations(search_query='properties',
+                                               tag_id=800)
+        """
+        return getResourceLocations(self, count, search_query, tag_id)
+
     def getOrderRequests(self, count=100, name=None):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
@@ -525,9 +554,6 @@ class User:
 
         Parameters
         ----------
-        user (obj)
-            The Labstep user creating the ResourceCategory.
-            Must have property 'api_key'. See 'login'.
         name (str)
             Give your ResourceCategory a name.
 
@@ -537,6 +563,22 @@ class User:
             An object representing the new Labstep ResourceCategory.
         """
         return newResourceCategory(self, name)
+
+    def newResourceLocation(self, name):
+        """
+        Create a new Labstep ResourceLocation.
+
+        Parameters
+        ----------
+        name (str)
+            Give your ResourceLocation a name.
+
+        Returns
+        -------
+        :class:`~labstep.resourceLocation.ResourceLocation`
+            An object representing the new Labstep ResourceLocation.
+        """
+        return newResourceLocation(self, name)
 
     def newOrderRequest(self, resource, quantity=1):
         """

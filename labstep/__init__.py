@@ -9,6 +9,7 @@ from .protocol import Protocol
 from .metadata import Metadata
 from .resource import Resource
 from .resourceCategory import ResourceCategory
+from .resourceLocation import ResourceLocation
 from .orderRequest import OrderRequest
 from .tag import Tag
 from .workspace import Workspace

@@ -1,30 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update
-from .comment import addCommentWithFile
-from .tag import tag
-
-
-def getResourceLocation(user, resourceLocation_id):
-    """
-    Retrieve a specific Labstep ResourceLocation.
-
-    Parameters
-    ----------
-    user (obj)
-        The Labstep user. Must have property
-        'api_key'. See 'login'.
-    resourceLocation_id (int)
-        The id of the ResourceLocation to retrieve.
-
-    Returns
-    -------
-    ResourceLocation
-        An object representing a Labstep ResourceLocation.
-    """
-    return getEntity(user, ResourceLocation, id=resourceLocation_id)
+import requests
+from .config import API_ROOT
+from .entity import getEntities, newEntity, editEntity
+from .helpers import url_join, handleError, update, showAttributes
 
 
 def getResourceLocations(user, count=100, search_query=None, tag_id=None):
@@ -75,7 +56,7 @@ def newResourceLocation(user, name):
     return newEntity(user, ResourceLocation, metadata)
 
 
-def editResourceLocation(resourceLocation, name=None, deleted_at=None):
+def editResourceLocation(resourceLocation, name):
     """
     Edit an existing ResourceLocation.
 
@@ -93,20 +74,68 @@ def editResourceLocation(resourceLocation, name=None, deleted_at=None):
     ResourceLocation
         An object representing the edited ResourceLocation.
     """
-    metadata = {'name': name,
-                'deleted_at': deleted_at}
+    metadata = {'name': name}
     return editEntity(resourceLocation, metadata)
 
 
+def deleteResourceLocation(resourceLocation):
+    """
+    Delete an existing ResourceLocation.
+
+    Parameters
+    ----------
+    resourceLocation (obj)
+        The ResourceLocation to delete.
+
+    Returns
+    -------
+    resourceLocation
+        An object representing the ResourceLocation to delete.
+    """
+    headers = {'apikey': resourceLocation.__user__.api_key}
+    url = url_join(API_ROOT, "/api/generic/", ResourceLocation.__entityName__,
+                   str(resourceLocation.id))
+    r = requests.delete(url, headers=headers)
+    handleError(r)
+    return None
+
+
 class ResourceLocation:
-    __entityName__ = 'order-request'
+    __entityName__ = 'resource-location'
 
     def __init__(self, data, user):
         self.__user__ = user
         update(self, data)
 
     # functions()
-    def edit(self, name=None):
+    def attributes(self):
+        """
+        Show all attributes of a ResourceLocation.
+
+        Example
+        -------
+        .. code-block::
+
+            # Use python index to select a ResourceLocation from the
+            # getResourceLocations() list.
+            my_resource_location = user.getResourceLocations()[1]
+            my_resource_location.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/resourceLocation_attributes.py
+
+        To inspect specific attributes of a ResourceLocation,
+        for example, the ResourceLocation 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_resource_location.name)
+            print(my_resource_location.id)
+        """
+        return showAttributes(self)
+
+    def edit(self, name):
         """
         Edit an existing ResourceLocation.
 
@@ -124,8 +153,12 @@ class ResourceLocation:
         -------
         .. code-block::
 
-            my_resourceLocation = user.getResourceLocation(17000)
-            my_resourceLocation.edit(name='A New ResourceLocation Name')
+            # Get all ResourceLocations, since there is no function
+            # to get one ResourceLocation.
+            resource_locations = user.getResourceLocations()
+
+            # Select the tag by using python index.
+            resource_locations[1].edit(name='A New ResourceLocation Name')
         """
         return editResourceLocation(self, name)
 
@@ -137,59 +170,71 @@ class ResourceLocation:
         -------
         .. code-block::
 
-            my_resourceLocation = user.getResourceLocation(17000)
-            my_resourceLocation.delete()
+            # Get all ResourceLocations, since there is no function
+            # to get one ResourceLocation.
+            resource_locations = user.getResourceLocations()
+
+            # Select the tag by using python index.
+            resource_locations[1].delete()
         """
-        return editResourceLocation(self, deleted_at=getTime())
+        return deleteResourceLocation(self)
 
-    def addComment(self, body, filepath=None):
-        """
-        Add a comment and/or file to a Labstep ResourceLocation.
+    # def addComment(self, body, filepath=None):
+    #     """
+    #     Add a comment and/or file to a Labstep ResourceLocation.
 
-        Parameters
-        ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
+    #     Parameters
+    #     ----------
+    #     body (str)
+    #         The body of the comment.
+    #     filepath (str)
+    #         A Labstep File entity to attach to the comment,
+    #         including the filepath.
 
-        Returns
-        -------
-        :class:`~labstep.comment.Comment`
-            The comment added.
+    #     Returns
+    #     -------
+    #     :class:`~labstep.comment.Comment`
+    #         The comment added.
 
-        Example
-        -------
-        .. code-block::
+    #     Example
+    #     -------
+    #     .. code-block::
 
-            my_resourceLocation = user.getResourceLocation(17000)
-            my_resourceLocation.addComment(body='I am commenting!',
-                                filepath='pwd/file_to_upload.dat')
-        """
-        return addCommentWithFile(self, body, filepath)
+    #         # Get all ResourceLocations, since there is no function
+    #         # to get one ResourceLocation.
+    #         resource_locations = user.getResourceLocations()
 
-    def addTag(self, name):
-        """
-        Add a tag to the ResourceLocation (creates a
-        new tag if none exists).
+    #         # Select the tag by using python index.
+    #         resource_locations[1].addComment(body='I am commenting!',
+    #                                          filepath='pwd/file_to_upload.dat')
+    #     """
+    #     return addCommentWithFile(self, body, filepath)
 
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
+    # def addTag(self, name):
+    #     """
+    #     Add a tag to the ResourceLocation (creates a
+    #     new tag if none exists).
 
-        Returns
-        -------
-        :class:`~labstep.resourceLocation.ResourceLocation`
-            The ResourceLocation that was tagged.
+    #     Parameters
+    #     ----------
+    #     name (str)
+    #         The name of the tag to create.
 
-        Example
-        -------
-        .. code-block::
+    #     Returns
+    #     -------
+    #     :class:`~labstep.resourceLocation.ResourceLocation`
+    #         The ResourceLocation that was tagged.
 
-            my_resourceLocation = user.getResourceLocation(17000)
-            my_resourceLocation.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
+    #     Example
+    #     -------
+    #     .. code-block::
+
+    #         # Get all ResourceLocations, since there is no function
+    #         # to get one ResourceLocation.
+    #         resource_locations = user.getResourceLocations()
+
+    #         # Select the tag by using python index.
+    #         resource_locations[1].addTag(name='My Tag')
+    #     """
+    #     tag(self, name)
+    #     return self

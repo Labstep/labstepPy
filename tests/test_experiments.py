@@ -31,7 +31,7 @@ class TestExperiment:
         assert result, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
-    def test_comment(self):
+    def test_addComment(self):
         result = entity.addComment(testName, './tests/test_experiments.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'

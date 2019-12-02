@@ -15,10 +15,10 @@ class TestTag:
         result = entity.edit('Pytest Edited')
         result.delete()
         assert result.name == 'Pytest Edited', \
-            'FAILED TO EDIT TAG NAME!'
+            'FAILED TO EDIT TAG NAME'
 
     def test_delete(self):
-        entity = testUser.newTag(testName)
-        result = entity.delete()
+        entityToDelete = testUser.newTag('testDelete')
+        result = entityToDelete.delete()
         assert result is None, \
             'FAILED TO DELETE TAG'

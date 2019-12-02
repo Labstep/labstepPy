@@ -25,7 +25,7 @@ class TestResource:
         assert result.deleted_at is not None, \
             'FAILED TO DELETE RESOURCE'
 
-    def test_comment(self):
+    def test_addComment(self):
         result = entity.addComment(testName, './tests/test_resource.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'

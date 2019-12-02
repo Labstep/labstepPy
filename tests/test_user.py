@@ -77,6 +77,11 @@ class TestUser:
         assert result[0].name, \
             'FAILED TO GET RESOURCE CATEGORYS'
 
+    def test_getResourceLocations(self):
+        result = testUser.getResourceLocations()
+        assert result[0].name, \
+            'FAILED TO GET RESOURCE LOCATIONS'
+
     def test_getOrderRequests(self):
         result = testUser.getOrderRequests()
         assert result[0].name, \
@@ -112,6 +117,12 @@ class TestUser:
         result = testUser.newResourceCategory(testName)
         assert result.name == testName, \
             'FAILED TO CREATE NEW RESOURCE CATEGORY'
+
+    def test_newResourceLocation(self):
+        result = testUser.newResourceLocation('testLocation')
+        result.delete()
+        assert result.name == 'testLocation', \
+            'FAILED TO CREATE NEW RESOURCE LOCATION'
 
     def test_newOrderRequest(self):
         entity = testUser.newResource(testName)

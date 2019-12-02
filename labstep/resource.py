@@ -138,7 +138,7 @@ class Resource:
         """
         return showAttributes(self)
 
-    def edit(self, name=None):
+    def edit(self, name):
         """
         Edit an existing Resource.
 
@@ -271,9 +271,6 @@ class Resource:
 
         Parameters
         ----------
-        user (obj)
-            The Labstep user creating the ResourceCategory.
-            Must have property 'api_key'. See 'login'.
         name (str)
             Give your ResourceCategory a name.
 
@@ -282,7 +279,7 @@ class Resource:
         :class:`~labstep.resourceCategory.ResourceCategory`
             An object representing the new Labstep ResourceCategory.
         """
-        return newResourceCategory(self, name)
+        return newResourceCategory(self.__user__, name)
 
     def newOrderRequest(self, quantity=1):
         """
