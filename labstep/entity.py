@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import update, url_join, handleError
+from .helpers import listToClass, update, url_join, handleError
 
 
 def getEntity(user, entityClass, id):
@@ -70,7 +70,7 @@ def getEntities(user, entityClass, count, filterParams={}):
         r = requests.get(url, headers=headers, params=params)
         resp = json.loads(r.content)
         items.extend(resp['items'])
-    return list(map(lambda x: entityClass(x, user), items))
+    return listToClass(items, entityClass, user)
 
 
 def newEntity(user, entityClass, fields):

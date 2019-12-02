@@ -4,8 +4,13 @@
 import requests
 from .config import API_ROOT
 from .entity import newEntity, editEntity
-from .helpers import (url_join, handleError, handleDate,
+from .helpers import (listToClass, url_join, handleError, handleDate,
                       update, showAttributes)
+
+
+def getMetadata(entity):
+    metadatas = entity.metadata_thread['metadatas']
+    return listToClass(metadatas, Metadata, entity.__user__)
 
 
 def addMetadataTo(entity, fieldType="default", fieldName=None,

@@ -179,62 +179,62 @@ class ResourceLocation:
         """
         return deleteResourceLocation(self)
 
-    # def addComment(self, body, filepath=None):
-    #     """
-    #     Add a comment and/or file to a Labstep ResourceLocation.
+    '''def addComment(self, body, filepath=None):
+        """
+        Add a comment and/or file to a Labstep ResourceLocation.
 
-    #     Parameters
-    #     ----------
-    #     body (str)
-    #         The body of the comment.
-    #     filepath (str)
-    #         A Labstep File entity to attach to the comment,
-    #         including the filepath.
+        Parameters
+        ----------
+        body (str)
+            The body of the comment.
+        filepath (str)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
 
-    #     Returns
-    #     -------
-    #     :class:`~labstep.comment.Comment`
-    #         The comment added.
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
 
-    #     Example
-    #     -------
-    #     .. code-block::
+        Example
+        -------
+        .. code-block::
 
-    #         # Get all ResourceLocations, since there is no function
-    #         # to get one ResourceLocation.
-    #         resource_locations = user.getResourceLocations()
+            # Get all ResourceLocations, since there is no function
+            # to get one ResourceLocation.
+            resource_locations = user.getResourceLocations()
 
-    #         # Select the tag by using python index.
-    #         resource_locations[1].addComment(body='I am commenting!',
-    #                                          filepath='pwd/file_to_upload.dat')
-    #     """
-    #     return addCommentWithFile(self, body, filepath)
+            # Select the tag by using python index.
+            resource_locations[1].addComment(body='I am commenting!',
+                                             filepath='pwd/file_to_upload.dat')
+        """
+        return addCommentWithFile(self, body, filepath)'''
 
-    # def addTag(self, name):
-    #     """
-    #     Add a tag to the ResourceLocation (creates a
-    #     new tag if none exists).
+    '''def addTag(self, name):
+        """
+        Add a tag to the ResourceLocation (creates a
+        new tag if none exists).
 
-    #     Parameters
-    #     ----------
-    #     name (str)
-    #         The name of the tag to create.
+        Parameters
+        ----------
+        name (str)
+            The name of the tag to create.
 
-    #     Returns
-    #     -------
-    #     :class:`~labstep.resourceLocation.ResourceLocation`
-    #         The ResourceLocation that was tagged.
+        Returns
+        -------
+        :class:`~labstep.resourceLocation.ResourceLocation`
+            The ResourceLocation that was tagged.
 
-    #     Example
-    #     -------
-    #     .. code-block::
+        Example
+        -------
+        .. code-block::
 
-    #         # Get all ResourceLocations, since there is no function
-    #         # to get one ResourceLocation.
-    #         resource_locations = user.getResourceLocations()
+            # Get all ResourceLocations, since there is no function
+            # to get one ResourceLocation.
+            resource_locations = user.getResourceLocations()
 
-    #         # Select the tag by using python index.
-    #         resource_locations[1].addTag(name='My Tag')
-    #     """
-    #     tag(self, name)
-    #     return self
+            # Select the tag by using python index.
+            resource_locations[1].addTag(name='My Tag')
+        """
+        tag(self, name)
+        return self'''

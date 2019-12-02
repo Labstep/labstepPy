@@ -110,6 +110,10 @@ def update(entity, newData):
     return entity
 
 
+def listToClassList(items, entityClass, user):
+    return list(map(lambda x: entityClass(x, user), items))
+
+
 def showAttributes(entity):
     """
     Returns
@@ -121,5 +125,5 @@ def showAttributes(entity):
         entity, lambda a: not(inspect.isroutine(a)))
     entity_attributes = {k: v for k,
                          v in all_attributes if not (k.startswith('__'))}
-    pp = pprint.PrettyPrinter(indent=4)
+    pp = pprint.PrettyPrinter(indent=1)
     return pp.pprint(entity_attributes)

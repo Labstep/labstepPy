@@ -5,7 +5,7 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
 from .metadata import addMetadataTo
-from .resourceCategory import newResourceCategory
+from .resourceCategory import getResourceCategory
 from .orderRequest import newOrderRequest
 from .tag import tag
 
@@ -82,7 +82,7 @@ def newResource(user, name):
     return newEntity(user, Resource, fields)
 
 
-def editResource(resource, name=None, deleted_at=None):
+def editResource(resource, name=None, deleted_at=None, resource_category=None):
     """
     Edit an existing Resource.
 
@@ -94,6 +94,8 @@ def editResource(resource, name=None, deleted_at=None):
         The new name of the Experiment.
     deleted_at (str)
         The timestamp at which the Resource is deleted/archived.
+    resource_category (obj)
+        The ResourceCategory to add to a Resource.
 
     Returns
     -------
@@ -102,6 +104,10 @@ def editResource(resource, name=None, deleted_at=None):
     """
     fields = {'name': name,
               'deleted_at': deleted_at}
+
+    if resource_category is not None:
+        fields['resource_category_id'] = resource_category.id
+
     return editEntity(resource, fields)
 
 
@@ -265,21 +271,34 @@ class Resource:
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
 
-    def addResourceCategory(self, name):
+    def setResourceCategory(self, resource_category):
         """
-        Create a new Labstep ResourceCategory.
+        Add a Labstep ResourceCategory to a Resource.
 
         Parameters
         ----------
-        name (str)
-            Give your ResourceCategory a name.
+        resource_category (obj)
+            The ResourceCategory to add to the Resource.
 
         Returns
         -------
         :class:`~labstep.resourceCategory.ResourceCategory`
-            An object representing the new Labstep ResourceCategory.
+            An object representing the ResourceCategory on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            # Get a ResourceCategory
+            resource_category = user.getResourceCategory(179)
+
+            # Set the Resource Category
+            my_resource = my_resource.setResourceCategory(resource_category)
         """
-        return newResourceCategory(self.__user__, name)
+        return editResource(self, resource_category)
+
+    def getResourceCategory(self, resourceCategory_id):
+        return getResourceCategory(self.__user__, resourceCategory_id)
 
     def newOrderRequest(self, quantity=1):
         """
