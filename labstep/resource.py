@@ -6,6 +6,7 @@ from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
 from .metadata import addMetadataTo
 from .resourceCategory import newResourceCategory
+from .resourceItem import newResourceItem, getResourceItems
 from .orderRequest import newOrderRequest
 from .tag import tag
 
@@ -303,3 +304,48 @@ class Resource:
             entity = my_resource.newOrderRequest(quantity=2)
         """
         return newOrderRequest(self.__user__, self, quantity)
+
+    def getItems(self, search_query=None,count=100,extraParams={}):
+        """
+        Returns the items of this Resource.
+
+        Parameters
+        ----------
+        
+
+        Returns
+        -------
+        List[:class:`~labstep.resourceItem.ResourceItem`]
+            A list of Resource Item objects.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            items = my_resource.getItems()
+        """
+        return getResourceItems(self.__user__,self,search_query=search_query,extraParams=extraParams,count=count)
+
+    def newItem(self,name=None):
+        """
+        Creates a new item of this Resource.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the item to create.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a Resource Item on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            item = my_resource.newItem('Test Item')
+        """
+        return newResourceItem(self.__user__,self,name)
