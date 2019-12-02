@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=W0611
 
-from .user import User, login
+from .user import User, login, authenticate
 from .experiment import Experiment
 from .file import File
 from .protocol import Protocol

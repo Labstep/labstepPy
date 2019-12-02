@@ -3,6 +3,8 @@
 
 import requests
 import json
+import urllib.parse
+
 from .config import API_ROOT
 from .helpers import url_join, handleError, showAttributes
 from .experiment import getExperiment, getExperiments, newExperiment
@@ -16,6 +18,37 @@ from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
 from .file import newFile
 
+
+def authenticate(username, apikey):
+    """
+    Returns an authenticated Labstep User object to allow
+    you to interact with the Labstep API.
+
+    Parameters
+    ----------
+    username (str)
+        Your Labstep username.
+    apikey (obj)
+        An apikey for the user.
+
+    Returns
+    -------
+    :class:`~labstep.user.User`
+        An object representing a user on Labstep.
+
+    Example
+    -------
+    .. code-block::
+
+        user = labstep.authenticate('myaccount@labstep.com', 'MY_API_KEY')
+    """
+    url = url_join(API_ROOT, "api/generic/user",urllib.parse.quote(username))
+    print(url)
+    r = requests.get(url, headers={'apikey': apikey})
+    handleError(r)
+    user = json.loads(r.content)
+    user['api_key'] = apikey
+    return User(user)
 
 def login(username, password):
     """
