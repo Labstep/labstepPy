@@ -14,6 +14,7 @@ entity = testUser.getResource(new_entity.id)
 entity.addMetadata(fieldName='test', value=testName)
 entity.addComment(testName)
 
+
 class TestResource:
     def test_edit(self):
         result = entity.edit('Pytest Edited')

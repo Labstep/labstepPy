@@ -8,7 +8,6 @@ from .helpers import url_join, handleError, showAttributes
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
-from .resourceItem import getResourceItem, getResourceItems, newResourceItem
 from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
 from .resourceLocation import getResourceLocations, newResourceLocation
@@ -168,28 +167,6 @@ class User:
             entity = user.getResource(17000)
         """
         return getResource(self, resource_id)
-
-    def getResourceItem(self, resourceItem_id):
-        """
-        Retrieve a specific Labstep ResourceItem.
-
-        Parameters
-        ----------
-        resourceItem_id (int)
-            The id of the ResourceItem to retrieve.
-
-        Returns
-        -------
-        :class:`~labstep.resourceItem.ResourceItem`
-            An object representing a ResourceItem on Labstep.
-
-        Example
-        -------
-        .. code-block::
-
-            entity = user.getResourceItem(17000)
-        """
-        return getResourceItem(self, resourceItem_id)
 
     def getResourceCategory(self, resourceCategory_id):
         """

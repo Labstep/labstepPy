@@ -112,6 +112,46 @@ def editProtocol(protocol, name=None, deleted_at=None):
     return editEntity(protocol, fields)
 
 
+class ProtocolStep:
+    __entityName__ = 'protocol_step'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, completedAt=None):
+        fields = {'completedAt': completedAt}
+        return editEntity(self, fields)
+
+    # def complete(self):
+    #     time = getTime()
+    #     return complete(self)
+
+
+class ProtocolTimer:
+    __entityName__ = 'protocol_timer'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, time=None):
+        fields = {'time': time}
+        return editEntity(self, fields)
+
+
+class ProtocolTable:
+    __entityName__ = 'protocol_table'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, data=None):
+        fields = {'data': data}
+        return editEntity(self, fields)
+
+
 class ProtocolMaterial:
     __entityName__ = 'protocol_value'
 
@@ -123,6 +163,7 @@ class ProtocolMaterial:
         fields = {'label': label,
                   'value': value,
                   'unit': unit}
+
         if resource is not None:
             fields['resource_id'] = resource.id
 
@@ -224,8 +265,8 @@ class Protocol:
                                    filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
-    
-    def getComments(self,count=100):
+
+    def getComments(self, count=100):
         """
         Gets the comments attached to this entity.
 
@@ -242,7 +283,7 @@ class Protocol:
             comments = entity.getComments()
             print(comments[0].body)
         """
-        return getComments(self,count)
+        return getComments(self, count)
 
     def addTag(self, name):
         """
@@ -271,4 +312,11 @@ class Protocol:
 
     def getTags(self):
         return getAttachedTags(self)
-        
+
+    # def getMaterials(self)
+
+    # def getTimers(self)
+
+    # def getTables(self)
+
+    # def getSteps(self)

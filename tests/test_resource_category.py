@@ -15,6 +15,7 @@ entity = testUser.getResourceCategory(new_entity.id)
 entity.addMetadata(fieldName='test', value=testName)
 entity.addComment(testName)
 
+
 class TestResourceCategory:
     def test_edit(self):
         result = entity.edit('Pytest Edited')
@@ -28,7 +29,8 @@ class TestResourceCategory:
             'FAILED TO DELETE RESOURCE CATEGORY'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_resource_category.py')
+        result = entity.addComment(testName,
+                                   './tests/test_resource_category.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -36,7 +38,7 @@ class TestResourceCategory:
         result = entity.getComments()
         assert result, \
             'FAILED TO GET COMMENTS'
-            
+
     def test_addTag(self):
         result = entity.addTag(testName)
         assert result, \
@@ -49,7 +51,8 @@ class TestResourceCategory:
 
     def test_addMetadata(self):
         new_resource_category = testUser.newResourceCategory(testName)
-        result = new_resource_category.addMetadata(fieldName=testName, value=testName)
+        result = new_resource_category.addMetadata(fieldName=testName,
+                                                   value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
 

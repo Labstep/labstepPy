@@ -8,7 +8,7 @@ from .helpers import (listToClass, url_join, handleError, handleDate,
                       update, showAttributes)
 
 
-def getMetadatas(entity):
+def getMetadata(entity):
     """
     Retrieve the Metadatas of a Labstep Resource.
 

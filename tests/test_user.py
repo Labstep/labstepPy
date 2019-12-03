@@ -37,13 +37,6 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET RESOURCE'
 
-    def test_getResourceItem(self):
-        new_resource = testUser.newResource(testName)
-        entity = new_resource.newResourceItem(name=testName)
-        result = testUser.getResourceItem(entity.id)
-        assert result.name == testName, \
-            'FAILED TO GET RESOURCE ITEM'
-
     def test_getResourceCategory(self):
         entity = testUser.newResourceCategory(testName)
         result = testUser.getResourceCategory(entity.id)

@@ -5,7 +5,6 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
-from .resourceCategory import getResourceCategory
 from .resourceItem import newResourceItem, getResourceItems
 from .orderRequest import newOrderRequest
 from .tag import tag, getAttachedTags
@@ -208,7 +207,7 @@ class Resource:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count=100):
+    def getComments(self, count=100):
         """
         Gets the comments attached to this entity.
 
@@ -225,7 +224,7 @@ class Resource:
             comments = entity.getComments()
             print(comments[0].body)
         """
-        return getComments(self,count)
+        return getComments(self, count)
 
     def addTag(self, name):
         """

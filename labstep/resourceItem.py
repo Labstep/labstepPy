@@ -4,11 +4,8 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import handleStatus, getTime, update, showAttributes
-from .comment import addCommentWithFile
+from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
-from .resourceCategory import newResourceCategory
-from .orderRequest import newOrderRequest
-from .tag import tag
 
 
 def getResourceItem(user, resourceItem_id):
@@ -256,7 +253,7 @@ class ResourceItem:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count=100):
+    def getComments(self, count=100):
         """
         Gets the comments attached to this entity.
 
@@ -273,7 +270,7 @@ class ResourceItem:
             comments = entity.getComments()
             print(comments[0].body)
         """
-        return getComments(self,count)
+        return getComments(self, count)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,

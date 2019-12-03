@@ -8,6 +8,7 @@ from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 from .metadata import addMetadataTo, getMetadata
 
+
 def getOrderRequest(user, orderRequest_id):
     """
     Retrieve a specific Labstep OrderRequest.
@@ -203,10 +204,10 @@ class OrderRequest:
             my_orderRequest.delete()
         """
         return editOrderRequest(self, deleted_at=getTime())
-    
+
     def getResource(self):
         return self.__user__.getResource(self.resource['id'])
-    
+
     def addComment(self, body, filepath=None):
         """
         Add a comment and/or file to a Labstep OrderRequest.
@@ -234,7 +235,7 @@ class OrderRequest:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count=100):
+    def getComments(self, count=100):
         """
         Gets the comments attached to this entity.
 
@@ -251,8 +252,8 @@ class OrderRequest:
             comments = entity.getComments()
             print(comments[0].body)
         """
-        return getComments(self,count)
-        
+        return getComments(self, count)
+
     def addTag(self, name):
         """
         Add a tag to the OrderRequest (creates a

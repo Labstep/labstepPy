@@ -14,6 +14,7 @@ entity = resource.newItem(name='Pytest Acetone')
 entity.addMetadata(fieldName='test', value=testName)
 entity.addComment(testName)
 
+
 class TestResource:
     def test_edit(self):
         result = entity.edit('Pytest Edited')
@@ -30,7 +31,7 @@ class TestResource:
         result = entity.addComment(testName, './tests/test_resource.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
-    
+
     def test_getComments(self):
         result = entity.getComments()
         assert result, \
@@ -43,5 +44,5 @@ class TestResource:
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result[0].name is not None, \
+        assert result[0].label is not None, \
             'FAILED TO GET METADATA'

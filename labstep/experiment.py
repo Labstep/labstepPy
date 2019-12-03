@@ -147,7 +147,7 @@ class SubExperiment:
 
     def __init__(self, fields, user):
         self.__user__ = user
-        update(self, fields)        
+        update(self, fields)
 
 
 class ExperimentMaterial:
@@ -270,7 +270,7 @@ class Experiment:
         return addProtocolToExperiment(self, protocol)
 
     def getProtocols(self):
-        return listToClass(self.experiments,SubExperiment,self.__user__)
+        return listToClass(self.experiments, SubExperiment, self.__user__)
 
     def addComment(self, body, filepath=None):
         """
@@ -299,7 +299,7 @@ class Experiment:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count=100):
+    def getComments(self, count=100):
         """
         Gets the comments attached to this entity.
 
@@ -316,7 +316,7 @@ class Experiment:
             comments = entity.getComments()
             print(comments[0].body)
         """
-        return getComments(self,count)
+        return getComments(self, count)
 
     def addTag(self, name):
         """
