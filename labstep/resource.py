@@ -3,11 +3,12 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
-from .comment import addCommentWithFile
-from .metadata import getMetadatas, addMetadataTo
+from .comment import addCommentWithFile, getComments
+from .metadata import addMetadataTo, getMetadata
+from .resourceCategory import getResourceCategory
 from .resourceItem import newResourceItem, getResourceItems
 from .orderRequest import newOrderRequest
-from .tag import tag
+from .tag import tag, getAttachedTags
 
 
 def getResource(user, resource_id):
@@ -207,6 +208,25 @@ class Resource:
         """
         return addCommentWithFile(self, body, filepath)
 
+    def getComments(self,count=100):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResource(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
+
     def addTag(self, name):
         """
         Add a tag to the Resource (creates a
@@ -231,6 +251,9 @@ class Resource:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
@@ -271,24 +294,24 @@ class Resource:
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
 
-    def getMetadatas(self):
+    def getMetadata(self):
         """
-        Retrieve the Metadatas of a Labstep Resource.
+        Retrieve the Metadata of a Labstep Resource.
 
         Example
         -------
         .. code-block::
 
             my_resource = user.getResource(17000)
-            metadatas = my_resource.getMetadatas()
+            metadatas = my_resource.getMetadata()
             metadatas[0].attributes()
 
         Returns
         -------
-        :class:`~labstep.metadata.Metadata` s
-        An object representing the Metadatas of the Resource.
+        :class:`~labstep.metadata.Metadata`
+        An object representing the Metadata of the Resource.
         """
-        return getMetadatas(self)
+        return getMetadata(self)
 
     def setResourceCategory(self, resource_category):
         """

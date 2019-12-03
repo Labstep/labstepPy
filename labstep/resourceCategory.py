@@ -4,8 +4,9 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
-from .comment import addCommentWithFile
-from .tag import tag
+from .comment import addCommentWithFile, getComments
+from .metadata import addMetadataTo, getMetadata
+from .tag import tag, getAttachedTags
 
 
 def getResourceCategory(user, resourceCategory_id):
@@ -195,6 +196,25 @@ class ResourceCategory:
         """
         return addCommentWithFile(self, body, filepath)
 
+    def getComments(self,count=100):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceCategory(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
+
     def addTag(self, name):
         """
         Add a tag to the ResourceCategory (creates a
@@ -219,3 +239,48 @@ class ResourceCategory:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)
+
+    def addMetadata(self, fieldType="default", fieldName=None,
+                    value=None, date=None,
+                    quantity_amount=None, quantity_unit=None):
+        """
+        Add Metadata to a Resource Category.
+
+        Parameters
+        ----------
+        fieldType (str)
+            The Metadata field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        fieldName (str)
+            The name of the field.
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        quantity_amount (float)
+            The quantity.
+        quantity_unit (str)
+            The unit accompanying the quantity_amount entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Metadata.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource_category = user.getResourceCategory(17000)
+            metadata = my_resource_category.addMetadata(fieldName="Refractive Index",
+                                               value="1.73")
+        """
+        return addMetadataTo(self, fieldType, fieldName, value, date,
+                             quantity_amount, quantity_unit)
+
+    def getMetadata(self):
+        return getMetadata(self)

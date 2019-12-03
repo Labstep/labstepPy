@@ -5,7 +5,10 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import handleStatus, getTime, update, showAttributes
 from .comment import addCommentWithFile
-from .metadata import addMetadataTo, getMetadatas
+from .metadata import addMetadataTo, getMetadata
+from .resourceCategory import newResourceCategory
+from .orderRequest import newOrderRequest
+from .tag import tag
 
 
 def getResourceItem(user, resourceItem_id):
@@ -253,6 +256,25 @@ class ResourceItem:
         """
         return addCommentWithFile(self, body, filepath)
 
+    def getComments(self,count=100):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResource(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
+
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
                     quantity_amount=None, quantity_unit=None):
@@ -292,20 +314,20 @@ class ResourceItem:
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
 
-    def getMetadatas(self):
+    def getMetadata(self):
         """
-        Retrieve the Metadatas of a Labstep Resource.
+        Get the metadata associated with the ResourceItem.
+        Returns
+        -------
+        List[:class:`~labstep.resource.ResourceItem`]
+            An array of Metadata objects for the ResourceItem.
 
         Example
         -------
         .. code-block::
 
             my_resource_item = user.getResourceItem(17000)
-            metadatas = my_resource_item.getMetadatas()
+            metadata = my_resource_item.getMetadata()
 
-        Returns
-        -------
-        :class:`~labstep.metadata.Metadata`s
-        An object representing the Metadatas of the Resource.
         """
-        return getMetadatas(self)
+        return getMetadata(self)

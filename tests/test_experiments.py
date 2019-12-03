@@ -11,7 +11,9 @@ testName = 'Api Pytest'
 # Make new entity
 new_entity = testUser.newExperiment(testName)
 entity = testUser.getExperiment(new_entity.id)
-
+entity.addComment(testName)
+get_protocol = testUser.getProtocols()[0]
+entity.addProtocol(get_protocol)
 
 class TestExperiment:
     def test_edit(self):
@@ -31,12 +33,27 @@ class TestExperiment:
         assert result, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
+    def test_getProtocols(self):
+        result = entity.getProtocols()
+        assert result, \
+            'FAILED TO GET PROTOCOLS'
+
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_experiments.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result, \
+            'FAILED TO GET COMMENTS'
+
     def test_addTag(self):
         result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'
+
+    def test_getTags(self):
+        result = entity.getTags()
+        assert result, \
+            'FAILED TO GET TAGS'

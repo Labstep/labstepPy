@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .entity import editEntity, newEntity
+from .entity import editEntity, newEntity, getEntities
 from .helpers import update
 from .file import newFile
 
+def getComments(entity,count=100):
+    filterParams = { 'thread_id': entity.thread['id'] }
+    return getEntities(entity.__user__,Comment,count,filterParams)
 
 def addComment(entity, body, file=None):
     """

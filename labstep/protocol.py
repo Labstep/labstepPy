@@ -4,8 +4,8 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (getTime, createdAtFrom, createdAtTo, update,
                       showAttributes)
-from .comment import addCommentWithFile
-from .tag import tag
+from .comment import addCommentWithFile, getComments
+from .tag import tag, getAttachedTags
 
 
 def getProtocol(user, protocol_id):
@@ -112,7 +112,7 @@ def editProtocol(protocol, name=None, deleted_at=None):
     return editEntity(protocol, fields)
 
 
-class ProtocolValue:
+class ProtocolMaterial:
     __entityName__ = 'protocol_value'
 
     def __init__(self, data, user):
@@ -224,6 +224,25 @@ class Protocol:
                                    filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
+    
+    def getComments(self,count=100):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResource(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
 
     def addTag(self, name):
         """
@@ -249,3 +268,7 @@ class Protocol:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)
+        

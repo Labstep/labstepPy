@@ -4,9 +4,9 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (update, getTime, createdAtFrom, createdAtTo,
-                      showAttributes)
-from .comment import addCommentWithFile
-from .tag import tag
+                      showAttributes, listToClass)
+from .comment import addCommentWithFile, getComments
+from .tag import tag, getAttachedTags
 
 
 def getExperiment(user, experiment_id):
@@ -147,10 +147,10 @@ class SubExperiment:
 
     def __init__(self, fields, user):
         self.__user__ = user
-        update(self, fields)
+        update(self, fields)        
 
 
-class ExperimentValue:
+class ExperimentMaterial:
     __entityName__ = 'experiment_value'
 
     def __init__(self, data, user):
@@ -269,6 +269,9 @@ class Experiment:
         """
         return addProtocolToExperiment(self, protocol)
 
+    def getProtocols(self):
+        return listToClass(self.experiments,SubExperiment,self.__user__)
+
     def addComment(self, body, filepath=None):
         """
         Add a comment and/or file to a Labstep Experiment.
@@ -296,6 +299,25 @@ class Experiment:
         """
         return addCommentWithFile(self, body, filepath)
 
+    def getComments(self,count=100):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getExperiment(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
+
     def addTag(self, name):
         """
         Add a tag to the Experiment (creates a
@@ -320,3 +342,6 @@ class Experiment:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)
