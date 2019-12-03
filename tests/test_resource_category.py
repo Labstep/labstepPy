@@ -45,14 +45,14 @@ class TestResourceCategory:
         result = entity.getTags()
         assert result, \
             'FAILED TO GET TAGS'
-            
-    def test_getMetadata(self):
-        result = entity.getMetadata()
-        assert result, \
-            'FAILED TO GET METADATA'
 
     def test_addMetadata(self):
         new_resource_category = testUser.newResourceCategory(testName)
         result = new_resource_category.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
+
+    def test_getMetadata(self):
+        result = entity.getMetadata()
+        assert result, \
+            'FAILED TO GET METADATA'

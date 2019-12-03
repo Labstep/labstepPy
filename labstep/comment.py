@@ -6,7 +6,7 @@ from .helpers import update
 from .file import newFile
 
 def getComments(entity,count=100):
-    filterParams = { 'thread_id': entity.thread_id }
+    filterParams = { 'thread_id': entity.thread['id'] }
     return getEntities(entity.__user__,Comment,count,filterParams)
 
 def addComment(entity, body, file=None):

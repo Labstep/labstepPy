@@ -36,8 +36,8 @@ class TestResource:
             'FAILED TO GET COMMENTS'
 
     def test_addMetadata(self):
-        new_resource = testUser.newResource(testName)
-        result = new_resource.addMetadata(fieldName=testName, value=testName)
+        new_resource_item = testUser.newResourceItem(testName)
+        result = new_resource_item.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
 

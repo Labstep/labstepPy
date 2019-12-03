@@ -4,7 +4,7 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (update, getTime, createdAtFrom, createdAtTo,
-                      showAttributes)
+                      showAttributes, listToClass)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 
@@ -269,6 +269,9 @@ class Experiment:
         """
         return addProtocolToExperiment(self, protocol)
 
+    def getProtocols(self):
+        return listToClass(self.experiments,SubExperiment,self.__user__)
+
     def addComment(self, body, filepath=None):
         """
         Add a comment and/or file to a Labstep Experiment.
@@ -296,7 +299,7 @@ class Experiment:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count):
+    def getComments(self,count=100):
         """
         Gets the comments attached to this entity.
 

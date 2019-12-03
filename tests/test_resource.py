@@ -53,7 +53,7 @@ class TestResource:
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result, \
+        assert result == [], \
             'FAILED TO GET METADATA'
 
     # def test_setResourceCategory(self):

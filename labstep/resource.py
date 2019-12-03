@@ -208,7 +208,7 @@ class Resource:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count):
+    def getComments(self,count=100):
         """
         Gets the comments attached to this entity.
 

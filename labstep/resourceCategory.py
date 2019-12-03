@@ -6,7 +6,7 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
-from .tag import tag
+from .tag import tag, getAttachedTags
 
 
 def getResourceCategory(user, resourceCategory_id):
@@ -196,7 +196,7 @@ class ResourceCategory:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count):
+    def getComments(self,count=100):
         """
         Gets the comments attached to this entity.
 
@@ -239,6 +239,9 @@ class ResourceCategory:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
