@@ -8,6 +8,7 @@ from .helpers import url_join, handleError, showAttributes
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
+from .resourceItem import getResourceItem, getResourceItems, newResourceItem
 from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
 from .resourceLocation import getResourceLocations, newResourceLocation
@@ -167,6 +168,28 @@ class User:
             entity = user.getResource(17000)
         """
         return getResource(self, resource_id)
+
+    def getResourceItem(self, resourceItem_id):
+        """
+        Retrieve a specific Labstep ResourceItem.
+
+        Parameters
+        ----------
+        resourceItem_id (int)
+            The id of the ResourceItem to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceItem(17000)
+        """
+        return getResourceItem(self, resourceItem_id)
 
     def getResourceCategory(self, resourceCategory_id):
         """
@@ -341,6 +364,34 @@ class User:
                                        tag_id=800)
         """
         return getResources(self, count, search_query, tag_id)
+
+    def getResourceItems(self, resource, count=100, search_query=None):
+        """
+        Retrieve a list of a User's ResourceItems
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        resource (obj)
+            The Resource to retrieve the ResourceItems for.
+        count (int)
+            The number of ResourceItems to retrieve.
+        search_query (str)
+            Search for ResourceItems with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.resourceItems.ResourceItems`]
+            A list of ResourceItem objects.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceItems(search_query="acid")
+        """
+        return getResourceItems(self, resource, count, search_query)
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None):
         """
@@ -547,6 +598,54 @@ class User:
             entity = user.newResource(name='salicylic acid')
         """
         return newResource(self, name)
+
+    def newResourceItem(self, resource, name=None, availability=None,
+                        quantity_amount=None, quantity_unit=None,
+                        location=None):
+        """
+        Create a new Labstep ResourceItem.
+
+        Parameters
+        ----------
+        resource (obj)
+            The Resource to add a new ResourceItem to.
+        name (str)
+            The new name of the ResourceItem.
+        availability (str)
+            The status of the ResourceItem. Options are:
+            "available" and "unavailable".
+        quantity_amount (float)
+            The quantity of the ResourceItem.
+        quantity_unit (str)
+            The unit of the quantity.
+        location (obj)
+            The ResourceLocation of the ResourceItem.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        .. code-block::
+
+            # Get a Resource
+            my_resource = user.getResource(17000)
+
+            # Get a ResourceLocation
+            my_location = user.getResourceLocations()[2]
+
+            # Create a new ResourceItem for my_resource
+            entity = user.newResourceItem(my_resource, name='Acetic Acid 10%',
+                                          availability='unavailable',
+                                          quantity_amount=250,
+                                          quantity_unit='ml',
+                                          location=my_location)
+        """
+        return newResourceItem(self, resource, name, availability,
+                               quantity_amount, quantity_unit,
+                               location)
 
     def newResourceCategory(self, name):
         """

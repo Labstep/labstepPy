@@ -4,8 +4,7 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile
-from .metadata import addMetadataTo
-from .resourceCategory import getResourceCategory
+from .metadata import getMetadatas, addMetadataTo
 from .resourceItem import newResourceItem, getResourceItems
 from .orderRequest import newOrderRequest
 from .tag import tag
@@ -272,6 +271,25 @@ class Resource:
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
 
+    def getMetadatas(self):
+        """
+        Retrieve the Metadatas of a Labstep Resource.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource = user.getResource(17000)
+            metadatas = my_resource.getMetadatas()
+            metadatas[0].attributes()
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`s
+        An object representing the Metadatas of the Resource.
+        """
+        return getMetadatas(self)
+
     def setResourceCategory(self, resource_category):
         """
         Add a Labstep ResourceCategory to a Resource.
@@ -291,15 +309,12 @@ class Resource:
         .. code-block::
 
             # Get a ResourceCategory
-            resource_category = user.getResourceCategory(179)
+            resource_category = user.getResourceCategory(170)
 
             # Set the Resource Category
             my_resource = my_resource.setResourceCategory(resource_category)
         """
-        return editResource(self, resource_category)
-
-    def getResourceCategory(self, resourceCategory_id):
-        return getResourceCategory(self.__user__, resourceCategory_id)
+        return editResource(self, resource_category=resource_category)
 
     def newOrderRequest(self, quantity=1):
         """
@@ -344,7 +359,8 @@ class Resource:
             my_resource = user.getResource(17000)
             items = my_resource.getItems()
         """
-        return getResourceItems(self.__user__, self, search_query=search_query, extraParams=extraParams, count=count)
+        return getResourceItems(self.__user__, self, search_query=search_query,
+                                extraParams=extraParams, count=count)
 
     def newItem(self, name=None):
         """

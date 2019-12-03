@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update, showAttributes
+from .helpers import handleStatus, getTime, update, showAttributes
 from .comment import addCommentWithFile
-from .metadata import addMetadataTo
-from .resourceCategory import newResourceCategory
-from .orderRequest import newOrderRequest
-from .tag import tag
+from .metadata import addMetadataTo, getMetadatas
 
 
-def getResourceItem(user, resource_id):
+def getResourceItem(user, resourceItem_id):
     """
     Retrieve a specific Labstep ResourceItem.
 
@@ -19,19 +17,19 @@ def getResourceItem(user, resource_id):
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    resource_id (int)
+    resourceItem_id (int)
         The id of the ResourceItem to retrieve.
 
     Returns
     -------
-    resource
+    ResourceItem
         An object representing a Labstep ResourceItem.
     """
-    return getEntity(user, ResourceItem, id=resource_id)
+    return getEntity(user, ResourceItem, id=resourceItem_id)
 
 
-def getResourceItems(user, resource, search_query=None, count=100,
-                 extraParams={}):
+def getResourceItems(user, resource, count=100, search_query=None,
+                     extraParams={}):
     """
     Retrieve a list of a user's ResourceItems on Labstep,
     which can be filtered using the parameters:
@@ -41,6 +39,8 @@ def getResourceItems(user, resource, search_query=None, count=100,
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
+    resource (obj)
+        The Resource to retrieve the ResourceItems for.
     count (int)
         The number of ResourceItems to retrieve.
     search_query (str)
@@ -50,7 +50,7 @@ def getResourceItems(user, resource, search_query=None, count=100,
 
     Returns
     -------
-    resources
+    ResourceItems
         A list of ResourceItem objects.
     """
     filterParams = {'search_query': search_query,
@@ -59,7 +59,9 @@ def getResourceItems(user, resource, search_query=None, count=100,
     return getEntities(user, ResourceItem, count, params)
 
 
-def newResourceItem(user, resource, name=None):
+def newResourceItem(user, resource, name=None, availability=None,
+                    quantity_amount=None, quantity_unit=None,
+                    location=None):
     """
     Create a new Labstep ResourceItem.
 
@@ -68,20 +70,40 @@ def newResourceItem(user, resource, name=None):
     user (obj)
         The Labstep user creating the ResourceItem.
         Must have property 'api_key'. See 'login'.
-    resource ()
+    resource (obj)
+        The Resource to add a new ResourceItem to.
     name (str)
-        Give your resource a name.
+        The new name of the ResourceItem.
+    availability (str)
+        The status of the ResourceItem. Options are:
+        "available" and "unavailable".
+    quantity_amount (float)
+        The quantity of the ResourceItem.
+    quantity_unit (str)
+        The unit of the quantity.
+    location (obj)
+        The ResourceLocation of the ResourceItem.
 
     Returns
     -------
     resource
         An object representing the new Labstep ResourceItem.
     """
-    fields = {'name': name, 'resource_id': resource.id }
+    fields = {'resource_id': resource.id,
+              'name': name,
+              'status': handleStatus(availability),
+              'quantity_amount': quantity_amount,
+              'quantity_unit': quantity_unit}
+
+    if location is not None:
+        fields['resource_location_id'] = location.id
+
     return newEntity(user, ResourceItem, fields)
 
 
-def editResourceItem(resourceItem, name=None, deleted_at=None):
+def editResourceItem(resourceItem, name=None, availability=None,
+                     quantity_amount=None, quantity_unit=None,
+                     location=None, deleted_at=None):
     """
     Edit an existing ResourceItem.
 
@@ -90,17 +112,33 @@ def editResourceItem(resourceItem, name=None, deleted_at=None):
     resourceItem (obj)
         The ResourceItem to edit.
     name (str)
-        The new name of the Experiment.
+        The new name of the ResourceItem.
+    availability (str)
+        The status of the ResourceItem. Options are:
+        "available" and "unavailable".
+    quantity_amount (float)
+        The quantity of the ResourceItem.
+    quantity_unit (str)
+        The unit of the quantity.
+    location (obj)
+        The ResourceLocation of the ResourceItem.
     deleted_at (str)
         The timestamp at which the ResourceItem is deleted/archived.
 
     Returns
     -------
-    resource
+    ResourceItem
         An object representing the edited ResourceItem.
     """
     fields = {'name': name,
+              'status': handleStatus(availability),
+              'quantity_amount': quantity_amount,
+              'quantity_unit': quantity_unit,
               'deleted_at': deleted_at}
+
+    if location is not None:
+        fields['resource_location_id'] = location.id
+
     return editEntity(resourceItem, fields)
 
 
@@ -120,24 +158,26 @@ class ResourceItem:
         -------
         .. code-block::
 
-            my_resource = user.getResourceItem(17000)
-            my_resource.attributes()
+            my_resource_item = user.getResourceItem(17000)
+            my_resource_item.attributes()
 
         The output should look something like this:
 
-        .. program-output:: python ../labstep/attributes/resource_attributes.py
+        .. program-output:: python ../labstep/attributes/resourceItem_attributes.py
 
-        To inspect specific attributes of a resource,
-        for example, the resource 'name', 'id', etc.:
+        To inspect specific attributes of a ResourceItem,
+        for example, the ResourceItem 'name', 'id', etc.:
 
         .. code-block::
 
-            print(my_resource.name)
-            print(my_resource.id)
+            print(my_resource_item.name)
+            print(my_resource_item.id)
         """
         return showAttributes(self)
 
-    def edit(self, name):
+    def edit(self, name=None, availability=None,
+             quantity_amount=None, quantity_unit=None,
+             location=None):
         """
         Edit an existing ResourceItem.
 
@@ -145,20 +185,32 @@ class ResourceItem:
         ----------
         name (str)
             The new name of the ResourceItem.
+        availability (str)
+            The status of the OrderRequest. Options are:
+            "available" and "unavailable".
+        quantity_amount (int)
+            The quantity of the ResourceItem.
+        quantity_unit (str)
+            The unit of the quantity.
+        location (obj)
+            The ResourceLocation of the ResourceItem.
+        deleted_at (str)
+            The timestamp at which the ResourceItem is deleted/archived.
 
         Returns
         -------
-        :class:`~labstep.resource.ResourceItem`
+        :class:`~labstep.resourceItem.ResourceItem`
             An object representing the edited ResourceItem.
 
         Example
         -------
         .. code-block::
 
-            my_resource = user.getResourceItem(17000)
-            my_resource.edit(name='A New ResourceItem Name')
+            my_resource_item = user.getResourceItem(17000)
+            my_resource_item.edit(name='A New ResourceItem Name')
         """
-        return editResourceItem(self, name)
+        return editResourceItem(self, name, availability,
+                                quantity_amount, quantity_unit, location)
 
     def delete(self):
         """
@@ -168,8 +220,8 @@ class ResourceItem:
         -------
         .. code-block::
 
-            my_resource = user.getResourceItem(17000)
-            my_resource.delete()
+            my_resource_item = user.getResourceItem(17000)
+            my_resource_item.delete()
         """
         return editResourceItem(self, deleted_at=getTime())
 
@@ -194,9 +246,9 @@ class ResourceItem:
         -------
         .. code-block::
 
-            my_resource = user.getResourceItem(17000)
-            my_resource.addComment(body='I am commenting!',
-                                filepath='pwd/file_to_upload.dat')
+            my_resource_item = user.getResourceItem(17000)
+            my_resource_item.addComment(body='I am commenting!',
+                                        filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
 
@@ -232,9 +284,27 @@ class ResourceItem:
         -------
         .. code-block::
 
-            my_resource = user.getResourceItem(17000)
-            metadata = my_resource.addMetadata(fieldName="Refractive Index",
-                                               value="1.73")
+            my_resource_item = user.getResourceItem(17000)
+            metadata = my_resource_item.addMetadata(fieldName="Refractive Index",
+                                                    value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
+
+    def getMetadatas(self):
+        """
+        Retrieve the Metadatas of a Labstep Resource.
+
+        Example
+        -------
+        .. code-block::
+
+            my_resource_item = user.getResourceItem(17000)
+            metadatas = my_resource_item.getMetadatas()
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`s
+        An object representing the Metadatas of the Resource.
+        """
+        return getMetadatas(self)

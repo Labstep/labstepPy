@@ -18,7 +18,7 @@ class TestResourceCategory:
     def test_edit(self):
         result = entity.edit('Pytest Edited')
         assert result.name == 'Pytest Edited', \
-            'FAILED TO EDIT RESOURCE CATEGORY!'
+            'FAILED TO EDIT RESOURCE CATEGORY'
 
     def test_delete(self):
         entityToDelete = testUser.newResourceCategory('testDelete')

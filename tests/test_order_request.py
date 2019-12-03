@@ -18,7 +18,7 @@ class TestOrderRequest:
     def test_edit(self):
         result = entity.edit(status="Back orDEred")
         assert result.status == 'back_ordered', \
-            'FAILED TO EDIT ORDER REQUEST!'
+            'FAILED TO EDIT ORDER REQUEST'
 
     def test_delete(self):
         test_resource = testUser.newResource('testDelete')

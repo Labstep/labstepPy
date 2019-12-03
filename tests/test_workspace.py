@@ -32,23 +32,23 @@ class TestWorkspace:
         test_exp.addTag(testName)
         result = entity.getExperiments()
         assert result[0].name, \
-            'FAILED TO GET EXPERIMENTS!'
+            'FAILED TO GET EXPERIMENTS'
 
     def test_getProtocols(self):
         testUser.newProtocol(testName)
         result = entity.getProtocols()
         assert result[0].name, \
-            'FAILED TO GET PROTOCOLS!'
+            'FAILED TO GET PROTOCOLS'
 
     def test_getResources(self):
         testUser.newResource(testName)
         result = entity.getResources()
         assert result[0].name, \
-            'FAILED TO GET RESOURCES!'
+            'FAILED TO GET RESOURCES'
 
     def test_getTags(self):
         new_tag = testUser.newTag('test_newTag')
         result = entity.getTags()
         new_tag.delete()
         assert result[0].name, \
-            'FAILED TO GET TAGS!'
+            'FAILED TO GET TAGS'

@@ -41,11 +41,17 @@ class TestResource:
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
 
-    # def test_setResourceCategory(self):
-    #     my_resourceCategory = testUser.getResourceCategorys()[0]
-    #     result = entity.setResourceCategory(my_resourceCategory)
-    #     assert result.resource_category is not None, \
-    #         'FAILED TO ADD METADATA'
+    def test_getMetadata(self):
+        new_resource = testUser.newResource(testName)
+        result = new_resource.addMetadata(fieldName=testName, value=testName)
+        assert result.label == testName, \
+            'FAILED TO GET METADATA'
+
+    def test_setResourceCategory(self):
+        my_resourceCategory = testUser.getResourceCategorys()[0]
+        result = entity.setResourceCategory(my_resourceCategory)
+        assert result.resource_category is not None, \
+            'FAILED TO SET RESOURCE CATEGORY'
 
     def test_newOrderRequest(self):
         result = entity.newOrderRequest()
