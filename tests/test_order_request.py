@@ -32,6 +32,11 @@ class TestOrderRequest:
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result, \
+            'FAILED TO GET COMMENTS'
+
     def test_addTag(self):
         result = entity.addTag(testName)
         assert result, \

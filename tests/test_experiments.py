@@ -31,10 +31,20 @@ class TestExperiment:
         assert result, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
+    def test_getProtocols(self):
+        result = entity.getProtocols()
+        assert result, \
+            'FAILED TO GET PROTOCOLS'
+
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_experiments.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
+
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result, \
+            'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
         result = entity.addTag(testName)

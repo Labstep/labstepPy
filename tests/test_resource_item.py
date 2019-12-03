@@ -29,9 +29,19 @@ class TestResource:
         result = entity.addComment(testName, './tests/test_resource.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
+    
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result, \
+            'FAILED TO GET COMMENTS'
 
     def test_addMetadata(self):
         new_resource = testUser.newResource(testName)
         result = new_resource.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
+
+    def test_getMetadata(self):
+        result = entity.getMetadata()
+        assert result, \
+            'FAILED TO GET METADATA'

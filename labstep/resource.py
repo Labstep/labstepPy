@@ -3,8 +3,8 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
-from .comment import addCommentWithFile
-from .metadata import addMetadataTo
+from .comment import addCommentWithFile, getComments
+from .metadata import addMetadataTo, getMetadata
 from .resourceCategory import getResourceCategory
 from .resourceItem import newResourceItem, getResourceItems
 from .orderRequest import newOrderRequest
@@ -208,8 +208,24 @@ class Resource:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getTags(self):
-        return getAttachedTags(self)
+    def getComments(self,count):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResource(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
 
     def addTag(self, name):
         """
@@ -235,6 +251,9 @@ class Resource:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
@@ -274,6 +293,16 @@ class Resource:
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
+
+    def getMetadata(self):
+        """
+        Get the metadata associated with the Resource.
+        Returns
+        -------
+        List[:class:`~labstep.resource.Resource`]
+            An array of Metadata objects for the Resource.
+        """
+        return getMetadata(self)
 
     def setResourceCategory(self, resource_category):
         """

@@ -4,7 +4,7 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (getTime, createdAtFrom, createdAtTo, update,
                       showAttributes)
-from .comment import addCommentWithFile
+from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 
 
@@ -224,6 +224,25 @@ class Protocol:
                                    filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
+    
+    def getComments(self,count):
+        """
+        Gets the comments attached to this entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResource(17000)
+            comments = entity.getComments()
+            print(comments[0].body)
+        """
+        return getComments(self,count)
 
     def addTag(self, name):
         """

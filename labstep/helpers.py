@@ -110,7 +110,7 @@ def update(entity, newData):
     return entity
 
 
-def listToClassList(items, entityClass, user):
+def listToClass(items, entityClass, user):
     return list(map(lambda x: entityClass(x, user), items))
 
 

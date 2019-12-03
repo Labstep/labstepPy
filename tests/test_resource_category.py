@@ -31,7 +31,28 @@ class TestResourceCategory:
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result, \
+            'FAILED TO GET COMMENTS'
+            
     def test_addTag(self):
         result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'
+
+    def test_getTags(self):
+        result = entity.getTags()
+        assert result, \
+            'FAILED TO GET TAGS'
+            
+    def test_getMetadata(self):
+        result = entity.getMetadata()
+        assert result, \
+            'FAILED TO GET METADATA'
+
+    def test_addMetadata(self):
+        new_resource_category = testUser.newResourceCategory(testName)
+        result = new_resource_category.addMetadata(fieldName=testName, value=testName)
+        assert result.label == testName, \
+            'FAILED TO ADD METADATA'
