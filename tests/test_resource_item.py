@@ -11,7 +11,8 @@ testName = 'Api Pytest'
 # Make new entity
 resource = testUser.newResource(testName)
 entity = resource.newItem()
-
+entity.addMetadata(fieldName='test', value=testName)
+entity.addComment(testName)
 
 class TestResource:
     def test_edit(self):
@@ -36,8 +37,7 @@ class TestResource:
             'FAILED TO GET COMMENTS'
 
     def test_addMetadata(self):
-        new_resource_item = testUser.newResourceItem(testName)
-        result = new_resource_item.addMetadata(fieldName=testName, value=testName)
+        result = entity.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
 

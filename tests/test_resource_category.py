@@ -12,7 +12,8 @@ testName = 'Api Pytest'
 # Make new entity
 new_entity = testUser.newResourceCategory(testName)
 entity = testUser.getResourceCategory(new_entity.id)
-
+entity.addMetadata(fieldName='test', value=testName)
+entity.addComment(testName)
 
 class TestResourceCategory:
     def test_edit(self):

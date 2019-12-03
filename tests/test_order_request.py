@@ -12,7 +12,8 @@ testName = 'Api Pytest'
 new_resource = testUser.newResource(testName)
 new_entity = new_resource.newOrderRequest()
 entity = testUser.getOrderRequest(new_entity.id)
-
+entity.addMetadata(fieldName='test', value=testName)
+entity.addComment(testName)
 
 class TestOrderRequest:
     def test_edit(self):
@@ -46,3 +47,13 @@ class TestOrderRequest:
         result = entity.getTags()
         assert result, \
             'FAILED TO GET TAGS'
+
+    def test_addMetadata(self):
+        result = entity.addMetadata(fieldName=testName, value=testName)
+        assert result.label == testName, \
+            'FAILED TO ADD METADATA'
+
+    def test_getMetadata(self):
+        result = entity.getMetadata()
+        assert result, \
+            'FAILED TO GET METADATA'

@@ -11,7 +11,8 @@ testName = 'Api Pytest'
 # Make new entity
 new_entity = testUser.newResource(testName)
 entity = testUser.getResource(new_entity.id)
-
+entity.addMetadata(fieldName='test', value=testName)
+entity.addComment(testName)
 
 class TestResource:
     def test_edit(self):
@@ -46,14 +47,13 @@ class TestResource:
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
-        new_resource = testUser.newResource(testName)
-        result = new_resource.addMetadata(fieldName=testName, value=testName)
+        result = entity.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
             'FAILED TO ADD METADATA'
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result == [], \
+        assert result, \
             'FAILED TO GET METADATA'
 
     # def test_setResourceCategory(self):

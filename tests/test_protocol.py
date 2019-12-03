@@ -11,7 +11,7 @@ testName = 'Api Pytest'
 # Make new entity
 new_entity = testUser.newProtocol(testName)
 entity = testUser.getProtocol(new_entity.id)
-
+entity.addComment(testName)
 
 class TestProtocol:
     def test_edit(self):
