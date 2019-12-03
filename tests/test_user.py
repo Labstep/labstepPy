@@ -79,13 +79,6 @@ class TestUser:
         assert result[0].name, \
             'FAILED TO GET RESOURCES'
 
-    def test_getResourceItems(self):
-        new_resource = testUser.newResource(testName)
-        testUser.newResourceItem(new_resource, name=testName)
-        result = testUser.getResourceItems(new_resource)
-        assert result[0].name, \
-            'FAILED TO GET RESOURCE ITEMS'
-
     def test_getResourceCategorys(self):
         result = testUser.getResourceCategorys()
         assert result[0].name, \
@@ -124,12 +117,6 @@ class TestUser:
 
     def test_newResource(self):
         result = testUser.newResource(testName)
-        assert result.name == testName, \
-            'FAILED TO CREATE NEW RESOURCE'
-
-    def test_newResourceItem(self):
-        entity = testUser.newResource(testName)
-        result = testUser.newResourceItem(entity, name=testName)
         assert result.name == testName, \
             'FAILED TO CREATE NEW RESOURCE'
 
