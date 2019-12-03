@@ -34,3 +34,8 @@ class TestProtocol:
         result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'
+
+    def test_getTags(self):
+        result = entity.getTags()
+        assert result, \
+            'FAILED TO GET TAGS'

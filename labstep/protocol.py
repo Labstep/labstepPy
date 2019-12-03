@@ -5,7 +5,7 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (getTime, createdAtFrom, createdAtTo, update,
                       showAttributes)
 from .comment import addCommentWithFile
-from .tag import tag
+from .tag import tag, getAttachedTags
 
 
 def getProtocol(user, protocol_id):
@@ -249,3 +249,6 @@ class Protocol:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)

@@ -6,7 +6,7 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (update, getTime, createdAtFrom, createdAtTo,
                       showAttributes)
 from .comment import addCommentWithFile
-from .tag import tag
+from .tag import tag, getAttachedTags
 
 
 def getExperiment(user, experiment_id):
@@ -320,3 +320,6 @@ class Experiment:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)

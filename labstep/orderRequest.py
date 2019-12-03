@@ -5,7 +5,7 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, handleStatus, update, showAttributes
 from .comment import addCommentWithFile
-from .tag import tag
+from .tag import tag, getAttachedTags
 
 
 def getOrderRequest(user, orderRequest_id):
@@ -255,3 +255,6 @@ class OrderRequest:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        return getAttachedTags(self)

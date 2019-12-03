@@ -51,3 +51,8 @@ class TestResource:
         result = entity.newOrderRequest()
         assert result.status, \
             'FAILED TO MAKE NEW ORDER REQUEST'
+
+    def test_getTags(self):
+        result = entity.getTags()
+        assert result, \
+            'FAILED TO GET TAGS'

@@ -8,7 +8,7 @@ from .metadata import addMetadataTo
 from .resourceCategory import getResourceCategory
 from .resourceItem import newResourceItem, getResourceItems
 from .orderRequest import newOrderRequest
-from .tag import tag
+from .tag import tag, getAttachedTags
 
 
 def getResource(user, resource_id):
@@ -207,6 +207,9 @@ class Resource:
                                 filepath='pwd/file_to_upload.dat')
         """
         return addCommentWithFile(self, body, filepath)
+
+    def getTags(self):
+        return getAttachedTags(self)
 
     def addTag(self, name):
         """
