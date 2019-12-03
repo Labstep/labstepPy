@@ -285,7 +285,7 @@ class Resource:
 
         Returns
         -------
-        :class:`~labstep.metadata.Metadata`s
+        :class:`~labstep.metadata.Metadata` s
         An object representing the Metadatas of the Resource.
         """
         return getMetadatas(self)
@@ -339,7 +339,7 @@ class Resource:
         """
         return newOrderRequest(self.__user__, self, quantity)
 
-    def getItems(self, search_query=None, count=100, extraParams={}):
+    def getItems(self, count=100, search_query=None, extraParams={}):
         """
         Returns the items of this Resource.
 
@@ -359,28 +359,44 @@ class Resource:
             my_resource = user.getResource(17000)
             items = my_resource.getItems()
         """
-        return getResourceItems(self.__user__, self, search_query=search_query,
-                                extraParams=extraParams, count=count)
+        return getResourceItems(self.__user__, self, count=count,
+                                search_query=search_query,
+                                extraParams=extraParams)
 
-    def newItem(self, name=None):
+    def newItem(self, name=None, availability='available',
+                quantity_amount=None, quantity_unit=None,
+                location=None):
         """
-        Creates a new item of this Resource.
+        Create a new Labstep ResourceItem.
 
         Parameters
         ----------
         name (str)
-            The name of the item to create.
+            The new name of the ResourceItem.
+        availability (str)
+            The status of the ResourceItem. Options are:
+            "available" and "unavailable".
+        quantity_amount (float)
+            The quantity of the ResourceItem.
+        quantity_unit (str)
+            The unit of the quantity.
+        location (obj)
+            The ResourceLocation of the ResourceItem.
 
         Returns
         -------
         :class:`~labstep.resourceItem.ResourceItem`
-            An object representing a Resource Item on Labstep.
+            An object representing a ResourceItem on Labstep.
 
         Example
         -------
         .. code-block::
 
             my_resource = user.getResource(17000)
-            item = my_resource.newItem('Test Item')
+            item = my_resource.newItem(name='Test Item')
         """
-        return newResourceItem(self.__user__, self, name)
+        return newResourceItem(self.__user__, self, name=name,
+                               availability=availability,
+                               quantity_amount=quantity_amount,
+                               quantity_unit=quantity_unit,
+                               location=location)

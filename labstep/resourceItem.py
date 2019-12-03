@@ -210,7 +210,8 @@ class ResourceItem:
             my_resource_item.edit(name='A New ResourceItem Name')
         """
         return editResourceItem(self, name, availability,
-                                quantity_amount, quantity_unit, location)
+                                quantity_amount, quantity_unit,
+                                location=location)
 
     def delete(self):
         """
