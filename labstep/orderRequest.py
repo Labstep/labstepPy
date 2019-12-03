@@ -8,7 +8,6 @@ from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 from .metadata import addMetadataTo, getMetadata
 
-
 def getOrderRequest(user, orderRequest_id):
     """
     Retrieve a specific Labstep OrderRequest.
@@ -204,7 +203,10 @@ class OrderRequest:
             my_orderRequest.delete()
         """
         return editOrderRequest(self, deleted_at=getTime())
-
+    
+    def getResource(self):
+        return self.__user__.getResource(self.resource['id'])
+    
     def addComment(self, body, filepath=None):
         """
         Add a comment and/or file to a Labstep OrderRequest.

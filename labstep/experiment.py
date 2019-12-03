@@ -147,10 +147,10 @@ class SubExperiment:
 
     def __init__(self, fields, user):
         self.__user__ = user
-        update(self, fields)
+        update(self, fields)        
 
 
-class ExperimentValue:
+class ExperimentMaterial:
     __entityName__ = 'experiment_value'
 
     def __init__(self, data, user):

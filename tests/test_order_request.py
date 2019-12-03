@@ -57,3 +57,8 @@ class TestOrderRequest:
         result = entity.getMetadata()
         assert result, \
             'FAILED TO GET METADATA'
+    
+    def test_getResource(self):
+        result = entity.getResource()
+        assert result.id == new_resource.id, \
+            'FAILED TO GET METADATA'

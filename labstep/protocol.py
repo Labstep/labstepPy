@@ -112,7 +112,7 @@ def editProtocol(protocol, name=None, deleted_at=None):
     return editEntity(protocol, fields)
 
 
-class ProtocolValue:
+class ProtocolMaterial:
     __entityName__ = 'protocol_value'
 
     def __init__(self, data, user):
@@ -271,3 +271,4 @@ class Protocol:
 
     def getTags(self):
         return getAttachedTags(self)
+        
