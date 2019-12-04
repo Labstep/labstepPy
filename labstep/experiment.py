@@ -308,7 +308,7 @@ class Experiment:
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        return listToClass(self.experiments,ExperimentProtocol,self.__user__)
+        return listToClass(self.experiments, ExperimentProtocol, self.__user__)
 
     def addComment(self, body, filepath=None):
         """
