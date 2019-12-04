@@ -5,10 +5,10 @@ import requests
 import json
 from .config import API_ROOT
 from .entity import getEntities, newEntity, editEntity
-from .helpers import url_join, handleError, update
+from .helpers import url_join, handleError, update, showAttributes
 
 
-def getTags(user, count=1000, search_query=None):
+def getTags(user, count=1000, search_query=None, extraParams={}):
     """
     Retrieve a list of the user's tags.
 
@@ -21,14 +21,17 @@ def getTags(user, count=1000, search_query=None):
         The number of Tags to retrieve.
     search_query (str)
         Search for Tags with this 'name'.
+    extraParams (dict)
+        Dictionary of extra filter parameters.
 
     Returns
     -------
     tags
         A list of tag objects.
     """
-    metadata = {'search_query': search_query}
-    return getEntities(user, Tag, count, metadata)
+    filterParams = {'search_query': search_query}
+    params = {**filterParams, **extraParams}
+    return getEntities(user, Tag, count, params)
 
 
 def newTag(user, name):
@@ -48,8 +51,8 @@ def newTag(user, name):
     tag
         An object representing the new Labstep Tag.
     """
-    metadata = {'name': name}
-    return newEntity(user, Tag, metadata)
+    fields = {'name': name}
+    return newEntity(user, Tag, fields)
 
 
 def addTagTo(entity, tag):
@@ -125,8 +128,8 @@ def editTag(tag, name):
     tag
         An object representing the edited Tag.
     """
-    data = {'name': name}
-    return editEntity(tag, data)
+    fields = {'name': name}
+    return editEntity(tag, fields)
 
 
 def deleteTag(tag):
@@ -153,11 +156,36 @@ def deleteTag(tag):
 class Tag:
     __entityName__ = 'tag'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of a Tag.
+
+        Example
+        -------
+        .. code-block::
+
+            my_tag = user.getTags()[0]
+            my_tag.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/tag_attributes.py
+
+        To inspect specific attributes of a tag,
+        for example, the tag 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_tag.name)
+            print(my_tag.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name):
         """
         Edit the name of an existing Tag.

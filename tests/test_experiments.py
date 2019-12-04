@@ -12,7 +12,7 @@ testComment = 'Api Default Comment'
 testFilePath = './tests/test_experiments.py'
 
 # Get the entity
-experiment = testUser.getExperiment(23976)
+experiment = testUser.getExperiment(24495)
 
 # Set variables for editting
 randomNum = randrange(1, 9)

@@ -1,3 +1,5 @@
+# pylama:ignore=W0611
+#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -10,11 +12,11 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import sphinx_rtd_theme
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../'))
-import sphinx_rtd_theme
 
 
 # -- Project information -----------------------------------------------------
@@ -33,7 +35,8 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
-              'sphinx.ext.napoleon', 'sphinx_rtd_theme']
+              'sphinx.ext.napoleon', 'sphinx_rtd_theme',
+              'sphinxcontrib.programoutput']
 
 # Napoleon settings
 napoleon_google_docstring = True
@@ -63,17 +66,20 @@ autodoc_member_order = 'bysource'
 builtin_themes = ['alabaster', 'classic', 'sphinx_rtd_theme']
 html_theme = builtin_themes[2]
 
-# See for html_theme_options: https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
+# See html_theme_options:
+# https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
 html_theme_options = {
     # 'canonical_url': '',
-    # 'analytics_id': 'UA-XXXXXXX-1',  #  Provided by Google in your dashboard
+    # 'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
     'logo_only': False,
     'display_version': True,
     # 'prev_next_buttons_location': 'bottom',
     'style_external_links': True,
     # 'vcs_pageview_mode': '',
     # 'style_nav_header_background': 'white',
+    # -----------
     # Toc options
+    # -----------
     'collapse_navigation': False,
     'sticky_navigation': False,
     'navigation_depth': 4,

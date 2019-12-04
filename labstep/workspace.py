@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update
+from .helpers import getTime, update, showAttributes
+from .experiment import getExperiments
+from .protocol import getProtocols
+from .resource import getResources
+from .tag import getTags
 
 
 def getWorkspace(user, workspace_id):
@@ -45,8 +50,8 @@ def getWorkspaces(user, count=100, name=None):
     workspaces
         A list of Workspace objects.
     """
-    metadata = {'name': name}
-    return getEntities(user, Workspace, count, metadata)
+    fields = {'name': name}
+    return getEntities(user, Workspace, count, fields)
 
 
 def newWorkspace(user, name):
@@ -66,8 +71,8 @@ def newWorkspace(user, name):
     workspace
         An object representing the new Labstep Workspace.
     """
-    metadata = {'name': name}
-    return newEntity(user, Workspace, metadata)
+    fields = {'name': name}
+    return newEntity(user, Workspace, fields)
 
 
 def editWorkspace(workspace, name=None, deleted_at=None):
@@ -88,19 +93,45 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     workspace
         An object representing the Workspace to edit.
     """
-    data = {'name': name,
-            'deleted_at': deleted_at}
-    return editEntity(workspace, data)
+    fields = {'name': name,
+              'deleted_at': deleted_at}
+    return editEntity(workspace, fields)
 
 
 class Workspace:
     __entityName__ = 'group'
 
-    def __init__(self, data, user):
+    def __init__(self, fields, user):
+        self.id = None
         self.__user__ = user
-        update(self, data)
+        update(self, fields)
 
     # functions()
+    def attributes(self):
+        """
+        Show all attributes of a Workspace.
+
+        Example
+        -------
+        .. code-block::
+
+            my_workspace = user.getWorkspace(17000)
+            my_workspace.attributes()
+
+        The output should look something like this:
+
+        .. program-output:: python ../labstep/attributes/workspace_attributes.py
+
+        To inspect specific attributes of a workspace,
+        for example, the workspace 'name', 'id', etc.:
+
+        .. code-block::
+
+            print(my_workspace.name)
+            print(my_workspace.id)
+        """
+        return showAttributes(self)
+
     def edit(self, name=None):
         """
         Edit an existing Workspace.
@@ -136,3 +167,137 @@ class Workspace:
             my_workspace.delete()
         """
         return editWorkspace(self, deleted_at=getTime())
+
+    # getMany()
+    def getExperiments(self, count=100, search_query=None,
+                       created_at_from=None, created_at_to=None, tag_id=None):
+        """
+        Retrieve a list of Experiments within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Experiments to retrieve.
+        search_query (str)
+            Search for Experiments with this 'name'.
+        created_at_from (str)
+            The start date of the search range, must be
+            in the format of 'YYYY-MM-DD'.
+        created_at_to (str)
+            The end date of the search range, must be
+            in the format of 'YYYY-MM-DD'.
+        tag_id (int)
+            The id of the Tag to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.experiment.Experiment`]
+            A list of Labstep Experiments.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = workspace.getExperiments(search_query='bacteria',
+                                              created_at_from='2019-01-01',
+                                              created_at_to='2019-01-31',
+                                              tag_id=800)
+        """
+        return getExperiments(self.__user__, count, search_query,
+                              created_at_from, created_at_to, tag_id,
+                              extraParams={'group_id': self.id})
+
+    def getProtocols(self, count=100, search_query=None,
+                     created_at_from=None, created_at_to=None, tag_id=None):
+        """
+        Retrieve a list of Protocols within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Protocols to retrieve.
+        search_query (str)
+            Search for Protocols with this 'name'.
+        created_at_from (str)
+            The start date of the search range, must be
+            in the format of 'YYYY-MM-DD'.
+        created_at_to (str)
+            The end date of the search range, must be
+            in the format of 'YYYY-MM-DD'.
+        tag_id (int)
+            The id of the Tag to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.protocol.Protocol`]
+            A list of Labstep Protocols.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = workspace.getProtocols(search_query='bacteria',
+                                            created_at_from='2019-01-01',
+                                            created_at_to='2019-01-31',
+                                            tag_id=800)
+        """
+        return getProtocols(self.__user__, count, search_query,
+                            created_at_from, created_at_to, tag_id,
+                            extraParams={'group_id': self.id})
+
+    def getResources(self, count=100, search_query=None, tag_id=None):
+        """
+        Retrieve a list of Resources within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Resources to retrieve.
+        search_query (str)
+            Search for Resources with this 'name'.
+        tag_id (int)
+            The id of the Tag to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.resource.Resource`]
+            A list of Labstep Resources.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = workspace.getResources(search_query='bacteria',
+                                            tag_id=800)
+        """
+        return getResources(self.__user__, count, search_query,
+                            tag_id, extraParams={'group_id': self.id})
+
+    def getTags(self, count=1000, search_query=None):
+        """
+        Retrieve a list of Tags within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Tags to retrieve.
+        search_query (str)
+            Search for Tags with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            A list of Labstep Tags.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = workspace.getTags(search_query='bacteria')
+        """
+        return getTags(self.__user__, count, search_query,
+                       extraParams={'group_id': self.id})
