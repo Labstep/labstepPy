@@ -139,10 +139,10 @@ def addProtocolToExperiment(experiment, protocol):
     """
     fields = {'experiment_workflow_id': experiment.id,
               'protocol_id': protocol.last_version['id']}
-    return newEntity(experiment.__user__, SubExperiment, fields)
+    return newEntity(experiment.__user__, ExperimentProtocol, fields)
 
 
-class SubExperiment:
+class ExperimentProtocol:
     __entityName__ = 'experiment'
 
     def __init__(self, fields, user):
@@ -308,7 +308,7 @@ class Experiment:
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        return listToClass(self.experiments, SubExperiment, self.__user__)
+        return listToClass(self.experiments,ExperimentProtocol,self.__user__)
 
     def addComment(self, body, filepath=None):
         """
