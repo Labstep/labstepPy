@@ -34,7 +34,7 @@ class TestResource:
 
     def test_getComments(self):
         result = entity.getComments()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
@@ -44,7 +44,7 @@ class TestResource:
 
     def test_getTags(self):
         result = entity.getTags()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
@@ -54,7 +54,7 @@ class TestResource:
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET METADATA'
 
     def test_setResourceCategory(self):
@@ -67,3 +67,13 @@ class TestResource:
         result = entity.newOrderRequest()
         assert result.status, \
             'FAILED TO MAKE NEW ORDER REQUEST'
+
+    def test_newItem(self):
+        result = entity.newItem(name=testName)
+        assert result.id, \
+            'FAILED TO MAKE NEW ITEM'
+
+    def test_getItems(self):
+        result = entity.getItems()
+        assert result[0].id, \
+            'FAILED TO GET ITEMS'

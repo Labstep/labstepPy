@@ -149,6 +149,9 @@ class SubExperiment:
         self.__user__ = user
         update(self, fields)
 
+    def attributes(self):
+        return showAttributes(self)
+
 
 class ExperimentMaterial:
     __entityName__ = 'experiment_value'
@@ -158,6 +161,25 @@ class ExperimentMaterial:
         update(self, data)
 
     def edit(self, value=None, unit=None, resource=None, resourceItem=None):
+        """
+        Edit an existing Experiment Material.
+
+        Parameters
+        ----------
+        value (str)
+            The value of the Experiment Material.
+        unit (str)
+            The unit of the value.
+        resource (obj)
+            The Resource of the Experiment Material.
+        resourceItem (obj)
+            The ResourceItem of the Experiment Material.
+
+        Returns
+        -------
+        experiment
+            An object representing the edited Experiment Material.
+        """
         fields = {'value': value,
                   'unit': unit}
         if resource is not None:
@@ -270,6 +292,22 @@ class Experiment:
         return addProtocolToExperiment(self, protocol)
 
     def getProtocols(self):
+        """
+        Retrieve the Protocols attached to this Labstep Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.protocol.Protocol`]
+            List of the protocols attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getExperiment(17000)
+            protocols = entity.getProtocols()
+            protocols[0].attributes()
+        """
         return listToClass(self.experiments, SubExperiment, self.__user__)
 
     def addComment(self, body, filepath=None):
@@ -301,7 +339,7 @@ class Experiment:
 
     def getComments(self, count=100):
         """
-        Gets the comments attached to this entity.
+        Retrieve the Comments attached to this Labstep Entity.
 
         Returns
         -------
@@ -314,7 +352,7 @@ class Experiment:
 
             entity = user.getExperiment(17000)
             comments = entity.getComments()
-            print(comments[0].body)
+            comments[0].attributes()
         """
         return getComments(self, count)
 
@@ -344,4 +382,20 @@ class Experiment:
         return self
 
     def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getExperiment(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
         return getAttachedTags(self)

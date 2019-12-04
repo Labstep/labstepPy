@@ -13,6 +13,7 @@ new_entity = testUser.newProtocol(testName)
 entity = testUser.getProtocol(new_entity.id)
 entity.addComment(testName)
 
+
 class TestProtocol:
     def test_edit(self):
         result = entity.edit('Pytest Edited')
@@ -32,7 +33,7 @@ class TestProtocol:
 
     def test_getComments(self):
         result = entity.getComments()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
@@ -42,5 +43,5 @@ class TestProtocol:
 
     def test_getTags(self):
         result = entity.getTags()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET TAGS'

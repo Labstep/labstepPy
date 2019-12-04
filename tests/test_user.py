@@ -59,42 +59,42 @@ class TestUser:
     # getMany()
     def test_getExperiments(self):
         result = testUser.getExperiments()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET EXPERIMENTS'
 
     def test_getProtocols(self):
         result = testUser.getProtocols()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET PROTOCOLS'
 
     def test_getResources(self):
         result = testUser.getResources()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET RESOURCES'
 
     def test_getResourceCategorys(self):
         result = testUser.getResourceCategorys()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET RESOURCE CATEGORYS'
 
     def test_getResourceLocations(self):
         result = testUser.getResourceLocations()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET RESOURCE LOCATIONS'
 
     def test_getOrderRequests(self):
         result = testUser.getOrderRequests()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET ORDER REQUESTS'
 
     def test_getTags(self):
         result = testUser.getTags()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET TAGS'
 
     def test_getWorkspaces(self):
         result = testUser.getWorkspaces()
-        assert result[0].name, \
+        assert result[0].id, \
             'FAILED TO GET WORKSPACES'
 
     # newEntity()

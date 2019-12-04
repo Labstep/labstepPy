@@ -196,7 +196,7 @@ class ResourceCategory:
         """
         return addCommentWithFile(self, body, filepath)
 
-    def getComments(self,count=100):
+    def getComments(self, count=100):
         """
         Gets the comments attached to this entity.
 
@@ -211,9 +211,9 @@ class ResourceCategory:
 
             entity = user.getResourceCategory(17000)
             comments = entity.getComments()
-            print(comments[0].body)
+            comments[0].attributes()
         """
-        return getComments(self,count)
+        return getComments(self, count)
 
     def addTag(self, name):
         """
@@ -241,6 +241,22 @@ class ResourceCategory:
         return self
 
     def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceCategory(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
         return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
@@ -277,10 +293,26 @@ class ResourceCategory:
 
             my_resource_category = user.getResourceCategory(17000)
             metadata = my_resource_category.addMetadata(fieldName="Refractive Index",
-                                               value="1.73")
+                                                        value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
                              quantity_amount, quantity_unit)
 
     def getMetadata(self):
+        """
+        Retrieve the Metadata of a Labstep Resource.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of Metadata objects for the Resource.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResourceCategory(17000)
+            metadatas = entity.getMetadata()
+            metadatas[0].attributes()
+        """
         return getMetadata(self)

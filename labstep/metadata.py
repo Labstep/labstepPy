@@ -10,17 +10,17 @@ from .helpers import (listToClass, url_join, handleError, handleDate,
 
 def getMetadata(entity):
     """
-    Retrieve the Metadatas of a Labstep Resource.
+    Retrieve the Metadata of a Labstep Entity.
 
     Parameters
     ----------
     entity (obj)
-        The entity Resource to retrieve the Metadatas from.
+        The Entity to retrieve the Metadata from.
 
     Returns
     -------
     metadatas
-        An object representing the Metadatas of the Resource.
+        An array of Metadata objects for the Entity.
     """
     metadatas = entity.metadata_thread['metadatas']
     return listToClass(metadatas, Metadata, entity.__user__)

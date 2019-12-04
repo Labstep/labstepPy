@@ -34,7 +34,7 @@ class TestResource:
 
     def test_getComments(self):
         result = entity.getComments()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET COMMENTS'
 
     def test_addMetadata(self):
@@ -44,5 +44,5 @@ class TestResource:
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result[0].label is not None, \
+        assert result[0].id is not None, \
             'FAILED TO GET METADATA'

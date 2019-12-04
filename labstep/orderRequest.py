@@ -250,7 +250,7 @@ class OrderRequest:
 
             entity = user.getOrderRequest(17000)
             comments = entity.getComments()
-            print(comments[0].body)
+            comments[0].attributes()
         """
         return getComments(self, count)
 

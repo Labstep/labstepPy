@@ -255,7 +255,7 @@ class ResourceItem:
 
     def getComments(self, count=100):
         """
-        Gets the comments attached to this entity.
+        Retrieve the Comments attached to this Labstep Entity.
 
         Returns
         -------
@@ -267,8 +267,9 @@ class ResourceItem:
         .. code-block::
 
             entity = user.getResource(17000)
-            comments = entity.getComments()
-            print(comments[0].body)
+            item = entity.getItems()[1]
+            comments = item.getComments()
+            comments[0].attributes()
         """
         return getComments(self, count)
 
@@ -313,7 +314,8 @@ class ResourceItem:
 
     def getMetadata(self):
         """
-        Get the metadata associated with the ResourceItem.
+        Retrieve the Metadata of a Labstep ResourceItem.
+
         Returns
         -------
         List[:class:`~labstep.resource.ResourceItem`]
@@ -323,8 +325,9 @@ class ResourceItem:
         -------
         .. code-block::
 
-            my_resource_item = user.getResourceItem(17000)
+            my_resource = user.getResource(17000)
+            my_resource_item = my_resource.getResourceItem(17000)
             metadata = my_resource_item.getMetadata()
-
+            metadatas[0].attributes()
         """
         return getMetadata(self)

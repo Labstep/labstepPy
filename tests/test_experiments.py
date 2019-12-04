@@ -15,6 +15,7 @@ entity.addComment(testName)
 get_protocol = testUser.getProtocols()[0]
 entity.addProtocol(get_protocol)
 
+
 class TestExperiment:
     def test_edit(self):
         result = entity.edit('Pytest Edited', 'Description Edited')
@@ -35,7 +36,7 @@ class TestExperiment:
 
     def test_getProtocols(self):
         result = entity.getProtocols()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET PROTOCOLS'
 
     def test_addComment(self):
@@ -45,7 +46,7 @@ class TestExperiment:
 
     def test_getComments(self):
         result = entity.getComments()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
@@ -55,5 +56,5 @@ class TestExperiment:
 
     def test_getTags(self):
         result = entity.getTags()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET TAGS'

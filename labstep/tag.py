@@ -33,10 +33,26 @@ def getTags(user, count=1000, search_query=None, extraParams={}):
     params = {**filterParams, **extraParams}
     return getEntities(user, Tag, count, params)
 
-def getAttachedTags(entity,count=100):
-    key = entity.__entityName__.replace('-','_')+'_id'
-    filterParams= { key: entity.id }
-    return getEntities(entity.__user__, Tag, count=count,filterParams=filterParams)
+
+def getAttachedTags(entity, count=100):
+    """
+    Retrieve the Tags attached to a Labstep Entity.
+
+    Parameters
+    ----------
+    entity (obj)
+        The entity to retrieve Tags from.
+
+    Returns
+    -------
+    tags
+        List of the tags attached.
+    """
+    key = entity.__entityName__.replace('-', '_')+'_id'
+    filterParams = {key: entity.id}
+    return getEntities(entity.__user__, Tag, count=count,
+                       filterParams=filterParams)
+
 
 def newTag(user, name):
     """

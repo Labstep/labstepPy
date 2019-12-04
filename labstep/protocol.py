@@ -128,18 +128,6 @@ class ProtocolStep:
     #     return complete(self)
 
 
-class ProtocolTimer:
-    __entityName__ = 'protocol_timer'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def edit(self, time=None):
-        fields = {'time': time}
-        return editEntity(self, fields)
-
-
 class ProtocolTable:
     __entityName__ = 'protocol_table'
 
@@ -149,6 +137,18 @@ class ProtocolTable:
 
     def edit(self, data=None):
         fields = {'data': data}
+        return editEntity(self, fields)
+
+
+class ProtocolTimer:
+    __entityName__ = 'protocol_timer'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, time=None):
+        fields = {'time': time}
         return editEntity(self, fields)
 
 
@@ -268,7 +268,7 @@ class Protocol:
 
     def getComments(self, count=100):
         """
-        Gets the comments attached to this entity.
+        Retrieve the Comments attached to this Labstep Entity.
 
         Returns
         -------
@@ -279,9 +279,9 @@ class Protocol:
         -------
         .. code-block::
 
-            entity = user.getResource(17000)
+            entity = user.getProtocol(17000)
             comments = entity.getComments()
-            print(comments[0].body)
+            comments[0].attributes()
         """
         return getComments(self, count)
 
@@ -311,12 +311,28 @@ class Protocol:
         return self
 
     def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
         return getAttachedTags(self)
 
-    # def getMaterials(self)
-
-    # def getTimers(self)
+    # def getSteps(self)
 
     # def getTables(self)
 
-    # def getSteps(self)
+    # def getTimers(self)
+
+    # def getMaterials(self)

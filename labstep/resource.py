@@ -5,7 +5,7 @@ from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
-from .resourceItem import newResourceItem, getResourceItems
+from .resourceItem import getResourceItems, newResourceItem
 from .orderRequest import newOrderRequest
 from .tag import tag, getAttachedTags
 
@@ -222,7 +222,7 @@ class Resource:
 
             entity = user.getResource(17000)
             comments = entity.getComments()
-            print(comments[0].body)
+            comments[0].attributes()
         """
         return getComments(self, count)
 
@@ -252,6 +252,22 @@ class Resource:
         return self
 
     def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getResource(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
         return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
@@ -297,6 +313,11 @@ class Resource:
         """
         Retrieve the Metadata of a Labstep Resource.
 
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of Metadata objects for the Resource.
+
         Example
         -------
         .. code-block::
@@ -304,11 +325,6 @@ class Resource:
             my_resource = user.getResource(17000)
             metadatas = my_resource.getMetadata()
             metadatas[0].attributes()
-
-        Returns
-        -------
-        :class:`~labstep.metadata.Metadata`
-        An object representing the Metadata of the Resource.
         """
         return getMetadata(self)
 
@@ -367,12 +383,17 @@ class Resource:
 
         Parameters
         ----------
-
+        count (int)
+            The number of ResourceItems to retrieve.
+        search_query (str)
+            Search for ResourceItems with this 'name'.
+        extraParams (dict)
+            Dictionary of extra filter parameters.
 
         Returns
         -------
         List[:class:`~labstep.resourceItem.ResourceItem`]
-            A list of Resource Item objects.
+            A list of ResourceItem objects.
 
         Example
         -------

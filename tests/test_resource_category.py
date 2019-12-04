@@ -29,14 +29,13 @@ class TestResourceCategory:
             'FAILED TO DELETE RESOURCE CATEGORY'
 
     def test_addComment(self):
-        result = entity.addComment(testName,
-                                   './tests/test_resource_category.py')
+        result = entity.addComment(testName, './tests/test_resource_category.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_getComments(self):
         result = entity.getComments()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
@@ -46,7 +45,7 @@ class TestResourceCategory:
 
     def test_getTags(self):
         result = entity.getTags()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
@@ -58,5 +57,5 @@ class TestResourceCategory:
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result, \
+        assert result[0].id is not None, \
             'FAILED TO GET METADATA'
