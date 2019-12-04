@@ -6,5 +6,5 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-entity = user.getExperiments()
+entity = user.getResourceCategorys()
 entity[0].attributes()

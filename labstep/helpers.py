@@ -59,7 +59,7 @@ def createdAtFrom(created_at_from):
         return None
     else:
         timezone = getTime()[-6:]
-        created_at_from = created_at_from + "T00:00:00{tz}".format(tz=timezone)
+        created_at_from = created_at_from + "T00:00:00" + timezone
         return created_at_from
 
 
@@ -73,8 +73,22 @@ def createdAtTo(created_at_to):
         return None
     else:
         timezone = getTime()[-6:]
-        created_at_to = created_at_to + "T23:59:59{tz}".format(tz=timezone)
+        created_at_to = created_at_to + "T23:59:59" + timezone
         return created_at_to
+
+
+def handleDate(datetime):
+    """
+    Returns
+    -------
+        The datetime in json serializable format.
+    """
+    if datetime is None:
+        return None
+    else:
+        timezone = getTime()[-6:]
+        datetime = datetime.replace(' ', 'T') + ":00" + timezone
+        return datetime
 
 
 def handleStatus(status):
@@ -87,13 +101,22 @@ def handleStatus(status):
     if status is None:
         return None
     else:
-        return status.lower()
+        return status.lower().replace(' ', '_')
 
 
 def update(entity, newData):
     for key in newData:
         setattr(entity, key, newData[key])
     return entity
+
+
+def listToClass(items, entityClass, user):
+    """
+    Returns
+    -------
+    return list(map(lambda x: entityClass(x, user), items))
+    """
+    return list(map(lambda x: entityClass(x, user), items))
 
 
 def showAttributes(entity):
@@ -107,5 +130,5 @@ def showAttributes(entity):
         entity, lambda a: not(inspect.isroutine(a)))
     entity_attributes = {k: v for k,
                          v in all_attributes if not (k.startswith('__'))}
-    pp = pprint.PrettyPrinter(indent=4)
+    pp = pprint.PrettyPrinter(indent=1)
     return pp.pprint(entity_attributes)

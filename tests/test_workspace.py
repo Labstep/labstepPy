@@ -2,47 +2,53 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Get the entity
-workspace = testUser.getWorkspace(11344)
+# Set variables
+testName = 'Api Pytest'
 
-# Set variables for editting
-randomNum = randrange(1, 9)
-editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
+# Make new entity
+new_entity = testUser.newWorkspace(testName)
+entity = testUser.getWorkspace(new_entity.id)
+my_workspace = testUser.setWorkspace(entity)
 
 
 class TestWorkspace:
     def test_edit(self):
-        result = workspace.edit(editName)
-        assert result.name == editName, \
-            'INCORRECT EDITTED WORKSPACE NAME!'
+        result = entity.edit('Pytest Edited')
+        assert result.name == 'Pytest Edited', \
+            'FAILED TO EDIT WORKSPACE'
 
     def test_delete(self):
-        workspaceToDelete = testUser.newWorkspace('testDelete')
-        result = workspaceToDelete.delete()
+        entityToDelete = testUser.newWorkspace(testName)
+        result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE WORKSPACE'
 
     # getMany()
     def test_getExperiments(self):
-        result = testUser.getExperiments()
-        assert result[0].name, \
-            'FAILED TO GET EXPERIMENTS!'
+        test_exp = testUser.newExperiment(testName)
+        test_exp.addTag(testName)
+        result = entity.getExperiments()
+        assert result[0].id, \
+            'FAILED TO GET EXPERIMENTS'
 
     def test_getProtocols(self):
-        result = testUser.getProtocols()
-        assert result[0].name, \
-            'FAILED TO GET PROTOCOLS!'
+        testUser.newProtocol(testName)
+        result = entity.getProtocols()
+        assert result[0].id, \
+            'FAILED TO GET PROTOCOLS'
 
     def test_getResources(self):
-        result = testUser.getResources()
-        assert result[0].name, \
-            'FAILED TO GET RESOURCES!'
+        testUser.newResource(testName)
+        result = entity.getResources()
+        assert result[0].id, \
+            'FAILED TO GET RESOURCES'
 
     def test_getTags(self):
-        result = testUser.getTags()
-        assert result[0].name, \
-            'FAILED TO GET TAGS!'
+        new_tag = testUser.newTag('test_newTag')
+        result = entity.getTags()
+        new_tag.delete()
+        assert result[0].id, \
+            'FAILED TO GET TAGS'

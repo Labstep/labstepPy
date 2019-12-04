@@ -58,6 +58,10 @@ The main classes within the *labstep* module are:
 - :class:`~labstep.experiment.Experiment`
 - :class:`~labstep.protocol.Protocol`
 - :class:`~labstep.resource.Resource`
+- :class:`~labstep.metadata.Metadata`
+- :class:`~labstep.resourceCategory.ResourceCategory`
+- :class:`~labstep.resourceLocation.ResourceLocation`
+- :class:`~labstep.orderRequest.OrderRequest`
 - :class:`~labstep.workspace.Workspace`
 - :class:`~labstep.file.File`
 - :class:`~labstep.comment.Comment`

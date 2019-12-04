@@ -2,41 +2,46 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in setup for test
-testName = 'Api Default Name'
-testComment = 'Api Default Comment'
-testFilePath = './tests/test_protocol.py'
+# Set variables
+testName = 'Api Pytest'
 
-# Get the entity
-protocol = testUser.getProtocol(10924)
-
-# Set variables for editting
-randomNum = randrange(1, 9)
-editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
+# Make new entity
+new_entity = testUser.newProtocol(testName)
+entity = testUser.getProtocol(new_entity.id)
+entity.addComment(testName)
 
 
 class TestProtocol:
     def test_edit(self):
-        result = protocol.edit(editName)
-        assert result.name == editName, \
-            'INCORRECT EDITTED PROTOCOL NAME!'
+        result = entity.edit('Pytest Edited')
+        assert result.name == 'Pytest Edited', \
+            'FAILED TO EDIT PROTOCOL'
 
     def test_delete(self):
-        protocolToDelete = testUser.newProtocol('testDelete')
-        result = protocolToDelete.delete()
+        entityToDelete = testUser.newProtocol(testName)
+        result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE PROTOCOL'
 
-    def test_comment(self):
-        result = protocol.addComment(testComment, testFilePath)
+    def test_addComment(self):
+        result = entity.addComment(testName, './tests/test_protocol.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result[0].id is not None, \
+            'FAILED TO GET COMMENTS'
+
     def test_addTag(self):
-        result = protocol.addTag(testName)
+        result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'
+
+    def test_getTags(self):
+        result = entity.getTags()
+        assert result[0].id is not None, \
+            'FAILED TO GET TAGS'

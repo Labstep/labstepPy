@@ -5,7 +5,8 @@
 import sys
 sys.path.append('./labstep/')
 from helpers import (url_join, getTime,
-                     createdAtFrom, createdAtTo, handleStatus)
+                     createdAtFrom, createdAtTo, handleDate,
+                     handleStatus)
 
 
 class TestHelpers:
@@ -22,14 +23,20 @@ class TestHelpers:
     def test_createdAtFrom(self):
         timezone = getTime()[-6:]
         assert createdAtFrom('2020-01-01') == \
-            '2020-01-01' + 'T00:00:00{tz}'.format(tz=timezone), \
+            '2020-01-01' + 'T00:00:00' + timezone, \
             'FAILED TO CREATE TIME FROM'
 
     def test_createdAtTo(self):
         timezone = getTime()[-6:]
         assert createdAtTo('2020-01-01') == \
-            '2020-01-01' + 'T23:59:59{tz}'.format(tz=timezone), \
+            '2020-01-01' + 'T23:59:59' + timezone, \
             'FAILED TO CREATE TIME TO'
+
+    def test_handleDate(self):
+        timezone = getTime()[-6:]
+        assert handleDate('2020-01-01 09:30') == \
+            '2020-01-01T09:30:00' + timezone, \
+            'FAILED TO HANDLE DATE'
 
     def test_handleStatus(self):
         assert handleStatus('AVaiLaBle') == 'available', \

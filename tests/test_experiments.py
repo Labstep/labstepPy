@@ -2,50 +2,59 @@
 # -*- coding: utf-8 -*-
 
 import labstep as LS
-from random import randrange
 
 testUser = LS.login('apitest@labstep.com', 'apitestpass')
 
-# Variables as in setup for test
-testName = 'Api Default Name'
-testComment = 'Api Default Comment'
-testFilePath = './tests/test_experiments.py'
+# Set variables
+testName = 'Api Pytest'
 
-# Get the entity
-experiment = testUser.getExperiment(24495)
-
-# Set variables for editting
-randomNum = randrange(1, 9)
-editName = 'Api Pytest Name Edit {n}'.format(n=randomNum)
-editDescription = 'Api Pytest Description Edit {n}'.format(n=randomNum)
+# Make new entity
+new_entity = testUser.newExperiment(testName)
+entity = testUser.getExperiment(new_entity.id)
+entity.addComment(testName)
+get_protocol = testUser.getProtocols()[0]
+entity.addProtocol(get_protocol)
 
 
 class TestExperiment:
     def test_edit(self):
-        result = experiment.edit(editName, editDescription)
-        assert result.name == editName, \
-            'INCORRECT EDITTED EXPERIMENT NAME!'
-        assert result.description == editDescription, \
-            'INCORRECT EDITTED EXPERIMENT DESCRIPTION!'
+        result = entity.edit('Pytest Edited', 'Description Edited')
+        assert result.name == 'Pytest Edited', \
+            'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):
-        experimentToDelete = testUser.newExperiment('testDelete')
-        result = experimentToDelete.delete()
+        entityToDelete = testUser.newExperiment(testName)
+        result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.getProtocol(4926)
-        result = experiment.addProtocol(get_protocol)
+        get_protocol = testUser.getProtocols()[0]
+        result = entity.addProtocol(get_protocol)
         assert result, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
-    def test_comment(self):
-        result = experiment.addComment(testComment, testFilePath)
+    def test_getProtocols(self):
+        result = entity.getProtocols()
+        assert result[0].id is not None, \
+            'FAILED TO GET PROTOCOLS'
+
+    def test_addComment(self):
+        result = entity.addComment(testName, './tests/test_experiments.py')
         assert result, \
             'FAILED TO ADD COMMENT AND FILE'
 
+    def test_getComments(self):
+        result = entity.getComments()
+        assert result[0].id is not None, \
+            'FAILED TO GET COMMENTS'
+
     def test_addTag(self):
-        result = experiment.addTag(testName)
+        result = entity.addTag(testName)
         assert result, \
             'FAILED TO ADD TAG'
+
+    def test_getTags(self):
+        result = entity.getTags()
+        assert result[0].id is not None, \
+            'FAILED TO GET TAGS'

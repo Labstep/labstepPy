@@ -9,8 +9,8 @@ testUser = LS.login('apitest@labstep.com', 'apitestpass')
 testName = 'Api Pytest'
 
 # Make new entity
-new_entity = testUser.newResource(testName)
-entity = testUser.getResource(new_entity.id)
+resource = testUser.newResource(testName)
+entity = resource.newItem(name='Pytest Acetone')
 entity.addMetadata(fieldName='test', value=testName)
 entity.addComment(testName)
 
@@ -19,13 +19,13 @@ class TestResource:
     def test_edit(self):
         result = entity.edit('Pytest Edited')
         assert result.name == 'Pytest Edited', \
-            'FAILED TO EDIT RESOURCE'
+            'FAILED TO EDIT RESOURCE ITEM'
 
     def test_delete(self):
-        entityToDelete = testUser.newResource('testDelete')
+        entityToDelete = resource.newItem('testDelete')
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
-            'FAILED TO DELETE RESOURCE'
+            'FAILED TO DELETE RESOURCE ITEM'
 
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_resource.py')
@@ -37,16 +37,6 @@ class TestResource:
         assert result[0].id is not None, \
             'FAILED TO GET COMMENTS'
 
-    def test_addTag(self):
-        result = entity.addTag(testName)
-        assert result, \
-            'FAILED TO ADD TAG'
-
-    def test_getTags(self):
-        result = entity.getTags()
-        assert result[0].id is not None, \
-            'FAILED TO GET TAGS'
-
     def test_addMetadata(self):
         result = entity.addMetadata(fieldName=testName, value=testName)
         assert result.label == testName, \
@@ -56,24 +46,3 @@ class TestResource:
         result = entity.getMetadata()
         assert result[0].id is not None, \
             'FAILED TO GET METADATA'
-
-    def test_setResourceCategory(self):
-        my_resourceCategory = testUser.getResourceCategorys()[0]
-        result = entity.setResourceCategory(my_resourceCategory)
-        assert result.resource_category is not None, \
-            'FAILED TO ADD METADATA'
-
-    def test_newOrderRequest(self):
-        result = entity.newOrderRequest()
-        assert result.status, \
-            'FAILED TO MAKE NEW ORDER REQUEST'
-
-    def test_newItem(self):
-        result = entity.newItem(name=testName)
-        assert result.id, \
-            'FAILED TO MAKE NEW ITEM'
-
-    def test_getItems(self):
-        result = entity.getItems()
-        assert result[0].id, \
-            'FAILED TO GET ITEMS'

@@ -4,8 +4,8 @@
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (getTime, createdAtFrom, createdAtTo, update,
                       showAttributes)
-from .comment import addCommentWithFile
-from .tag import tag
+from .comment import addCommentWithFile, getComments
+from .tag import tag, getAttachedTags
 
 
 def getProtocol(user, protocol_id):
@@ -112,6 +112,64 @@ def editProtocol(protocol, name=None, deleted_at=None):
     return editEntity(protocol, fields)
 
 
+class ProtocolStep:
+    __entityName__ = 'protocol_step'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, completedAt=None):
+        fields = {'completedAt': completedAt}
+        return editEntity(self, fields)
+
+    # def complete(self):
+    #     time = getTime()
+    #     return complete(self)
+
+
+class ProtocolTable:
+    __entityName__ = 'protocol_table'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, data=None):
+        fields = {'data': data}
+        return editEntity(self, fields)
+
+
+class ProtocolTimer:
+    __entityName__ = 'protocol_timer'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, time=None):
+        fields = {'time': time}
+        return editEntity(self, fields)
+
+
+class ProtocolMaterial:
+    __entityName__ = 'protocol_value'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, label=None, value=None, unit=None, resource=None):
+        fields = {'label': label,
+                  'value': value,
+                  'unit': unit}
+
+        if resource is not None:
+            fields['resource_id'] = resource.id
+
+        return editEntity(self, fields)
+
+
 class Protocol:
     __entityName__ = 'protocol-collection'
 
@@ -145,7 +203,7 @@ class Protocol:
         """
         return showAttributes(self)
 
-    def edit(self, name=None):
+    def edit(self, name):
         """
         Edit an existing Protocol.
 
@@ -208,6 +266,25 @@ class Protocol:
         """
         return addCommentWithFile(self, body, filepath)
 
+    def getComments(self, count=100):
+        """
+        Retrieve the Comments attached to this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            comments = entity.getComments()
+            comments[0].attributes()
+        """
+        return getComments(self, count)
+
     def addTag(self, name):
         """
         Add a tag to the Protocol (creates a
@@ -232,3 +309,30 @@ class Protocol:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
+        return getAttachedTags(self)
+
+    # def getSteps(self)
+
+    # def getTables(self)
+
+    # def getTimers(self)
+
+    # def getMaterials(self)

@@ -34,6 +34,26 @@ def getTags(user, count=1000, search_query=None, extraParams={}):
     return getEntities(user, Tag, count, params)
 
 
+def getAttachedTags(entity, count=100):
+    """
+    Retrieve the Tags attached to a Labstep Entity.
+
+    Parameters
+    ----------
+    entity (obj)
+        The entity to retrieve Tags from.
+
+    Returns
+    -------
+    tags
+        List of the tags attached.
+    """
+    key = entity.__entityName__.replace('-', '_')+'_id'
+    filterParams = {key: entity.id}
+    return getEntities(entity.__user__, Tag, count=count,
+                       filterParams=filterParams)
+
+
 def newTag(user, name):
     """
     Create a new Tag.
@@ -169,6 +189,8 @@ class Tag:
         -------
         .. code-block::
 
+            # Use python index to select a Tag from the
+            # getTags() list.
             my_tag = user.getTags()[0]
             my_tag.attributes()
 
@@ -205,11 +227,10 @@ class Tag:
         .. code-block::
 
             # Get all tags, since there is no function
-            # to get one tag
+            # to get one tag.
             tags = user.getTags()
 
-            # Select the tag by using
-            # python indexing
+            # Select the tag by using python index.
             tags[1].edit(name='A New Tag Name')
         """
         return editTag(self, name)
@@ -222,12 +243,11 @@ class Tag:
         -------
         .. code-block::
 
-            # Get all tags, since there is
-            # no function to get one tag
+            # Get all tags, since there is no function
+            # to get one tag.
             tags = user.getTags()
 
-            # Select the tag by using
-            # python indexing
+            # Select the tag by using python index.
             tags[1].delete()
         """
         return deleteTag(self)

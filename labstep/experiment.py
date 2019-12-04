@@ -4,9 +4,9 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (update, getTime, createdAtFrom, createdAtTo,
-                      showAttributes)
-from .comment import addCommentWithFile
-from .tag import tag
+                      showAttributes, listToClass)
+from .comment import addCommentWithFile, getComments
+from .tag import tag, getAttachedTags
 
 
 def getExperiment(user, experiment_id):
@@ -139,15 +139,55 @@ def addProtocolToExperiment(experiment, protocol):
     """
     fields = {'experiment_workflow_id': experiment.id,
               'protocol_id': protocol.last_version['id']}
-    return newEntity(experiment.__user__, SubExperiment, fields)
+    return newEntity(experiment.__user__, ExperimentProtocol, fields)
 
 
-class SubExperiment:
+class ExperimentProtocol:
     __entityName__ = 'experiment'
 
     def __init__(self, fields, user):
         self.__user__ = user
         update(self, fields)
+
+    def attributes(self):
+        return showAttributes(self)
+
+
+class ExperimentMaterial:
+    __entityName__ = 'experiment_value'
+
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def edit(self, value=None, unit=None, resource=None, resourceItem=None):
+        """
+        Edit an existing Experiment Material.
+
+        Parameters
+        ----------
+        value (str)
+            The value of the Experiment Material.
+        unit (str)
+            The unit of the value.
+        resource (obj)
+            The Resource of the Experiment Material.
+        resourceItem (obj)
+            The ResourceItem of the Experiment Material.
+
+        Returns
+        -------
+        experiment
+            An object representing the edited Experiment Material.
+        """
+        fields = {'value': value,
+                  'unit': unit}
+        if resource is not None:
+            fields['resource_id'] = resource.id
+        if resourceItem is not None:
+            fields['resource_item_id'] = resourceItem.id
+
+        return editEntity(self, fields)
 
 
 class Experiment:
@@ -251,6 +291,25 @@ class Experiment:
         """
         return addProtocolToExperiment(self, protocol)
 
+    def getProtocols(self):
+        """
+        Retrieve the Protocols attached to this Labstep Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.protocol.Protocol`]
+            List of the protocols attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getExperiment(17000)
+            protocols = entity.getProtocols()
+            protocols[0].attributes()
+        """
+        return listToClass(self.experiments, ExperimentProtocol, self.__user__)
+
     def addComment(self, body, filepath=None):
         """
         Add a comment and/or file to a Labstep Experiment.
@@ -278,6 +337,25 @@ class Experiment:
         """
         return addCommentWithFile(self, body, filepath)
 
+    def getComments(self, count=100):
+        """
+        Retrieve the Comments attached to this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getExperiment(17000)
+            comments = entity.getComments()
+            comments[0].attributes()
+        """
+        return getComments(self, count)
+
     def addTag(self, name):
         """
         Add a tag to the Experiment (creates a
@@ -302,3 +380,22 @@ class Experiment:
         """
         tag(self, name)
         return self
+
+    def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getExperiment(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
+        return getAttachedTags(self)
