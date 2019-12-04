@@ -3,13 +3,23 @@
 
 import labstep as LS
 
-testUser = LS.login('apitest@labstep.com', 'apitestpass')
+testUser = LS.authenticate('apitest@labstep.com', '1c5b51d1-a1a5-4661-9eea-f71b7523f909')
 
 # Set variables
 testName = 'Api Pytest'
 
 
 class TestUser:
+    def test_login(self):
+        testUser = LS.login('apitest@labstep.com', 'apitestpass')
+        assert testUser.id == 8400, \
+            'FAILED TO LOGIN'
+
+    def test_authenticate(self):
+        testUser = LS.authenticate('apitest@labstep.com','1c5b51d1-a1a5-4661-9eea-f71b7523f909')
+        assert testUser.id == 8400, \
+            'FAILED TO AUTHENTICATE'
+
     def test_setWorkspace(self):
         my_workspace = testUser.getWorkspace(11339)
         testUser.setWorkspace(my_workspace)
