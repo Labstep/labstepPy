@@ -111,14 +111,14 @@ class User:
         """
         return showAttributes(self)
 
-    def setWorkspace(self, workspace):
+    def setWorkspace(self, workspace_id):
         """
         Set a Workspace as the active Workspace.
 
         Parameters
         ----------
-        workspace (obj)
-            The Workspace to set as active.
+        workspace_id (obj)
+            The id of the Workspace to set as active.
 
         Returns
         -------
@@ -132,7 +132,7 @@ class User:
             entity = user.getWorkspace(17000)
             my_workspace = user.setWorkspace(entity)
         """
-        self.activeWorkspace = workspace.id
+        self.activeWorkspace = workspace_id
 
     # getSingle()
     def getExperiment(self, experiment_id):
