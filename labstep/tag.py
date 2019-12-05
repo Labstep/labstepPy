@@ -122,7 +122,7 @@ def tag(entity, name):
     """
     user = entity.__user__
     tags = getTags(user, search_query=name,extraParams={'group_id': user.activeWorkspace})
-    matchingTags = list(filter(lambda x: x.name == name, tags))
+    matchingTags = list(filter(lambda x: x.name.lower() == name.lower(), tags))
 
     if len(matchingTags) == 0:
         tag = newTag(user, name)
