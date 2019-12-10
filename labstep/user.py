@@ -42,13 +42,14 @@ def authenticate(username, apikey):
 
         user = labstep.authenticate('myaccount@labstep.com', 'MY_API_KEY')
     """
-    url = url_join(API_ROOT, "api/generic/user",urllib.parse.quote(username))
+    url = url_join(API_ROOT, "api/generic/user", urllib.parse.quote(username))
     print(url)
     r = requests.get(url, headers={'apikey': apikey})
     handleError(r)
     user = json.loads(r.content)
     user['api_key'] = apikey
     return User(user)
+
 
 def login(username, password):
     """
@@ -130,7 +131,7 @@ class User:
         .. code-block::
 
             entity = user.getWorkspace(17000)
-            my_workspace = user.setWorkspace(entity)
+            user.setWorkspace(entity.id)
         """
         self.activeWorkspace = workspace_id
 
@@ -594,6 +595,12 @@ class User:
         -------
         :class:`~labstep.resourceCategory.ResourceCategory`
             An object representing the new Labstep ResourceCategory.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.newResourceCategory(name='Properties')
         """
         return newResourceCategory(self, name)
 
@@ -610,6 +617,12 @@ class User:
         -------
         :class:`~labstep.resourceLocation.ResourceLocation`
             An object representing the new Labstep ResourceLocation.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.newResourceLocation(name='Fridge A')
         """
         return newResourceLocation(self, name)
 

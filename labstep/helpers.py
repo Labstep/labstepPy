@@ -105,6 +105,14 @@ def handleStatus(status):
 
 
 def update(entity, newData):
+    """
+    Returns
+    -------
+    entity
+        for key in newData:
+            setattr(entity, key, newData[key])
+        return entity
+    """
     for key in newData:
         setattr(entity, key, newData[key])
     return entity

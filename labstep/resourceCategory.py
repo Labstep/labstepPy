@@ -29,7 +29,8 @@ def getResourceCategory(user, resourceCategory_id):
     return getEntity(user, ResourceCategory, id=resourceCategory_id)
 
 
-def getResourceCategorys(user, count=100, search_query=None, tag_id=None):
+def getResourceCategorys(user, count=100, search_query=None, tag_id=None,
+                         extraParams={}):
     """
     Retrieve a list of a user's ResourceCategorys on Labstep,
     which can be filtered using the parameters:
@@ -51,9 +52,10 @@ def getResourceCategorys(user, count=100, search_query=None, tag_id=None):
     ResourceCategorys
         A list of ResourceCategory objects.
     """
-    metadata = {'search_query': search_query,
-                'tag_id': tag_id}
-    return getEntities(user, ResourceCategory, count, metadata)
+    filterParams = {'search_query': search_query,
+                    'tag_id': tag_id}
+    params = {**filterParams, **extraParams}
+    return getEntities(user, ResourceCategory, count, params)
 
 
 def newResourceCategory(user, name):

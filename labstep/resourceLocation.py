@@ -8,7 +8,8 @@ from .entity import getEntities, newEntity, editEntity
 from .helpers import url_join, handleError, update, showAttributes
 
 
-def getResourceLocations(user, count=100, search_query=None, tag_id=None):
+def getResourceLocations(user, count=100, search_query=None, tag_id=None,
+                         extraParams={}):
     """
     Retrieve a list of a user's ResourceLocations on Labstep,
     which can be filtered using the parameters:
@@ -30,9 +31,10 @@ def getResourceLocations(user, count=100, search_query=None, tag_id=None):
     ResourceLocations
         A list of ResourceLocation objects.
     """
-    metadata = {'search_query': search_query,
-                'tag_id': tag_id}
-    return getEntities(user, ResourceLocation, count, metadata)
+    filterParams = {'search_query': search_query,
+                    'tag_id': tag_id}
+    params = {**filterParams, **extraParams}
+    return getEntities(user, ResourceLocation, count, params)
 
 
 def newResourceLocation(user, name):
