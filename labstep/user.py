@@ -28,7 +28,7 @@ def authenticate(username, apikey):
     ----------
     username (str)
         Your Labstep username.
-    apikey (obj)
+    apikey (str)
         An apikey for the user.
 
     Returns
@@ -60,7 +60,7 @@ def login(username, password):
     ----------
     username (str)
         Your Labstep username.
-    password (obj)
+    password (str)
         Your Labstep password.
 
     Returns

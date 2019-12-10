@@ -188,14 +188,12 @@ class ResourceItem:
         availability (str)
             The status of the OrderRequest. Options are:
             "available" and "unavailable".
-        quantity_amount (int)
+        quantity_amount (float)
             The quantity of the ResourceItem.
         quantity_unit (str)
             The unit of the quantity.
         location (obj)
             The ResourceLocation of the ResourceItem.
-        deleted_at (str)
-            The timestamp at which the ResourceItem is deleted/archived.
 
         Returns
         -------

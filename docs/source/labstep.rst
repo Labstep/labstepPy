@@ -24,10 +24,17 @@ the *labstep* module and logging into your Labstep account:
     user = labstep.login('myaccount@labstep.com', 'mypassword')
 
 
+Authenticate
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autofunction:: labstep.user.authenticate
+
+
 Login
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autofunction:: labstep.user.login
+
 
 Classes
 ----------------------------------------------

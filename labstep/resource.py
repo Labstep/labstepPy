@@ -438,8 +438,6 @@ class Resource:
             my_resource = user.getResource(17000)
             item = my_resource.newItem(name='Test Item')
         """
-        return newResourceItem(self.__user__, self, name=name,
-                               availability=availability,
-                               quantity_amount=quantity_amount,
-                               quantity_unit=quantity_unit,
-                               location=location)
+        return newResourceItem(self.__user__, self, name,
+                               availability, quantity_amount,
+                               quantity_unit, location)
