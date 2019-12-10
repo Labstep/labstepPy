@@ -121,7 +121,8 @@ def tag(entity, name):
         An object representing the tagged entity.
     """
     user = entity.__user__
-    tags = getTags(user, search_query=name,extraParams={'group_id': user.activeWorkspace})
+    tags = getTags(user, search_query=name, extraParams={
+                   'group_id': user.activeWorkspace})
     matchingTags = list(filter(lambda x: x.name.lower() == name.lower(), tags))
 
     if len(matchingTags) == 0:

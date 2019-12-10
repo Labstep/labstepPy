@@ -282,6 +282,22 @@ class OrderRequest:
         return self
 
     def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getOrderRequest(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
         return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
@@ -324,4 +340,20 @@ class OrderRequest:
                              quantity_amount, quantity_unit)
 
     def getMetadata(self):
+        """
+        Retrieve the Metadata of a Labstep OrderRequest.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of Metadata objects for the OrderRequest.
+
+        Example
+        -------
+        .. code-block::
+
+            my_order_request = user.getOrderRequest(17000)
+            metadatas = my_order_request.getMetadata()
+            metadatas[0].attributes()
+        """
         return getMetadata(self)
