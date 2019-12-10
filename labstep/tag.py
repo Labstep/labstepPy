@@ -96,7 +96,7 @@ def addTagTo(entity, tag):
     entity (obj)
         The Labstep entity to tag. Can be Resource,
         Experiment, or Protocol. Must have 'id'.
-    tag (str)
+    tag (obj)
         The tag to attach. Must have an 'id' property.
 
     Returns
@@ -110,6 +110,7 @@ def addTagTo(entity, tag):
     url = url_join(API_ROOT, "api/generic/", entityName,
                    str(entity.id), tag.__entityName__, str(tag.id))
     r = requests.put(url, headers=headers)
+    handleError(r)
     return json.loads(r.content)
 
 
@@ -132,12 +133,14 @@ def tag(entity, name):
         An object representing the tagged entity.
     """
     user = entity.__user__
-    tags = getTags(user, type=entity.__entityName__, search_query=name,
+    type = (entity.__entityName__).replace('-', '_')
+
+    tags = getTags(user, type=type, search_query=name,
                    extraParams={'group_id': user.activeWorkspace})
     matchingTags = list(filter(lambda x: x.name.lower() == name.lower(), tags))
 
     if len(matchingTags) == 0:
-        tag = newTag(user, name, type=entity.__entityName__)
+        tag = newTag(user, name, type=type)
     else:
         tag = matchingTags[0]
 
