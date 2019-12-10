@@ -459,7 +459,7 @@ class User:
         """
         return getOrderRequests(self, count, name)
 
-    def getTags(self, count=1000, search_query=None):
+    def getTags(self, count=1000, type=None, search_query=None):
         """
         Retrieve a list of a User's Tags
         across all Workspaces on Labstep,
@@ -469,6 +469,10 @@ class User:
         ----------
         count (int)
             The number of Tags to retrieve.
+        type (str)
+            Return only tags of a certain type. Options are:
+            'experiment_workflow', 'protocol_collection',
+            'resource', 'order_request'.
         search_query (str)
             Search for Tags with this 'name'.
 
@@ -483,7 +487,7 @@ class User:
 
             entity = user.getTags(search_query='bacteria')
         """
-        return getTags(self, count, search_query)
+        return getTags(self, count, type, search_query)
 
     def getWorkspaces(self, count=100, name=None):
         """
@@ -651,7 +655,7 @@ class User:
         """
         return newOrderRequest(self, resource, quantity)
 
-    def newTag(self, name):
+    def newTag(self, name, type):
         """
         Create a new Labstep Tag.
 
@@ -659,6 +663,10 @@ class User:
         ----------
         name (str)
             Give your Tag a name.
+        type (str)
+            Return only tags of a certain type. Options are:
+            'experiment_workflow', 'protocol_collection',
+            'resource', 'order_request'.
 
         Returns
         -------
@@ -671,7 +679,7 @@ class User:
 
             entity = user.newTag(name='Aspirin')
         """
-        return newTag(self, name)
+        return newTag(self, name, type)
 
     def newWorkspace(self, name):
         """

@@ -91,17 +91,17 @@ def handleDate(datetime):
         return datetime
 
 
-def handleStatus(status):
+def handleString(string):
     """
     Returns
     -------
-    status
-        The status of the Resource in lowercase.
+    string
+        The string in lowercase, and any whitespace replaced with '_'.
     """
-    if status is None:
+    if string is None:
         return None
     else:
-        return status.lower().replace(' ', '_')
+        return string.lower().replace(' ', '_')
 
 
 def update(entity, newData):

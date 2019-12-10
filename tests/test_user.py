@@ -3,8 +3,8 @@
 
 import labstep as LS
 
-testUser = LS.authenticate('apitest@labstep.com',
-                           '1c5b51d1-a1a5-4661-9eea-f71b7523f909')
+testUser = LS.login('apitest@labstep.com',
+                    'apitestpass')
 
 # Set variables
 testName = 'Api Pytest'
@@ -16,11 +16,11 @@ class TestUser:
         assert testUser.id == 8400, \
             'FAILED TO LOGIN'
 
-    def test_authenticate(self):
-        testUser = LS.authenticate(
-            'apitest@labstep.com', '1c5b51d1-a1a5-4661-9eea-f71b7523f909')
-        assert testUser.id == 8400, \
-            'FAILED TO AUTHENTICATE'
+    # def test_authenticate(self):
+    #     testUser = LS.authenticate(
+    #         'apitest@labstep.com', '1c5b51d1-a1a5-4661-9eea-f71b7523f909')
+    #     assert testUser.id == 8400, \
+    #         'FAILED TO AUTHENTICATE'
 
     def test_setWorkspace(self):
         my_workspace = testUser.getWorkspace(11339)
@@ -143,7 +143,7 @@ class TestUser:
             'FAILED TO CREATE NEW ORDER REQUEST'
 
     def test_newTag(self):
-        result = testUser.newTag('test_newTag')
+        result = testUser.newTag('test_newTag', type='experiment_workflow')
         result.delete()
         assert result.name == 'test_newTag', \
             'FAILED TO CREATE NEW TAG'

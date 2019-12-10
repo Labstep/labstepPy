@@ -3,7 +3,7 @@
 # pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, handleStatus, update, showAttributes
+from .helpers import getTime, handleString, update, showAttributes
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 from .metadata import addMetadataTo, getMetadata
@@ -112,7 +112,7 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     OrderRequest
         An object representing the edited OrderRequest.
     """
-    fields = {'status': handleStatus(status),
+    fields = {'status': handleString(status),
               'quantity': quantity,
               'price': price,
               'currency': currency,
@@ -208,6 +208,21 @@ class OrderRequest:
         return editOrderRequest(self, deleted_at=getTime())
 
     def getResource(self):
+        """
+        Retrieve the Resource of the OrderRequest.
+
+        Returns
+        -------
+        :class:`~labstep.resource.Resource`
+            An object representing the Resource of the OrderRequest.
+
+        Example
+        -------
+        .. code-block::
+
+            my_orderRequest = user.getOrderRequest(17000)
+            my_orderRequest.getResource()
+        """
         return self.__user__.getResource(self.resource['id'])
 
     def addComment(self, body, filepath=None):

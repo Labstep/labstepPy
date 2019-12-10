@@ -15,6 +15,7 @@ entity = testUser.getOrderRequest(new_entity.id)
 entity.addMetadata(fieldName='test', value=testName)
 entity.addComment(testName)
 
+
 class TestOrderRequest:
     def test_edit(self):
         result = entity.edit(status="Back orDEred")
@@ -27,6 +28,11 @@ class TestOrderRequest:
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE ORDER REQUEST'
+
+    def test_getResource(self):
+        result = entity.getResource()
+        assert result.id == new_resource.id, \
+            'FAILED TO GET METADATA'
 
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_order_request.py')
@@ -56,9 +62,4 @@ class TestOrderRequest:
     def test_getMetadata(self):
         result = entity.getMetadata()
         assert result, \
-            'FAILED TO GET METADATA'
-    
-    def test_getResource(self):
-        result = entity.getResource()
-        assert result.id == new_resource.id, \
             'FAILED TO GET METADATA'

@@ -3,7 +3,7 @@
 # pylama:ignore=E501
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import handleStatus, getTime, update, showAttributes
+from .helpers import handleString, getTime, update, showAttributes
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
 
@@ -91,7 +91,7 @@ def newResourceItem(user, resource, name=None, availability=None,
     """
     fields = {'resource_id': resource.id,
               'name': name,
-              'status': handleStatus(availability),
+              'status': handleString(availability),
               'quantity_amount': quantity_amount,
               'quantity_unit': quantity_unit}
 
@@ -131,10 +131,12 @@ def editResourceItem(resourceItem, name=None, availability=None,
         An object representing the edited ResourceItem.
     """
     fields = {'name': name,
-              'status': handleStatus(availability),
-              'quantity_amount': quantity_amount,
+              'status': handleString(availability),
               'quantity_unit': quantity_unit,
               'deleted_at': deleted_at}
+
+    if quantity_amount is not None:
+        fields['quantity_amount'] = float(quantity_amount)
 
     if location is not None:
         fields['resource_location_id'] = location.id

@@ -6,7 +6,7 @@ import sys
 sys.path.append('./labstep/')
 from helpers import (url_join, getTime,
                      createdAtFrom, createdAtTo, handleDate,
-                     handleStatus)
+                     handleString)
 
 
 class TestHelpers:
@@ -38,6 +38,6 @@ class TestHelpers:
             '2020-01-01T09:30:00' + timezone, \
             'FAILED TO HANDLE DATE'
 
-    def test_handleStatus(self):
-        assert handleStatus('AVaiLaBle') == 'available', \
+    def test_handleString(self):
+        assert handleString('orDEr RequeST') == 'order_request', \
             'FAILED TO HANDLE STATUS'

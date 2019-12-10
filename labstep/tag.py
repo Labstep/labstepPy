@@ -5,10 +5,11 @@ import requests
 import json
 from .config import API_ROOT
 from .entity import getEntities, newEntity, editEntity
-from .helpers import url_join, handleError, update, showAttributes
+from .helpers import (url_join, handleError, handleString, update,
+                      showAttributes)
 
 
-def getTags(user, count=1000, search_query=None, extraParams={}):
+def getTags(user, count=1000, type=None, search_query=None, extraParams={}):
     """
     Retrieve a list of the user's tags.
 
@@ -19,6 +20,10 @@ def getTags(user, count=1000, search_query=None, extraParams={}):
         Must have property 'api_key'. See 'login'.
     count (int)
         The number of Tags to retrieve.
+    type (str)
+        Return only tags of a certain type. Options are:
+        'experiment_workflow', 'protocol_collection',
+        'resource', 'order_request'.
     search_query (str)
         Search for Tags with this 'name'.
     extraParams (dict)
@@ -29,7 +34,8 @@ def getTags(user, count=1000, search_query=None, extraParams={}):
     tags
         A list of tag objects.
     """
-    filterParams = {'search_query': search_query}
+    filterParams = {'search_query': search_query,
+                    'type': handleString(type)}
     params = {**filterParams, **extraParams}
     return getEntities(user, Tag, count, params)
 
@@ -54,7 +60,7 @@ def getAttachedTags(entity, count=100):
                        filterParams=filterParams)
 
 
-def newTag(user, name):
+def newTag(user, name, type):
     """
     Create a new Tag.
 
@@ -65,13 +71,18 @@ def newTag(user, name):
         Must have property 'api_key'. See 'login'.
     name (str)
         Name of the new Tag.
+    type (str)
+            Return only tags of a certain type. Options are:
+            'experiment_workflow', 'protocol_collection',
+            'resource', 'order_request'.
 
     Returns
     -------
     tag
         An object representing the new Labstep Tag.
     """
-    fields = {'name': name}
+    fields = {'name': name,
+              'type': handleString(type)}
     return newEntity(user, Tag, fields)
 
 
@@ -121,12 +132,12 @@ def tag(entity, name):
         An object representing the tagged entity.
     """
     user = entity.__user__
-    tags = getTags(user, search_query=name, extraParams={
-                   'group_id': user.activeWorkspace})
+    tags = getTags(user, type=entity.__entityName__, search_query=name,
+                   extraParams={'group_id': user.activeWorkspace})
     matchingTags = list(filter(lambda x: x.name.lower() == name.lower(), tags))
 
     if len(matchingTags) == 0:
-        tag = newTag(user, name)
+        tag = newTag(user, name, type=entity.__entityName__)
     else:
         tag = matchingTags[0]
 

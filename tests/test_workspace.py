@@ -29,7 +29,6 @@ class TestWorkspace:
     # getMany()
     def test_getExperiments(self):
         testUser.newExperiment(testName)
-        # test_exp.addTag(testName)
         result = entity.getExperiments()
         assert result[0].id, \
             'FAILED TO GET EXPERIMENTS'
@@ -66,12 +65,12 @@ class TestWorkspace:
         assert result[0].id, \
             'FAILED TO GET ORDER REQUESTS'
 
-    # def test_getTags(self):
-    #     new_tag = testUser.newTag('test_newTag')
-    #     result = entity.getTags()
-    #     new_tag.delete()
-    #     assert result[0].id, \
-    #         'FAILED TO GET TAGS'
+    def test_getTags(self):
+        new_tag = testUser.newTag('test_newTag', type='experiment_workflow')
+        result = entity.getTags()
+        new_tag.delete()
+        assert result[0].id, \
+            'FAILED TO GET TAGS'
 
     # newEntity()
     def test_newExperiment(self):
@@ -106,11 +105,11 @@ class TestWorkspace:
         assert result.name == testName, \
             'FAILED TO CREATE NEW ORDER REQUEST'
 
-    # def test_newTag(self):
-    #     result = entity.newTag('test_newTag')
-    #     result.delete()
-    #     assert result.name == 'test_newTag', \
-    #         'FAILED TO CREATE NEW TAG'
+    def test_newTag(self):
+        result = entity.newTag('test_newTag', type='experiment_workflow')
+        result.delete()
+        assert result.name == 'test_newTag', \
+            'FAILED TO CREATE NEW TAG'
 
     def test_newFile(self):
         result = entity.newFile('./tests/test_workspace.py')

@@ -366,7 +366,7 @@ class Workspace:
         return getOrderRequests(self.__user__, count, name,
                                 extraParams={'group_id': self.id})
 
-    def getTags(self, count=1000, search_query=None):
+    def getTags(self, count=1000, type=None, search_query=None):
         """
         Retrieve a list of Tags within this specific Workspace,
         which can be filtered using the parameters:
@@ -375,6 +375,10 @@ class Workspace:
         ----------
         count (int)
             The number of Tags to retrieve.
+        type (str)
+            Return only tags of a certain type. Options are:
+            'experiment_workflow', 'protocol_collection',
+            'resource', 'order_request'.
         search_query (str)
             Search for Tags with this 'name'.
 
@@ -389,7 +393,7 @@ class Workspace:
 
             entity = workspace.getTags(search_query='bacteria')
         """
-        return getTags(self.__user__, count, search_query,
+        return getTags(self.__user__, count, type, search_query,
                        extraParams={'group_id': self.id})
 
     # newEntity()
@@ -532,7 +536,7 @@ class Workspace:
         """
         return newOrderRequest(self.__user__, resource, quantity)
 
-    def newTag(self, name):
+    def newTag(self, name, type):
         """
         Create a new Labstep Tag.
 
@@ -540,6 +544,10 @@ class Workspace:
         ----------
         name (str)
             Give your Tag a name.
+        type (str)
+            Return only tags of a certain type. Options are:
+            'experiment_workflow', 'protocol_collection',
+            'resource', 'order_request'.
 
         Returns
         -------
@@ -552,7 +560,7 @@ class Workspace:
 
             entity = workspace.newTag(name='Aspirin')
         """
-        return newTag(self.__user__, name)
+        return newTag(self.__user__, name, type)
 
     def newFile(self, filepath):
         """
