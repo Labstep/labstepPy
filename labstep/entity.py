@@ -7,7 +7,7 @@ from .config import API_ROOT
 from .helpers import listToClass, update, url_join, handleError
 
 
-def getEntity(user, entityClass, id):
+def getEntity(user, entityClass, id, isDeleted='both'):
     """
     Parameters
     ----------
@@ -23,11 +23,14 @@ def getEntity(user, entityClass, id):
     entity
         An object representing a Labstep Entity.
     """
-    params = {'is_deleted': 'both'}
+    params = {
+            'is_deleted': isDeleted,
+            'get_single': 1,
+            'id': id
+        }
     headers = {'apikey': user.api_key}
-    query = "?get_single=1&is_deleted=both&id="+str(id)
     url = url_join(API_ROOT, "/api/generic/",
-                   entityClass.__entityName__ + query)
+                   entityClass.__entityName__)
     r = requests.get(url, headers=headers, params=params)
     handleError(r)
     return entityClass(json.loads(r.content), user)
@@ -91,7 +94,8 @@ def newEntity(user, entityClass, fields):
     """
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
-
+    fields = dict(
+        filter(lambda field: field[1] is not None, fields.items()))
     fields['group_id'] = user.activeWorkspace
     r = requests.post(url, headers=headers, json=fields)
     handleError(r)

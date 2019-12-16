@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import (getTime, createdAtFrom, createdAtTo, update,
+from .helpers import (listToClass, getTime, createdAtFrom, createdAtTo, update,
                       showAttributes)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
@@ -113,47 +113,47 @@ def editProtocol(protocol, name=None, deleted_at=None):
 
 
 class ProtocolStep:
-    __entityName__ = 'protocol_step'
+    __entityName__ = 'protocol-step'
 
     def __init__(self, data, user):
         self.__user__ = user
         update(self, data)
-
-    def edit(self, completedAt=None):
-        fields = {'completedAt': completedAt}
-        return editEntity(self, fields)
-
-    # def complete(self):
-    #     time = getTime()
-    #     return complete(self)
 
 
 class ProtocolTable:
-    __entityName__ = 'protocol_table'
+    __entityName__ = 'protocol-table'
 
     def __init__(self, data, user):
         self.__user__ = user
         update(self, data)
 
-    def edit(self, data=None):
-        fields = {'data': data}
+    def edit(self, name=None, data=None):
+        fields = {
+            'name': name,
+            'data': data
+            }
         return editEntity(self, fields)
 
 
 class ProtocolTimer:
-    __entityName__ = 'protocol_timer'
+    __entityName__ = 'protocol-timer'
 
     def __init__(self, data, user):
         self.__user__ = user
         update(self, data)
 
-    def edit(self, time=None):
-        fields = {'time': time}
+    def edit(self, name=None, hours=None,minutes=None,seconds=None):
+        fields = {
+            'name': name,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+            }
         return editEntity(self, fields)
 
 
 class ProtocolMaterial:
-    __entityName__ = 'protocol_value'
+    __entityName__ = 'protocol-value'
 
     def __init__(self, data, user):
         self.__user__ = user
@@ -175,6 +175,7 @@ class Protocol:
 
     def __init__(self, fields, user):
         self.__user__ = user
+        self.last_version = {}
         update(self, fields)
 
     # functions()
@@ -329,10 +330,186 @@ class Protocol:
         """
         return getAttachedTags(self)
 
-    # def getSteps(self)
+    def getSteps(self):
+        """
+        Returns a list of the steps in the protocol.
 
-    # def getTables(self)
+        Returns
+        -------
+        List[:class:`~labstep.protocol.ProtocolStep`]
+            List of the steps in the protocol.
 
-    # def getTimers(self)
+        Example
+        -------
+        .. code-block::
 
-    # def getMaterials(self)
+            entity = user.getProtocol(17000)
+            steps = entity.getSteps()
+            steps[0].complete()
+        """
+        steps = self.last_version['protocol_steps']
+        return listToClass(steps, ProtocolStep, self.__user__)
+
+    def addMaterial(self, name=None,amount=None,unit=None,resource=None):
+        """
+        Add a new material to the protocol.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the material to add.
+        amount (str)
+            The amount required by the protocol.
+        units (str)
+            The units for the amount.
+        resource (:class:`~labstep.resource.Resource`)
+            The specific resource recommended for use with the protocol.
+
+        Returns
+        -------
+        :class:`~labstep.protocolMaterial.ProtocolMaterial`
+            The newly added material entity.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            material = entity.addMaterial()
+            material.edit(name='Test Material')
+        """
+        fields = {
+            'protocol_id': self.last_version['id'],
+            'name': name,
+            'value': amount,
+            'units': unit,
+        }
+        return newEntity(self.__user__, ProtocolMaterial, fields)
+
+    def getMaterials(self):
+        """
+        Returns a list of the materials specified in the protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.protocol.ProtocolMaterial`]
+            List of the materials in the protocol.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            materials = entity.getMaterials()
+            materials[0].edit(name='Test Material')
+        """
+        materials = self.last_version['protocol_values']
+        return listToClass(materials, ProtocolMaterial, self.__user__)
+    
+    def addTimer(self, name=None,hours=None,minutes=None,seconds=None):
+        """
+        Add a new timer to the protocol.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the timer.
+        hours (int)
+            The hours.
+        minutes (int)
+            The minutes.
+        seconds (int)
+            The seconds.
+
+        Returns
+        -------
+        :class:`~labstep.protocolTimer.ProtocolTimer`
+            The newly added timer entity.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            timer = entity.addTimer()
+            timer.edit(name='Test Timer')
+        """
+        fields = {
+            'protocol_id': self.last_version['id'],
+            'name': name,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        }
+        return newEntity(self.__user__, ProtocolTimer, fields)
+
+    def getTimers(self):
+        """
+        Returns a list of the timers specified in the protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.protocol.ProtocolTimer`]
+            List of the timers in the protocol.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            timers = entity.getTimers()
+            timers[0].edit()
+        """
+        timers = self.last_version['protocol_timers']
+        return listToClass(timers, ProtocolTimer, self.__user__)
+
+    def addTable(self, name=None):
+        """
+        Add a new timer to the protocol.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the timer.
+        data (json)
+            The json data of the table.
+    
+        Returns
+        -------
+        :class:`~labstep.protocolTable.ProtocolTable`
+            The newly added table entity.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            table = entity.addTable()
+            table.edit(name='Test Table')
+        """
+        fields = {
+            'protocol_id': self.last_version['id'],
+            'name': name,
+        }
+        return newEntity(self.__user__, ProtocolTimer, fields)
+
+    def getTables(self):
+        """
+        Returns a list of the tables in the protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.protocol.ProtocolTable`]
+            List of the talbes in the protocol.
+
+        Example
+        -------
+        .. code-block::
+
+            entity = user.getProtocol(17000)
+            timers = entity.getTimers()
+            timers[0].edit()
+        """
+        tables = self.last_version['protocol_tables']
+        return listToClass(tables, ProtocolTable, self.__user__)
+

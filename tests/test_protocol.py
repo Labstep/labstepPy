@@ -45,3 +45,38 @@ class TestProtocol:
         result = entity.getTags()
         assert result[0].id is not None, \
             'FAILED TO GET TAGS'
+
+    def test_getSteps(self):
+        result = entity.getSteps()
+        assert result is not None, \
+            'FAILED TO GET STEPS'
+
+    def test_addMaterial(self):
+        result = entity.addMaterial()
+        assert result is not None, \
+            'FAILED TO ADD MATERIAL'
+
+    def test_getMaterials(self):
+        result = entity.getMaterials()
+        assert result is not None, \
+            'FAILED TO GET MATERIALS'
+
+    def test_addTimer(self):
+        result = entity.addTimer()
+        assert result is not None, \
+            'FAILED TO ADD TIMER'
+
+    def test_getTimers(self):
+        result = entity.getTimers()
+        assert result is not None, \
+            'FAILED TO GET TIMERS'
+
+    def test_addTable(self):
+        result = entity.addTable()
+        assert result is not None, \
+            'FAILED TO ADD TABLE'
+    
+    def test_getTables(self):
+        result = entity.getTables()
+        assert result is not None, \
+            'FAILED TO GET TABLES'
