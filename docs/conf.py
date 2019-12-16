@@ -60,32 +60,62 @@ autodoc_member_order = 'bysource'
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-builtin_themes = ['alabaster', 'classic', 'sphinx_rtd_theme']
-html_theme = builtin_themes[2]
+html_logo = './labstep_logo.png'
 
-# See html_theme_options:
-# https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
-html_theme_options = {
-    # 'canonical_url': '',
-    # 'analytics_id': 'UA-XXXXXXX-1',  # Provided by Google in your dashboard
-    'logo_only': False,
-    'display_version': True,
-    # 'prev_next_buttons_location': 'bottom',
-    'style_external_links': True,
-    # 'vcs_pageview_mode': '',
-    # 'style_nav_header_background': 'white',
-    # -----------
-    # Toc options
-    # -----------
-    'collapse_navigation': False,
-    'sticky_navigation': False,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
-}
+# The theme to use for HTML and HTML Help pages. See the documentation for
+# a list of builtin themes.
+builtin_themes = ['alabaster',
+                  'classic',
+                  'sphinx_rtd_theme']
+html_theme = builtin_themes[1]
+
+if html_theme is 'classic':
+    darkblue = '#000033'
+    blue = '#0066cc'
+    cyan = '#00ccff'
+
+    html_theme_options = {
+        # Footer
+        'footerbgcolor': darkblue,
+        # Sidebar
+        'stickysidebar': True,
+        'sidebarbgcolor': darkblue,
+        'sidebarlinkcolor': 'white',
+        # Relation bar
+        'relbarbgcolor': '#00001a',
+        'relbartextcolor': 'white',
+        'relbarlinkcolor': 'white',
+        # Body Text
+        'textcolor': 'black',
+        'linkcolor': blue,
+        'visitedlinkcolor': blue,
+        'externalrefs': True,
+        # Headings
+        'headbgcolor': '#f2f2f2',  # light grey
+        'headtextcolor': darkblue,
+        # Code blocks
+        'codebgcolor': '#f2f2f2',  # light grey
+    }
+
+elif html_theme is 'sphinx_rtd_theme':
+    # https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
+    html_theme_options = {
+        # 'canonical_url': '',
+        # 'analytics_id': 'UA-XXXXXXX-1',
+        'logo_only': False,
+        'display_version': True,
+        'prev_next_buttons_location': 'bottom',
+        'style_external_links': True,
+        'style_nav_header_background': '#2980B9',  # or 'white'
+        # -----------
+        # Toc options
+        # -----------
+        'collapse_navigation': False,
+        'sticky_navigation': False,
+        'navigation_depth': 3,
+        'includehidden': True,
+        'titles_only': False
+    }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
