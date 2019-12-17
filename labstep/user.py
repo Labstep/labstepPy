@@ -40,6 +40,8 @@ def authenticate(username, apikey):
     -------
     .. code-block::
 
+        import labstep
+
         user = labstep.authenticate('myaccount@labstep.com', 'MY_API_KEY')
     """
     url = url_join(API_ROOT, "api/generic/user", urllib.parse.quote(username))
@@ -71,6 +73,8 @@ def login(username, password):
     Example
     -------
     .. code-block::
+
+        import labstep
 
         user = labstep.login('myaccount@labstep.com', 'mypassword')
     """
