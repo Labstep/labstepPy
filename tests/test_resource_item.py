@@ -29,7 +29,7 @@ class TestResource:
 
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_resource.py')
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_getComments(self):

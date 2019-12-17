@@ -3,9 +3,12 @@
 # pylama:ignore=W0611
 
 from .user import User, login, authenticate
-from .experiment import Experiment
+from .experiment import (ExperimentProtocol, ExperimentMaterial,
+                         ExperimentStep, ExperimentTable, ExperimentTimer,
+                         Experiment)
 from .file import File
-from .protocol import Protocol
+from .protocol import (ProtocolMaterial, ProtocolStep, ProtocolTable,
+                       ProtocolTimer, Protocol)
 from .metadata import Metadata
 from .resource import Resource
 from .resourceItem import ResourceItem

@@ -26,10 +26,10 @@ class TestResourceLocation:
     # def test_addComment(self):
     #     result = entity.addComment(testName,
     #                                './tests/test_resource_location.py')
-    #     assert result, \
+    #     assert result is not None, \
     #         'FAILED TO ADD COMMENT AND FILE'
 
     # def test_addTag(self):
     #     result = entity.addTag(testName)
-    #     assert result, \
+    #     assert result is not None, \
     #         'FAILED TO ADD TAG'

@@ -71,7 +71,7 @@ def newResource(user, name):
         The Labstep user creating the Resource.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your resource a name.
+        Give your Resource a name.
 
     Returns
     -------
@@ -135,7 +135,7 @@ class Resource:
         .. program-output:: python ../labstep/attributes/resource_attributes.py
 
         To inspect specific attributes of a resource,
-        for example, the resource 'name', 'id', etc.:
+        for example, the Resource 'name', 'id', etc.:
 
         .. code-block::
 
