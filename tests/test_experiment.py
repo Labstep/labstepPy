@@ -12,8 +12,8 @@ testName = 'Api Pytest'
 new_entity = testUser.newExperiment(testName)
 entity = testUser.getExperiment(new_entity.id)
 entity.addComment(testName)
-add_protocol = entity.addProtocol(testUser.getProtocol(4926))
-exp_protocol = entity.getProtocols()[0]
+exp_protocol = entity.addProtocol(testUser.getProtocol(4926))
+entity = testUser.getExperiment(entity.id)
 
 
 class TestExperiment:
@@ -31,7 +31,7 @@ class TestExperiment:
     def test_addProtocol(self):
         get_protocol = testUser.getProtocol(4926)
         result = entity.addProtocol(get_protocol)
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
     def test_getProtocols(self):
@@ -41,7 +41,7 @@ class TestExperiment:
 
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_experiment.py')
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_getComments(self):
@@ -51,7 +51,7 @@ class TestExperiment:
 
     def test_addTag(self):
         result = entity.addTag(testName)
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD TAG'
 
     def test_getTags(self):
@@ -60,10 +60,10 @@ class TestExperiment:
             'FAILED TO GET TAGS'
 
     # ExperimentMaterial
-    """ def test_addMaterial(self):
-        result = entity.addMaterial()
-        assert result is not None, \
-            'FAILED TO ADD MATERIAL' """
+    # def test_addMaterial(self):
+    #     result = entity.addMaterial()
+    #     assert result is not None, \
+    #         'FAILED TO ADD MATERIAL'
 
     def test_getMaterials(self):
         result = exp_protocol.getMaterials()
@@ -72,8 +72,8 @@ class TestExperiment:
 
     def test_editMaterial(self):
         material = exp_protocol.getMaterials()[0]
-        result = material.edit(value=0.1, units='ml')
-        assert result.value == 0.1, \
+        result = material.edit(amount='0.1', units='ml')
+        assert result.value == '0.1', \
             'FAILED TO EDIT MATERIAL'
 
     # ExperimentStep
@@ -89,27 +89,21 @@ class TestExperiment:
             'FAILED TO COMPLETE STEP'
 
     # ExperimentTable
-    """ def test_addTable(self):
-        result = entity.addTable()
-        assert result is not None, \
-            'FAILED TO ADD TABLE' """
+    # def test_addTable(self):
+    #     result = entity.addTable(data=data)
+    #     assert result is not None, \
+    #         'FAILED TO ADD TABLE'
 
     def test_getTables(self):
         result = exp_protocol.getTables()
         assert result[0].id is not None, \
             'FAILED TO GET TABLES'
 
-    # def test_editTable(self):
-    #     table = exp_protocol.getTables()[0]
-    #     result = table.edit(name=testName)
-    #     assert result.name == testName, \
-    #         'FAILED TO EDIT TABLE'
-
     # ExperimentTimer
-    """ def test_addTimer(self):
-        result = entity.addTimer()
-        assert result is not None, \
-            'FAILED TO ADD TIMER' """
+    # def test_addTimer(self):
+    #     result = entity.addTimer()
+    #     assert result is not None, \
+    #         'FAILED TO ADD TIMER'
 
     def test_getTimers(self):
         result = exp_protocol.getTimers()

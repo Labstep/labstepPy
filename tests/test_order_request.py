@@ -36,22 +36,22 @@ class TestOrderRequest:
 
     def test_addComment(self):
         result = entity.addComment(testName, './tests/test_order_request.py')
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_getComments(self):
         result = entity.getComments()
-        assert result, \
+        assert result is not None, \
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
         result = entity.addTag(testName)
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD TAG'
 
     def test_getTags(self):
         result = entity.getTags()
-        assert result, \
+        assert result is not None, \
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
@@ -61,5 +61,5 @@ class TestOrderRequest:
 
     def test_getMetadata(self):
         result = entity.getMetadata()
-        assert result, \
+        assert result is not None, \
             'FAILED TO GET METADATA'

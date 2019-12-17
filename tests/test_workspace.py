@@ -113,5 +113,5 @@ class TestWorkspace:
 
     def test_newFile(self):
         result = entity.newFile('./tests/test_workspace.py')
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD NEW FILE'

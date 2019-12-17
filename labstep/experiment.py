@@ -253,7 +253,7 @@ class ExperimentProtocol:
 
 
 class ExperimentMaterial:
-    __entityName__ = 'experiment_value'
+    __entityName__ = 'experiment-value'
 
     def __init__(self, data, user):
         self.__user__ = user
@@ -274,16 +274,16 @@ class ExperimentMaterial:
         """
         return showAttributes(self)
 
-    def edit(self, value=None, units=None, resource=None, resourceItem=None):
+    def edit(self, amount=None, units=None, resource=None, resourceItem=None):
         """
         Edit an existing Experiment Material.
 
         Parameters
         ----------
-        value (float)
-            The value/amount of the Experiment Material.
+        amount (str)
+            The amount of the Experiment Material.
         units (str)
-            The units of the value/amount.
+            The units of the amount.
         resource (obj)
             The Resource of the Experiment Material.
         resourceItem (obj)
@@ -301,9 +301,9 @@ class ExperimentMaterial:
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_materials = exp_protocol.getMaterials()
-            exp_protocol_materials[0].edit(value=1.7, units='ml')
+            exp_protocol_materials[0].edit(amount=1.7, units='ml')
         """
-        fields = {'value': value,
+        fields = {'value': amount,
                   'units': units}
         if resource is not None:
             fields['resource_id'] = resource.id
@@ -392,7 +392,7 @@ class ExperimentTable:
         """
         return showAttributes(self)
 
-    def edit(self, name=None, data=None):
+    def edit(self, data=None):
         """
         Edit an existing Experiment Table.
 
@@ -417,8 +417,7 @@ class ExperimentTable:
             exp_protocol_tables = exp_protocol.getTables()
             exp_protocol_tables[0].edit(name='New Table Name')
         """
-        fields = {'name': name,
-                  'data': data}
+        fields = {'data': data}
         return editEntity(self, fields)
 
 
@@ -451,11 +450,11 @@ class ExperimentTimer:
         Parameters
         ----------
         hours (int)
-            The hours of the Experiment Timer.
+            The hours of the timer.
         minutes (int)
-            The minutes of the Experiment Timer.
+            The minutes of the timer.
         seconds (int)
-            The seconds of the Experiment Timer.
+            The seconds of the timer.
 
         Returns
         -------

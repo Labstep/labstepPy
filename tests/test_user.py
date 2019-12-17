@@ -155,5 +155,5 @@ class TestUser:
 
     def test_newFile(self):
         result = testUser.newFile('./tests/test_user.py')
-        assert result, \
+        assert result is not None, \
             'FAILED TO ADD NEW FILE'
