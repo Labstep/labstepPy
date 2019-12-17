@@ -4,7 +4,7 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import (update, getTime, createdAtFrom, createdAtTo,
-                      showAttributes, listToClass)
+                      handleDate, showAttributes, listToClass)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 
@@ -93,7 +93,7 @@ def newExperiment(user, name, description=None):
     return newEntity(user, Experiment, fields)
 
 
-def editExperiment(experiment, name=None, description=None, startedAt=None,
+def editExperiment(experiment, name=None, description=None, started_at=None,
                    deleted_at=None):
     """
     Edit an existing Experiment.
@@ -106,8 +106,8 @@ def editExperiment(experiment, name=None, description=None, startedAt=None,
         The new name of the Experiment.
     description (str)
         The new description for the Experiment.
-    startedAt (date)
-            The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
+    started_at (str)
+        The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
     deleted_at (str)
         The timestamp at which the Experiment is deleted/archived.
 
@@ -118,9 +118,9 @@ def editExperiment(experiment, name=None, description=None, startedAt=None,
     """
     fields = {'name': name,
               'description': description,
-              'started_at': startedAt,
+              'started_at': handleDate(started_at),
               'deleted_at': deleted_at
-            }
+              }
     return editEntity(experiment, fields)
 
 
@@ -154,87 +154,103 @@ class ExperimentProtocol:
         update(self, fields)
 
     def attributes(self):
-        return showAttributes(self)
-
-    def getSteps(self):
         """
-        Returns a list of the steps in the protocol within an experiment.
-
-        Returns
-        -------
-        List[:class:`~labstep.experiment.ExperimentStep`]
-            List of the steps in an experiment's protocol.
+        Show all attributes of a Protocol within an Experiment.
 
         Example
         -------
         .. code-block::
 
             experiment = user.getExperiment(17000)
-            experimentProtocols = experiment.getProtocols()
-            steps = experimentProtocols[0].getSteps()
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol.attributes()
         """
-        steps = self.experiment_steps
-        return listToClass(steps, ExperimentStep, self.__user__)
+        return showAttributes(self)
 
     def getMaterials(self):
         """
-        Returns a list of the materials specified in an experiment's protocol.
+        Returns a list of the materials in a Protocol within an Experiment.
 
         Returns
         -------
         List[:class:`~labstep.experiment.ExperimentMaterial`]
-            List of the materials in the experiment's protocol.
+            List of the materials in an Experiment's Protocol.
 
         Example
         -------
         .. code-block::
 
-            entity = user.getProtocol(17000)
-            materials = entity.getMaterials()
-            materials[0].edit(name='Test Material')
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_materials = exp_protocol.getMaterials()
+            exp_protocol_materials[0].attributes()
         """
         materials = self.experiment_values
         return listToClass(materials, ExperimentMaterial, self.__user__)
 
+    def getSteps(self):
+        """
+        Returns a list of the steps in a Protocol within an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.experiment.ExperimentStep`]
+            List of the steps in an Experiment's Protocol.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.getSteps()
+            exp_protocol_steps[0].attributes()
+        """
+        steps = self.experiment_steps
+        return listToClass(steps, ExperimentStep, self.__user__)
+
+    def getTables(self):
+        """
+        Returns a list of the tables in a Protocol within an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.experiment.ProtocolTable`]
+            List of the tables in an Experiment's Protocol.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_tables = exp_protocol.getTables()
+            exp_protocol_tables[0].attributes()
+        """
+        tables = self.experiment_tables
+        return listToClass(tables, ExperimentTable, self.__user__)
+
     def getTimers(self):
         """
-        Returns a list of the timers in an experiment's protocol.
+        Returns a list of the timers in a Protocol within an Experiment.
 
         Returns
         -------
         List[:class:`~labstep.experiment.ExperimentTimer`]
-            List of the timers in an experiment's protocol.
+            List of the timers in an Experiment's Protocol.
 
         Example
         -------
         .. code-block::
 
-            entity = user.getProtocol(17000)
-            timers = entity.getTimers()
-            timers[0].edit()
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_timers = exp_protocol.getTimers()
+            exp_protocol_timers[0].attributes()
         """
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
 
-    def getTables(self):
-        """
-        Returns a list of the tables in the protocol.
-
-        Returns
-        -------
-        List[:class:`~labstep.protocol.ProtocolTable`]
-            List of the talbes in the protocol.
-
-        Example
-        -------
-        .. code-block::
-
-            entity = user.getProtocol(17000)
-            timers = entity.getTimers()
-            timers[0].edit()
-        """
-        tables = self.experiment_tables
-        return listToClass(tables, ExperimentTable, self.__user__)
 
 class ExperimentMaterial:
     __entityName__ = 'experiment_value'
@@ -243,16 +259,31 @@ class ExperimentMaterial:
         self.__user__ = user
         update(self, data)
 
-    def edit(self, value=None, unit=None, resource=None, resourceItem=None):
+    def attributes(self):
+        """
+        Show all attributes of an ExperimentMaterial.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_materials = exp_protocol.getMaterials()
+            exp_protocol_materials[0].attributes()
+        """
+        return showAttributes(self)
+
+    def edit(self, value=None, units=None, resource=None, resourceItem=None):
         """
         Edit an existing Experiment Material.
 
         Parameters
         ----------
-        value (str)
-            The value of the Experiment Material.
-        unit (str)
-            The unit of the value.
+        value (float)
+            The value/amount of the Experiment Material.
+        units (str)
+            The units of the value/amount.
         resource (obj)
             The Resource of the Experiment Material.
         resourceItem (obj)
@@ -260,17 +291,27 @@ class ExperimentMaterial:
 
         Returns
         -------
-        experiment
+        :class:`~labstep.experiment.ExperimentMaterial`
             An object representing the edited Experiment Material.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_materials = exp_protocol.getMaterials()
+            exp_protocol_materials[0].edit(value=1.7, units='ml')
         """
         fields = {'value': value,
-                  'unit': unit}
+                  'units': units}
         if resource is not None:
             fields['resource_id'] = resource.id
         if resourceItem is not None:
             fields['resource_item_id'] = resourceItem.id
 
         return editEntity(self, fields)
+
 
 class ExperimentStep:
     __entityName__ = 'experiment-step'
@@ -279,13 +320,55 @@ class ExperimentStep:
         self.__user__ = user
         update(self, data)
 
-    def edit(self, completedAt=None):
-        fields = {'ended_at': completedAt}
+    def attributes(self):
+        """
+        Show all attributes of an ExperimentStep.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.getSteps()
+            exp_protocol_steps[0].attributes()
+        """
+        return showAttributes(self)
+
+    def edit(self, completed_at=None):
+        """
+        Edit an existing Experiment Step.
+
+        Parameters
+        ----------
+        completed_at (str)
+            The datetime at which the Experiment Step was completed.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentStep`
+            An object representing the edited Experiment Step.
+        """
+        fields = {'ended_at': completed_at}
         return editEntity(self, fields)
 
     def complete(self):
-        time = getTime()
-        return self.edit(completedAt = time)
+        """
+        Mark an existing Experiment Step as 'Complete'.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.getSteps()
+            exp_protocol_steps[0].complete()
+            exp_protocol_steps[1].complete()
+            exp_protocol_steps[2].complete()
+        """
+        return self.edit(completed_at=getTime())
+
 
 class ExperimentTable:
     __entityName__ = 'experiment-table'
@@ -294,11 +377,48 @@ class ExperimentTable:
         self.__user__ = user
         update(self, data)
 
+    def attributes(self):
+        """
+        Show all attributes of an ExperimentTable.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_tables = exp_protocol.getTables()
+            exp_protocol_tables[0].attributes()
+        """
+        return showAttributes(self)
+
     def edit(self, name=None, data=None):
-        fields = {
-            'name': name,
-            'data': data
-            }
+        """
+        Edit an existing Experiment Table.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the Experiment Table.
+        data (str)
+            The data of the table.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentTable`
+            An object representing the edited Experiment Table.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_tables = exp_protocol.getTables()
+            exp_protocol_tables[0].edit(name='New Table Name')
+        """
+        fields = {'name': name,
+                  'data': data}
         return editEntity(self, fields)
 
 
@@ -309,37 +429,75 @@ class ExperimentTimer:
         self.__user__ = user
         update(self, data)
 
-    def edit(self, name=None, hours=None,minutes=None,seconds=None):
-        fields = {
-            'name': name,
-            'hours': hours,
-            'minutes': minutes,
-            'seconds': seconds
-            }
+    def attributes(self):
+        """
+        Show all attributes of an ExperimentTimer.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_timers = exp_protocol.getTimers()
+            exp_protocol_timers[0].attributes()
+        """
+        return showAttributes(self)
+
+    def edit(self, hours=None, minutes=None, seconds=None):
+        """
+        Edit an existing Experiment Timer.
+
+        Parameters
+        ----------
+        hours (int)
+            The hours of the Experiment Timer.
+        minutes (int)
+            The minutes of the Experiment Timer.
+        seconds (int)
+            The seconds of the Experiment Timer.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentTimer`
+            An object representing the edited Experiment Timer.
+
+        Example
+        -------
+        .. code-block::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_timers = exp_protocol.getTimers()
+            exp_protocol_timers[0].edit(minutes=1, seconds=7)
+        """
+        fields = {}
+
+        if hours is not None:
+            fields['hours'] = hours
+        if minutes is not None:
+            fields['minutes'] = minutes
+        if seconds is not None:
+            fields['seconds'] = seconds
+
         return editEntity(self, fields)
-    
+
     """ def start(self):
         time = getTime() + self.hours + self.minutes + self.seconds
-        fields = {
-            'ended_at': time,
-            }
+        fields = {'ended_at': time}
         return editEntity(self, fields)
-    
+
     def pause(self):
         time = getTime()
-        fields = {
-            'paused_at': time,
-            }
+        fields = {'paused_at': time}
         return editEntity(self, fields)
-    
+
     def resume(self):
         time = getTime() + self.ended_at - self.paused_at
-        fields = {
-            'ended_at': time
-            'paused_at': 'null',
-            }
+        fields = {'ended_at': time
+                  'paused_at': 'null',
+                  }
         return editEntity(self, fields) """
-
 
 
 class Experiment:
@@ -365,8 +523,8 @@ class Experiment:
 
         .. program-output:: python ../labstep/attributes/experiment_attributes.py
 
-        To inspect specific attributes of an experiment,
-        for example, the experiment 'name', 'id', etc.:
+        To inspect specific attributes of an Experiment,
+        for example, the Experiment 'name', 'id', etc.:
 
         .. code-block::
 
@@ -375,7 +533,7 @@ class Experiment:
         """
         return showAttributes(self)
 
-    def edit(self, name=None, description=None, startedAt=None):
+    def edit(self, name=None, description=None, started_at=None):
         """
         Edit an existing Experiment.
 
@@ -385,7 +543,7 @@ class Experiment:
             The new name of the Experiment.
         description (str)
             The new description of the Experiment.
-        startedAt (date)
+        started_at (str)
             The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
 
         Returns
@@ -400,9 +558,9 @@ class Experiment:
             my_experiment = user.getExperiment(17000)
             my_experiment.edit(name='A New Experiment Name',
                                description='A new description!',
-                               startedAt='2018-06-06 12:05')
+                               started_at='2018-06-06 12:05')
         """
-        return editExperiment(self, name, description, startedAt)
+        return editExperiment(self, name, description, started_at)
 
     def delete(self):
         """
@@ -435,13 +593,13 @@ class Experiment:
         -------
         .. code-block::
 
-            # Get an experiment
+            # Get an Experiment
             my_experiment = user.getExperiment(17000)
 
-            # Get a protocol
+            # Get a Protocol
             my_protocol = user.getProtocol(10000)
 
-            # Attach the protocol to the experiment
+            # Attach the Protocol to the Experiment
             my_experiment.addProtocol(my_protocol)
         """
         return addProtocolToExperiment(self, protocol)
@@ -453,7 +611,7 @@ class Experiment:
         Returns
         -------
         List[:class:`~labstep.experiment.ExperimentProtocol`]
-            List of the protocols attached to the experiment.
+            List of the Protocols attached to the Experiment.
 
         Example
         -------
@@ -463,7 +621,7 @@ class Experiment:
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        return list(map(lambda x: getEntity(self.__user__, ExperimentProtocol, x['id'],isDeleted=None), self.experiments))
+        return list(map(lambda x: getEntity(self.__user__, ExperimentProtocol, x['id'], isDeleted=None), self.experiments))
 
     def addComment(self, body, filepath=None):
         """

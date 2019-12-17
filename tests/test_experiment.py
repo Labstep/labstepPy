@@ -12,8 +12,8 @@ testName = 'Api Pytest'
 new_entity = testUser.newExperiment(testName)
 entity = testUser.getExperiment(new_entity.id)
 entity.addComment(testName)
-get_protocol = testUser.getProtocols()[0]
-exp_prot = entity.addProtocol(get_protocol)
+add_protocol = entity.addProtocol(testUser.getProtocol(4926))
+exp_protocol = entity.getProtocols()[0]
 
 
 class TestExperiment:
@@ -29,7 +29,7 @@ class TestExperiment:
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.getProtocols()[0]
+        get_protocol = testUser.getProtocol(4926)
         result = entity.addProtocol(get_protocol)
         assert result, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
@@ -58,45 +58,66 @@ class TestExperiment:
         result = entity.getTags()
         assert result[0].id is not None, \
             'FAILED TO GET TAGS'
-    
-    def test_getSteps(self):
-        exp_prot = entity.getProtocols()[0]
-        result = exp_prot.getSteps()
-        assert result is not None, \
-            'FAILED TO GET STEPS'
 
-    def test_completeStep(self):
-        result = exp_prot.getSteps()
-        completedStep = result[0].complete()
-        assert completedStep is not None, \
-            'FAILED TO COMPLETE STEP'
-
+    # ExperimentMaterial
     """ def test_addMaterial(self):
         result = entity.addMaterial()
         assert result is not None, \
             'FAILED TO ADD MATERIAL' """
 
     def test_getMaterials(self):
-        result = exp_prot.getMaterials() 
-        assert result is not None, \
+        result = exp_protocol.getMaterials()
+        assert result[0].id is not None, \
             'FAILED TO GET MATERIALS'
 
+    def test_editMaterial(self):
+        material = exp_protocol.getMaterials()[0]
+        result = material.edit(value=0.1, units='ml')
+        assert result.value == 0.1, \
+            'FAILED TO EDIT MATERIAL'
+
+    # ExperimentStep
+    def test_getSteps(self):
+        result = exp_protocol.getSteps()
+        assert result[0].id is not None, \
+            'FAILED TO GET STEPS'
+
+    def test_completeStep(self):
+        steps = exp_protocol.getSteps()
+        result = steps[0].complete()
+        assert result.ended_at is not None, \
+            'FAILED TO COMPLETE STEP'
+
+    # ExperimentTable
+    """ def test_addTable(self):
+        result = entity.addTable()
+        assert result is not None, \
+            'FAILED TO ADD TABLE' """
+
+    def test_getTables(self):
+        result = exp_protocol.getTables()
+        assert result[0].id is not None, \
+            'FAILED TO GET TABLES'
+
+    # def test_editTable(self):
+    #     table = exp_protocol.getTables()[0]
+    #     result = table.edit(name=testName)
+    #     assert result.name == testName, \
+    #         'FAILED TO EDIT TABLE'
+
+    # ExperimentTimer
     """ def test_addTimer(self):
         result = entity.addTimer()
         assert result is not None, \
             'FAILED TO ADD TIMER' """
 
     def test_getTimers(self):
-        result = exp_prot.getTimers() 
-        assert result is not None, \
+        result = exp_protocol.getTimers()
+        assert result[0].id is not None, \
             'FAILED TO GET TIMERS'
 
-    """ def test_addTable(self):
-        result = entity.addTable()
-        assert result is not None, \
-            'FAILED TO ADD TABLE' """
-    
-    def test_getTables(self):
-        result = exp_prot.getTables() 
-        assert result is not None, \
-            'FAILED TO GET TABLES'
+    def test_editTimer(self):
+        timer = exp_protocol.getTimers()[0]
+        result = timer.edit(minutes=17)
+        assert result.minutes == 17, \
+            'FAILED TO EDIT TIMER'

@@ -131,7 +131,7 @@ class ProtocolTable:
         fields = {
             'name': name,
             'data': data
-            }
+        }
         return editEntity(self, fields)
 
 
@@ -142,13 +142,13 @@ class ProtocolTimer:
         self.__user__ = user
         update(self, data)
 
-    def edit(self, name=None, hours=None,minutes=None,seconds=None):
+    def edit(self, name=None, hours=None, minutes=None, seconds=None):
         fields = {
             'name': name,
             'hours': hours,
             'minutes': minutes,
             'seconds': seconds
-            }
+        }
         return editEntity(self, fields)
 
 
@@ -195,7 +195,7 @@ class Protocol:
         .. program-output:: python ../labstep/attributes/protocol_attributes.py
 
         To inspect specific attributes of a protocol,
-        for example, the protocol 'name', 'id', etc.:
+        for example, the Protocol 'name', 'id', etc.:
 
         .. code-block::
 
@@ -350,7 +350,7 @@ class Protocol:
         steps = self.last_version['protocol_steps']
         return listToClass(steps, ProtocolStep, self.__user__)
 
-    def addMaterial(self, name=None,amount=None,unit=None,resource=None):
+    def addMaterial(self, name=None, amount=None, unit=None, resource=None):
         """
         Add a new material to the protocol.
 
@@ -363,7 +363,7 @@ class Protocol:
         units (str)
             The units for the amount.
         resource (:class:`~labstep.resource.Resource`)
-            The specific resource recommended for use with the protocol.
+            The specific Resource recommended for use with the protocol.
 
         Returns
         -------
@@ -405,8 +405,8 @@ class Protocol:
         """
         materials = self.last_version['protocol_values']
         return listToClass(materials, ProtocolMaterial, self.__user__)
-    
-    def addTimer(self, name=None,hours=None,minutes=None,seconds=None):
+
+    def addTimer(self, name=None, hours=None, minutes=None, seconds=None):
         """
         Add a new timer to the protocol.
 
@@ -473,7 +473,7 @@ class Protocol:
             The name of the timer.
         data (json)
             The json data of the table.
-    
+
         Returns
         -------
         :class:`~labstep.protocolTable.ProtocolTable`
@@ -512,4 +512,3 @@ class Protocol:
         """
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
-

@@ -125,7 +125,7 @@ class Metadata:
         -------
         .. code-block::
 
-            # Add metadata to a resource
+            # Add metadata to a Resource
             my_resource = user.getResource(17000)
             metadata = my_resource.addMetadata(fieldName="Refractive Index",
                                                value="1.73")

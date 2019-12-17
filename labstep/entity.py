@@ -11,23 +11,24 @@ def getEntity(user, entityClass, id, isDeleted='both'):
     """
     Parameters
     ----------
-    user (User)
+    user (obj)
         The Labstep user.
     entityClass (class)
         The Class of entity to retrieve.
     id (int)
         The id of the entity.
+    isDeleted (str)
+        Retrieve an entity that has been soft deleted.
 
     Returns
     -------
     entity
         An object representing a Labstep Entity.
     """
-    params = {
-            'is_deleted': isDeleted,
-            'get_single': 1,
-            'id': id
-        }
+    params = {'is_deleted': isDeleted,
+              'get_single': 1,
+              'id': id
+              }
     headers = {'apikey': user.api_key}
     url = url_join(API_ROOT, "/api/generic/",
                    entityClass.__entityName__)
@@ -40,7 +41,7 @@ def getEntities(user, entityClass, count, filterParams={}):
     """
     Parameters
     ----------
-    user (User)
+    user (obj)
         The Labstep user.
     entityClass (class)
         The Class of the entity to retrieve.
@@ -80,7 +81,7 @@ def newEntity(user, entityClass, fields):
     """
     Parameters
     ----------
-    user (User)
+    user (obj)
         The Labstep user.
     entityClass (class)
         The Class of the entity to retrieve.
