@@ -1,16 +1,3 @@
-# labstepPy
-
-Python wrapper around the Labstep API
-
-## Installation
-
-```
-pip install labstep
-```
-
-## Usage
-
-```
 import labstep
 
 # Login to your Labstep account
@@ -27,8 +14,3 @@ my_protocol = user.getProtocol(4926)
 
 # Attach the protocol to the experiment
 result = my_experiment.addProtocol(my_protocol)
-```
-
-For full list of available methods see:
-
-https://labsteppy.readthedocs.io/en/latest/

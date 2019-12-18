@@ -1,31 +1,92 @@
+.. labstepPy documentation master file, created by
+   sphinx-quickstart on Tue Oct 29 14:21:12 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-Welcome to labstepPy's documentation!
+
+
+Welcome to labstepPy's Documentation!
 =====================================
+
+
+Introduction
+------------
+`Labstep <https://www.labstep.com>`_ is a flexible research 
+environment that connects `your electronic notebook
+<https://app.labstep.com/login>`_, inventory, applications,
+and data in one collaborative workspace.
+
+**labstepPy is a Python package for working with the Labstep API.**
+This guide is for anyone who wants to automatically attach analysis scripts
+and data to your experiments on Labstep.
+
+All the labstepPy code is available under open source licenses
+from repositories at `github <https://github.com/Labstep/labstepPy>`_.
+
 
 Installation
 ------------
+The *labstep* package can be easily installed using ``pip``.
 
-.. code-block:: c
+Open the ``Terminal``, and do:
+
+.. code-block:: bash
 
     pip install labstep
 
-Example Usage
+
+.. Citations
+   ---------
+   When using labstepPy in published work, please cite the following:
+   ...
+   Thank you!
+
+
+Quick Example
 -------------
+The quick example below shows you how to attach
+a Labstep Protocol to a Labstep Experiment.
 
-.. literalinclude:: ../example.py
-  
+To see what else labstepPy can do,
+see more :ref:`example uses <example-uses>`.
 
-Available Methods
------------------
+.. literalinclude:: ../examples/example.py
 
 
-.. automodule:: labstep
-    :members:
-    :undoc-members:
+Learning labstepPy
+------------------
+
+To learn more about how to use **labstepPy**, the navigation below
+should help you find the best use of the *labstep* package for your
+own specific purposes.
 
 .. toctree::
+   :caption: Quick Start
    :maxdepth: 2
-   :caption: Contents:
+   :numbered:
+
+   source/installation_login.rst
+   
+.. toctree::
+   :caption: Classes
+   :maxdepth: 2
+   :numbered:
+
+   source/user.rst
+   source/workspace.rst
+   source/experiment.rst
+   source/protocol.rst
+   source/resource.rst
+   source/orderRequest.rst
+   source/file.rst
+   source/comment.rst
+   source/tag.rst
+   source/example_uses.rst
+
+
+Getting Involved
+----------------
+Please report any bugs or provide any feedback to **barney@labstep.com**.
 
 
 Indices and tables

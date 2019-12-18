@@ -1,0 +1,31 @@
+# Instructions as in
+# https://samnicholls.net/2016/06/15/how-to-sphinx-readthedocs/
+
+# Install Sphinx using either pip or conda
+pip install Sphinx
+
+# From the root of Labstep project, initialise docs/ directory with sphinx-quickstart
+mkdir docs
+cd docs/
+sphinx-quickstart
+
+# Answer the questions prompted by sphinx-quickstart.
+# Enable the autodoc extension if/when prompted.
+# Then, use sphinx-apidoc to build a nice module index.
+# Important: set the output directory (-o) to source/ dir to keep the generated Sphinx source files. Without it and by dumping everything into docs/ dir, the py-modindex.html file would not be generated and cause a 404 error on the website.
+# It should point to the Python package, ie. ../labstep.
+sphinx-apidoc -o source/ ../labstep
+
+# During the build, if warning encountered: "WARNING: autodoc: failed to import module", uncomment this line in conf.py
+sys.path.insert(0, os.path.abspath('.'))
+# And add this if warning persists.
+sys.path.insert(0, os.path.abspath('../'))
+
+# To build the documentation, run the following commands in docs/ dir.
+# It is usually good practice to run make clean before make html to ensure that the html output is generated from scratch.
+# Or run the script build_documentation.sh
+make clean
+make html
+
+# View the generated documentation:
+# labstep/docs/_build/html/index.html
