@@ -68,32 +68,34 @@ html_logo = './logo-padding.png'
 builtin_themes = ['alabaster',
                   'classic',
                   'sphinx_rtd_theme']
-html_theme = builtin_themes[1]
+html_theme = builtin_themes[2]
 
 if html_theme is 'classic':
-    darkblue = '#000033'
+    labstepBlue = '#3A78FF'
+    darkGrey = '#404E5B'
     blue = '#0066cc'
     cyan = '#00ccff'
 
     html_theme_options = {
         # Footer
-        'footerbgcolor': darkblue,
+        'footerbgcolor': labstepBlue,
         # Sidebar
         'stickysidebar': True,
-        'sidebarbgcolor': darkblue,
-        'sidebarlinkcolor': 'white',
+        'sidebarbgcolor': '#f2f2f2',
+        'sidebartextcolor': darkGrey,
+        'sidebarlinkcolor': blue,
         # Relation bar
-        'relbarbgcolor': '#00001a',
+        'relbarbgcolor': labstepBlue,
         'relbartextcolor': 'white',
         'relbarlinkcolor': 'white',
         # Body Text
-        'textcolor': 'black',
+        'textcolor': darkGrey,
         'linkcolor': blue,
         'visitedlinkcolor': blue,
         'externalrefs': True,
         # Headings
-        'headbgcolor': '#f2f2f2',  # light grey
-        'headtextcolor': darkblue,
+        'headbgcolor': 'white',  # light grey
+        'headtextcolor': darkGrey,
         # Code blocks
         'codebgcolor': '#f2f2f2',  # light grey
     }
@@ -103,7 +105,7 @@ elif html_theme is 'sphinx_rtd_theme':
     html_theme_options = {
         # 'canonical_url': '',
         # 'analytics_id': 'UA-XXXXXXX-1',
-        'logo_only': False,
+        'logo_only': True,
         'display_version': True,
         'prev_next_buttons_location': 'bottom',
         'style_external_links': True,
@@ -111,9 +113,9 @@ elif html_theme is 'sphinx_rtd_theme':
         # -----------
         # Toc options
         # -----------
-        'collapse_navigation': False,
-        'sticky_navigation': False,
-        'navigation_depth': 3,
+        'collapse_navigation': True,
+        'sticky_navigation': True,
+        'navigation_depth': 4,
         'includehidden': True,
         'titles_only': False
     }

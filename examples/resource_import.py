@@ -36,7 +36,7 @@ for counter, name in enumerate(data['Name']):
         search_query=data['Location'][counter])
 
     if len(location) == 0:
-        location = my_workspace.newResourceLocation(data['Location'][counter])
+        location = user.newResourceLocation(data['Location'][counter])
     else:
         location = location[0]
 

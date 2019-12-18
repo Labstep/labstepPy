@@ -5,7 +5,7 @@
 
 
 
-Welcome to labstepPy's Documentation!
+labstepPy
 =====================================
 
 
@@ -63,14 +63,12 @@ own specific purposes.
 .. toctree::
    :caption: Quick Start
    :maxdepth: 2
-   :numbered:
 
    source/installation_login.rst
    
 .. toctree::
-   :caption: Classes
+   :caption: Entity Classes
    :maxdepth: 2
-   :numbered:
 
    source/user.rst
    source/workspace.rst
@@ -81,6 +79,11 @@ own specific purposes.
    source/file.rst
    source/comment.rst
    source/tag.rst
+
+.. toctree::
+   :caption: Examples
+   :maxdepth: 2
+
    source/example_uses.rst
 
 

@@ -145,7 +145,7 @@ class ProtocolMaterial:
             The amount of the Protocol Material.
         units (str)
             The units of the amount.
-        resource (obj)
+        resource (:class:`~labstep.resource.Resource`)
             The Resource of the Protocol Material.
 
         Returns
@@ -516,7 +516,7 @@ class Protocol:
             The amount required by the protocol.
         units (str)
             The units for the amount.
-        resource (obj)
+        resource (:class:`~labstep.resource.Resource`)
             The specific Resource recommended for use with the protocol.
 
         Returns

@@ -334,13 +334,13 @@ class Resource:
 
         Parameters
         ----------
-        resource_category (obj)
+        resource_category (:class:`~labstep.resourceCategory.ResourceCategory`)
             The ResourceCategory to add to the Resource.
 
         Returns
         -------
-        :class:`~labstep.resourceCategory.ResourceCategory`
-            An object representing the ResourceCategory on Labstep.
+        :class:`~labstep.resource.Resource`
+            An object representing the Resource on Labstep.
 
         Example
         -------
@@ -373,7 +373,7 @@ class Resource:
         ::
 
             my_resource = user.getResource(17000)
-            entity = my_resource.newOrderRequest(quantity=2)
+            order_request = my_resource.newOrderRequest(quantity=2)
         """
         return newOrderRequest(self.__user__, self, quantity)
 

@@ -1,15 +1,12 @@
 .. _example-uses:
 
-Example Uses
-==============================================
-
-Experiment Setup
+Workspace Setup
 ----------------------------------------------
-To setup an Experiment on Labstep:
+To setup a Workspace on Labstep:
 
-:download:`experiment_setup.py <../../examples/experiment_setup.py>`
+:download:`workspace_setup.py <../../examples/workspace_setup.py>`
 
-.. literalinclude:: ../../examples/experiment_setup.py
+.. literalinclude:: ../../examples/workspace_setup.py
 
 
 Importing Resources

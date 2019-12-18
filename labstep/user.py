@@ -120,7 +120,7 @@ class User:
 
         Parameters
         ----------
-        workspace_id (obj)
+        workspace_id (int)
             The id of the Workspace to set as active.
 
         Returns
@@ -291,7 +291,7 @@ class User:
             The end date of the search range, must be
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -330,7 +330,7 @@ class User:
             The end date of the search range, must be
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -362,7 +362,7 @@ class User:
         search_query (str)
             Search for Resources with this 'name'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -391,7 +391,7 @@ class User:
         search_query (str)
             Search for ResourceCategorys with this 'name'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -407,7 +407,7 @@ class User:
         """
         return getResourceCategorys(self, count, search_query, tag_id)
 
-    def getResourceLocations(self, count=100, search_query=None, tag_id=None):
+    def getResourceLocations(self, count=100, search_query=None):
         """
         Retrieve a list of a user's ResourceLocations on Labstep,
         which can be filtered using the parameters:
@@ -418,8 +418,6 @@ class User:
             The number of ResourceLocations to retrieve.
         search_query (str)
             Search for ResourceLocations with this 'name'.
-        tag_id (int)
-            The id of the Tag to retrieve.
 
         Returns
         -------
@@ -430,10 +428,9 @@ class User:
         -------
         ::
 
-            entity = user.getResourceLocations(search_query='properties',
-                                               tag_id=800)
+            entity = user.getResourceLocations(search_query='fridge')
         """
-        return getResourceLocations(self, count, search_query, tag_id)
+        return getResourceLocations(self, count, search_query)
 
     def getOrderRequests(self, count=100, name=None):
         """
@@ -606,7 +603,7 @@ class User:
         -------
         ::
 
-            entity = user.newResourceCategory(name='Properties')
+            entity = user.newResourceCategory(name='Chemical')
         """
         return newResourceCategory(self, name)
 
@@ -638,7 +635,7 @@ class User:
 
         Parameters
         ----------
-        resource (obj)
+        resource (:class:`~labstep.resource.Resource`)
             The Labstep Resource.
         quantity (int)
             The quantity of the new OrderRequest.

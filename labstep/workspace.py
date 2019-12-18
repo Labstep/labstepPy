@@ -192,7 +192,7 @@ class Workspace:
             The end date of the search range, must be
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -231,7 +231,7 @@ class Workspace:
             The end date of the search range, must be
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -263,7 +263,7 @@ class Workspace:
         search_query (str)
             Search for Resources with this 'name'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -293,7 +293,7 @@ class Workspace:
         search_query (str)
             Search for ResourceCategorys with this 'name'.
         tag_id (int)
-            The id of the Tag to retrieve.
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -310,7 +310,7 @@ class Workspace:
         return getResourceCategorys(self.__user__, count, search_query, tag_id,
                                     extraParams={'group_id': self.id})
 
-    def getResourceLocations(self, count=100, search_query=None, tag_id=None):
+    def getResourceLocations(self, count=100, search_query=None):
         """
         Retrieve a list of a user's ResourceLocations on Labstep,
         which can be filtered using the parameters:
@@ -321,8 +321,6 @@ class Workspace:
             The number of ResourceLocations to retrieve.
         search_query (str)
             Search for ResourceLocations with this 'name'.
-        tag_id (int)
-            The id of the Tag to retrieve.
 
         Returns
         -------
@@ -336,7 +334,7 @@ class Workspace:
             entity = workspace.getResourceLocations(search_query='properties',
                                                     tag_id=800)
         """
-        return getResourceLocations(self.__user__, count, search_query, tag_id,
+        return getResourceLocations(self.__user__, count, search_query,
                                     extraParams={'group_id': self.id})
 
     def getOrderRequests(self, count=100, name=None):
@@ -395,186 +393,3 @@ class Workspace:
         """
         return getTags(self.__user__, count, type, search_query,
                        extraParams={'group_id': self.id})
-
-    # newEntity()
-    def newExperiment(self, name, description=None):
-        """
-        Create a new Labstep Experiment.
-
-        Parameters
-        ----------
-        name (str)
-            Give your Experiment a name.
-        description (str)
-            Give your Experiment a description.
-
-        Returns
-        -------
-        :class:`~labstep.experiment.Experiment`
-            An object representing an Experiment on Labstep.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newExperiment(
-                name='The Synthesis of Aspirin',
-                description='Aspirin is an analgesic used to reduce pain.')
-        """
-        return newExperiment(self.__user__, name, description)
-
-    def newProtocol(self, name):
-        """
-        Create a new Labstep Protocol.
-
-        Parameters
-        ----------
-        name (str)
-            Give your Protocol a name.
-
-        Returns
-        -------
-        :class:`~labstep.protocol.Protocol`
-            An object representing a Protocol on Labstep.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newProtocol(name='Synthesising Aspirin')
-        """
-        return newProtocol(self.__user__, name)
-
-    def newResource(self, name):
-        """
-        Create a new Labstep Resource.
-
-        Parameters
-        ----------
-        name (str)
-            Give your Resource a name.
-
-        Returns
-        -------
-        :class:`~labstep.resource.Resource`
-            An object representing a Resource on Labstep.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newResource(name='salicylic acid')
-        """
-        return newResource(self.__user__, name)
-
-    def newResourceCategory(self, name):
-        """
-        Create a new Labstep ResourceCategory.
-
-        Parameters
-        ----------
-        name (str)
-            Give your ResourceCategory a name.
-
-        Returns
-        -------
-        :class:`~labstep.resourceCategory.ResourceCategory`
-            An object representing the new Labstep ResourceCategory.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newResourceCategory(name='Properties')
-        """
-        return newResourceCategory(self.__user__, name)
-
-    def newResourceLocation(self, name):
-        """
-        Create a new Labstep ResourceLocation.
-
-        Parameters
-        ----------
-        name (str)
-            Give your ResourceLocation a name.
-
-        Returns
-        -------
-        :class:`~labstep.resourceLocation.ResourceLocation`
-            An object representing the new Labstep ResourceLocation.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newResourceLocation(name='Fridge A')
-        """
-        return newResourceLocation(self.__user__, name)
-
-    def newOrderRequest(self, resource, quantity=1):
-        """
-        Create a new Labstep OrderRequest.
-
-        Parameters
-        ----------
-        resource (obj)
-            The Labstep Resource.
-        quantity (int)
-            The quantity of the new OrderRequest.
-
-        Returns
-        -------
-        :class:`~labstep.orderRequest.OrderRequest`
-            An object representing the an OrderRequest on Labstep.
-
-        Example
-        -------
-        ::
-
-            my_resource = user.getResource(17000)
-            entity = workspace.newOrderRequest(my_resource, quantity=2)
-        """
-        return newOrderRequest(self.__user__, resource, quantity)
-
-    def newTag(self, name, type):
-        """
-        Create a new Labstep Tag.
-
-        Parameters
-        ----------
-        name (str)
-            Give your Tag a name.
-        type (str)
-            Return only tags of a certain type. Options are:
-            'experiment_workflow', 'protocol_collection',
-            'resource', 'order_request'.
-
-        Returns
-        -------
-        :class:`~labstep.tag.Tag`
-            An object representing a Tag on Labstep.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newTag(name='Aspirin')
-        """
-        return newTag(self.__user__, name, type)
-
-    def newFile(self, filepath):
-        """
-        Upload a file to the Labstep entity Data.
-
-        Parameters
-        ----------
-        filepath (str)
-            The filepath to the file to attach.
-
-        Example
-        -------
-        ::
-
-            entity = workspace.newFile('./structure_of_aspirin.png')
-        """
-        return newFile(self.__user__, filepath)
