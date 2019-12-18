@@ -334,8 +334,8 @@ class Resource:
 
         Parameters
         ----------
-        resource_category (:class:`~labstep.resourceCategory.ResourceCategory`)
-            The ResourceCategory to add to the Resource.
+        resource_category (ResourceCategory)
+            The :class:`~labstep.resourceCategory.ResourceCategory` to add to the Resource.
 
         Returns
         -------

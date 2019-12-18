@@ -635,10 +635,10 @@ class User:
 
         Parameters
         ----------
-        resource (:class:`~labstep.resource.Resource`)
-            The Labstep Resource.
+        resource (Resource)
+            The :class:`~labstep.resource.Resource` to request more items of.
         quantity (int)
-            The quantity of the new OrderRequest.
+            The quantity of items requested.
 
         Returns
         -------

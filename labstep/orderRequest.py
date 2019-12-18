@@ -167,8 +167,8 @@ class OrderRequest:
         status (str)
             The status of the OrderRequest. Options are: "new", "approved",
             "ordered", "back_ordered", "received", and "cancelled".
-        resource (:class:`~labstep.resource.Resource`)
-            The Resource of the OrderRequest.
+        resource (Resource)
+            The :class:`~labstep.resource.Resource` of the OrderRequest.
         quantity (int)
             The quantity of the OrderRequest.
         price (int)

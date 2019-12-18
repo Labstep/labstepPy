@@ -284,10 +284,10 @@ class ExperimentMaterial:
             The amount of the Experiment Material.
         units (str)
             The units of the amount.
-        resource (:class:`~labstep.resource.Resource`)
-            The Resource of the Experiment Material.
-        resourceItem (:class:`~labstep.resource.ResourceItem`)
-            The ResourceItem of the Experiment Material.
+        resource (Resource)
+            The :class:`~labstep.resource.Resource` of the Experiment Material.
+        resourceItem (ResourceItem)
+            The :class:`~labstep.resource.ResourceItem` of the Experiment Material.
 
         Returns
         -------
@@ -580,8 +580,8 @@ class Experiment:
 
         Parameters
         ----------
-        protocol (:class:`~labstep.protocol.Protocol`)
-            The Labstep Protocol to attach.
+        protocol (Protocol)
+            The :class:`~labstep.protocol.Protocol` to attach.
 
         Returns
         -------

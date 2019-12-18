@@ -194,8 +194,8 @@ class ResourceItem:
             The quantity of the ResourceItem.
         quantity_unit (str)
             The unit of the quantity.
-        location (:class:`~labstep.resourceLocation.ResourceLocation`)
-            The ResourceLocation of the ResourceItem.
+        location (ResourceLocation)
+            The :class:`~labstep.resourceLocation.ResourceLocation` of the ResourceItem.
 
         Returns
         -------
