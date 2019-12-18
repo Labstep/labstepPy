@@ -12,6 +12,14 @@ my_workspace = user.getWorkspaces(name='Structure of Protein A')[0]
 user.setWorkspace(my_workspace.id)
 
 
+# Delete a list of Tags for 'crystallisation'
+# That are only in the Resource entity type
+tags_to_delete = user.getTags(search_query='crystallisation', type='resource')
+for i in range(len(tags_to_delete)):
+    print('TAGS TO DELETE =', tags_to_delete[i].name)
+    tags_to_delete[i].delete()
+
+
 # Get the difference of two lists using set()
 def diff(list1, list2):
     return (list(set(list1) - set(list2)))
@@ -22,6 +30,8 @@ def diff(list1, list2):
 keep_experiments = user.getExperiments(search_query='NMR')
 keep_exp_ids = []
 for i in range(len(keep_experiments)):
+    print('EXPERIMENTS TO KEEP =', keep_experiments[i].name)
+    print('EXPERIMENT IDS TO KEEP =', keep_experiments[i].id)
     keep_exp_ids.append(keep_experiments[i].id)
 
 

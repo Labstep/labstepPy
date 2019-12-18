@@ -24,6 +24,7 @@ and data to your experiments on Labstep.
 Installation
 ------------
 The *labstep* package can be easily installed using ``pip``.
+
 Open the ``Terminal``, and do:
 
 .. code-block:: bash
@@ -46,12 +47,13 @@ from repositories at ``github``.
 
 Quick Example
 -------------
-The quick example below shows how you would attach a Labstep Protocol
-to a Labstep Experiment:
+The quick example below shows you how to attach
+a Labstep Protocol to a Labstep Experiment.
+
+To see what else labstepPy can do,
+see more :ref:`example uses <example-uses>`.
 
 .. literalinclude:: ../examples/example.py
-
-See more :ref:`example uses <example-uses>`.
 
 
 Learning labstepPy
@@ -59,12 +61,29 @@ Learning labstepPy
 
 To learn more about how to use **labstepPy**, the navigation below
 should help you find the best use of the *labstep* package for your
-own specific uses.
+own specific purposes.
 
 .. toctree::
-   :maxdepth: 3
+   :caption: Quick Start
+   :maxdepth: 2
+   :numbered:
 
-   source/labstep
+   source/installation_login.rst
+   
+.. toctree::
+   :caption: Classes
+   :maxdepth: 2
+   :numbered:
+
+   source/user.rst
+   source/workspace.rst
+   source/experiment.rst
+   source/protocol.rst
+   source/resource.rst
+   source/file.rst
+   source/comment.rst
+   source/tag.rst
+   source/example_uses.rst
 
 
 Getting Involved
