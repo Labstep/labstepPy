@@ -45,7 +45,6 @@ def authenticate(username, apikey):
         user = labstep.authenticate('myaccount@labstep.com', 'MY_API_KEY')
     """
     url = url_join(API_ROOT, "api/generic/user", urllib.parse.quote(username))
-    print(url)
     r = requests.get(url, headers={'apikey': apikey})
     handleError(r)
     user = json.loads(r.content)
