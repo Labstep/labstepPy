@@ -20,6 +20,9 @@ and data in one collaborative workspace.
 This guide is for anyone who wants to automatically attach analysis scripts
 and data to your experiments on Labstep.
 
+All the labstepPy code is available under open source licenses
+from repositories at `github <https://github.com/Labstep/labstepPy>`_.
+
 
 Installation
 ------------
@@ -30,12 +33,6 @@ Open the ``Terminal``, and do:
 .. code-block:: bash
 
     pip install labstep
-
-
-Open Source
------------
-All the labstepPy code is available under open source licenses
-from repositories at ``github``.
 
 
 .. Citations
@@ -80,6 +77,7 @@ own specific purposes.
    source/experiment.rst
    source/protocol.rst
    source/resource.rst
+   source/orderRequest.rst
    source/file.rst
    source/comment.rst
    source/tag.rst

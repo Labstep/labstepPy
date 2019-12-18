@@ -25,10 +25,3 @@ ResourceLocation
 .. autoclass:: labstep.resourceLocation.ResourceLocation
    :members:
    :undoc-members:
-
-OrderRequest
-++++++++++++++++++++++++++++++++++++++++++++++
-
-.. autoclass:: labstep.orderRequest.OrderRequest
-   :members:
-   :undoc-members:

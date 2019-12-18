@@ -366,7 +366,7 @@ class Workspace:
         return getOrderRequests(self.__user__, count, name,
                                 extraParams={'group_id': self.id})
 
-    def getTags(self, count=1000, type=None, search_query=None):
+    def getTags(self, count=1000, search_query=None, type=None):
         """
         Retrieve a list of Tags within this specific Workspace,
         which can be filtered using the parameters:

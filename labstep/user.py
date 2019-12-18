@@ -462,7 +462,7 @@ class User:
         """
         return getOrderRequests(self, count, name)
 
-    def getTags(self, count=1000, type=None, search_query=None):
+    def getTags(self, count=1000, search_query=None, type=None):
         """
         Retrieve a list of a User's Tags
         across all Workspaces on Labstep,

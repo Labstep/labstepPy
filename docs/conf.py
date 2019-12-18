@@ -60,7 +60,7 @@ autodoc_member_order = 'bysource'
 
 # -- Options for HTML output -------------------------------------------------
 
-html_logo = './labstep_logo.png'
+html_logo = './logo-padding.png'
 
 # The theme to use for HTML and HTML Help pages. See the documentation for
 # a list of builtin themes.
