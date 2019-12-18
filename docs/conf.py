@@ -26,8 +26,9 @@ copyright = '2019, Barney Walker'
 author = 'Barney Walker'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '2.0.0'
 
+master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------
 
