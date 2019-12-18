@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
   long_description = fh.read()
 
 setup(name='labstep',
-  version='1.0.0',
-  description='Python Wrapper around the Labstep API',
+  version='2.0.0',
+  description='Python SDK for working with the Labstep API',
   long_description_content_type='text/markdown',
   long_description=long_description,
   url='http://github.com/Labstep/labstepPy',

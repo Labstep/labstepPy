@@ -11,20 +11,22 @@ pip install labstep
 ## Usage
 
 ```
-from labstep import login, createExperiment, addComment, attachFile
+import labstep
 
 # Login to your Labstep account
-user = login('demo@labstep.com','demopassword')
+user = labstep.login('myaccount@labstep.com', 'mypassword')
 
-# Create an experiment
-experiment = createExperiment(user,'My First Python Experiment','An experiment created using the labstep python package')
+# Get a list of your experiments
+experiments = user.getExperiments(count=10)
 
-# Comment on an experiment
-addComment(user,experiment,'It's working great!')
+# Get a specific experiment
+my_experiment = user.getExperiment(23973)
 
-# Attach a file to an experiment
-filepath = 'my_script.py'
-attachFile(user,experiment,filepath,'This is the python script used in this experiment')
+# Get a specific protocol
+my_protocol = user.getProtocol(4926)
+
+# Attach the protocol to the experiment
+result = my_experiment.addProtocol(my_protocol)
 ```
 
 For full list of available methods see:
