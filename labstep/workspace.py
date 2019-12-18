@@ -117,7 +117,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_workspace = user.getWorkspace(17000)
             my_workspace.attributes()
@@ -129,7 +129,7 @@ class Workspace:
         To inspect specific attributes of a workspace,
         for example, the workspace 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_workspace.name)
             print(my_workspace.id)
@@ -152,7 +152,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_workspace = user.getWorkspace(17000)
             my_workspace.edit(name='A New Workspace Name')
@@ -165,7 +165,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_workspace = user.getWorkspace(17000)
             my_workspace.delete()
@@ -201,7 +201,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getExperiments(search_query='bacteria',
                                               created_at_from='2019-01-01',
@@ -240,7 +240,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getProtocols(search_query='bacteria',
                                             created_at_from='2019-01-01',
@@ -272,7 +272,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getResources(search_query='bacteria',
                                             tag_id=800)
@@ -302,7 +302,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getResourceCategorys(search_query='properties',
                                                     tag_id=800)
@@ -331,7 +331,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getResourceLocations(search_query='properties',
                                                     tag_id=800)
@@ -359,7 +359,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getOrderRequests(name='polymerase')
         """
@@ -389,7 +389,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.getTags(search_query='bacteria')
         """
@@ -415,7 +415,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newExperiment(
                 name='The Synthesis of Aspirin',
@@ -439,7 +439,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newProtocol(name='Synthesising Aspirin')
         """
@@ -461,7 +461,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newResource(name='salicylic acid')
         """
@@ -483,7 +483,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newResourceCategory(name='Properties')
         """
@@ -505,7 +505,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newResourceLocation(name='Fridge A')
         """
@@ -529,7 +529,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             entity = workspace.newOrderRequest(my_resource, quantity=2)
@@ -556,7 +556,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newTag(name='Aspirin')
         """
@@ -573,7 +573,7 @@ class Workspace:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = workspace.newFile('./structure_of_aspirin.png')
         """

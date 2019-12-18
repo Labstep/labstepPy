@@ -38,7 +38,7 @@ def authenticate(username, apikey):
 
     Example
     -------
-    .. code-block::
+    ::
 
         import labstep
 
@@ -71,7 +71,7 @@ def login(username, password):
 
     Example
     -------
-    .. code-block::
+    ::
 
         import labstep
 
@@ -97,7 +97,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             import labstep
 
@@ -107,7 +107,7 @@ class User:
         To inspect specific attributes of the user,
         for example, the user's 'username', 'activeWorkspace', etc.:
 
-        .. code-block::
+        ::
 
             print(user.username)
             print(user.activeWorkspace)
@@ -130,7 +130,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getWorkspace(17000)
             user.setWorkspace(entity.id)
@@ -154,7 +154,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getExperiment(17000)
         """
@@ -176,7 +176,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getProtocol(17000)
         """
@@ -198,7 +198,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResource(17000)
         """
@@ -220,7 +220,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResourceCategory(17000)
         """
@@ -242,7 +242,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getOrderRequest(17000)
         """
@@ -264,7 +264,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getWorkspace(17000)
         """
@@ -300,7 +300,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getExperiments(search_query='bacteria',
                                          created_at_from='2019-01-01',
@@ -339,7 +339,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getProtocols(search_query='bacteria',
                                        created_at_from='2019-01-01',
@@ -371,7 +371,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResources(search_query='bacteria',
                                        tag_id=800)
@@ -400,7 +400,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResourceCategorys(search_query='properties',
                                                tag_id=800)
@@ -428,7 +428,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResourceLocations(search_query='properties',
                                                tag_id=800)
@@ -455,7 +455,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getOrderRequests(name='polymerase')
         """
@@ -485,7 +485,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getTags(search_query='bacteria')
         """
@@ -511,7 +511,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getWorkspaces(name='bacteria')
         """
@@ -536,7 +536,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newExperiment(name='The Synthesis of Aspirin',
                                         description='Aspirin is an analgesic
@@ -560,7 +560,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newProtocol(name='Synthesising Aspirin')
         """
@@ -582,7 +582,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newResource(name='salicylic acid')
         """
@@ -604,7 +604,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newResourceCategory(name='Properties')
         """
@@ -626,7 +626,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newResourceLocation(name='Fridge A')
         """
@@ -650,7 +650,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             entity = user.newOrderRequest(my_resource, quantity=2)
@@ -677,7 +677,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newTag(name='Aspirin')
         """
@@ -699,7 +699,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newWorkspace(name='Aspirin Project')
         """
@@ -716,7 +716,7 @@ class User:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.newFile('./structure_of_aspirin.png')
         """

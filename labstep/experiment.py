@@ -159,7 +159,7 @@ class ExperimentProtocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -178,7 +178,7 @@ class ExperimentProtocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -199,7 +199,7 @@ class ExperimentProtocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -220,7 +220,7 @@ class ExperimentProtocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -241,7 +241,7 @@ class ExperimentProtocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -265,7 +265,7 @@ class ExperimentMaterial:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -296,7 +296,7 @@ class ExperimentMaterial:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -326,7 +326,7 @@ class ExperimentStep:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -358,7 +358,7 @@ class ExperimentStep:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -383,7 +383,7 @@ class ExperimentTable:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -410,7 +410,7 @@ class ExperimentTable:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -434,7 +434,7 @@ class ExperimentTimer:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -463,7 +463,7 @@ class ExperimentTimer:
 
         Example
         -------
-        .. code-block::
+        ::
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
@@ -513,7 +513,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_experiment = user.getExperiment(17000)
             my_experiment.attributes()
@@ -525,7 +525,7 @@ class Experiment:
         To inspect specific attributes of an Experiment,
         for example, the Experiment 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_experiment.name)
             print(my_experiment.id)
@@ -552,7 +552,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_experiment = user.getExperiment(17000)
             my_experiment.edit(name='A New Experiment Name',
@@ -567,7 +567,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_experiment = user.getExperiment(17000)
             my_experiment.delete()
@@ -590,7 +590,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get an Experiment
             my_experiment = user.getExperiment(17000)
@@ -614,7 +614,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getExperiment(17000)
             protocols = entity.getProtocols()
@@ -641,7 +641,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_experiment = user.getExperiment(17000)
             my_experiment.addComment(body='I am commenting!',
@@ -660,7 +660,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getExperiment(17000)
             comments = entity.getComments()
@@ -685,7 +685,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_experiment = user.getExperiment(17000)
             my_experiment.addTag(name='My Tag')
@@ -704,7 +704,7 @@ class Experiment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getExperiment(17000)
             tags = entity.getTags()

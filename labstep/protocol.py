@@ -125,7 +125,7 @@ class ProtocolMaterial:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_materials = protocol.getMaterials()
@@ -155,7 +155,7 @@ class ProtocolMaterial:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_materials = exp_protocol.getMaterials()
@@ -184,7 +184,7 @@ class ProtocolStep:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_steps = protocol.getSteps()
@@ -206,7 +206,7 @@ class ProtocolTable:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_tables = protocol.getTables()
@@ -232,7 +232,7 @@ class ProtocolTable:
 
         Example
         -------
-        .. code-block::
+        ::
 
             data = {
                 "rowCount": 6,
@@ -275,7 +275,7 @@ class ProtocolTimer:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_timers = protocol.getTimers()
@@ -305,7 +305,7 @@ class ProtocolTimer:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_timers = protocol.getTimers()
@@ -339,7 +339,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_protocol = user.getProtocol(17000)
             my_protocol.attributes()
@@ -351,7 +351,7 @@ class Protocol:
         To inspect specific attributes of a protocol,
         for example, the Protocol 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_protocol.name)
             print(my_protocol.id)
@@ -374,7 +374,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
@@ -387,7 +387,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_protocol = user.getProtocol(17000)
             my_protocol.delete()
@@ -413,7 +413,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_protocol = user.getProtocol(17000)
             my_protocol.addComment(body='I am commenting!',
@@ -432,7 +432,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getProtocol(17000)
             comments = entity.getComments()
@@ -457,7 +457,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_protocol = user.getProtocol(17000)
             my_protocol.addTag(name='My Tag')
@@ -476,7 +476,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getProtocol(17000)
             tags = entity.getTags()
@@ -495,7 +495,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_steps = protocol.getSteps()
@@ -526,7 +526,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             resource = user.getResources(search_query='Sample A')[0]
@@ -554,7 +554,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_materials = protocol.getMaterials()
@@ -585,7 +585,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol.addTimer(name='Refluxing', hours='4', minutes='30')
@@ -609,7 +609,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_timers = protocol.getTimers()
@@ -636,7 +636,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             data = {
                 "rowCount": 12,
@@ -677,7 +677,7 @@ class Protocol:
 
         Example
         -------
-        .. code-block::
+        ::
 
             protocol = user.getProtocol(17000)
             protocol_tables = protocol.getTables()

@@ -202,7 +202,7 @@ class Tag:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Use python index to select a Tag from the
             # getTags() list.
@@ -216,7 +216,7 @@ class Tag:
         To inspect specific attributes of a tag,
         for example, the tag 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_tag.name)
             print(my_tag.id)
@@ -239,7 +239,7 @@ class Tag:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all tags, since there is no function
             # to get one tag.
@@ -256,7 +256,7 @@ class Tag:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all tags, since there is no function
             # to get one tag.

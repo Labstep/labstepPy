@@ -109,7 +109,7 @@ class Comment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all comments of a Resource
             entity = user.getResource(17000)
@@ -123,7 +123,7 @@ class Comment:
         To inspect specific attributes of a comment,
         for example, the comment 'body', etc.:
 
-        .. code-block::
+        ::
 
             print(my_comment.body)
         """
@@ -145,7 +145,7 @@ class Comment:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_comment.edit(body='My new comment.')
         """

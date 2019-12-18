@@ -116,7 +116,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.attributes()
@@ -128,7 +128,7 @@ class ResourceCategory:
         To inspect specific attributes of a ResourceCategory,
         for example, the ResourceCategory 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_resource_category.name)
             print(my_resource_category.id)
@@ -151,7 +151,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.edit(name='A New ResourceCategory Name')
@@ -164,7 +164,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.delete()
@@ -190,7 +190,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.addComment(body='I am commenting!',
@@ -209,7 +209,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResourceCategory(17000)
             comments = entity.getComments()
@@ -234,7 +234,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.addTag(name='My Tag')
@@ -253,7 +253,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResourceCategory(17000)
             tags = entity.getTags()
@@ -291,7 +291,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             metadata = my_resource_category.addMetadata(fieldName="Refractive Index",
@@ -311,7 +311,7 @@ class ResourceCategory:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResourceCategory(17000)
             metadatas = entity.getMetadata()

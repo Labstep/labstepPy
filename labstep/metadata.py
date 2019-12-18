@@ -123,7 +123,7 @@ class Metadata:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Add metadata to a Resource
             my_resource = user.getResource(17000)
@@ -140,7 +140,7 @@ class Metadata:
         To inspect specific attributes of a metadata,
         for example, the metadata 'label', 'value', etc.:
 
-        .. code-block::
+        ::
 
             print(metadata.label)
             print(metadata.value)
@@ -165,7 +165,7 @@ class Metadata:
 
         Example
         -------
-        .. code-block::
+        ::
 
             metadata.edit(value='2.50')
         """
@@ -177,7 +177,7 @@ class Metadata:
 
         Example
         -------
-        .. code-block::
+        ::
 
             metadata.delete()
         """

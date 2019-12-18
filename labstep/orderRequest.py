@@ -137,7 +137,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_order_request = user.getOrderRequest(17000)
             my_order_request.attributes()
@@ -149,7 +149,7 @@ class OrderRequest:
         To inspect specific attributes of an order request,
         for example, the order request 'name', 'id', 'status', etc.:
 
-        .. code-block::
+        ::
 
             print(my_order_request.name)
             print(my_order_request.id)
@@ -185,7 +185,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.edit(status="back_ordered", quantity=3,
@@ -200,7 +200,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.delete()
@@ -218,7 +218,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.getResource()
@@ -244,7 +244,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.addComment(body='I am commenting!',
@@ -263,7 +263,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getOrderRequest(17000)
             comments = entity.getComments()
@@ -288,7 +288,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.addTag(name='My Tag')
@@ -307,7 +307,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getOrderRequest(17000)
             tags = entity.getTags()
@@ -345,7 +345,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_category = user.getResourceCategory(17000)
             metadata = my_resource_category.addMetadata(fieldName="Refractive Index",
@@ -365,7 +365,7 @@ class OrderRequest:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_order_request = user.getOrderRequest(17000)
             metadatas = my_order_request.getMetadata()

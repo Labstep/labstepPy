@@ -116,7 +116,7 @@ class ResourceLocation:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Use python index to select a ResourceLocation from the
             # getResourceLocations() list.
@@ -130,7 +130,7 @@ class ResourceLocation:
         To inspect specific attributes of a ResourceLocation,
         for example, the ResourceLocation 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_resource_location.name)
             print(my_resource_location.id)
@@ -153,7 +153,7 @@ class ResourceLocation:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all ResourceLocations, since there is no function
             # to get one ResourceLocation.
@@ -170,7 +170,7 @@ class ResourceLocation:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all ResourceLocations, since there is no function
             # to get one ResourceLocation.
@@ -200,7 +200,7 @@ class ResourceLocation:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all ResourceLocations, since there is no function
             # to get one ResourceLocation.
@@ -229,7 +229,7 @@ class ResourceLocation:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get all ResourceLocations, since there is no function
             # to get one ResourceLocation.

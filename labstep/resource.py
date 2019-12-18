@@ -125,7 +125,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             my_resource.attributes()
@@ -137,7 +137,7 @@ class Resource:
         To inspect specific attributes of a resource,
         for example, the Resource 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_resource.name)
             print(my_resource.id)
@@ -160,7 +160,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             my_resource.edit(name='A New Resource Name')
@@ -173,7 +173,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             my_resource.delete()
@@ -199,7 +199,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             my_resource.addComment(body='I am commenting!',
@@ -218,7 +218,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResource(17000)
             comments = entity.getComments()
@@ -243,7 +243,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             my_resource.addTag(name='My Tag')
@@ -262,7 +262,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResource(17000)
             tags = entity.getTags()
@@ -300,7 +300,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             metadata = my_resource.addMetadata(fieldName="Refractive Index",
@@ -320,7 +320,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             metadatas = my_resource.getMetadata()
@@ -344,7 +344,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             # Get a ResourceCategory
             resource_category = user.getResourceCategory(170)
@@ -370,7 +370,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             entity = my_resource.newOrderRequest(quantity=2)
@@ -397,7 +397,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             items = my_resource.getItems()
@@ -433,7 +433,7 @@ class Resource:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             item = my_resource.newItem(name='Test Item')

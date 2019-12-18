@@ -158,7 +158,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.attributes()
@@ -170,7 +170,7 @@ class ResourceItem:
         To inspect specific attributes of a ResourceItem,
         for example, the ResourceItem 'name', 'id', etc.:
 
-        .. code-block::
+        ::
 
             print(my_resource_item.name)
             print(my_resource_item.id)
@@ -204,7 +204,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.edit(name='A New ResourceItem Name')
@@ -219,7 +219,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.delete()
@@ -245,7 +245,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.addComment(body='I am commenting!',
@@ -264,7 +264,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             entity = user.getResource(17000)
             item = entity.getItems()[1]
@@ -303,7 +303,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource_item = user.getResourceItem(17000)
             metadata = my_resource_item.addMetadata(fieldName="Refractive Index",
@@ -323,7 +323,7 @@ class ResourceItem:
 
         Example
         -------
-        .. code-block::
+        ::
 
             my_resource = user.getResource(17000)
             my_resource_item = my_resource.getResourceItem(17000)
