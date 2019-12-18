@@ -30,7 +30,8 @@ chemicalCategory.addMetadata(fieldName='Melting point')
 
 # Add Resources
 salicylic_acid = user.newResource('Salicylic Acid')
-salicylic_acid.addComment('Here is the chemical structure', './salicylic_acid.png')
+salicylic_acid.addComment('Here is the chemical structure',
+                          './salicylic_acid.png')
 salicylic_acid.addMetadata(fieldName='Formula', value='C7H6O3')
 salicylic_acid.addMetadata(fieldName='Hazards', value='Corrosive, irritant')
 

@@ -4,14 +4,13 @@
 
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, update, showAttributes
-from .experiment import getExperiments, newExperiment
-from .protocol import getProtocols, newProtocol
-from .resource import getResources, newResource
-from .resourceCategory import getResourceCategorys, newResourceCategory
-from .resourceLocation import getResourceLocations, newResourceLocation
-from .orderRequest import getOrderRequests, newOrderRequest
-from .tag import getTags, newTag
-from .file import newFile
+from .experiment import getExperiments
+from .protocol import getProtocols
+from .resource import getResources
+from .resourceCategory import getResourceCategorys
+from .resourceLocation import getResourceLocations
+from .orderRequest import getOrderRequests
+from .tag import getTags
 
 
 def getWorkspace(user, workspace_id):

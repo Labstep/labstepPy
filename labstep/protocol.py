@@ -517,7 +517,8 @@ class Protocol:
         units (str)
             The units for the amount.
         resource (Resource)
-            The specific :class:`~labstep.resource.Resource` recommended for use with the protocol.
+            The specific :class:`~labstep.resource.Resource` recommended for
+            use with the protocol.
 
         Returns
         -------
