@@ -1,6 +1,6 @@
 # labstepPy
 
-Python wrapper around the Labstep API
+Python SDK for working with the Labstep API
 
 ## Installation
 
@@ -20,10 +20,11 @@ user = labstep.login('myaccount@labstep.com', 'mypassword')
 experiments = user.getExperiments(count=10)
 
 # Get a specific experiment
-my_experiment = user.getExperiment(23973)
+my_experiment = experiments[0]
 
 # Get a specific protocol
-my_protocol = user.getProtocol(4926)
+protocols = user.getProtocols()
+my_protocol = protocols[0]
 
 # Attach the protocol to the experiment
 result = my_experiment.addProtocol(my_protocol)

@@ -1,12 +1,11 @@
 from setuptools import setup
 
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
   long_description = fh.read()
 
 setup(name='labstep',
   version='2.0.0',
   description='Python SDK for working with the Labstep API',
-  long_description_content_type='text/markdown',
   long_description=long_description,
   url='http://github.com/Labstep/labstepPy',
   author='Barney Walker',
