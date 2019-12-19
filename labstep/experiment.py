@@ -415,7 +415,24 @@ class ExperimentTable:
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_tables = exp_protocol.getTables()
-            exp_protocol_tables[0].edit(name='New Table Name')
+            data = {
+                "rowCount": 12,
+                "columnCount": 12,
+                "colHeaderData": {},
+                "data": {
+                    "dataTable": {
+                        0: {
+                            0: {
+                                "value": 'Cell A1'
+                            },
+                            1: {
+                                "value": 'Cell B1'
+                            }
+                        }
+                    }
+                }
+            }
+            exp_protocol_tables[0].edit(data=data)
         """
         fields = {'data': data}
         return editEntity(self, fields)
