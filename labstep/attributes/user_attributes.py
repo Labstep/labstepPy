@@ -4,4 +4,4 @@
 import labstep
 
 
-labstep.login('apitest@labstep.com', 'apitestpass')
+print(labstep.login('apitest@labstep.com', 'apitestpass'))

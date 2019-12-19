@@ -6,4 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-user.getResourceItems()[0]
+print(user.getResourceItems()[0])

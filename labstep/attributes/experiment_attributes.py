@@ -6,4 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-user.getExperiments()[0]
+print(user.getExperiments()[0])

@@ -6,4 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-user.getWorkspaces()[0]
+print(user.getWorkspaces()[0])

@@ -6,4 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-user.getOrderRequests()[0]
+print(user.getOrderRequests()[0])
