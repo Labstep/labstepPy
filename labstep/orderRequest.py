@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, handleString, update, showAttributes
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import getTime, handleString
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 from .metadata import addMetadataTo, getMetadata
@@ -123,39 +123,24 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     return editEntity(orderRequest, fields)
 
 
-class OrderRequest:
+class OrderRequest(Entity):
+    """
+    Represents an Order Request on Labstep.
+
+    To see all attributes of the order request run
+    ::
+        print(my_order_request)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/orderRequest_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_order_request.name)
+        print(my_order_request.id)
+    """
     __entityName__ = 'order-request'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of an OrderRequest.
-
-        Example
-        -------
-        ::
-
-            my_order_request = user.getOrderRequest(17000)
-            my_order_request.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/orderRequest_attributes.py
-
-        To inspect specific attributes of an order request,
-        for example, the order request 'name', 'id', 'status', etc.:
-
-        ::
-
-            print(my_order_request.name)
-            print(my_order_request.id)
-            print(my_order_request.status)
-        """
-        return showAttributes(self)
 
     def edit(self, status=None, resource=None, quantity=None,
              price=None, currency=None):

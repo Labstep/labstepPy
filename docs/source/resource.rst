@@ -5,13 +5,6 @@ Resource
    :members:
    :undoc-members:
 
-Metadata
-++++++++++++++++++++++++++++++++++++++++++++++
-
-.. autoclass:: labstep.metadata.Metadata
-   :members:
-   :undoc-members:
-
 ResourceCategory
 ++++++++++++++++++++++++++++++++++++++++++++++
 

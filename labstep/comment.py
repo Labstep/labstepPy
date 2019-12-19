@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .entity import editEntity, newEntity, getEntities
-from .helpers import update, showAttributes
+from .entity import Entity, editEntity, newEntity, getEntities
 from .file import newFile
 
 
@@ -95,39 +94,8 @@ def editComment(comment, body):
     return editEntity(comment, fields)
 
 
-class Comment:
+class Comment(Entity):
     __entityName__ = 'comment'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a Comment.
-
-        Example
-        -------
-        ::
-
-            # Get all comments of a Resource
-            entity = user.getResource(17000)
-            comments = entity.getComments()
-
-            # Use python index to select a Comment from the
-            # getComments() list.
-            my_comment = comments[0]
-            my_comment.attributes()
-
-        To inspect specific attributes of a comment,
-        for example, the comment 'body', etc.:
-
-        ::
-
-            print(my_comment.body)
-        """
-        return showAttributes(self)
 
     def edit(self, body):
         """

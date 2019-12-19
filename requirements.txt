@@ -2,3 +2,4 @@ pytest
 Pylama
 sphinxcontrib-programoutput
 labstep
+pandas

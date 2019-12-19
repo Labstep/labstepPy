@@ -5,6 +5,8 @@ import requests
 import json
 from .config import API_ROOT
 from .helpers import listToClass, update, url_join, handleError
+import inspect
+import pprint
 
 
 def getEntity(user, entityClass, id, isDeleted='both'):
@@ -128,3 +130,17 @@ def editEntity(entity, fields):
     r = requests.put(url, json=new_fields, headers=headers)
     handleError(r)
     return update(entity, json.loads(r.content))
+
+
+class Entity:
+    def __init__(self, data, user):
+        self.__user__ = user
+        update(self, data)
+
+    def __repr__(self):
+        all_attributes = inspect.getmembers(
+            self, lambda a: not(inspect.isroutine(a)))
+        entity_attributes = {k: v for k,
+                             v in all_attributes if not (k.startswith('__'))}
+        pp = pprint.PrettyPrinter(indent=1)
+        return pp.pformat(entity_attributes)
