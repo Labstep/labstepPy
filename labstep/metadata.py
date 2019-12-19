@@ -116,10 +116,6 @@ class Metadata(Entity):
     ::
         print(my_metadata_field)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/metadata_attributes.py
-
     Specific attributes can be accessed via dot notation like so...
     ::
         print(my_metadata_field.value)

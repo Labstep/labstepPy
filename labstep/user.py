@@ -94,10 +94,6 @@ class User(Entity):
     ::
         print(user)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/user_attributes.py
-
     Specific attributes can be accessed via dot notation like so...
     ::
         print(user.name)

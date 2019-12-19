@@ -152,10 +152,6 @@ class ResourceItem(Entity):
     ::
         print(my_resource_item)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/resourceItem_attributes.py
-
     Specific attributes can be accessed via dot notation like so...
     ::
         print(my_resource_item.name)

@@ -259,10 +259,6 @@ class Protocol(Entity):
     ::
         print(my_protocol)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/protocol_attributes.py
-
     Specific attributes can be accessed via dot notation like so...
     ::
         print(my_protocol.name)

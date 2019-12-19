@@ -195,10 +195,6 @@ class Tag(Entity):
     ::
         print(my_tag)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/tag_attributes.py
-
     Specific attributes can be accessed via dot notation like so...
     ::
         print(my_tag.name)

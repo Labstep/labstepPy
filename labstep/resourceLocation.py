@@ -110,10 +110,6 @@ class ResourceLocation(Entity):
     ::
         print(my_resource_location)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/resourceLocation_attributes.py
-
     Specific attributes can be accessed via dot notation like so...
     ::
         print(my_resource_location.name)

@@ -430,10 +430,6 @@ class Experiment(Entity):
     ::
         print(my_experiment)
 
-    The output should look something like this:
-
-    .. program-output:: python ../labstep/attributes/experiment_attributes.py
-
     Specific attributes can be inspected via dot notation like so...
     ::
         print(my_experiment.name)
