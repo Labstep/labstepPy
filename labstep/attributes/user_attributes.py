@@ -4,5 +4,4 @@
 import labstep
 
 
-user = labstep.login('apitest@labstep.com', 'apitestpass')
-user.attributes()
+labstep.login('apitest@labstep.com', 'apitestpass')

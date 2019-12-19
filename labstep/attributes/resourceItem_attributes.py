@@ -6,5 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-entity = user.getResourceItems()
-entity[0].attributes()
+user.getResourceItems()[0]

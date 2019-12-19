@@ -76,9 +76,10 @@ own specific purposes.
    source/protocol.rst
    source/resource.rst
    source/orderRequest.rst
-   source/file.rst
+   source/metadata.rst
    source/comment.rst
    source/tag.rst
+   source/file.rst
 
 .. toctree::
    :caption: Examples

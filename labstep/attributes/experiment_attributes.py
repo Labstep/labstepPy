@@ -6,5 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 
-entity = user.getExperiments()
-entity[0].attributes()
+user.getExperiments()[0]

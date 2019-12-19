@@ -4,9 +4,8 @@
 import requests
 import json
 from .config import API_ROOT
-from .entity import getEntities, newEntity, editEntity
-from .helpers import (url_join, handleError, handleString, update,
-                      showAttributes)
+from .entity import Entity, getEntities, newEntity, editEntity
+from .helpers import (url_join, handleError, handleString)
 
 
 def getTags(user, count=1000, type=None, search_query=None, extraParams={}):
@@ -188,40 +187,24 @@ def deleteTag(tag):
     return None
 
 
-class Tag:
+class Tag(Entity):
+    """
+    Represents a Tag on Labstep.
+
+    To see all attributes of a tag run
+    ::
+        print(my_tag)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/tag_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_tag.name)
+        print(my_tag.id)
+    """
     __entityName__ = 'tag'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a Tag.
-
-        Example
-        -------
-        ::
-
-            # Use python index to select a Tag from the
-            # getTags() list.
-            my_tag = user.getTags()[0]
-            my_tag.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/tag_attributes.py
-
-        To inspect specific attributes of a tag,
-        for example, the tag 'name', 'id', etc.:
-
-        ::
-
-            print(my_tag.name)
-            print(my_tag.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name):
         """

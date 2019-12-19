@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update, showAttributes
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import getTime
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
 from .tag import tag, getAttachedTags
@@ -102,38 +102,24 @@ def editResourceCategory(resourceCategory, name=None, deleted_at=None):
     return editEntity(resourceCategory, metadata)
 
 
-class ResourceCategory:
+class ResourceCategory(Entity):
+    """
+    Represents a Resource Category on Labstep.
+
+    To see all attributes of the resource category run
+    ::
+        print(my_resource_category)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/resourceCategory_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_resource_category.name)
+        print(my_resource_category.id)
+    """
     __entityName__ = 'resource-category'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a ResourceCategory.
-
-        Example
-        -------
-        ::
-
-            my_resource_category = user.getResourceCategory(17000)
-            my_resource_category.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/resourceCategory_attributes.py
-
-        To inspect specific attributes of a ResourceCategory,
-        for example, the ResourceCategory 'name', 'id', etc.:
-
-        ::
-
-            print(my_resource_category.name)
-            print(my_resource_category.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name):
         """
