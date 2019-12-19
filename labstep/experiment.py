@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import (update, getTime, createdAtFrom, createdAtTo,
-                      handleDate, showAttributes, listToClass)
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import (getTime, createdAtFrom, createdAtTo,
+                      handleDate, listToClass)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 
@@ -146,26 +146,8 @@ def addProtocolToExperiment(experiment, protocol):
     return newEntity(experiment.__user__, ExperimentProtocol, fields)
 
 
-class ExperimentProtocol:
+class ExperimentProtocol(Entity):
     __entityName__ = 'experiment'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
-
-    def attributes(self):
-        """
-        Show all attributes of a Protocol within an Experiment.
-
-        Example
-        -------
-        ::
-
-            experiment = user.getExperiment(17000)
-            exp_protocol = experiment.getProtocols()[0]
-            exp_protocol.attributes()
-        """
-        return showAttributes(self)
 
     def getMaterials(self):
         """
@@ -252,27 +234,8 @@ class ExperimentProtocol:
         return listToClass(timers, ExperimentTimer, self.__user__)
 
 
-class ExperimentMaterial:
+class ExperimentMaterial(Entity):
     __entityName__ = 'experiment-value'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of an ExperimentMaterial.
-
-        Example
-        -------
-        ::
-
-            experiment = user.getExperiment(17000)
-            exp_protocol = experiment.getProtocols()[0]
-            exp_protocol_materials = exp_protocol.getMaterials()
-            exp_protocol_materials[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, amount=None, units=None, resource=None, resourceItem=None):
         """
@@ -313,27 +276,8 @@ class ExperimentMaterial:
         return editEntity(self, fields)
 
 
-class ExperimentStep:
+class ExperimentStep(Entity):
     __entityName__ = 'experiment-step'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of an ExperimentStep.
-
-        Example
-        -------
-        ::
-
-            experiment = user.getExperiment(17000)
-            exp_protocol = experiment.getProtocols()[0]
-            exp_protocol_steps = exp_protocol.getSteps()
-            exp_protocol_steps[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, completed_at=None):
         """
@@ -370,27 +314,8 @@ class ExperimentStep:
         return self.edit(completed_at=getTime())
 
 
-class ExperimentTable:
+class ExperimentTable(Entity):
     __entityName__ = 'experiment-table'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of an ExperimentTable.
-
-        Example
-        -------
-        ::
-
-            experiment = user.getExperiment(17000)
-            exp_protocol = experiment.getProtocols()[0]
-            exp_protocol_tables = exp_protocol.getTables()
-            exp_protocol_tables[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, data=None):
         """
@@ -438,27 +363,8 @@ class ExperimentTable:
         return editEntity(self, fields)
 
 
-class ExperimentTimer:
+class ExperimentTimer(Entity):
     __entityName__ = 'experiment-timer'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of an ExperimentTimer.
-
-        Example
-        -------
-        ::
-
-            experiment = user.getExperiment(17000)
-            exp_protocol = experiment.getProtocols()[0]
-            exp_protocol_timers = exp_protocol.getTimers()
-            exp_protocol_timers[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, hours=None, minutes=None, seconds=None):
         """
@@ -516,38 +422,8 @@ class ExperimentTimer:
         return editEntity(self, fields) """
 
 
-class Experiment:
+class Experiment(Entity):
     __entityName__ = 'experiment-workflow'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of an Experiment.
-
-        Example
-        -------
-        ::
-
-            my_experiment = user.getExperiment(17000)
-            my_experiment.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/experiment_attributes.py
-
-        To inspect specific attributes of an Experiment,
-        for example, the Experiment 'name', 'id', etc.:
-
-        ::
-
-            print(my_experiment.name)
-            print(my_experiment.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name=None, description=None, started_at=None):
         """

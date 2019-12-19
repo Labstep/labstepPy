@@ -6,7 +6,8 @@ import json
 import urllib.parse
 
 from .config import API_ROOT
-from .helpers import url_join, handleError, showAttributes
+from .entity import Entity
+from .helpers import url_join, handleError
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
@@ -85,34 +86,11 @@ def login(username, password):
     return User(json.loads(r.content))
 
 
-class User:
+class User(Entity):
     def __init__(self, user):
         self.activeWorkspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
-
-    def attributes(self):
-        """
-        Show all attributes of the User.
-
-        Example
-        -------
-        ::
-
-            import labstep
-
-            user = labstep.login('myaccount@labstep.com', 'mypassword')
-            user.attributes()
-
-        To inspect specific attributes of the user,
-        for example, the user's 'username', 'activeWorkspace', etc.:
-
-        ::
-
-            print(user.username)
-            print(user.activeWorkspace)
-        """
-        return showAttributes(self)
 
     def setWorkspace(self, workspace_id):
         """

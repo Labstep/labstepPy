@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import handleString, getTime, update, showAttributes
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import handleString, getTime
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
 
@@ -144,38 +144,8 @@ def editResourceItem(resourceItem, name=None, availability=None,
     return editEntity(resourceItem, fields)
 
 
-class ResourceItem:
+class ResourceItem(Entity):
     __entityName__ = 'resource-item'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a ResourceItem.
-
-        Example
-        -------
-        ::
-
-            my_resource_item = user.getResourceItem(17000)
-            my_resource_item.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/resourceItem_attributes.py
-
-        To inspect specific attributes of a ResourceItem,
-        for example, the ResourceItem 'name', 'id', etc.:
-
-        ::
-
-            print(my_resource_item.name)
-            print(my_resource_item.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name=None, availability=None,
              quantity_amount=None, quantity_unit=None,

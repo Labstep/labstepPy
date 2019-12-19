@@ -3,9 +3,8 @@
 
 import requests
 from .config import API_ROOT
-from .entity import newEntity, editEntity
-from .helpers import (listToClass, url_join, handleError, handleDate,
-                      update, showAttributes)
+from .entity import Entity, newEntity, editEntity
+from .helpers import (listToClass, url_join, handleError, handleDate)
 
 
 def getMetadata(entity):
@@ -109,43 +108,8 @@ def deleteMetadata(metadata):
     return None
 
 
-class Metadata:
+class Metadata(Entity):
     __entityName__ = 'metadata'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a Metadata.
-
-        Example
-        -------
-        ::
-
-            # Add metadata to a Resource
-            my_resource = user.getResource(17000)
-            metadata = my_resource.addMetadata(fieldName="Refractive Index",
-                                               value="1.73")
-
-            # Show attributes
-            metadata.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/metadata_attributes.py
-
-        To inspect specific attributes of a metadata,
-        for example, the metadata 'label', 'value', etc.:
-
-        ::
-
-            print(metadata.label)
-            print(metadata.value)
-        """
-        return showAttributes(self)
 
     def edit(self, fieldName=None, value=None):
         """

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update, showAttributes
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import getTime
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
 from .resourceItem import getResourceItems, newResourceItem
@@ -111,38 +111,8 @@ def editResource(resource, name=None, deleted_at=None, resource_category=None):
     return editEntity(resource, fields)
 
 
-class Resource:
+class Resource(Entity):
     __entityName__ = 'resource'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a Resource.
-
-        Example
-        -------
-        ::
-
-            my_resource = user.getResource(17000)
-            my_resource.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/resource_attributes.py
-
-        To inspect specific attributes of a resource,
-        for example, the Resource 'name', 'id', etc.:
-
-        ::
-
-            print(my_resource.name)
-            print(my_resource.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name):
         """

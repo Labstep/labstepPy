@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, update, showAttributes
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import getTime
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -101,39 +101,8 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     return editEntity(workspace, fields)
 
 
-class Workspace:
+class Workspace(Entity):
     __entityName__ = 'group'
-
-    def __init__(self, fields, user):
-        self.id = None
-        self.__user__ = user
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a Workspace.
-
-        Example
-        -------
-        ::
-
-            my_workspace = user.getWorkspace(17000)
-            my_workspace.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/workspace_attributes.py
-
-        To inspect specific attributes of a workspace,
-        for example, the workspace 'name', 'id', etc.:
-
-        ::
-
-            print(my_workspace.name)
-            print(my_workspace.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name):
         """

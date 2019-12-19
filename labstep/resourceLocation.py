@@ -4,8 +4,8 @@
 
 import requests
 from .config import API_ROOT
-from .entity import getEntities, newEntity, editEntity
-from .helpers import url_join, handleError, update, showAttributes
+from .entity import Entity, getEntities, newEntity, editEntity
+from .helpers import url_join, handleError
 
 
 def getResourceLocations(user, count=100, search_query=None, tag_id=None,
@@ -102,40 +102,8 @@ def deleteResourceLocation(resourceLocation):
     return None
 
 
-class ResourceLocation:
+class ResourceLocation(Entity):
     __entityName__ = 'resource-location'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a ResourceLocation.
-
-        Example
-        -------
-        ::
-
-            # Use python index to select a ResourceLocation from the
-            # getResourceLocations() list.
-            my_resource_location = user.getResourceLocations()[1]
-            my_resource_location.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/resourceLocation_attributes.py
-
-        To inspect specific attributes of a ResourceLocation,
-        for example, the ResourceLocation 'name', 'id', etc.:
-
-        ::
-
-            print(my_resource_location.name)
-            print(my_resource_location.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name):
         """

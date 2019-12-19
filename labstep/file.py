@@ -4,7 +4,8 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import url_join, handleError, update
+from .helpers import url_join, handleError
+from .entity import Entity
 
 
 def newFile(user, filepath):
@@ -32,7 +33,5 @@ def newFile(user, filepath):
     return json.loads(r.content)
 
 
-class File:
-    def __init__(self, fields, user):
-        self.__user__ = user
-        update(self, fields)
+class File(Entity):
+    __entityName__ = 'file'

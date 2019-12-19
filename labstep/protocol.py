@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .entity import getEntity, getEntities, newEntity, editEntity
-from .helpers import (listToClass, getTime, createdAtFrom, createdAtTo, update,
-                      showAttributes)
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .helpers import (listToClass, getTime, createdAtFrom, createdAtTo)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
 
@@ -112,26 +111,8 @@ def editProtocol(protocol, name=None, deleted_at=None):
     return editEntity(protocol, fields)
 
 
-class ProtocolMaterial:
+class ProtocolMaterial(Entity):
     __entityName__ = 'protocol-value'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of a ProtocolMaterial.
-
-        Example
-        -------
-        ::
-
-            protocol = user.getProtocol(17000)
-            protocol_materials = protocol.getMaterials()
-            protocol_materials[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, name=None, amount=None, units=None, resource=None):
         """
@@ -171,48 +152,12 @@ class ProtocolMaterial:
         return editEntity(self, fields)
 
 
-class ProtocolStep:
+class ProtocolStep(Entity):
     __entityName__ = 'protocol-step'
 
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
 
-    def attributes(self):
-        """
-        Show all attributes of a ProtocolStep.
-
-        Example
-        -------
-        ::
-
-            protocol = user.getProtocol(17000)
-            protocol_steps = protocol.getSteps()
-            protocol_steps[0].attributes()
-        """
-        return showAttributes(self)
-
-
-class ProtocolTable:
+class ProtocolTable(Entity):
     __entityName__ = 'protocol-table'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of a ProtocolTable.
-
-        Example
-        -------
-        ::
-
-            protocol = user.getProtocol(17000)
-            protocol_tables = protocol.getTables()
-            protocol_tables[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, name=None, data=None):
         """
@@ -262,26 +207,8 @@ class ProtocolTable:
         return editEntity(self, fields)
 
 
-class ProtocolTimer:
+class ProtocolTimer(Entity):
     __entityName__ = 'protocol-timer'
-
-    def __init__(self, data, user):
-        self.__user__ = user
-        update(self, data)
-
-    def attributes(self):
-        """
-        Show all attributes of a ProtocolTimer.
-
-        Example
-        -------
-        ::
-
-            protocol = user.getProtocol(17000)
-            protocol_timers = protocol.getTimers()
-            protocol_timers[0].attributes()
-        """
-        return showAttributes(self)
 
     def edit(self, name=None, hours=None, minutes=None, seconds=None):
         """
@@ -324,39 +251,8 @@ class ProtocolTimer:
         return editEntity(self, fields)
 
 
-class Protocol:
+class Protocol(Entity):
     __entityName__ = 'protocol-collection'
-
-    def __init__(self, fields, user):
-        self.__user__ = user
-        self.last_version = {}
-        update(self, fields)
-
-    # functions()
-    def attributes(self):
-        """
-        Show all attributes of a Protocol.
-
-        Example
-        -------
-        ::
-
-            my_protocol = user.getProtocol(17000)
-            my_protocol.attributes()
-
-        The output should look something like this:
-
-        .. program-output:: python ../labstep/attributes/protocol_attributes.py
-
-        To inspect specific attributes of a protocol,
-        for example, the Protocol 'name', 'id', etc.:
-
-        ::
-
-            print(my_protocol.name)
-            print(my_protocol.id)
-        """
-        return showAttributes(self)
 
     def edit(self, name):
         """
