@@ -16,8 +16,6 @@ from a *resource_import.csv* file:
 
 :download:`resource_import.csv <../../examples/resource_import.csv>`
 
-.. program-output:: python -c 'import pandas; print(pandas.read_csv("~/labstepPy/examples/resource_import.csv"))'
-
 :download:`resource_import.py <../../examples/resource_import.py>`
 
 .. literalinclude:: ../../examples/resource_import.py
