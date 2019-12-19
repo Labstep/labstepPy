@@ -423,6 +423,22 @@ class ExperimentTimer(Entity):
 
 
 class Experiment(Entity):
+    """
+    Represents an Experiment on Labstep.
+
+    To see all attributes of an experiment run
+    ::
+        print(my_experiment)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/experiment_attributes.py
+
+    Specific attributes can be inspected via dot notation like so...
+    ::
+        print(my_experiment.name)
+        print(my_experiment.id)
+    """
     __entityName__ = 'experiment-workflow'
 
     def edit(self, name=None, description=None, started_at=None):

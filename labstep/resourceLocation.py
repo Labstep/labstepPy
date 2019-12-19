@@ -103,6 +103,22 @@ def deleteResourceLocation(resourceLocation):
 
 
 class ResourceLocation(Entity):
+    """
+    Represents a Resource Location on Labstep.
+
+    To see all attributes of the resource location run
+    ::
+        print(my_resource_location)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/resourceLocation_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_resource_location.name)
+        print(my_resource_location.id)
+    """
     __entityName__ = 'resource-location'
 
     def edit(self, name):

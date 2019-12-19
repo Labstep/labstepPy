@@ -145,6 +145,22 @@ def editResourceItem(resourceItem, name=None, availability=None,
 
 
 class ResourceItem(Entity):
+    """
+    Represents a Resource Item on Labstep.
+
+    To see all attributes of the resource item run
+    ::
+        print(my_resource_item)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/resourceItem_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_resource_item.name)
+        print(my_resource_item.id)
+    """
     __entityName__ = 'resource-item'
 
     def edit(self, name=None, availability=None,

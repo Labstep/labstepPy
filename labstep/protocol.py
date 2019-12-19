@@ -252,6 +252,22 @@ class ProtocolTimer(Entity):
 
 
 class Protocol(Entity):
+    """
+    Represents a Protocol on Labstep.
+
+    To see all attributes of a protocol run
+    ::
+        print(my_protocol)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/protocol_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_protocol.name)
+        print(my_protocol.id)
+    """
     __entityName__ = 'protocol-collection'
 
     def edit(self, name):

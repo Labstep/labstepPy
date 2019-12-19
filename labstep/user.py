@@ -87,6 +87,22 @@ def login(username, password):
 
 
 class User(Entity):
+    """
+    Represents a Labstep User.
+
+    To see all attributes of the user run
+    ::
+        print(user)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/user_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(user.name)
+        print(user.id)
+    """
     def __init__(self, user):
         self.activeWorkspace = user['group']['id']
         for key in user:

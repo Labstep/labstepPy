@@ -109,6 +109,22 @@ def deleteMetadata(metadata):
 
 
 class Metadata(Entity):
+    """
+    Represents a single Metadata field attached to a Labstep Entity.
+
+    To see the attributes of the metsdata field run
+    ::
+        print(my_metadata_field)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/metadata_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_metadata_field.value)
+        print(my_metadata_field.id)
+    """
     __entityName__ = 'metadata'
 
     def edit(self, fieldName=None, value=None):

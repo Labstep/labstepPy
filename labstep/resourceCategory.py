@@ -103,6 +103,22 @@ def editResourceCategory(resourceCategory, name=None, deleted_at=None):
 
 
 class ResourceCategory(Entity):
+    """
+    Represents a Resource Category on Labstep.
+
+    To see all attributes of the resource category run
+    ::
+        print(my_resource_category)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/resourceCategory_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_resource_category.name)
+        print(my_resource_category.id)
+    """
     __entityName__ = 'resource-category'
 
     def edit(self, name):

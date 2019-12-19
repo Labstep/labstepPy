@@ -102,6 +102,22 @@ def editWorkspace(workspace, name=None, deleted_at=None):
 
 
 class Workspace(Entity):
+    """
+    Represents a Labstep Workspace.
+
+    To see all attributes of the workspace run
+    ::
+        print(my_workspace)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/workspace_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_workspace.name)
+        print(my_workspace.id)
+    """
     __entityName__ = 'group'
 
     def edit(self, name):

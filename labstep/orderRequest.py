@@ -124,6 +124,22 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
 
 
 class OrderRequest(Entity):
+    """
+    Represents an Order Request on Labstep.
+
+    To see all attributes of the order request run
+    ::
+        print(my_order_request)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/orderRequest_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_order_request.name)
+        print(my_order_request.id)
+    """
     __entityName__ = 'order-request'
 
     def edit(self, status=None, resource=None, quantity=None,

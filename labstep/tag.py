@@ -188,6 +188,22 @@ def deleteTag(tag):
 
 
 class Tag(Entity):
+    """
+    Represents a Tag on Labstep.
+
+    To see all attributes of a tag run
+    ::
+        print(my_tag)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/tag_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_tag.name)
+        print(my_tag.id)
+    """
     __entityName__ = 'tag'
 
     def edit(self, name):

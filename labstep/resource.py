@@ -112,6 +112,22 @@ def editResource(resource, name=None, deleted_at=None, resource_category=None):
 
 
 class Resource(Entity):
+    """
+    Represents a Resource on Labstep.
+
+    To see all attributes of the resource run
+    ::
+        print(my_resource)
+
+    The output should look something like this:
+
+    .. program-output:: python ../labstep/attributes/resource_attributes.py
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(my_resource.name)
+        print(my_resource.id)
+    """
     __entityName__ = 'resource'
 
     def edit(self, name):
