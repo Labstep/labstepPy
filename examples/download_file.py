@@ -1,6 +1,6 @@
 import labstep
 
-user = labstep.login('apitest@labstep.com', 'apitestpass')
+user = labstep.login('myaccount@labstep.com', 'mypassword')
 
 # A List of the authenticated user's files can be accessed
 # via the getFiles method
