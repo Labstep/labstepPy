@@ -5,7 +5,7 @@ import requests
 import json
 from .config import API_ROOT
 from .helpers import url_join, handleError
-from .entity import Entity
+from .entity import Entity, getEntity, getEntities
 
 
 def newFile(user, filepath):
@@ -30,8 +30,81 @@ def newFile(user, filepath):
     url = url_join(API_ROOT, "/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)
     handleError(r)
-    return json.loads(r.content)
+    data = json.loads(r.content)
+    return File(list(data.values())[0], user)
+
+
+def getFile(user, file_id):
+    """
+    Retrieve a specific Labstep File.
+
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
+    file_id (int)
+        The id of the File to retrieve.
+
+    Returns
+    -------
+    file
+        An object representing a Labstep File.
+    """
+    return getEntity(user, File, file_id, isDeleted=None)
+
+
+def downloadFile(user, file_id):
+    headers = {'apikey': user.api_key}
+    url = url_join(API_ROOT, "/api/generic/file/download", str(file_id))
+    r = requests.post(url, headers=headers)
+    handleError(r)
+    rawData = requests.get(json.loads(r.content)['signed_url']).content
+    return rawData
+
+
+def getFiles(user, count=100, search_query=None, file_type=None,
+             extraParams={}):
+    """
+        Retrieve a list of a User's Files
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of files to retrieve.
+        file_type (str)
+            Return only files of a certain type. Options are:
+            'csv', 'doc',
+            'docx', 'jpg', 'pdf','png','ppt','pptx','svg','xls',
+            'xlsx','xml' or 'generic' for all others.
+        search_query (str)
+            Search for files with this name.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            A list of Labstep Files.
+
+        Example
+        -------
+        ::
+
+            entities = user.getFiles(search_query='bacteria')
+        """
+    filterParams = {'search_query': search_query,
+                    'file_type': file_type}
+    params = {**filterParams, **extraParams}
+    return getEntities(user, File, count, params)
 
 
 class File(Entity):
     __entityName__ = 'file'
+
+    def getData(self):
+        return downloadFile(self.__user__, self.id)
+
+    def saveAs(self, filepath):
+        data = self.getData()
+        open(filepath, 'wb').write(data)

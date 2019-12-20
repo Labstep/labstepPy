@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep as LS
+import labstep
 
-testUser = LS.login('apitest@labstep.com', 'apitestpass')
+testUser = labstep.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
-testName = 'Api Pytest'
+testName = labstep.helpers.getTime()
 
 
 class TestResourceLocation:

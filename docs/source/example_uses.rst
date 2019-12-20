@@ -32,3 +32,12 @@ performing a global delete.
 :download:`delete_multiple.py <../../examples/delete_multiple.py>`
 
 .. literalinclude:: ../../examples/delete_multiple.py
+
+Downloading Files
+----------------------------------------------
+You can use **labstepPy** to download files uploaded directly to Labstep or
+attached to different Labstep entities
+
+:download:`delete_multiple.py <../../examples/download_file.py>`
+
+.. literalinclude:: ../../examples/download_file.py
