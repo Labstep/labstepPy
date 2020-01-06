@@ -12,13 +12,15 @@ testName = labstep.helpers.getTime()
 class TestResourceLocation:
     def test_edit(self):
         entity = testUser.newResourceLocation(testName)
-        result = entity.edit('Pytest Edited')
+        newName = labstep.helpers.getTime()
+        result = entity.edit(newName)
         result.delete()
-        assert result.name == 'Pytest Edited', \
+        assert result.name == newName, \
             'FAILED TO EDIT RESOURCE LOCATION'
 
     def test_delete(self):
-        entityToDelete = testUser.newResourceLocation('testDelete')
+        testName = labstep.helpers.getTime()
+        entityToDelete = testUser.newResourceLocation(testName)
         result = entityToDelete.delete()
         assert result is None, \
             'FAILED TO DELETE RESOURCE LOCATION'
