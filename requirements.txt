@@ -3,3 +3,4 @@ Pylama
 sphinxcontrib-programoutput
 labstep
 pandas
+python-dotenv
