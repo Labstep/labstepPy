@@ -29,3 +29,10 @@ First publish to Test PyPi by running:
 When you are ready to publish to PyPi...
 
 ```twine upload dist/*```
+
+# Building the Docs
+
+```
+cd docs
+./build_documentation.sh
+```

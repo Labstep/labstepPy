@@ -17,7 +17,7 @@ from .resourceLocation import getResourceLocations, newResourceLocation
 from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 from .tag import getTags, newTag
 from .workspace import getWorkspace, getWorkspaces, newWorkspace
-from .file import newFile
+from .file import newFile, getFile, getFiles
 
 
 def authenticate(username, apikey):
@@ -99,6 +99,7 @@ class User(Entity):
         print(user.name)
         print(user.id)
     """
+
     def __init__(self, user):
         self.activeWorkspace = user['group']['id']
         for key in user:
@@ -259,6 +260,28 @@ class User(Entity):
             entity = user.getWorkspace(17000)
         """
         return getWorkspace(self, workspace_id)
+
+    def getFile(self, file_id):
+        """
+        Retrieve a specific Labstep File.
+
+        Parameters
+        ----------
+        file_id (int)
+            The id of the File to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            An object representing a File on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getFile(17000)
+        """
+        return getFile(self, file_id)
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
@@ -504,7 +527,39 @@ class User(Entity):
         """
         return getWorkspaces(self, count, name)
 
+    def getFiles(self, count=100, search_query=None, file_type=None):
+        """
+        Retrieve a list of a User's Files
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of files to retrieve.
+        file_type (str)
+            Return only files of a certain type. Options are:
+            'csv', 'doc',
+            'docx', 'jpg', 'pdf','png','ppt','pptx','svg','xls','xlsx',
+            'xml' or 'generic' for all others.
+        search_query (str)
+            Search for files with this name.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            A list of Labstep Files.
+
+        Example
+        -------
+        ::
+
+            entities = user.getFiles(search_query='bacteria')
+        """
+        return getFiles(self, count, search_query, file_type)
+
     # newEntity()
+
     def newExperiment(self, name, description=None):
         """
         Create a new Labstep Experiment.
