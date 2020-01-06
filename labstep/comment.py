@@ -34,8 +34,9 @@ def addComment(entity, body, file=None):
         'thread' property with property 'id'.
     body (str)
         The body of the comment.
-    file (str)
-        A Labstep File entity to attach to the comment. Must have 'id'.
+    file (obj)
+        A Labstep :class:`~labstep.file.File` entity to attach to the comment.
+        Must have 'id'.
 
     Returns
     -------
@@ -43,13 +44,14 @@ def addComment(entity, body, file=None):
         An object representing a comment on labstep.
     """
     threadId = entity.thread['id']
-    if file is None:
-        lsFile = None
-    else:
-        lsFile = [list(file.keys())[0]]
+
     fields = {'body': body,
               'thread_id': threadId,
-              'file_id': lsFile}
+              }
+
+    if file is not None:
+        fields['file_id'] = file.id
+
     return newEntity(entity.__user__, Comment, fields)
 
 
