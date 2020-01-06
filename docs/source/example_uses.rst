@@ -38,6 +38,6 @@ Downloading Files
 You can use **labstepPy** to download files uploaded directly to Labstep or
 attached to different Labstep entities
 
-:download:`delete_multiple.py <../../examples/download_file.py>`
+:download:`download_file.py <../../examples/download_file.py>`
 
 .. literalinclude:: ../../examples/download_file.py
