@@ -119,12 +119,13 @@ class File(Entity):
 
     def save(self, folder=None, name=None):
         """
-        Save a Labstep file to the local filesystem. 
+        Save a Labstep file to the local filesystem.
 
         Parameters
         ----------
         folder (str)
-            The path to the folder where the file should be saved (defaults to the current working directory).
+            The path to the folder where the file should be saved
+            (defaults to the current working directory).
         name (str)
             Optionally give the file a new name.
 
