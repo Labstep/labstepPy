@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep as LS
+import labstep
 
-testUser = LS.login('apitest@labstep.com',
-                    'apitestpass')
+testUser = labstep.login('apitest@labstep.com',
+                         'apitestpass')
 
 # Set variables
-testName = 'Api Pytest'
+testName = labstep.helpers.getTime()
 
 
 class TestUser:
     def test_login(self):
-        testUser = LS.login('apitest@labstep.com', 'apitestpass')
+        testUser = labstep.login('apitest@labstep.com', 'apitestpass')
         assert testUser.id == 8400, \
             'FAILED TO LOGIN'
 
     def test_authenticate(self):
-        testUser = LS.authenticate(
+        testUser = labstep.authenticate(
             'apitest@labstep.com', '1c5b51d1-a1a5-4661-9eea-f71b7523f909')
         assert testUser.id == 8400, \
             'FAILED TO AUTHENTICATE'
@@ -68,6 +68,12 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET WORKSPACE'
 
+    def test_getFile(self):
+        entity = testUser.newFile('./tests/test_user.py')
+        result = testUser.getFile(entity.id)
+        assert result.id == entity.id, \
+            'FAILED TO GET FILE'
+
     # getMany()
     def test_getExperiments(self):
         result = testUser.getExperiments()
@@ -108,6 +114,11 @@ class TestUser:
         result = testUser.getWorkspaces()
         assert result[0].id, \
             'FAILED TO GET WORKSPACES'
+
+    def test_getFiles(self):
+        result = testUser.getFiles()
+        assert result[0].id, \
+            'FAILED TO GET FILES'
 
     # newEntity()
     def test_newExperiment(self):

@@ -11,6 +11,7 @@ from .resourceCategory import getResourceCategorys
 from .resourceLocation import getResourceLocations
 from .orderRequest import getOrderRequests
 from .tag import getTags
+from .file import getFiles
 
 
 def getWorkspace(user, workspace_id):
@@ -373,3 +374,32 @@ class Workspace(Entity):
         """
         return getTags(self.__user__, count, type, search_query,
                        extraParams={'group_id': self.id})
+
+    def getFiles(self, count=100, search_query=None, file_type=None):
+        """
+        Retrieve a list of Files in the Workspace on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of files to retrieve.
+        file_type (str)
+            Return only files of a certain type. Options are:
+            'csv', 'doc',
+            'docx', 'jpg', 'pdf','png','ppt','pptx','svg','xls','xlsx','xml' or 'generic' for all others.
+        search_query (str)
+            Search for files with this name.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            A list of Labstep Files.
+
+        Example
+        -------
+        ::
+
+            files = workspace.getFiles(search_query='bacteria')
+        """
+        return getFiles(self, count, search_query, file_type, extraParams={'group_id': self.id})
