@@ -4,7 +4,7 @@ with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setup(name='labstep',
-      version='2.0.1',
+      version='2.0.2',
       description='Python SDK for working with the Labstep API',
       long_description=long_description,
       url='http://github.com/Labstep/labstepPy',
@@ -12,6 +12,6 @@ setup(name='labstep',
       author_email='barney@labstep.com',
       license='MIT',
       packages=['labstep'],
-      install_requires=['requests'],
+      install_requires=['requests', 'python-dotenv'],
       tests_require=["pytest"],
       zip_safe=False)
