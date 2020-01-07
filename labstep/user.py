@@ -105,7 +105,7 @@ class User(Entity):
         for key in user:
             setattr(self, key, user[key])
 
-    def setWorkspace(self, workspace_id):
+    def setWorkspace(self, workspace_id: int):
         """
         Set a Workspace as the active Workspace.
 
@@ -126,6 +126,9 @@ class User(Entity):
             entity = user.getWorkspace(17000)
             user.setWorkspace(entity.id)
         """
+        if isinstance(workspace_id, int) is False:
+            raise TypeError('workspace_id must be an integer')
+
         self.activeWorkspace = workspace_id
 
     # getSingle()
