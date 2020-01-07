@@ -29,7 +29,7 @@ def getOrderRequest(user, orderRequest_id):
     return getEntity(user, OrderRequest, id=orderRequest_id)
 
 
-def getOrderRequests(user, count=100, search_query=None, tag_id=None,
+def getOrderRequests(user, count=100, search_query=None, tag_id=None, status=None,
                      extraParams={}):
     """
     Retrieve a list of a user's OrderRequests on Labstep,
@@ -53,7 +53,9 @@ def getOrderRequests(user, count=100, search_query=None, tag_id=None,
         A list of OrderRequest objects.
     """
     filterParams = {'search_query': search_query,
-                    'tag_id': tag_id}
+                    'tag_id': tag_id,
+                    'status': handleString(status)
+                    }
     params = {**filterParams, **extraParams}
     return getEntities(user, OrderRequest, count, params)
 

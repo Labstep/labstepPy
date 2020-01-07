@@ -105,6 +105,11 @@ class TestUser:
         assert result[0].id, \
             'FAILED TO GET ORDER REQUESTS'
 
+    def test_getOrderRequestsWithFilter(self):
+        result = testUser.getOrderRequests(status='new')
+        assert result[0].id, \
+            'FAILED TO GET ORDER REQUESTS WITH FILTER'
+
     def test_getTags(self):
         result = testUser.getTags()
         assert result[0].id, \
