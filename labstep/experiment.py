@@ -7,7 +7,7 @@ from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
-
+from .workspace import addToWorkspace
 
 def getExperiment(user, experiment_id):
     """
@@ -616,3 +616,21 @@ class Experiment(Entity):
             tags[0].attributes()
         """
         return getAttachedTags(self)
+
+    def addToWorkspace(self, workspace_id, permission):
+        """
+        Add Experiment to a Workpace.
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to share with.
+        permission (str)
+            The level of permission to grant. Can be 'view' or 'edit'
+
+        Returns
+        -------
+        experiment
+            The Labstep Experiment
+        """
+        return addToWorkspace(self, workspace_id, permission)

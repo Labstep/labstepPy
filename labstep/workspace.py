@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
+import requests
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime
+from .helpers import getTime, url_join, handleError
+from .config import API_ROOT
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -100,6 +102,43 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     fields = {'name': name,
               'deleted_at': deleted_at}
     return editEntity(workspace, fields)
+
+
+def addToWorkspace(entity, workspace_id, permission):
+    """
+    Share a Labstep Entity with a Workpace.
+
+    Parameters
+    ----------
+    entity (obj)
+        The Labstep entity to share. Can be Resource,
+        Experiment, Protocol, OrderRequest or ResourceCategory.
+    workspace_id (int)
+        The id of the workspace to share with.
+    permission (str)
+        The level of permission to grant. Can be 'view' or 'edit'
+
+    Returns
+    -------
+    entity
+        An object representing the entity.
+    """
+    entityName = entity.__entityName__
+
+    headers = {'apikey': entity.__user__.api_key}
+    url = url_join(API_ROOT, "api/generic/", 'acl')
+
+    fields = {
+        'id': entity.id,
+        'entity_class': entityName.replace('-', '_'),
+        'action': 'grant',
+        'group_id': workspace_id,
+        'permission': permission
+    }
+    r = requests.post(url, headers=headers, json=fields)
+    handleError(r)
+
+    return entity
 
 
 class Workspace(Entity):
