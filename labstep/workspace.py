@@ -104,43 +104,6 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     return editEntity(workspace, fields)
 
 
-def addToWorkspace(entity, workspace_id, permission):
-    """
-    Share a Labstep Entity with a Workpace.
-
-    Parameters
-    ----------
-    entity (obj)
-        The Labstep entity to share. Can be Resource,
-        Experiment, Protocol, OrderRequest or ResourceCategory.
-    workspace_id (int)
-        The id of the workspace to share with.
-    permission (str)
-        The level of permission to grant. Can be 'view' or 'edit'
-
-    Returns
-    -------
-    entity
-        An object representing the entity.
-    """
-    entityName = entity.__entityName__
-
-    headers = {'apikey': entity.__user__.api_key}
-    url = url_join(API_ROOT, "api/generic/", 'acl')
-
-    fields = {
-        'id': entity.id,
-        'entity_class': entityName.replace('-', '_'),
-        'action': 'grant',
-        'group_id': workspace_id,
-        'permission': permission
-    }
-    r = requests.post(url, headers=headers, json=fields)
-    handleError(r)
-
-    return entity
-
-
 class Workspace(Entity):
     """
     Represents a Labstep Workspace.

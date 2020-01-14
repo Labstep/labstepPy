@@ -1,8 +1,10 @@
-from .helpers import getTime, url_join, handleError
+import requests
+import json
+from .helpers import listToClass, url_join, handleError
 from .config import API_ROOT
 
 
-def newPermssion(entity, workspace_id, permission):
+def newPermission(entity, workspace_id, permission):
     """
     Create a new sharing permission for a Labstep Entity.
 
@@ -74,7 +76,7 @@ def editPermission(entity, workspace_id, permission):
     return entity
 
 
-def revokePermission(entity):
+def revokePermission(entity, workspace_id):
     """
     Revoke a sharing permission for a Labstep Entity.
 
@@ -100,8 +102,7 @@ def revokePermission(entity):
         'id': entity.id,
         'entity_class': entityName.replace('-', '_'),
         'action': 'revoke',
-        'group_id': workspace_id,
-        'permission': permission
+        'group_id': workspace_id
     }
     r = requests.post(url, headers=headers, json=fields)
     handleError(r)
@@ -126,11 +127,71 @@ def getPermissions(entity):
     entityName = entity.__entityName__
     headers = {'apikey': entity.__user__.api_key}
     url = url_join(API_ROOT, "api/generic/", 'acl',
-                   entityName.replace('-', '_'), entity.id)
+                   entityName.replace('-', '_'), str(entity.id))
     r = requests.get(url, headers=headers)
     handleError(r)
     resp = json.loads(r.content)
-    return 
+    return listToClass(resp['group_permissions'], Permission, entity)
 
 
 def transferOwnership(entity, workspace_id):
+    """
+    Transfer Ownership for a Labstep Entity to a different Workspace.
+
+    Parameters
+    ----------
+    entity (obj)
+        The Labstep entity to be transfered. Can be Resource,
+        Experiment, Protocol, OrderRequest or ResourceCategory.
+
+    workspace_id (int)
+        The id of the workspace to transfer ownership to
+
+    Returns
+    -------
+    None
+    """
+    entityName = entity.__entityName__
+    headers = {'apikey': entity.__user__.api_key}
+    url = url_join(API_ROOT, "api/generic/", entityName,
+                   str(entity.id), 'transfer-ownership')
+    fields = {'group_id': workspace_id}
+    r = requests.post(url, headers=headers, json=fields)
+    handleError(r)
+    return
+
+
+class Permission:
+    def __init__(self, data, entity):
+        self.entity = entity
+        self.workspace = data['entity']
+        self.permission = data['permission']
+
+    def set(self, permission):
+        """
+        Modify this sharing permission.
+
+        Parameters
+        ----------
+        permission (str)
+            The level of permission to grant. Can be 'view' or 'edit'
+
+        Returns
+        -------
+        None
+        """
+        editPermission(self.entity, self.workspace['id'], permission)
+
+    def revoke(self):
+        """
+        Revoke this sharing permission.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        """
+        revokePermission(self.entity, self.workspace['id'])

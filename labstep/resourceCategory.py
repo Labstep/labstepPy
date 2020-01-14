@@ -7,6 +7,7 @@ from .helpers import getTime
 from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
 from .tag import tag, getAttachedTags
+from .permissions import getPermissions, newPermission, transferOwnership
 
 
 def getResourceCategory(user, resourceCategory_id):
@@ -300,3 +301,42 @@ class ResourceCategory(Entity):
             metadatas[0].attributes()
         """
         return getMetadata(self)
+
+    def getPermissions(self):
+        """
+        Returns the sharing permissions for the ResourceCategory.
+
+        Returns
+        -------
+        List[:class:`~labstep.permissions.Permission`]
+        """
+        return getPermissions(self)
+
+    def shareWith(self, workspace_id, permission='view'):
+        """
+        Shares the ResourceCategory with another Workspace.
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to share with
+
+        permission (str)
+            Permission to share with. Can be 'view' or 'edit'
+
+        Returns
+        -------
+        None
+        """
+        return newPermission(self, workspace_id, permission)
+
+    def transferOwnership(self, workspace_id):
+        """
+        Transfer ownership of the Entity to a different Workspace
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to transfer ownership to
+        """
+        return transferOwnership(self, workspace_id)
