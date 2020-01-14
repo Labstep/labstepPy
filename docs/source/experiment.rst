@@ -3,6 +3,7 @@ Experiment
 
 .. autoclass:: labstep.experiment.Experiment
    :members:
+   :inherited-members:
    :undoc-members:
 
 Experiment Protocol

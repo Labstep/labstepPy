@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .primaryEntity import PrimaryEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime, handleString
-from .comment import addCommentWithFile, getComments
-from .tag import tag, getAttachedTags
 from .metadata import addMetadataTo, getMetadata
-from .permissions import getPermissions, newPermission, transferOwnership
 
 
 def getOrderRequest(user, orderRequest_id):
@@ -124,7 +122,7 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     return editEntity(orderRequest, fields)
 
 
-class OrderRequest(Entity):
+class OrderRequest(PrimaryEntity):
     """
     Represents an Order Request on Labstep.
 
@@ -207,96 +205,6 @@ class OrderRequest(Entity):
         """
         return self.__user__.getResource(self.resource['id'])
 
-    def addComment(self, body, filepath=None):
-        """
-        Add a comment and/or file to a Labstep OrderRequest.
-
-        Parameters
-        ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
-
-        Returns
-        -------
-        :class:`~labstep.comment.Comment`
-            The comment added.
-
-        Example
-        -------
-        ::
-
-            my_orderRequest = user.getOrderRequest(17000)
-            my_orderRequest.addComment(body='I am commenting!',
-                                       filepath='pwd/file_to_upload.dat')
-        """
-        return addCommentWithFile(self, body, filepath)
-
-    def getComments(self, count=100):
-        """
-        Gets the comments attached to this entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.comment.Comment`]
-            List of the comments attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getOrderRequest(17000)
-            comments = entity.getComments()
-            comments[0].attributes()
-        """
-        return getComments(self, count)
-
-    def addTag(self, name):
-        """
-        Add a tag to the OrderRequest (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
-
-        Returns
-        -------
-        :class:`~labstep.orderRequest.OrderRequest`
-            The OrderRequest that was tagged.
-
-        Example
-        -------
-        ::
-
-            my_orderRequest = user.getOrderRequest(17000)
-            my_orderRequest.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
-
-    def getTags(self):
-        """
-        Retrieve the Tags attached to a this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.tag.Tag`]
-            List of the tags attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getOrderRequest(17000)
-            tags = entity.getTags()
-            tags[0].attributes()
-        """
-        return getAttachedTags(self)
-
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
                     quantity_amount=None, quantity_unit=None):
@@ -354,42 +262,3 @@ class OrderRequest(Entity):
             metadatas[0].attributes()
         """
         return getMetadata(self)
-
-    def getPermissions(self):
-        """
-        Returns the sharing permissions for the Order Request.
-
-        Returns
-        -------
-        List[:class:`~labstep.permissions.Permission`]
-        """
-        return getPermissions(self)
-
-    def shareWith(self, workspace_id, permission='view'):
-        """
-        Shares the OrderRequest with another Workspace.
-
-        Parameters
-        ----------
-        workspace_id (int)
-            The id of the workspace to share with
-
-        permission (str)
-            Permission to share with. Can be 'view' or 'edit'
-
-        Returns
-        -------
-        None
-        """
-        return newPermission(self, workspace_id, permission)
-
-    def transferOwnership(self, workspace_id):
-        """
-        Transfer ownership of the Entity to a different Workspace
-
-        Parameters
-        ----------
-        workspace_id (int)
-            The id of the workspace to transfer ownership to
-        """
-        return transferOwnership(self, workspace_id)

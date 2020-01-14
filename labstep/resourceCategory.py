@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .primaryEntity import PrimaryEntity
+from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime
-from .comment import addCommentWithFile, getComments
 from .metadata import addMetadataTo, getMetadata
-from .tag import tag, getAttachedTags
-from .permissions import getPermissions, newPermission, transferOwnership
 
 
 def getResourceCategory(user, resourceCategory_id):
@@ -103,7 +101,7 @@ def editResourceCategory(resourceCategory, name=None, deleted_at=None):
     return editEntity(resourceCategory, metadata)
 
 
-class ResourceCategory(Entity):
+class ResourceCategory(PrimaryEntity):
     """
     Represents a Resource Category on Labstep.
 
@@ -153,96 +151,6 @@ class ResourceCategory(Entity):
             my_resource_category.delete()
         """
         return editResourceCategory(self, deleted_at=getTime())
-
-    def addComment(self, body, filepath=None):
-        """
-        Add a comment and/or file to a Labstep ResourceCategory.
-
-        Parameters
-        ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
-
-        Returns
-        -------
-        :class:`~labstep.comment.Comment`
-            The comment added.
-
-        Example
-        -------
-        ::
-
-            my_resource_category = user.getResourceCategory(17000)
-            my_resource_category.addComment(body='I am commenting!',
-                                            filepath='pwd/file_to_upload.dat')
-        """
-        return addCommentWithFile(self, body, filepath)
-
-    def getComments(self, count=100):
-        """
-        Gets the comments attached to this entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.comment.Comment`]
-            List of the comments attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getResourceCategory(17000)
-            comments = entity.getComments()
-            comments[0].attributes()
-        """
-        return getComments(self, count)
-
-    def addTag(self, name):
-        """
-        Add a tag to the ResourceCategory (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
-
-        Returns
-        -------
-        :class:`~labstep.resourceCategory.ResourceCategory`
-            The ResourceCategory that was tagged.
-
-        Example
-        -------
-        ::
-
-            my_resource_category = user.getResourceCategory(17000)
-            my_resource_category.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
-
-    def getTags(self):
-        """
-        Retrieve the Tags attached to a this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.tag.Tag`]
-            List of the tags attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getResourceCategory(17000)
-            tags = entity.getTags()
-            tags[0].attributes()
-        """
-        return getAttachedTags(self)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
@@ -301,42 +209,3 @@ class ResourceCategory(Entity):
             metadatas[0].attributes()
         """
         return getMetadata(self)
-
-    def getPermissions(self):
-        """
-        Returns the sharing permissions for the ResourceCategory.
-
-        Returns
-        -------
-        List[:class:`~labstep.permissions.Permission`]
-        """
-        return getPermissions(self)
-
-    def shareWith(self, workspace_id, permission='view'):
-        """
-        Shares the ResourceCategory with another Workspace.
-
-        Parameters
-        ----------
-        workspace_id (int)
-            The id of the workspace to share with
-
-        permission (str)
-            Permission to share with. Can be 'view' or 'edit'
-
-        Returns
-        -------
-        None
-        """
-        return newPermission(self, workspace_id, permission)
-
-    def transferOwnership(self, workspace_id):
-        """
-        Transfer ownership of the Entity to a different Workspace
-
-        Parameters
-        ----------
-        workspace_id (int)
-            The id of the workspace to transfer ownership to
-        """
-        return transferOwnership(self, workspace_id)
