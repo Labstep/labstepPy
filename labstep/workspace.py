@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-import requests
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime, url_join, handleError
-from .config import API_ROOT
+from .helpers import getTime
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
