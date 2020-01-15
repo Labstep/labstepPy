@@ -448,7 +448,7 @@ class User(Entity):
         """
         return getResourceLocations(self, count, search_query)
 
-    def getOrderRequests(self, count=100, name=None):
+    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
         which can be filtered using the parameters:
@@ -459,6 +459,11 @@ class User(Entity):
             The number of OrderRequests to retrieve.
         name (str)
             Search for OrderRequests with this 'name'.
+        status (str)
+            The status of the OrderRequest to filter by. Options are: "new",
+            "approved", "ordered", "back_ordered", "received", and "cancelled".
+        tag_id (int)
+            The id of a tag to filter by.
 
         Returns
         -------
@@ -472,7 +477,8 @@ class User(Entity):
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self, count, name)
+        return getOrderRequests(self, count, search_query=name,
+                                tag_id=tag_id, status=status)
 
     def getTags(self, count=1000, search_query=None, type=None):
         """
