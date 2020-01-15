@@ -421,6 +421,16 @@ class ExperimentTimer(Entity):
         return editEntity(self, fields) """
 
 
+class ExperimentSignature(Entity):
+    __entityName__ = 'signature'
+
+    def revoke(self):
+        fields = {
+            "revoked_at": getTime()
+        }
+        return editEntity(self, fields)
+
+
 class Experiment(PrimaryEntity):
     """
     Represents an Experiment on Labstep.
@@ -525,3 +535,13 @@ class Experiment(PrimaryEntity):
             protocols[0].attributes()
         """
         return list(map(lambda x: getEntity(self.__user__, ExperimentProtocol, x['id'], isDeleted=None), self.experiments))
+
+    def getSignatures(self):
+        """
+        Retrieve a list of signatures added to the experiment
+
+        Returns
+        -------
+        List[:class:`~labstep.experiment.ExperimentSignature`]
+        """
+        return listToClass(self.signatures, ExperimentSignature, self.__user__)
