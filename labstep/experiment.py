@@ -3,11 +3,9 @@
 # pylama:ignore=E501
 
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .primaryEntity import PrimaryEntity
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
-from .comment import addCommentWithFile, getComments
-from .tag import tag, getAttachedTags
-from .permissions import getPermissions, newPermission, transferOwnership
 
 
 def getExperiment(user, experiment_id):
@@ -423,7 +421,7 @@ class ExperimentTimer(Entity):
         return editEntity(self, fields) """
 
 
-class Experiment(Entity):
+class Experiment(PrimaryEntity):
     """
     Represents an Experiment on Labstep.
 
@@ -527,132 +525,3 @@ class Experiment(Entity):
             protocols[0].attributes()
         """
         return list(map(lambda x: getEntity(self.__user__, ExperimentProtocol, x['id'], isDeleted=None), self.experiments))
-
-    def addComment(self, body, filepath=None):
-        """
-        Add a comment and/or file to a Labstep Experiment.
-
-        Parameters
-        ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
-
-        Returns
-        -------
-        :class:`~labstep.comment.Comment`
-            The comment added.
-
-        Example
-        -------
-        ::
-
-            my_experiment = user.getExperiment(17000)
-            my_experiment.addComment(body='I am commenting!',
-                                     filepath='pwd/file_to_upload.dat')
-        """
-        return addCommentWithFile(self, body, filepath)
-
-    def getComments(self, count=100):
-        """
-        Retrieve the Comments attached to this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.comment.Comment`]
-            List of the comments attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getExperiment(17000)
-            comments = entity.getComments()
-            comments[0].attributes()
-        """
-        return getComments(self, count)
-
-    def addTag(self, name):
-        """
-        Add a tag to the Experiment (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
-
-        Returns
-        -------
-        :class:`~labstep.experiment.Experiment`
-            The Experiment that was tagged.
-
-        Example
-        -------
-        ::
-
-            my_experiment = user.getExperiment(17000)
-            my_experiment.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
-
-    def getTags(self):
-        """
-        Retrieve the Tags attached to a this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.tag.Tag`]
-            List of the tags attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getExperiment(17000)
-            tags = entity.getTags()
-            tags[0].attributes()
-        """
-        return getAttachedTags(self)
-
-    def getPermissions(self):
-        """
-        Returns the sharing permissions for the Order Request.
-
-        Returns
-        -------
-        List[:class:`~labstep.permissions.Permission`]
-        """
-        return getPermissions(self)
-
-    def shareWith(self, workspace_id, permission='view'):
-        """
-        Shares the OrderRequest with another Workspace.
-
-        Parameters
-        ----------
-        workspace_id (int)
-            The id of the workspace to share with
-
-        permission (str)
-            Permission to share with. Can be 'view' or 'edit'
-
-        Returns
-        -------
-        None
-        """
-        return newPermission(self, workspace_id, permission)
-
-    def transferOwnership(self, workspace_id):
-        """
-        Transfer ownership of the Entity to a different Workspace
-
-        Parameters
-        ----------
-        workspace_id (int)
-            The id of the workspace to transfer ownership to
-        """
-        return transferOwnership(self, workspace_id)
