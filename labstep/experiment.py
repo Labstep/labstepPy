@@ -7,6 +7,7 @@ from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
+from .permissions import getPermissions, newPermission, transferOwnership
 
 
 def getExperiment(user, experiment_id):
@@ -616,3 +617,42 @@ class Experiment(Entity):
             tags[0].attributes()
         """
         return getAttachedTags(self)
+
+    def getPermissions(self):
+        """
+        Returns the sharing permissions for the Order Request.
+
+        Returns
+        -------
+        List[:class:`~labstep.permissions.Permission`]
+        """
+        return getPermissions(self)
+
+    def shareWith(self, workspace_id, permission='view'):
+        """
+        Shares the OrderRequest with another Workspace.
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to share with
+
+        permission (str)
+            Permission to share with. Can be 'view' or 'edit'
+
+        Returns
+        -------
+        None
+        """
+        return newPermission(self, workspace_id, permission)
+
+    def transferOwnership(self, workspace_id):
+        """
+        Transfer ownership of the Entity to a different Workspace
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to transfer ownership to
+        """
+        return transferOwnership(self, workspace_id)

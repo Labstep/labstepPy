@@ -5,6 +5,7 @@ from .entity import Entity, getEntity, getEntities, newEntity, editEntity
 from .helpers import (listToClass, getTime, createdAtFrom, createdAtTo)
 from .comment import addCommentWithFile, getComments
 from .tag import tag, getAttachedTags
+from .permissions import getPermissions, newPermission, transferOwnership
 
 
 def getProtocol(user, protocol_id):
@@ -594,3 +595,42 @@ class Protocol(Entity):
         """
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
+
+    def getPermissions(self):
+        """
+        Returns the sharing permissions for the Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.permissions.Permission`]
+        """
+        return getPermissions(self)
+
+    def shareWith(self, workspace_id, permission='view'):
+        """
+        Shares the Protocol with another Workspace.
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to share with
+
+        permission (str)
+            Permission to share with. Can be 'view' or 'edit'
+
+        Returns
+        -------
+        None
+        """
+        return newPermission(self, workspace_id, permission)
+
+    def transferOwnership(self, workspace_id):
+        """
+        Transfer ownership of the Entity to a different Workspace
+
+        Parameters
+        ----------
+        workspace_id (int)
+            The id of the workspace to transfer ownership to
+        """
+        return transferOwnership(self, workspace_id)
