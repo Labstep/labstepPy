@@ -2,6 +2,7 @@ Resource
 ----------------------------------------------
 
 .. autoclass:: labstep.resource.Resource
+   :inherited-members:
    :members:
    :undoc-members:
 
@@ -9,6 +10,7 @@ ResourceCategory
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.resourceCategory.ResourceCategory
+   :inherited-members:
    :members:
    :undoc-members:
 
