@@ -425,6 +425,14 @@ class ExperimentSignature(Entity):
     __entityName__ = 'signature'
 
     def revoke(self):
+        """
+        Revokes the signature.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentSignature`
+            An object representing the revoked signature.
+        """
         fields = {
             "revoked_at": getTime()
         }
@@ -544,7 +552,8 @@ class Experiment(PrimaryEntity):
         -------
         List[:class:`~labstep.experiment.ExperimentSignature`]
         """
-        return listToClass(self.signatures, ExperimentSignature, self.__user__)
+        exp = self.__user__.getExperiment(self.id)
+        return listToClass(exp.signatures, ExperimentSignature, self.__user__)
 
     def addSignature(self, statement=None, lock=False):
         """
