@@ -545,3 +545,26 @@ class Experiment(PrimaryEntity):
         List[:class:`~labstep.experiment.ExperimentSignature`]
         """
         return listToClass(self.signatures, ExperimentSignature, self.__user__)
+
+    def addSignature(self, statement=None, lock=False):
+        """
+        Add a signature to experiment
+
+        Parameters
+        ----------
+        statement (str)
+            Statement describing the signature.
+        lock (boolean)
+            Whether to lock the experiment against further edits.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentSignature`
+            The signature that has been added
+        """
+        fields = {
+            "statement": statement,
+            "is_lock": int(lock),
+            "experiment_workflow_id": self.id
+        }
+        return newEntity(self.__user__, ExperimentSignature, fields)
