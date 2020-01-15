@@ -115,3 +115,12 @@ class TestExperiment:
         result = timer.edit(minutes=17)
         assert result.minutes == 17, \
             'FAILED TO EDIT TIMER'
+
+    def test_signatures(self):
+        sig = entity.addSignature('test', lock=True)
+        sigs = entity.getSignatures()
+        sig.revoke()
+        assert sig.id == sigs[0].id \
+            and sig.statement == 'test' \
+            and sig.revoked_at is not None, \
+            'FAILED SIGNATURES TEST'
