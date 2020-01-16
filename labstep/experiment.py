@@ -551,6 +551,7 @@ class Experiment(PrimaryEntity):
         Returns
         -------
         List[:class:`~labstep.experiment.ExperimentSignature`]
+            List of the signatures added to the Experiment
         """
         exp = self.__user__.getExperiment(self.id)
         return listToClass(exp.signatures, ExperimentSignature, self.__user__)
