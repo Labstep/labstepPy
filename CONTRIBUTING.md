@@ -44,4 +44,4 @@ Check out the updated docs at https://labsteppy.readthedocs.io/en/develop
 
 In a fresh python environment run
 
-```pip install -i https://test.pypi.org/simple/ labstep``
+```pip install -i https://test.pypi.org/simple/ labstep```
