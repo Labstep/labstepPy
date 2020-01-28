@@ -4,10 +4,6 @@ Navigate to folder containing `setup.py` and run:
 
 ```pip install -e .```
 
-# Building Package 
-
-```python setup.py sdist```
-
 # Testing
 
 To run the test suite use the command:
@@ -17,6 +13,18 @@ To run the test suite use the command:
 To include coverage report, use:
 
 ```pytest --cov-report html --cov=labstep tests/```
+
+# Building the Docs
+
+```
+cd docs
+./build_documentation.sh
+```
+
+# Building the Package 
+
+```python setup.py sdist```
+
 
 # Publishing
 
@@ -30,9 +38,10 @@ When you are ready to publish to PyPi...
 
 ```twine upload dist/*```
 
-# Building the Docs
+# Reviewing the Release
 
-```
-cd docs
-./build_documentation.sh
-```
+Check out the updated docs at https://labsteppy.readthedocs.io/en/develop
+
+In a fresh python environment run
+
+```pip install -i https://test.pypi.org/simple/ labstep```

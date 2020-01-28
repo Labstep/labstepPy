@@ -3,10 +3,9 @@
 # pylama:ignore=E501
 
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .primaryEntity import PrimaryEntity
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
-from .comment import addCommentWithFile, getComments
-from .tag import tag, getAttachedTags
 
 
 def getExperiment(user, experiment_id):
@@ -422,7 +421,25 @@ class ExperimentTimer(Entity):
         return editEntity(self, fields) """
 
 
-class Experiment(Entity):
+class ExperimentSignature(Entity):
+    __entityName__ = 'signature'
+
+    def revoke(self):
+        """
+        Revokes the signature.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentSignature`
+            An object representing the revoked signature.
+        """
+        fields = {
+            "revoked_at": getTime()
+        }
+        return editEntity(self, fields)
+
+
+class Experiment(PrimaryEntity):
     """
     Represents an Experiment on Labstep.
 
@@ -527,92 +544,37 @@ class Experiment(Entity):
         """
         return list(map(lambda x: getEntity(self.__user__, ExperimentProtocol, x['id'], isDeleted=None), self.experiments))
 
-    def addComment(self, body, filepath=None):
+    def getSignatures(self):
         """
-        Add a comment and/or file to a Labstep Experiment.
+        Retrieve a list of signatures added to the experiment
+
+        Returns
+        -------
+        List[:class:`~labstep.experiment.ExperimentSignature`]
+            List of the signatures added to the Experiment
+        """
+        exp = self.__user__.getExperiment(self.id)
+        return listToClass(exp.signatures, ExperimentSignature, self.__user__)
+
+    def addSignature(self, statement=None, lock=False):
+        """
+        Add a signature to experiment
 
         Parameters
         ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
+        statement (str)
+            Statement describing the signature.
+        lock (boolean)
+            Whether to lock the experiment against further edits.
 
         Returns
         -------
-        :class:`~labstep.comment.Comment`
-            The comment added.
-
-        Example
-        -------
-        ::
-
-            my_experiment = user.getExperiment(17000)
-            my_experiment.addComment(body='I am commenting!',
-                                     filepath='pwd/file_to_upload.dat')
+        :class:`~labstep.experiment.ExperimentSignature`
+            The signature that has been added
         """
-        return addCommentWithFile(self, body, filepath)
-
-    def getComments(self, count=100):
-        """
-        Retrieve the Comments attached to this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.comment.Comment`]
-            List of the comments attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getExperiment(17000)
-            comments = entity.getComments()
-            comments[0].attributes()
-        """
-        return getComments(self, count)
-
-    def addTag(self, name):
-        """
-        Add a tag to the Experiment (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
-
-        Returns
-        -------
-        :class:`~labstep.experiment.Experiment`
-            The Experiment that was tagged.
-
-        Example
-        -------
-        ::
-
-            my_experiment = user.getExperiment(17000)
-            my_experiment.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
-
-    def getTags(self):
-        """
-        Retrieve the Tags attached to a this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.tag.Tag`]
-            List of the tags attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getExperiment(17000)
-            tags = entity.getTags()
-            tags[0].attributes()
-        """
-        return getAttachedTags(self)
+        fields = {
+            "statement": statement,
+            "is_lock": int(lock),
+            "experiment_workflow_id": self.id
+        }
+        return newEntity(self.__user__, ExperimentSignature, fields)

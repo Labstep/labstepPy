@@ -318,7 +318,7 @@ class Workspace(Entity):
         return getResourceLocations(self.__user__, count, search_query,
                                     extraParams={'group_id': self.id})
 
-    def getOrderRequests(self, count=100, name=None):
+    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
         which can be filtered using the parameters:
@@ -342,7 +342,7 @@ class Workspace(Entity):
 
             entity = workspace.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self.__user__, count, name,
+        return getOrderRequests(self.__user__, count, name, status=status, tag_id=tag_id,
                                 extraParams={'group_id': self.id})
 
     def getTags(self, count=1000, search_query=None, type=None):

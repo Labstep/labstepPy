@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from .primaryEntity import PrimaryEntity
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
 from .helpers import (listToClass, getTime, createdAtFrom, createdAtTo)
-from .comment import addCommentWithFile, getComments
-from .tag import tag, getAttachedTags
 
 
 def getProtocol(user, protocol_id):
@@ -251,7 +250,7 @@ class ProtocolTimer(Entity):
         return editEntity(self, fields)
 
 
-class Protocol(Entity):
+class Protocol(PrimaryEntity):
     """
     Represents a Protocol on Labstep.
 
@@ -301,96 +300,6 @@ class Protocol(Entity):
             my_protocol.delete()
         """
         return editProtocol(self, deleted_at=getTime())
-
-    def addComment(self, body, filepath=None):
-        """
-        Add a comment and/or file to a Labstep Protocol.
-
-        Parameters
-        ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
-
-        Returns
-        -------
-        :class:`~labstep.comment.Comment`
-            The comment added.
-
-        Example
-        -------
-        ::
-
-            my_protocol = user.getProtocol(17000)
-            my_protocol.addComment(body='I am commenting!',
-                                   filepath='pwd/file_to_upload.dat')
-        """
-        return addCommentWithFile(self, body, filepath)
-
-    def getComments(self, count=100):
-        """
-        Retrieve the Comments attached to this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.comment.Comment`]
-            List of the comments attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getProtocol(17000)
-            comments = entity.getComments()
-            comments[0].attributes()
-        """
-        return getComments(self, count)
-
-    def addTag(self, name):
-        """
-        Add a tag to the Protocol (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
-
-        Returns
-        -------
-        :class:`~labstep.protocol.Protocol`
-            The Protocol that was tagged.
-
-        Example
-        -------
-        ::
-
-            my_protocol = user.getProtocol(17000)
-            my_protocol.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
-
-    def getTags(self):
-        """
-        Retrieve the Tags attached to a this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.tag.Tag`]
-            List of the tags attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getProtocol(17000)
-            tags = entity.getTags()
-            tags[0].attributes()
-        """
-        return getAttachedTags(self)
 
     def getSteps(self):
         """

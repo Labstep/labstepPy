@@ -22,10 +22,17 @@ the :func:`~labstep.user.login` functions below:
 Authenticate
 ----------------------------------------------
 
-.. autofunction:: labstep.user.authenticate
+Authenticating via an API key is the most secure method. 
 
+For guidance on generating an API key to connect to your Labstep account see `this article <https://help.labstep.com/en/articles/3636355-how-to-create-an-api-key-on-labstep>`_.
+
+.. autofunction:: labstep.user.authenticate
 
 Login
 ----------------------------------------------
+
+You can also login using your username and password. 
+
+NOTE: this method will not work for users who sign in via Google or via an Institution.
 
 .. autofunction:: labstep.user.login

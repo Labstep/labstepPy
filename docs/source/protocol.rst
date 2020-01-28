@@ -3,6 +3,7 @@ Protocol
 
 .. autoclass:: labstep.protocol.Protocol
    :members:
+   :inherited-members:
    :undoc-members:
 
 Protocol Material
