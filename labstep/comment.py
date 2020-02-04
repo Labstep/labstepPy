@@ -50,7 +50,7 @@ def addComment(entity, body, file=None):
               }
 
     if file is not None:
-        fields['file_id'] = file.id
+        fields['file_id'] = [file.id]
 
     return newEntity(entity.__user__, Comment, fields)
 
