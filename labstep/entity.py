@@ -57,7 +57,7 @@ def getEntities(user, entityClass, count, filterParams={}):
     entity
         A list of Entity objects.
     """
-    n = min(count, 1000)
+    n = min(count, 50)
     search_params = {'search': 1,
                      'cursor': -1,
                      'count': n}
