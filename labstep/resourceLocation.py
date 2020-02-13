@@ -4,7 +4,7 @@
 
 import requests
 from .config import API_ROOT
-from .entity import Entity, getEntities, newEntity, editEntity
+from .entity import Entity, getEntities, newEntity, editEntity, getHeaders
 from .helpers import url_join, handleError
 
 
@@ -94,7 +94,7 @@ def deleteResourceLocation(resourceLocation):
     resourceLocation
         An object representing the ResourceLocation to delete.
     """
-    headers = {'apikey': resourceLocation.__user__.api_key}
+    headers = getHeaders(resourceLocation.__user__)
     url = url_join(API_ROOT, "/api/generic/", ResourceLocation.__entityName__,
                    str(resourceLocation.id))
     r = requests.delete(url, headers=headers)

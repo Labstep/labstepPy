@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E402
 
-import sys
-sys.path.append('./labstep/')
-from helpers import (url_join, getTime,
-                     createdAtFrom, createdAtTo, handleDate,
-                     handleString)
+from labstep.helpers import (url_join, getTime,
+                             createdAtFrom, createdAtTo, handleDate,
+                             handleString)
 
 
 class TestHelpers:

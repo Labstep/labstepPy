@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .helpers import listToClass, update, url_join, handleError
+from .helpers import listToClass, update, url_join, handleError, getHeaders
 import inspect
 import pprint
 
@@ -31,7 +31,7 @@ def getEntity(user, entityClass, id, isDeleted='both'):
               'get_single': 1,
               'id': id
               }
-    headers = {'apikey': user.api_key}
+    headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/",
                    entityClass.__entityName__)
     r = requests.get(url, headers=headers, params=params)
@@ -64,7 +64,7 @@ def getEntities(user, entityClass, count, filterParams={}):
 
     params = {**search_params, **filterParams}
 
-    headers = {'apikey': user.api_key}
+    headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
     r = requests.get(url, params=params, headers=headers)
     handleError(r)
@@ -95,7 +95,7 @@ def newEntity(user, entityClass, fields):
     entity
         An object representing the new Labstep Entity.
     """
-    headers = {'apikey': user.api_key}
+    headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
     fields = dict(
         filter(lambda field: field[1] is not None, fields.items()))
@@ -124,7 +124,7 @@ def editEntity(entity, fields):
     # the 'fields' will be overwritten to 'None'.
     new_fields = dict(
         filter(lambda field: field[1] is not None, fields.items()))
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, '/api/generic/',
                    entity.__entityName__, str(entity.id))
     r = requests.put(url, json=new_fields, headers=headers)

@@ -1,6 +1,6 @@
 import requests
 import json
-from .helpers import listToClass, url_join, handleError
+from .helpers import listToClass, url_join, handleError, getHeaders
 from .config import API_ROOT
 
 
@@ -25,7 +25,7 @@ def newPermission(entity, workspace_id, permission):
     """
     entityName = entity.__entityName__
 
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl')
 
     fields = {
@@ -61,7 +61,7 @@ def editPermission(entity, workspace_id, permission):
     """
     entityName = entity.__entityName__
 
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl')
 
     fields = {
@@ -95,7 +95,7 @@ def revokePermission(entity, workspace_id):
     """
     entityName = entity.__entityName__
 
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl')
 
     fields = {
@@ -125,7 +125,7 @@ def getPermissions(entity):
         An list of objects representing permissions.
     """
     entityName = entity.__entityName__
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl',
                    entityName.replace('-', '_'), str(entity.id))
     r = requests.get(url, headers=headers)
@@ -152,7 +152,7 @@ def transferOwnership(entity, workspace_id):
     None
     """
     entityName = entity.__entityName__
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", entityName,
                    str(entity.id), 'transfer-ownership')
     fields = {'group_id': workspace_id}

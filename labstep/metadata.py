@@ -4,7 +4,8 @@
 import requests
 from .config import API_ROOT
 from .entity import Entity, newEntity, editEntity
-from .helpers import (listToClass, url_join, handleError, handleDate)
+from .helpers import (listToClass, url_join, handleError,
+                      handleDate, getHeaders)
 
 
 def getMetadata(entity):
@@ -101,7 +102,7 @@ def deleteMetadata(metadata):
     -------
     None
     """
-    headers = {'apikey': metadata.__user__.api_key}
+    headers = getHeaders(metadata.__user__)
     url = url_join(API_ROOT, "/api/generic/metadata/", str(metadata.id))
     r = requests.delete(url, headers=headers)
     handleError(r)

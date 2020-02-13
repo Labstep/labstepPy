@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .entity import Entity, getEntities, newEntity, editEntity
+from .entity import Entity, getEntities, newEntity, editEntity, getHeaders
 from .helpers import (url_join, handleError, handleString)
 
 
@@ -105,7 +105,7 @@ def addTagTo(entity, tag):
     """
     entityName = entity.__entityName__
 
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", entityName,
                    str(entity.id), tag.__entityName__, str(tag.id))
     r = requests.put(url, headers=headers)
@@ -180,7 +180,7 @@ def deleteTag(tag):
     tag
         An object representing the tag to delete.
     """
-    headers = {'apikey': tag.__user__.api_key}
+    headers = getHeaders(tag.__user__)
     url = url_join(API_ROOT, "/api/generic/tag/", str(tag.id))
     r = requests.delete(url, headers=headers)
     handleError(r)

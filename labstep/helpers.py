@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from time import gmtime, strftime
+from .config import version
 
 
 def url_join(*args):
@@ -120,3 +121,7 @@ def listToClass(items, entityClass, user):
     return list(map(lambda x: entityClass(x, user), items))
     """
     return list(map(lambda x: entityClass(x, user), items))
+
+
+def getHeaders(user):
+    return {'apikey': user.api_key, 'User-Agent': f"Python SDK {version}"}

@@ -5,7 +5,7 @@ import requests
 import json
 import os
 from .config import API_ROOT
-from .helpers import url_join, handleError
+from .helpers import url_join, handleError, getHeaders
 from .entity import Entity, getEntity, getEntities
 
 
@@ -27,7 +27,7 @@ def newFile(user, filepath):
         An object representing the uploaded file to Labstep.
     """
     files = {'file': open(filepath, 'rb')}
-    headers = {'apikey': user.api_key}
+    headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)
     handleError(r)
@@ -56,7 +56,7 @@ def getFile(user, file_id):
 
 
 def downloadFile(user, file_id):
-    headers = {'apikey': user.api_key}
+    headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/file/download", str(file_id))
     r = requests.post(url, headers=headers)
     handleError(r)
