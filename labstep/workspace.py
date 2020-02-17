@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
+import requests
+import json
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime
+from .config import API_ROOT
+from .helpers import getTime, getHeaders, url_join, handleError
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -116,6 +119,8 @@ class Workspace(Entity):
         print(my_workspace.id)
     """
     __entityName__ = 'group'
+
+    share_link = None
 
     def edit(self, name):
         """
@@ -403,3 +408,45 @@ class Workspace(Entity):
             files = workspace.getFiles(search_query='bacteria')
         """
         return getFiles(self, count, search_query, file_type, extraParams={'group_id': self.id})
+
+    def sendInvites(self, emails, message):
+        """
+        Send invites to a Labstep Workspace via email.
+        Parameters
+        ----------
+        emails (list)
+            A list of the emails to send the invite to.
+        message (str)
+            A message to send with the invite.
+
+        Returns
+        -------
+        None
+
+        Example
+        -------
+        ::
+
+        workspace.
+        sendInvites(emails=['collegue1@labstep.com','collegue2@labstep.com'],message='Hi, please collaborate with me on Labstep!')
+        """
+        headers = getHeaders(self.__user__)
+        sharelink = self.share_link
+
+        if sharelink is None:
+            url = url_join(API_ROOT, "api/generic/share-link")
+            fields = {
+                    "group_id": self.id
+                }
+            r = requests.post(url, json=fields, headers=headers)
+            handleError(r)
+            sharelink = json.loads(r.content)
+
+        url = url_join(API_ROOT, "api/generic/share-link/email")
+        fields = {
+            "emails": emails,
+            "message": message,
+            "id": sharelink['id']
+        }
+        r = requests.post(url, json=fields, headers=headers)
+        handleError(r)
