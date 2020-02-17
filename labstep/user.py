@@ -20,6 +20,19 @@ from .workspace import getWorkspace, getWorkspaces, newWorkspace
 from .file import newFile, getFile, getFiles
 
 
+def newUser(first_name, last_name, email, password):
+    url = url_join(API_ROOT, "public-api/user")
+    fields = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+        "password": password
+    }
+    r = requests.post(url, json=fields)
+    handleError(r)
+    return User(json.loads(r.content))
+
+
 def authenticate(username, apikey):
     """
     Returns an authenticated Labstep User object to allow
