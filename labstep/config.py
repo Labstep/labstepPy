@@ -4,7 +4,7 @@
 import os
 from dotenv import load_dotenv
 
-version = "2.1.3"
+version = "2.2.0"
 
 API = os.getenv('LABSTEP_API')
 
