@@ -68,7 +68,7 @@ def getExperiments(user, count=100, search_query=None,
     return getEntities(user, Experiment, count, params)
 
 
-def newExperiment(user, name, description=None):
+def newExperiment(user, name, description=None, extraParams={}):
     """
     Create a new Labstep Experiment.
 
@@ -87,13 +87,14 @@ def newExperiment(user, name, description=None):
     experiment
         An object representing the new Labstep Experiment.
     """
-    fields = {'name': name,
-              'description': description}
-    return newEntity(user, Experiment, fields)
+    filterParams = {'name': name,
+                    'description': description}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, Experiment, params)
 
 
 def editExperiment(experiment, name=None, description=None, started_at=None,
-                   deleted_at=None):
+                   deleted_at=None, extraParams={}):
     """
     Edit an existing Experiment.
 
@@ -115,12 +116,13 @@ def editExperiment(experiment, name=None, description=None, started_at=None,
     experiment
         An object representing the edited Experiment.
     """
-    fields = {'name': name,
-              'description': description,
-              'started_at': handleDate(started_at),
-              'deleted_at': deleted_at
-              }
-    return editEntity(experiment, fields)
+    filterParams = {'name': name,
+                    'description': description,
+                    'started_at': handleDate(started_at),
+                    'deleted_at': deleted_at,
+                    }
+    params = {**filterParams, **extraParams}
+    return editEntity(experiment, params)
 
 
 def addProtocolToExperiment(experiment, protocol):
@@ -454,7 +456,7 @@ class Experiment(PrimaryEntity):
     """
     __entityName__ = 'experiment-workflow'
 
-    def edit(self, name=None, description=None, started_at=None):
+    def edit(self, name=None, description=None, started_at=None, extraParams={}):
         """
         Edit an existing Experiment.
 
@@ -481,7 +483,7 @@ class Experiment(PrimaryEntity):
                                description='A new description!',
                                started_at='2018-06-06 12:05')
         """
-        return editExperiment(self, name, description, started_at)
+        return editExperiment(self, name, description, started_at, extraParams)
 
     def delete(self):
         """

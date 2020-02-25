@@ -37,7 +37,7 @@ def getResourceLocations(user, count=100, search_query=None, tag_id=None,
     return getEntities(user, ResourceLocation, count, params)
 
 
-def newResourceLocation(user, name):
+def newResourceLocation(user, name, extraParams={}):
     """
     Create a new Labstep ResourceLocation.
 
@@ -54,11 +54,12 @@ def newResourceLocation(user, name):
     ResourceLocation
         An object representing the new Labstep ResourceLocation.
     """
-    metadata = {'name': name}
-    return newEntity(user, ResourceLocation, metadata)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, ResourceLocation, params)
 
 
-def editResourceLocation(resourceLocation, name):
+def editResourceLocation(resourceLocation, name, extraParams={}):
     """
     Edit an existing ResourceLocation.
 
@@ -76,8 +77,9 @@ def editResourceLocation(resourceLocation, name):
     ResourceLocation
         An object representing the edited ResourceLocation.
     """
-    metadata = {'name': name}
-    return editEntity(resourceLocation, metadata)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return editEntity(resourceLocation, params)
 
 
 def deleteResourceLocation(resourceLocation):
@@ -117,7 +119,7 @@ class ResourceLocation(Entity):
     """
     __entityName__ = 'resource-location'
 
-    def edit(self, name):
+    def edit(self, name, extraParams={}):
         """
         Edit an existing ResourceLocation.
 
@@ -142,7 +144,7 @@ class ResourceLocation(Entity):
             # Select the tag by using python index.
             resource_locations[1].edit(name='A New ResourceLocation Name')
         """
-        return editResourceLocation(self, name)
+        return editResourceLocation(self, name, extraParams)
 
     def delete(self):
         """

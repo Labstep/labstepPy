@@ -20,15 +20,16 @@ from .workspace import getWorkspace, getWorkspaces, newWorkspace
 from .file import newFile, getFile, getFiles
 
 
-def newUser(first_name, last_name, email, password):
+def newUser(first_name, last_name, email, password, extraParams={}):
     url = url_join(API_ROOT, "public-api/user")
-    fields = {
+    filterParams = {
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
         "password": password
     }
-    r = requests.post(url, json=fields)
+    params = {**filterParams, **extraParams}
+    r = requests.post(url, json=params)
     handleError(r)
     return User(json.loads(r.content))
 
@@ -379,7 +380,7 @@ class User(Entity):
                                        tag_id=800)
         """
         return getProtocols(self, count, search_query, created_at_from,
-                            created_at_to, tag_id, extraParams={})
+                            created_at_to, tag_id, extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
                      extraParams={}):
@@ -410,7 +411,7 @@ class User(Entity):
                                        tag_id=800)
         """
         return getResources(self, count, search_query, tag_id,
-                            extraParams={})
+                            extraParams)
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None,
                              extraParams={}):
@@ -441,7 +442,7 @@ class User(Entity):
                                                tag_id=800)
         """
         return getResourceCategorys(self, count, search_query, tag_id,
-                                    extraParams={})
+                                    extraParams)
 
     def getResourceLocations(self, count=100, search_query=None,
                              extraParams={}):
@@ -467,7 +468,7 @@ class User(Entity):
 
             entity = user.getResourceLocations(search_query='fridge')
         """
-        return getResourceLocations(self, count, search_query, extraParams={})
+        return getResourceLocations(self, count, search_query, extraParams)
 
     def getOrderRequests(self, count=100, name=None, status=None, tag_id=None,
                          extraParams={}):
@@ -499,9 +500,7 @@ class User(Entity):
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self, count, search_query=name,
-                                tag_id=tag_id, status=status,
-                                extraParams={})
+        return getOrderRequests(self, count, name, status, tag_id, extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None,
                 extraParams={}):
@@ -532,7 +531,7 @@ class User(Entity):
 
             entity = user.getTags(search_query='bacteria')
         """
-        return getTags(self, count, type, search_query, extraParams={})
+        return getTags(self, count, type, search_query, extraParams)
 
     def getWorkspaces(self, count=100, name=None, extraParams={}):
         """
@@ -558,7 +557,7 @@ class User(Entity):
 
             entity = user.getWorkspaces(name='bacteria')
         """
-        return getWorkspaces(self, count, name, extraParams={})
+        return getWorkspaces(self, count, name, extraParams)
 
     def getFiles(self, count=100, search_query=None, file_type=None,
                  extraParams={}):
@@ -590,11 +589,11 @@ class User(Entity):
 
             entities = user.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type, extraParams={})
+        return getFiles(self, count, search_query, file_type, extraParams)
 
     # newEntity()
 
-    def newExperiment(self, name, description=None):
+    def newExperiment(self, name, description=None, extraParams={}):
         """
         Create a new Labstep Experiment.
 
@@ -618,9 +617,9 @@ class User(Entity):
                                         description='Aspirin is an analgesic
                                         used to reduce pain.')
         """
-        return newExperiment(self, name, description)
+        return newExperiment(self, name, description, extraParams)
 
-    def newProtocol(self, name):
+    def newProtocol(self, name, extraParams={}):
         """
         Create a new Labstep Protocol.
 
@@ -640,9 +639,9 @@ class User(Entity):
 
             entity = user.newProtocol(name='Synthesising Aspirin')
         """
-        return newProtocol(self, name)
+        return newProtocol(self, name, extraParams)
 
-    def newResource(self, name):
+    def newResource(self, name, extraParams={}):
         """
         Create a new Labstep Resource.
 
@@ -662,9 +661,9 @@ class User(Entity):
 
             entity = user.newResource(name='salicylic acid')
         """
-        return newResource(self, name)
+        return newResource(self, name, extraParams)
 
-    def newResourceCategory(self, name):
+    def newResourceCategory(self, name, extraParams={}):
         """
         Create a new Labstep ResourceCategory.
 
@@ -684,9 +683,9 @@ class User(Entity):
 
             entity = user.newResourceCategory(name='Chemical')
         """
-        return newResourceCategory(self, name)
+        return newResourceCategory(self, name, extraParams)
 
-    def newResourceLocation(self, name):
+    def newResourceLocation(self, name, extraParams={}):
         """
         Create a new Labstep ResourceLocation.
 
@@ -706,9 +705,9 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        return newResourceLocation(self, name)
+        return newResourceLocation(self, name, extraParams)
 
-    def newOrderRequest(self, resource, quantity=1):
+    def newOrderRequest(self, resource, quantity=1, extraParams={}):
         """
         Create a new Labstep OrderRequest.
 
@@ -731,9 +730,9 @@ class User(Entity):
             my_resource = user.getResource(17000)
             entity = user.newOrderRequest(my_resource, quantity=2)
         """
-        return newOrderRequest(self, resource, quantity)
+        return newOrderRequest(self, resource, quantity, extraParams)
 
-    def newTag(self, name, type):
+    def newTag(self, name, type, extraParams={}):
         """
         Create a new Labstep Tag.
 
@@ -757,9 +756,9 @@ class User(Entity):
 
             entity = user.newTag(name='Aspirin')
         """
-        return newTag(self, name, type)
+        return newTag(self, name, type, extraParams)
 
-    def newWorkspace(self, name):
+    def newWorkspace(self, name, extraParams={}):
         """
         Create a new Labstep Workspace.
 
@@ -779,9 +778,9 @@ class User(Entity):
 
             entity = user.newWorkspace(name='Aspirin Project')
         """
-        return newWorkspace(self, name)
+        return newWorkspace(self, name, extraParams)
 
-    def newFile(self, filepath):
+    def newFile(self, filepath, extraParams={}):
         """
         Upload a file to the Labstep entity Data.
 
@@ -796,4 +795,4 @@ class User(Entity):
 
             entity = user.newFile('./structure_of_aspirin.png')
         """
-        return newFile(self, filepath)
+        return newFile(self, filepath, extraParams)
