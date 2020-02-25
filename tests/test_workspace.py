@@ -71,8 +71,8 @@ class TestWorkspace:
         new_tag.delete()
         assert result[0].id, \
             'FAILED TO GET TAGS'
-            
-    def test_getTags(self):
+
+    def test_getFiles(self):
         result = entity.getFiles()
         assert result, \
             'FAILED TO GET FILES'
