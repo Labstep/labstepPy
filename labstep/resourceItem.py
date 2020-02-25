@@ -210,7 +210,7 @@ class ResourceItem(Entity):
         """
         return editResourceItem(self, deleted_at=getTime())
 
-    def addComment(self, body, filepath=None):
+    def addComment(self, body, filepath=None, extraParams={}):
         """
         Add a comment and/or file to a Labstep ResourceItem.
 
@@ -235,9 +235,9 @@ class ResourceItem(Entity):
             my_resource_item.addComment(body='I am commenting!',
                                         filepath='pwd/file_to_upload.dat')
         """
-        return addCommentWithFile(self, body, filepath)
+        return addCommentWithFile(self, body, filepath, extraParams)
 
-    def getComments(self, count=100):
+    def getComments(self, count=100, extraParams={}):
         """
         Retrieve the Comments attached to this Labstep Entity.
 
@@ -255,7 +255,7 @@ class ResourceItem(Entity):
             comments = item.getComments()
             comments[0].attributes()
         """
-        return getComments(self, count)
+        return getComments(self, count, extraParams)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
