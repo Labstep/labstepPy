@@ -301,7 +301,8 @@ class User(Entity):
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
-                       created_at_from=None, created_at_to=None, tag_id=None):
+                       created_at_from=None, created_at_to=None, tag_id=None,
+                       extraParams={}):
         """
         Retrieve a list of a User's Experiments
         across all Workspaces on Labstep,
@@ -337,10 +338,12 @@ class User(Entity):
                                          tag_id=800)
         """
         return getExperiments(self, count, search_query,
-                              created_at_from, created_at_to, tag_id)
+                              created_at_from, created_at_to, tag_id,
+                              extraParams)
 
     def getProtocols(self, count=100, search_query=None,
-                     created_at_from=None, created_at_to=None, tag_id=None):
+                     created_at_from=None, created_at_to=None, tag_id=None,
+                     extraParams={}):
         """
         Retrieve a list of a User's Protocols
         across all Workspaces on Labstep,
@@ -376,9 +379,10 @@ class User(Entity):
                                        tag_id=800)
         """
         return getProtocols(self, count, search_query, created_at_from,
-                            created_at_to, tag_id)
+                            created_at_to, tag_id, extraParams={})
 
-    def getResources(self, count=100, search_query=None, tag_id=None):
+    def getResources(self, count=100, search_query=None, tag_id=None,
+                     extraParams={}):
         """
         Retrieve a list of a User's Resources
         across all Workspaces on Labstep,
@@ -405,9 +409,11 @@ class User(Entity):
             entity = user.getResources(search_query='bacteria',
                                        tag_id=800)
         """
-        return getResources(self, count, search_query, tag_id)
+        return getResources(self, count, search_query, tag_id,
+                            extraParams={})
 
-    def getResourceCategorys(self, count=100, search_query=None, tag_id=None):
+    def getResourceCategorys(self, count=100, search_query=None, tag_id=None,
+                             extraParams={}):
         """
         Retrieve a list of a User's Resource Categorys
         across all Workspaces on Labstep,
@@ -434,9 +440,11 @@ class User(Entity):
             entity = user.getResourceCategorys(search_query='properties',
                                                tag_id=800)
         """
-        return getResourceCategorys(self, count, search_query, tag_id)
+        return getResourceCategorys(self, count, search_query, tag_id,
+                                    extraParams={})
 
-    def getResourceLocations(self, count=100, search_query=None):
+    def getResourceLocations(self, count=100, search_query=None,
+                             extraParams={}):
         """
         Retrieve a list of a user's ResourceLocations on Labstep,
         which can be filtered using the parameters:
@@ -459,9 +467,10 @@ class User(Entity):
 
             entity = user.getResourceLocations(search_query='fridge')
         """
-        return getResourceLocations(self, count, search_query)
+        return getResourceLocations(self, count, search_query, extraParams={})
 
-    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None):
+    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None,
+                         extraParams={}):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
         which can be filtered using the parameters:
@@ -491,9 +500,11 @@ class User(Entity):
             entity = user.getOrderRequests(name='polymerase')
         """
         return getOrderRequests(self, count, search_query=name,
-                                tag_id=tag_id, status=status)
+                                tag_id=tag_id, status=status,
+                                extraParams={})
 
-    def getTags(self, count=1000, search_query=None, type=None):
+    def getTags(self, count=1000, search_query=None, type=None,
+                extraParams={}):
         """
         Retrieve a list of a User's Tags
         across all Workspaces on Labstep,
@@ -521,9 +532,9 @@ class User(Entity):
 
             entity = user.getTags(search_query='bacteria')
         """
-        return getTags(self, count, type, search_query)
+        return getTags(self, count, type, search_query, extraParams={})
 
-    def getWorkspaces(self, count=100, name=None):
+    def getWorkspaces(self, count=100, name=None, extraParams={}):
         """
         Retrieve a list of a user's Workspaces on Labstep,
         which can be filtered using the parameters:
@@ -547,9 +558,10 @@ class User(Entity):
 
             entity = user.getWorkspaces(name='bacteria')
         """
-        return getWorkspaces(self, count, name)
+        return getWorkspaces(self, count, name, extraParams={})
 
-    def getFiles(self, count=100, search_query=None, file_type=None):
+    def getFiles(self, count=100, search_query=None, file_type=None,
+                 extraParams={}):
         """
         Retrieve a list of a User's Files
         across all Workspaces on Labstep,
@@ -578,7 +590,7 @@ class User(Entity):
 
             entities = user.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type)
+        return getFiles(self, count, search_query, file_type, extraParams={})
 
     # newEntity()
 
