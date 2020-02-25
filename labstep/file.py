@@ -26,7 +26,7 @@ def newFile(user, filepath):
     file
         An object representing the uploaded file to Labstep.
     """
-    files = {'file': open(filepath, 'rb')}
+    files = {'file': open(filepath, 'rb'), 'group_id': user.activeWorkspace}
     headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files)
