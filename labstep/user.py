@@ -20,14 +20,18 @@ from .workspace import getWorkspace, getWorkspaces, newWorkspace
 from .file import newFile, getFile, getFiles
 
 
-def newUser(first_name, last_name, email, password):
+def newUser(first_name, last_name, email, password, share_link_token=None):
     url = url_join(API_ROOT, "public-api/user")
     fields = {
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
-        "password": password
+        "password": password,
+        "share_link_token": share_link_token
     }
+    fields = dict(
+        filter(lambda field: field[1] is not None, fields.items()))
+
     r = requests.post(url, json=fields)
     handleError(r)
     return User(json.loads(r.content))
