@@ -407,7 +407,7 @@ class Workspace(Entity):
 
             files = workspace.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type, extraParams={'group_id': self.id})
+        return getFiles(self.__user__, count, search_query, file_type, extraParams={'group_id': self.id})
 
     def sendInvites(self, emails, message):
         """
