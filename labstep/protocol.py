@@ -146,12 +146,12 @@ class ProtocolMaterial(Entity):
         """
         fields = {'name': name,
                   'value': amount,
-                  'units': units}
+                  'units': units, **extraParams}
 
         if resource is not None:
             fields['resource_id'] = resource.id
 
-        return editEntity(self, fields, extraParams=extraParams)
+        return editEntity(self, fields)
 
 
 class ProtocolStep(Entity):

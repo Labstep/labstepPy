@@ -249,7 +249,8 @@ class Resource(PrimaryEntity):
             # Set the Resource Category
             my_resource = my_resource.setResourceCategory(resource_category)
         """
-        return editResource(self, resource_category, extraParams=extraParams)
+        return editResource(self, resource_category=resource_category,
+                            extraParams=extraParams)
 
     def newOrderRequest(self, quantity=1, extraParams={}):
         """
