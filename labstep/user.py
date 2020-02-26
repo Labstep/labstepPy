@@ -20,7 +20,8 @@ from .workspace import getWorkspace, getWorkspaces, newWorkspace
 from .file import newFile, getFile, getFiles
 
 
-def newUser(first_name, last_name, email, password, share_link_token=None,extraParams={}):
+def newUser(first_name, last_name, email, password,
+            share_link_token=None, extraParams={}):
     url = url_join(API_ROOT, "public-api/user")
     filterParams = {
         "first_name": first_name,
@@ -473,7 +474,8 @@ class User(Entity):
 
             entity = user.getResourceLocations(search_query='fridge')
         """
-        return getResourceLocations(self, count, search_query, extraParams=extraParams)
+        return getResourceLocations(self, count, search_query,
+                                    extraParams=extraParams)
 
     def getOrderRequests(self, count=100, name=None, status=None, tag_id=None,
                          extraParams={}):
@@ -505,7 +507,8 @@ class User(Entity):
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self, count, name, status, tag_id, extraParams=extraParams)
+        return getOrderRequests(self, count, name, status, tag_id,
+                                extraParams=extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None,
                 extraParams={}):
@@ -536,7 +539,8 @@ class User(Entity):
 
             entity = user.getTags(search_query='bacteria')
         """
-        return getTags(self, count, type, search_query, extraParams=extraParams)
+        return getTags(self, count, type, search_query,
+                       extraParams=extraParams)
 
     def getWorkspaces(self, count=100, name=None, extraParams={}):
         """
@@ -594,7 +598,8 @@ class User(Entity):
 
             entities = user.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type, extraParams=extraParams)
+        return getFiles(self, count, search_query, file_type,
+                        extraParams=extraParams)
 
     # newEntity()
 
@@ -735,7 +740,8 @@ class User(Entity):
             my_resource = user.getResource(17000)
             entity = user.newOrderRequest(my_resource, quantity=2)
         """
-        return newOrderRequest(self, resource, quantity, extraParams=extraParams)
+        return newOrderRequest(self, resource, quantity,
+                               extraParams=extraParams)
 
     def newTag(self, name, type, extraParams={}):
         """
