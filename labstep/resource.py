@@ -300,7 +300,7 @@ class Resource(PrimaryEntity):
         """
         return getResourceItems(self.__user__, self, count=count,
                                 search_query=search_query,
-                                extraParams)
+                                extraParams=extraParams)
 
     def newItem(self, name=None, availability='available',
                 quantity_amount=None, quantity_unit=None,
