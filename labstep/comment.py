@@ -57,7 +57,7 @@ def addComment(entity, body, file=None, extraParams={}):
     return newEntity(entity.__user__, Comment, params)
 
 
-def addCommentWithFile(entity, body, filepath):
+def addCommentWithFile(entity, body, filepath, extraParams={}):
     """
     Add a comment with an attaching file.
 
@@ -75,7 +75,7 @@ def addCommentWithFile(entity, body, filepath):
         lsFile = newFile(entity.__user__, filepath)
     else:
         lsFile = None
-    return addComment(entity, body, lsFile)
+    return addComment(entity, body, lsFile, extraParams=extraParams)
 
 
 def editComment(comment, body, extraParams={}):
