@@ -544,7 +544,7 @@ class Experiment(PrimaryEntity):
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        return self.experiments
+        return listToClass(self.experiments, ExperimentProtocol, self.__user__)
 
     def getSignatures(self):
         """

@@ -365,9 +365,8 @@ class Workspace(Entity):
 
             entity = workspace.getOrderRequests(name='polymerase')
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
-        return getOrderRequests(self.__user__, count, name, status=status, tag_id=tag_id,
+        extraParams = {'group_id': self.id, **extraParams}
+        return getOrderRequests(self.__user__, count=count, search_query=name, status=status, tag_id=tag_id,
                                 extraParams=extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None, extraParams={}):
