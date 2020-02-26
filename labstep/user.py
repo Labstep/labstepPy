@@ -345,7 +345,7 @@ class User(Entity):
         """
         return getExperiments(self, count, search_query,
                               created_at_from, created_at_to, tag_id,
-                              extraParams)
+                              extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None,
@@ -385,7 +385,7 @@ class User(Entity):
                                        tag_id=800)
         """
         return getProtocols(self, count, search_query, created_at_from,
-                            created_at_to, tag_id, extraParams)
+                            created_at_to, tag_id, extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
                      extraParams={}):
@@ -416,7 +416,7 @@ class User(Entity):
                                        tag_id=800)
         """
         return getResources(self, count, search_query, tag_id,
-                            extraParams)
+                            extraParams=extraParams)
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None,
                              extraParams={}):
@@ -447,7 +447,7 @@ class User(Entity):
                                                tag_id=800)
         """
         return getResourceCategorys(self, count, search_query, tag_id,
-                                    extraParams)
+                                    extraParams=extraParams)
 
     def getResourceLocations(self, count=100, search_query=None,
                              extraParams={}):
@@ -473,7 +473,7 @@ class User(Entity):
 
             entity = user.getResourceLocations(search_query='fridge')
         """
-        return getResourceLocations(self, count, search_query, extraParams)
+        return getResourceLocations(self, count, search_query, extraParams=extraParams)
 
     def getOrderRequests(self, count=100, name=None, status=None, tag_id=None,
                          extraParams={}):
@@ -505,7 +505,7 @@ class User(Entity):
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self, count, name, status, tag_id, extraParams)
+        return getOrderRequests(self, count, name, status, tag_id, extraParams=extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None,
                 extraParams={}):
@@ -536,7 +536,7 @@ class User(Entity):
 
             entity = user.getTags(search_query='bacteria')
         """
-        return getTags(self, count, type, search_query, extraParams)
+        return getTags(self, count, type, search_query, extraParams=extraParams)
 
     def getWorkspaces(self, count=100, name=None, extraParams={}):
         """
@@ -562,7 +562,7 @@ class User(Entity):
 
             entity = user.getWorkspaces(name='bacteria')
         """
-        return getWorkspaces(self, count, name, extraParams)
+        return getWorkspaces(self, count, name, extraParams=extraParams)
 
     def getFiles(self, count=100, search_query=None, file_type=None,
                  extraParams={}):
@@ -594,7 +594,7 @@ class User(Entity):
 
             entities = user.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type, extraParams)
+        return getFiles(self, count, search_query, file_type, extraParams=extraParams)
 
     # newEntity()
 
@@ -622,7 +622,7 @@ class User(Entity):
                                         description='Aspirin is an analgesic
                                         used to reduce pain.')
         """
-        return newExperiment(self, name, description, extraParams)
+        return newExperiment(self, name, description, extraParams=extraParams)
 
     def newProtocol(self, name, extraParams={}):
         """
@@ -644,7 +644,7 @@ class User(Entity):
 
             entity = user.newProtocol(name='Synthesising Aspirin')
         """
-        return newProtocol(self, name, extraParams)
+        return newProtocol(self, name, extraParams=extraParams)
 
     def newResource(self, name, extraParams={}):
         """
@@ -666,7 +666,7 @@ class User(Entity):
 
             entity = user.newResource(name='salicylic acid')
         """
-        return newResource(self, name, extraParams)
+        return newResource(self, name, extraParams=extraParams)
 
     def newResourceCategory(self, name, extraParams={}):
         """
@@ -688,7 +688,7 @@ class User(Entity):
 
             entity = user.newResourceCategory(name='Chemical')
         """
-        return newResourceCategory(self, name, extraParams)
+        return newResourceCategory(self, name, extraParams=extraParams)
 
     def newResourceLocation(self, name, extraParams={}):
         """
@@ -710,7 +710,7 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        return newResourceLocation(self, name, extraParams)
+        return newResourceLocation(self, name, extraParams=extraParams)
 
     def newOrderRequest(self, resource, quantity=1, extraParams={}):
         """
@@ -735,7 +735,7 @@ class User(Entity):
             my_resource = user.getResource(17000)
             entity = user.newOrderRequest(my_resource, quantity=2)
         """
-        return newOrderRequest(self, resource, quantity, extraParams)
+        return newOrderRequest(self, resource, quantity, extraParams=extraParams)
 
     def newTag(self, name, type, extraParams={}):
         """
@@ -761,7 +761,7 @@ class User(Entity):
 
             entity = user.newTag(name='Aspirin')
         """
-        return newTag(self, name, type, extraParams)
+        return newTag(self, name, type, extraParams=extraParams)
 
     def newWorkspace(self, name, extraParams={}):
         """
@@ -783,7 +783,7 @@ class User(Entity):
 
             entity = user.newWorkspace(name='Aspirin Project')
         """
-        return newWorkspace(self, name, extraParams)
+        return newWorkspace(self, name, extraParams=extraParams)
 
     def newFile(self, filepath, extraParams={}):
         """
@@ -800,4 +800,4 @@ class User(Entity):
 
             entity = user.newFile('./structure_of_aspirin.png')
         """
-        return newFile(self, filepath, extraParams)
+        return newFile(self, filepath, extraParams=extraParams)

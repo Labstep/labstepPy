@@ -483,7 +483,7 @@ class Experiment(PrimaryEntity):
                                description='A new description!',
                                started_at='2018-06-06 12:05')
         """
-        return editExperiment(self, name, description, started_at, extraParams)
+        return editExperiment(self, name, description, started_at, extraParams=extraParams)
 
     def delete(self):
         """

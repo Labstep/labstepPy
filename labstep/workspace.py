@@ -148,7 +148,7 @@ class Workspace(Entity):
             my_workspace = user.getWorkspace(17000)
             my_workspace.edit(name='A New Workspace Name')
         """
-        return editWorkspace(self, name, extraParams)
+        return editWorkspace(self, name, extraParams=extraParams)
 
     def delete(self):
         """
@@ -204,7 +204,7 @@ class Workspace(Entity):
         extraParams = {**groupParams, **extraParams}
         return getExperiments(self.__user__, count, search_query,
                               created_at_from, created_at_to, tag_id,
-                              extraParams)
+                              extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None,
@@ -246,7 +246,7 @@ class Workspace(Entity):
         extraParams = {**groupParams, **extraParams}
         return getProtocols(self.__user__, count, search_query,
                             created_at_from, created_at_to, tag_id,
-                            extraParams)
+                            extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
                      extraParams={}):
@@ -278,7 +278,7 @@ class Workspace(Entity):
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
         return getResources(self.__user__, count, search_query,
-                            tag_id, extraParams)
+                            tag_id, extraParams=extraParams)
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None, extraParams={}):
         """
@@ -310,7 +310,7 @@ class Workspace(Entity):
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
         return getResourceCategorys(self.__user__, count, search_query, tag_id,
-                                    extraParams)
+                                    extraParams=extraParams)
 
     def getResourceLocations(self, count=100, search_query=None, extraParams={}):
         """
@@ -339,7 +339,7 @@ class Workspace(Entity):
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
         return getResourceLocations(self.__user__, count, search_query,
-                                    extraParams)
+                                    extraParams=extraParams)
 
     def getOrderRequests(self, count=100, name=None, status=None, tag_id=None, extraParams={}):
         """
@@ -368,7 +368,7 @@ class Workspace(Entity):
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
         return getOrderRequests(self.__user__, count, name, status=status, tag_id=tag_id,
-                                extraParams)
+                                extraParams=extraParams=extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None, extraParams={}):
         """
@@ -400,7 +400,7 @@ class Workspace(Entity):
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
         return getTags(self.__user__, count, type, search_query,
-                       extraParams)
+                       extraParams=extraParams)
 
     def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
         """
@@ -431,7 +431,7 @@ class Workspace(Entity):
         """
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
-        return getFiles(self.__user__, count, search_query, file_type, extraParams)
+        return getFiles(self.__user__, count, search_query, file_type, extraParams=extraParams)
 
     def sendInvites(self, emails, message):
         """

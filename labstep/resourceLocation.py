@@ -144,7 +144,7 @@ class ResourceLocation(Entity):
             # Select the tag by using python index.
             resource_locations[1].edit(name='A New ResourceLocation Name')
         """
-        return editResourceLocation(self, name, extraParams)
+        return editResourceLocation(self, name, extraParams=extraParams)
 
     def delete(self):
         """

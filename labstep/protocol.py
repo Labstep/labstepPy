@@ -151,7 +151,7 @@ class ProtocolMaterial(Entity):
         if resource is not None:
             fields['resource_id'] = resource.id
 
-        return editEntity(self, fields, extraParams)
+        return editEntity(self, fields, extraParams=extraParams)
 
 
 class ProtocolStep(Entity):
@@ -292,7 +292,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        return editProtocol(self, name, extraParams)
+        return editProtocol(self, name, extraParams=extraParams)
 
     def delete(self):
         """

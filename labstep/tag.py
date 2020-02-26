@@ -229,7 +229,7 @@ class Tag(Entity):
             # Select the tag by using python index.
             tags[1].edit(name='A New Tag Name')
         """
-        return editTag(self, name, extraParams)
+        return editTag(self, name, extraParams=extraParams)
 
     def delete(self):
         """

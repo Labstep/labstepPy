@@ -176,7 +176,7 @@ class OrderRequest(PrimaryEntity):
                                  price=50, currency="GBP")
         """
         return editOrderRequest(self, status, resource, quantity,
-                                price, currency, extraParams)
+                                price, currency, extraParams=extraParams)
 
     def delete(self):
         """
@@ -247,7 +247,7 @@ class OrderRequest(PrimaryEntity):
                                                value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams)
+                             quantity_amount, quantity_unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

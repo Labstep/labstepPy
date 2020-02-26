@@ -195,7 +195,7 @@ class ResourceItem(Entity):
         """
         return editResourceItem(self, name, availability,
                                 quantity_amount, quantity_unit,
-                                location, extraParams)
+                                location, extraParams=extraParams)
 
     def delete(self):
         """
@@ -235,7 +235,7 @@ class ResourceItem(Entity):
             my_resource_item.addComment(body='I am commenting!',
                                         filepath='pwd/file_to_upload.dat')
         """
-        return addCommentWithFile(self, body, filepath, extraParams)
+        return addCommentWithFile(self, body, filepath, extraParams=extraParams)
 
     def getComments(self, count=100, extraParams={}):
         """
@@ -255,7 +255,7 @@ class ResourceItem(Entity):
             comments = item.getComments()
             comments[0].attributes()
         """
-        return getComments(self, count, extraParams)
+        return getComments(self, count, extraParams=extraParams)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
@@ -295,7 +295,7 @@ class ResourceItem(Entity):
                                                     value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams)
+                             quantity_amount, quantity_unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

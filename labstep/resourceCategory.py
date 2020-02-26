@@ -140,7 +140,7 @@ class ResourceCategory(PrimaryEntity):
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.edit(name='A New ResourceCategory Name')
         """
-        return editResourceCategory(self, name, extraParams)
+        return editResourceCategory(self, name, extraParams=extraParams)
 
     def delete(self):
         """
@@ -193,7 +193,7 @@ class ResourceCategory(PrimaryEntity):
                                                         value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams)
+                             quantity_amount, quantity_unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

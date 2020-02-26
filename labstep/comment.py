@@ -122,4 +122,4 @@ class Comment(Entity):
 
             my_comment.edit(body='My new comment.')
         """
-        return editComment(self, body, extraParams)
+        return editComment(self, body, extraParams=extraParams)

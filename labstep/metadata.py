@@ -149,7 +149,7 @@ class Metadata(Entity):
 
             metadata.edit(value='2.50')
         """
-        return editMetadata(self, fieldName, value, extraParams)
+        return editMetadata(self, fieldName, value, extraParams=extraParams)
 
     def delete(self):
         """
