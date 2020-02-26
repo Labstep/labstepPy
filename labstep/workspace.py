@@ -368,7 +368,7 @@ class Workspace(Entity):
         groupParams = {'group_id': self.id}
         extraParams = {**groupParams, **extraParams}
         return getOrderRequests(self.__user__, count, name, status=status, tag_id=tag_id,
-                                extraParams=extraParams=extraParams)
+                                extraParams=extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None, extraParams={}):
         """

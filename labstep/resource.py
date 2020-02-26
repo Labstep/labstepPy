@@ -202,7 +202,8 @@ class Resource(PrimaryEntity):
                                                value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams=extraParams)
+                             quantity_amount, quantity_unit,
+                             extraParams=extraParams)
 
     def getMetadata(self):
         """
@@ -271,7 +272,8 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             order_request = my_resource.newOrderRequest(quantity=2)
         """
-        return newOrderRequest(self.__user__, self, quantity, extraParams=extraParams)
+        return newOrderRequest(self.__user__, self, quantity,
+                               extraParams=extraParams)
 
     def getItems(self, count=100, search_query=None, extraParams={}):
         """
@@ -300,7 +302,7 @@ class Resource(PrimaryEntity):
         """
         return getResourceItems(self.__user__, self, count=count,
                                 search_query=search_query,
-                                extraParams=extraParams=extraParams)
+                                extraParams=extraParams)
 
     def newItem(self, name=None, availability='available',
                 quantity_amount=None, quantity_unit=None,
@@ -336,4 +338,5 @@ class Resource(PrimaryEntity):
         """
         return newResourceItem(self.__user__, self, name,
                                availability, quantity_amount,
-                               quantity_unit, location, extraParams=extraParams)
+                               quantity_unit, location,
+                               extraParams=extraParams)
