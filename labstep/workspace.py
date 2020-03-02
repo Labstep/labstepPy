@@ -37,7 +37,7 @@ def getWorkspace(user, workspace_id):
     return getEntity(user, Workspace, id=workspace_id)
 
 
-def getWorkspaces(user, count=100, name=None, extraParams={}):
+def getWorkspaces(user, count=100, search_query=None, extraParams={}):
     """
     Retrieve a list of a user's Workspaces on Labstep,
     which can be filtered using the parameters:
@@ -49,7 +49,7 @@ def getWorkspaces(user, count=100, name=None, extraParams={}):
         Must have property 'api_key'. See 'login'.
     count (int)
         The number of Workspaces to retrieve.
-    name (str)
+    search_query (str)
         Search for Workspaces with this 'name'.
     extraParams (dict)
         Dictionary of extra filter parameters.
@@ -59,7 +59,7 @@ def getWorkspaces(user, count=100, name=None, extraParams={}):
     workspaces
         A list of Workspace objects.
     """
-    filterParams = {'name': name}
+    filterParams = {'name': search_query}
     params = {**filterParams, **extraParams}
     return getEntities(user, Workspace, count, params)
 

@@ -344,8 +344,12 @@ class User(Entity):
                                          created_at_to='2019-01-31',
                                          tag_id=800)
         """
-        return getExperiments(self, count, search_query,
-                              created_at_from, created_at_to, tag_id,
+        return getExperiments(self,
+                              count=count,
+                              search_query=search_query,
+                              created_at_from=created_at_from,
+                              created_at_to=created_at_to,
+                              tag_id=tag_id,
                               extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
@@ -385,8 +389,13 @@ class User(Entity):
                                        created_at_to='2019-01-31',
                                        tag_id=800)
         """
-        return getProtocols(self, count, search_query, created_at_from,
-                            created_at_to, tag_id, extraParams=extraParams)
+        return getProtocols(self,
+                            count=count,
+                            search_query=search_query,
+                            created_at_from=created_at_from,
+                            created_at_to=created_at_to,
+                            tag_id=tag_id,
+                            extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
                      extraParams={}):
@@ -416,7 +425,10 @@ class User(Entity):
             entity = user.getResources(search_query='bacteria',
                                        tag_id=800)
         """
-        return getResources(self, count, search_query, tag_id,
+        return getResources(self,
+                            count=count,
+                            search_query=search_query,
+                            tag_id=tag_id,
                             extraParams=extraParams)
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None,
@@ -447,7 +459,10 @@ class User(Entity):
             entity = user.getResourceCategorys(search_query='properties',
                                                tag_id=800)
         """
-        return getResourceCategorys(self, count, search_query, tag_id,
+        return getResourceCategorys(self,
+                                    count=count,
+                                    search_query=search_query,
+                                    tag_id=tag_id,
                                     extraParams=extraParams)
 
     def getResourceLocations(self, count=100, search_query=None,
@@ -474,10 +489,13 @@ class User(Entity):
 
             entity = user.getResourceLocations(search_query='fridge')
         """
-        return getResourceLocations(self, count, search_query,
+        return getResourceLocations(self,
+                                    count=count,
+                                    search_query=search_query,
                                     extraParams=extraParams)
 
-    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None,
+    def getOrderRequests(self, count=100, search_query=None, status=None,
+                         tag_id=None,
                          extraParams={}):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
@@ -487,8 +505,8 @@ class User(Entity):
         ----------
         count (int)
             The number of OrderRequests to retrieve.
-        name (str)
-            Search for OrderRequests with this 'name'.
+        search_query (str)
+            Search query for OrderRequests with this 'name'.
         status (str)
             The status of the OrderRequest to filter by. Options are: "new",
             "approved", "ordered", "back_ordered", "received", and "cancelled".
@@ -507,7 +525,11 @@ class User(Entity):
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self, count, name, status, tag_id,
+        return getOrderRequests(self,
+                                count=count,
+                                search_query=search_query,
+                                status=status,
+                                tag_id=tag_id,
                                 extraParams=extraParams)
 
     def getTags(self, count=1000, search_query=None, type=None,
@@ -539,10 +561,13 @@ class User(Entity):
 
             entity = user.getTags(search_query='bacteria')
         """
-        return getTags(self, count, type, search_query,
+        return getTags(self,
+                       count=count,
+                       type=type,
+                       search_query=search_query,
                        extraParams=extraParams)
 
-    def getWorkspaces(self, count=100, name=None, extraParams={}):
+    def getWorkspaces(self, count=100, search_query=None, extraParams={}):
         """
         Retrieve a list of a user's Workspaces on Labstep,
         which can be filtered using the parameters:
@@ -551,7 +576,7 @@ class User(Entity):
         ----------
         count (int)
             The number of Workspaces to retrieve.
-        name (str)
+        search_query (str)
             Search for Workspaces with this 'name'.
 
         Returns
@@ -566,7 +591,10 @@ class User(Entity):
 
             entity = user.getWorkspaces(name='bacteria')
         """
-        return getWorkspaces(self, count, name, extraParams=extraParams)
+        return getWorkspaces(self,
+                             count=count,
+                             search_query=search_query,
+                             extraParams=extraParams)
 
     def getFiles(self, count=100, search_query=None, file_type=None,
                  extraParams={}):
@@ -598,7 +626,10 @@ class User(Entity):
 
             entities = user.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type,
+        return getFiles(self,
+                        count=count,
+                        search_query=search_query,
+                        file_type=file_type,
                         extraParams=extraParams)
 
     # newEntity()
@@ -627,7 +658,9 @@ class User(Entity):
                                         description='Aspirin is an analgesic
                                         used to reduce pain.')
         """
-        return newExperiment(self, name, description, extraParams=extraParams)
+        return newExperiment(self, name,
+                             description=description,
+                             extraParams=extraParams)
 
     def newProtocol(self, name, extraParams={}):
         """
@@ -740,7 +773,7 @@ class User(Entity):
             my_resource = user.getResource(17000)
             entity = user.newOrderRequest(my_resource, quantity=2)
         """
-        return newOrderRequest(self, resource, quantity,
+        return newOrderRequest(self, resource, quantity=quantity,
                                extraParams=extraParams)
 
     def newTag(self, name, type, extraParams={}):
@@ -767,7 +800,7 @@ class User(Entity):
 
             entity = user.newTag(name='Aspirin')
         """
-        return newTag(self, name, type, extraParams=extraParams)
+        return newTag(self, name, type=type, extraParams=extraParams)
 
     def newWorkspace(self, name, extraParams={}):
         """

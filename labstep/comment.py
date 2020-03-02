@@ -19,7 +19,7 @@ def getComments(entity, count=100, extraParams={}):
     comments
         List of the comments attached.
     """
-    filterParams = {'thread_id': entity.thread['id']}
+    filterParams = {'parent_thread_id': entity.thread['id']}
     params = {**filterParams, **extraParams}
     return getEntities(entity.__user__, Comment, count, params)
 
@@ -47,7 +47,7 @@ def addComment(entity, body, file=None, extraParams={}):
     threadId = entity.thread['id']
 
     filterParams = {'body': body,
-                    'thread_id': threadId,
+                    'parent_thread_id': threadId,
                     }
 
     if file is not None:
