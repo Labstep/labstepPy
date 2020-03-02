@@ -74,5 +74,5 @@ class TestWorkspace:
 
     def test_getFiles(self):
         result = entity.getFiles()
-        assert result, \
+        assert len(result) >= 0, \
             'FAILED TO GET FILES'

@@ -59,7 +59,7 @@ def getOrderRequests(user, count=100, search_query=None, tag_id=None, status=Non
     return getEntities(user, OrderRequest, count, params)
 
 
-def newOrderRequest(user, resource, quantity=1):
+def newOrderRequest(user, resource, quantity=1, extraParams={}):
     """
     Create a new Labstep OrderRequest.
 
@@ -78,13 +78,14 @@ def newOrderRequest(user, resource, quantity=1):
     OrderRequest
         An object representing the new Labstep OrderRequest.
     """
-    fields = {'resource_id': resource.id,
-              'quantity': quantity}
-    return newEntity(user, OrderRequest, fields)
+    filterParams = {'resource_id': resource.id,
+                    'quantity': quantity}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, OrderRequest, params)
 
 
 def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
-                     price=None, currency=None, deleted_at=None):
+                     price=None, currency=None, deleted_at=None, extraParams={}):
     """
     Edit an existing OrderRequest.
 
@@ -113,15 +114,16 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     OrderRequest
         An object representing the edited OrderRequest.
     """
-    fields = {'status': handleString(status),
-              'quantity': quantity,
-              'price': price,
-              'currency': currency,
-              'deleted_at': deleted_at}
+    filterParams = {'status': handleString(status),
+                    'quantity': quantity,
+                    'price': price,
+                    'currency': currency,
+                    'deleted_at': deleted_at}
     if resource is not None:
-        fields['resource_id'] = resource.id
+        filterParams['resource_id'] = resource.id
 
-    return editEntity(orderRequest, fields)
+    params = {**filterParams, **extraParams}
+    return editEntity(orderRequest, params)
 
 
 class OrderRequest(PrimaryEntity):
@@ -140,7 +142,7 @@ class OrderRequest(PrimaryEntity):
     __entityName__ = 'order-request'
 
     def edit(self, status=None, resource=None, quantity=None,
-             price=None, currency=None):
+             price=None, currency=None, extraParams={}):
         """
         Edit an existing OrderRequest.
 
@@ -174,7 +176,7 @@ class OrderRequest(PrimaryEntity):
                                  price=50, currency="GBP")
         """
         return editOrderRequest(self, status, resource, quantity,
-                                price, currency)
+                                price, currency, extraParams=extraParams)
 
     def delete(self):
         """
@@ -209,7 +211,8 @@ class OrderRequest(PrimaryEntity):
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None):
+                    quantity_amount=None, quantity_unit=None,
+                    extraParams={}):
         """
         Add Metadata to an Order Request.
 
@@ -244,7 +247,7 @@ class OrderRequest(PrimaryEntity):
                                                value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit)
+                             quantity_amount, quantity_unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

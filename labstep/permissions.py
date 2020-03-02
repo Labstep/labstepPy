@@ -69,6 +69,7 @@ def editPermission(entity, workspace_id, permission):
         'entity_class': entityName.replace('-', '_'),
         'action': 'set',
         'group_id': workspace_id,
+        'group_owner_id': workspace_id,
         'permission': permission
     }
     r = requests.post(url, headers=headers, json=fields)

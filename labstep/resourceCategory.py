@@ -57,7 +57,7 @@ def getResourceCategorys(user, count=100, search_query=None, tag_id=None,
     return getEntities(user, ResourceCategory, count, params)
 
 
-def newResourceCategory(user, name):
+def newResourceCategory(user, name, extraParams={}):
     """
     Create a new Labstep ResourceCategory.
 
@@ -74,11 +74,13 @@ def newResourceCategory(user, name):
     ResourceCategory
         An object representing the new Labstep ResourceCategory.
     """
-    metadata = {'name': name}
-    return newEntity(user, ResourceCategory, metadata)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, ResourceCategory, params)
 
 
-def editResourceCategory(resourceCategory, name=None, deleted_at=None):
+def editResourceCategory(resourceCategory, name=None, deleted_at=None,
+                         extraParams={}):
     """
     Edit an existing ResourceCategory.
 
@@ -96,9 +98,10 @@ def editResourceCategory(resourceCategory, name=None, deleted_at=None):
     ResourceCategory
         An object representing the edited ResourceCategory.
     """
-    metadata = {'name': name,
-                'deleted_at': deleted_at}
-    return editEntity(resourceCategory, metadata)
+    filterParams = {'name': name,
+                    'deleted_at': deleted_at}
+    params = {**filterParams, **extraParams}
+    return editEntity(resourceCategory, params)
 
 
 class ResourceCategory(PrimaryEntity):
@@ -116,7 +119,7 @@ class ResourceCategory(PrimaryEntity):
     """
     __entityName__ = 'resource-category'
 
-    def edit(self, name):
+    def edit(self, name, extraParams={}):
         """
         Edit an existing ResourceCategory.
 
@@ -137,7 +140,7 @@ class ResourceCategory(PrimaryEntity):
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.edit(name='A New ResourceCategory Name')
         """
-        return editResourceCategory(self, name)
+        return editResourceCategory(self, name, extraParams=extraParams)
 
     def delete(self):
         """
@@ -154,7 +157,8 @@ class ResourceCategory(PrimaryEntity):
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None):
+                    quantity_amount=None, quantity_unit=None,
+                    extraParams={}):
         """
         Add Metadata to a Resource Category.
 
@@ -189,7 +193,7 @@ class ResourceCategory(PrimaryEntity):
                                                         value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit)
+                             quantity_amount, quantity_unit, extraParams=extraParams)
 
     def getMetadata(self):
         """
