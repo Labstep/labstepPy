@@ -1,6 +1,6 @@
 import labstep
 
-user = labstep.login('apitest@labstep.com', 'apitestpass')
+user = labstep.login('myaccount@labstep.com', 'mypassword')
 
 # Create a Protocol to Share
 protocol = user.newProtocol('Protocol to Share')
@@ -14,11 +14,7 @@ protocol.shareWith(workspace.id, 'view')
 
 # Retrieve the sharing permissions for the protocol to see which workspaces it
 # is shared with
-resourceCategory = user.newResourceCategory('Test')
-
-resourceCategory.shareWith(workspace.id, 'view')
-
-permissions = resourceCategory.getPermissions()
+permissions = protocol.getPermissions()
 
 # We can alter the permission to 'edit' if we want
 permissions[0].set('edit')
