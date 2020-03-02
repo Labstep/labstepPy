@@ -4,7 +4,7 @@
 import requests
 import json
 from .config import API_ROOT
-from .entity import Entity, getEntities, newEntity, editEntity
+from .entity import Entity, getEntities, newEntity, editEntity, getHeaders
 from .helpers import (url_join, handleError, handleString)
 
 
@@ -59,7 +59,7 @@ def getAttachedTags(entity, count=100):
                        filterParams=filterParams)
 
 
-def newTag(user, name, type):
+def newTag(user, name, type, extraParams={}):
     """
     Create a new Tag.
 
@@ -80,9 +80,10 @@ def newTag(user, name, type):
     tag
         An object representing the new Labstep Tag.
     """
-    fields = {'name': name,
-              'type': handleString(type)}
-    return newEntity(user, Tag, fields)
+    filterParams = {'name': name,
+                    'type': handleString(type)}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, Tag, params)
 
 
 def addTagTo(entity, tag):
@@ -105,7 +106,7 @@ def addTagTo(entity, tag):
     """
     entityName = entity.__entityName__
 
-    headers = {'apikey': entity.__user__.api_key}
+    headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", entityName,
                    str(entity.id), tag.__entityName__, str(tag.id))
     r = requests.put(url, headers=headers)
@@ -146,7 +147,7 @@ def tag(entity, name):
     return addTagTo(entity, tag)
 
 
-def editTag(tag, name):
+def editTag(tag, name, extraParams={}):
     """
     Edit the name of an existing Tag.
 
@@ -162,8 +163,9 @@ def editTag(tag, name):
     tag
         An object representing the edited Tag.
     """
-    fields = {'name': name}
-    return editEntity(tag, fields)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return editEntity(tag, params)
 
 
 def deleteTag(tag):
@@ -180,7 +182,7 @@ def deleteTag(tag):
     tag
         An object representing the tag to delete.
     """
-    headers = {'apikey': tag.__user__.api_key}
+    headers = getHeaders(tag.__user__)
     url = url_join(API_ROOT, "/api/generic/tag/", str(tag.id))
     r = requests.delete(url, headers=headers)
     handleError(r)
@@ -202,7 +204,7 @@ class Tag(Entity):
     """
     __entityName__ = 'tag'
 
-    def edit(self, name):
+    def edit(self, name, extraParams={}):
         """
         Edit the name of an existing Tag.
 
@@ -227,7 +229,7 @@ class Tag(Entity):
             # Select the tag by using python index.
             tags[1].edit(name='A New Tag Name')
         """
-        return editTag(self, name)
+        return editTag(self, name, extraParams=extraParams)
 
     def delete(self):
         """

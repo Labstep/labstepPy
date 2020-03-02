@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
+import requests
+import json
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .helpers import getTime
+from .config import API_ROOT
+from .helpers import getTime, getHeaders, url_join, handleError
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -34,7 +37,7 @@ def getWorkspace(user, workspace_id):
     return getEntity(user, Workspace, id=workspace_id)
 
 
-def getWorkspaces(user, count=100, name=None):
+def getWorkspaces(user, count=100, search_query=None, extraParams={}):
     """
     Retrieve a list of a user's Workspaces on Labstep,
     which can be filtered using the parameters:
@@ -46,19 +49,22 @@ def getWorkspaces(user, count=100, name=None):
         Must have property 'api_key'. See 'login'.
     count (int)
         The number of Workspaces to retrieve.
-    name (str)
+    search_query (str)
         Search for Workspaces with this 'name'.
+    extraParams (dict)
+        Dictionary of extra filter parameters.
 
     Returns
     -------
     workspaces
         A list of Workspace objects.
     """
-    fields = {'name': name}
-    return getEntities(user, Workspace, count, fields)
+    filterParams = {'name': search_query}
+    params = {**filterParams, **extraParams}
+    return getEntities(user, Workspace, count, params)
 
 
-def newWorkspace(user, name):
+def newWorkspace(user, name, extraParams={}):
     """
     Create a new Labstep Workspace.
 
@@ -75,11 +81,12 @@ def newWorkspace(user, name):
     workspace
         An object representing the new Labstep Workspace.
     """
-    fields = {'name': name}
-    return newEntity(user, Workspace, fields)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, Workspace, params)
 
 
-def editWorkspace(workspace, name=None, deleted_at=None):
+def editWorkspace(workspace, name=None, deleted_at=None, extraParams={}):
     """
     Edit an existing Workspace.
 
@@ -97,9 +104,10 @@ def editWorkspace(workspace, name=None, deleted_at=None):
     workspace
         An object representing the Workspace to edit.
     """
-    fields = {'name': name,
-              'deleted_at': deleted_at}
-    return editEntity(workspace, fields)
+    filterParams = {'name': name,
+                    'deleted_at': deleted_at}
+    params = {**filterParams, **extraParams}
+    return editEntity(workspace, params)
 
 
 class Workspace(Entity):
@@ -117,7 +125,9 @@ class Workspace(Entity):
     """
     __entityName__ = 'group'
 
-    def edit(self, name):
+    share_link = None
+
+    def edit(self, name, extraParams={}):
         """
         Edit an existing Workspace.
 
@@ -138,7 +148,7 @@ class Workspace(Entity):
             my_workspace = user.getWorkspace(17000)
             my_workspace.edit(name='A New Workspace Name')
         """
-        return editWorkspace(self, name)
+        return editWorkspace(self, name, extraParams=extraParams)
 
     def delete(self):
         """
@@ -155,7 +165,8 @@ class Workspace(Entity):
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
-                       created_at_from=None, created_at_to=None, tag_id=None):
+                       created_at_from=None, created_at_to=None, tag_id=None,
+                       extraParams={}):
         """
         Retrieve a list of Experiments within this specific Workspace,
         which can be filtered using the parameters:
@@ -189,12 +200,15 @@ class Workspace(Entity):
                                               created_at_to='2019-01-31',
                                               tag_id=800)
         """
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
         return getExperiments(self.__user__, count, search_query,
                               created_at_from, created_at_to, tag_id,
-                              extraParams={'group_id': self.id})
+                              extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
-                     created_at_from=None, created_at_to=None, tag_id=None):
+                     created_at_from=None, created_at_to=None, tag_id=None,
+                     extraParams={}):
         """
         Retrieve a list of Protocols within this specific Workspace,
         which can be filtered using the parameters:
@@ -228,11 +242,14 @@ class Workspace(Entity):
                                             created_at_to='2019-01-31',
                                             tag_id=800)
         """
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
         return getProtocols(self.__user__, count, search_query,
                             created_at_from, created_at_to, tag_id,
-                            extraParams={'group_id': self.id})
+                            extraParams=extraParams)
 
-    def getResources(self, count=100, search_query=None, tag_id=None):
+    def getResources(self, count=100, search_query=None, tag_id=None,
+                     extraParams={}):
         """
         Retrieve a list of Resources within this specific Workspace,
         which can be filtered using the parameters:
@@ -258,10 +275,12 @@ class Workspace(Entity):
             entity = workspace.getResources(search_query='bacteria',
                                             tag_id=800)
         """
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
         return getResources(self.__user__, count, search_query,
-                            tag_id, extraParams={'group_id': self.id})
+                            tag_id, extraParams=extraParams)
 
-    def getResourceCategorys(self, count=100, search_query=None, tag_id=None):
+    def getResourceCategorys(self, count=100, search_query=None, tag_id=None, extraParams={}):
         """
         Retrieve a list of a User's Resource Categorys
         across all Workspaces on Labstep,
@@ -288,10 +307,12 @@ class Workspace(Entity):
             entity = workspace.getResourceCategorys(search_query='properties',
                                                     tag_id=800)
         """
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
         return getResourceCategorys(self.__user__, count, search_query, tag_id,
-                                    extraParams={'group_id': self.id})
+                                    extraParams=extraParams)
 
-    def getResourceLocations(self, count=100, search_query=None):
+    def getResourceLocations(self, count=100, search_query=None, extraParams={}):
         """
         Retrieve a list of a user's ResourceLocations on Labstep,
         which can be filtered using the parameters:
@@ -315,10 +336,12 @@ class Workspace(Entity):
             entity = workspace.getResourceLocations(search_query='properties',
                                                     tag_id=800)
         """
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
         return getResourceLocations(self.__user__, count, search_query,
-                                    extraParams={'group_id': self.id})
+                                    extraParams=extraParams)
 
-    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None):
+    def getOrderRequests(self, count=100, name=None, status=None, tag_id=None, extraParams={}):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
         which can be filtered using the parameters:
@@ -342,10 +365,11 @@ class Workspace(Entity):
 
             entity = workspace.getOrderRequests(name='polymerase')
         """
-        return getOrderRequests(self.__user__, count, name, status=status, tag_id=tag_id,
-                                extraParams={'group_id': self.id})
+        extraParams = {'group_id': self.id, **extraParams}
+        return getOrderRequests(self.__user__, count=count, search_query=name, status=status, tag_id=tag_id,
+                                extraParams=extraParams)
 
-    def getTags(self, count=1000, search_query=None, type=None):
+    def getTags(self, count=1000, search_query=None, type=None, extraParams={}):
         """
         Retrieve a list of Tags within this specific Workspace,
         which can be filtered using the parameters:
@@ -372,10 +396,12 @@ class Workspace(Entity):
 
             entity = workspace.getTags(search_query='bacteria')
         """
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
         return getTags(self.__user__, count, type, search_query,
-                       extraParams={'group_id': self.id})
+                       extraParams=extraParams)
 
-    def getFiles(self, count=100, search_query=None, file_type=None):
+    def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
         """
         Retrieve a list of Files in the Workspace on Labstep,
         which can be filtered using the parameters:
@@ -402,4 +428,48 @@ class Workspace(Entity):
 
             files = workspace.getFiles(search_query='bacteria')
         """
-        return getFiles(self, count, search_query, file_type, extraParams={'group_id': self.id})
+        groupParams = {'group_id': self.id}
+        extraParams = {**groupParams, **extraParams}
+        return getFiles(self.__user__, count, search_query, file_type, extraParams=extraParams)
+
+    def sendInvites(self, emails, message):
+        """
+        Send invites to a Labstep Workspace via email.
+        Parameters
+        ----------
+        emails (list)
+            A list of the emails to send the invite to.
+        message (str)
+            A message to send with the invite.
+
+        Returns
+        -------
+        None
+
+        Example
+        -------
+        ::
+
+        workspace.
+        sendInvites(emails=['collegue1@labstep.com','collegue2@labstep.com'],message='Hi, please collaborate with me on Labstep!')
+        """
+        headers = getHeaders(self.__user__)
+        sharelink = self.share_link
+
+        if sharelink is None:
+            url = url_join(API_ROOT, "api/generic/share-link")
+            fields = {
+                "group_id": self.id
+            }
+            r = requests.post(url, json=fields, headers=headers)
+            handleError(r)
+            sharelink = json.loads(r.content)
+
+        url = url_join(API_ROOT, "api/generic/share-link/email")
+        fields = {
+            "emails": emails,
+            "message": message,
+            "id": sharelink['id']
+        }
+        r = requests.post(url, json=fields, headers=headers)
+        handleError(r)

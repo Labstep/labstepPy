@@ -5,7 +5,7 @@ from .entity import Entity, editEntity, newEntity, getEntities
 from .file import newFile
 
 
-def getComments(entity, count=100):
+def getComments(entity, count=100, extraParams={}):
     """
     Retrieve the Comments attached to a Labstep Entity.
 
@@ -19,11 +19,12 @@ def getComments(entity, count=100):
     comments
         List of the comments attached.
     """
-    filterParams = {'thread_id': entity.thread['id']}
-    return getEntities(entity.__user__, Comment, count, filterParams)
+    filterParams = {'parent_thread_id': entity.thread['id']}
+    params = {**filterParams, **extraParams}
+    return getEntities(entity.__user__, Comment, count, params)
 
 
-def addComment(entity, body, file=None):
+def addComment(entity, body, file=None, extraParams={}):
     """
     Add a comment to a Labstep entity such as an Experiment or Resource.
 
@@ -45,17 +46,18 @@ def addComment(entity, body, file=None):
     """
     threadId = entity.thread['id']
 
-    fields = {'body': body,
-              'thread_id': threadId,
-              }
+    filterParams = {'body': body,
+                    'parent_thread_id': threadId,
+                    }
 
     if file is not None:
-        fields['file_id'] = [file.id]
+        filterParams['file_id'] = [file.id]
 
-    return newEntity(entity.__user__, Comment, fields)
+    params = {**filterParams, **extraParams}
+    return newEntity(entity.__user__, Comment, params)
 
 
-def addCommentWithFile(entity, body, filepath):
+def addCommentWithFile(entity, body, filepath, extraParams={}):
     """
     Add a comment with an attaching file.
 
@@ -73,10 +75,10 @@ def addCommentWithFile(entity, body, filepath):
         lsFile = newFile(entity.__user__, filepath)
     else:
         lsFile = None
-    return addComment(entity, body, lsFile)
+    return addComment(entity, body, lsFile, extraParams=extraParams)
 
 
-def editComment(comment, body):
+def editComment(comment, body, extraParams={}):
     """
     Edit an existing comment/caption.
 
@@ -92,14 +94,15 @@ def editComment(comment, body):
     comment
         An object representing the edited comment.
     """
-    fields = {'body': body}
-    return editEntity(comment, fields)
+    filterParams = {'body': body}
+    params = {**filterParams, **extraParams}
+    return editEntity(comment, params)
 
 
 class Comment(Entity):
     __entityName__ = 'comment'
 
-    def edit(self, body):
+    def edit(self, body, extraParams={}):
         """
         Edit an existing comment/caption.
 
@@ -119,4 +122,4 @@ class Comment(Entity):
 
             my_comment.edit(body='My new comment.')
         """
-        return editComment(self, body)
+        return editComment(self, body, extraParams=extraParams)

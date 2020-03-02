@@ -61,7 +61,7 @@ def getResourceItems(user, resource, count=100, search_query=None,
 
 def newResourceItem(user, resource, name=None, availability=None,
                     quantity_amount=None, quantity_unit=None,
-                    location=None):
+                    location=None, extraParams={}):
     """
     Create a new Labstep ResourceItem.
 
@@ -89,21 +89,22 @@ def newResourceItem(user, resource, name=None, availability=None,
     resource
         An object representing the new Labstep ResourceItem.
     """
-    fields = {'resource_id': resource.id,
-              'name': name,
-              'status': handleString(availability),
-              'quantity_amount': quantity_amount,
-              'quantity_unit': quantity_unit}
+    filterParams = {'resource_id': resource.id,
+                    'name': name,
+                    'status': handleString(availability),
+                    'quantity_amount': quantity_amount,
+                    'quantity_unit': quantity_unit}
 
     if location is not None:
-        fields['resource_location_id'] = location.id
+        filterParams['resource_location_id'] = location.id
 
-    return newEntity(user, ResourceItem, fields)
+    params = {**filterParams, **extraParams}
+    return newEntity(user, ResourceItem, params)
 
 
 def editResourceItem(resourceItem, name=None, availability=None,
                      quantity_amount=None, quantity_unit=None,
-                     location=None, deleted_at=None):
+                     location=None, deleted_at=None, extraParams={}):
     """
     Edit an existing ResourceItem.
 
@@ -130,18 +131,19 @@ def editResourceItem(resourceItem, name=None, availability=None,
     ResourceItem
         An object representing the edited ResourceItem.
     """
-    fields = {'name': name,
-              'status': handleString(availability),
-              'quantity_unit': quantity_unit,
-              'deleted_at': deleted_at}
+    filterParams = {'name': name,
+                    'status': handleString(availability),
+                    'quantity_unit': quantity_unit,
+                    'deleted_at': deleted_at}
 
     if quantity_amount is not None:
-        fields['quantity_amount'] = float(quantity_amount)
+        filterParams['quantity_amount'] = float(quantity_amount)
 
     if location is not None:
-        fields['resource_location_id'] = location.id
+        filterParams['resource_location_id'] = location.id
 
-    return editEntity(resourceItem, fields)
+    params = {**filterParams, **extraParams}
+    return editEntity(resourceItem, params)
 
 
 class ResourceItem(Entity):
@@ -161,7 +163,7 @@ class ResourceItem(Entity):
 
     def edit(self, name=None, availability=None,
              quantity_amount=None, quantity_unit=None,
-             location=None):
+             location=None, extraParams={}):
         """
         Edit an existing ResourceItem.
 
@@ -193,7 +195,7 @@ class ResourceItem(Entity):
         """
         return editResourceItem(self, name, availability,
                                 quantity_amount, quantity_unit,
-                                location=location)
+                                location, extraParams=extraParams)
 
     def delete(self):
         """
@@ -208,7 +210,7 @@ class ResourceItem(Entity):
         """
         return editResourceItem(self, deleted_at=getTime())
 
-    def addComment(self, body, filepath=None):
+    def addComment(self, body, filepath=None, extraParams={}):
         """
         Add a comment and/or file to a Labstep ResourceItem.
 
@@ -233,9 +235,9 @@ class ResourceItem(Entity):
             my_resource_item.addComment(body='I am commenting!',
                                         filepath='pwd/file_to_upload.dat')
         """
-        return addCommentWithFile(self, body, filepath)
+        return addCommentWithFile(self, body, filepath, extraParams=extraParams)
 
-    def getComments(self, count=100):
+    def getComments(self, count=100, extraParams={}):
         """
         Retrieve the Comments attached to this Labstep Entity.
 
@@ -253,11 +255,12 @@ class ResourceItem(Entity):
             comments = item.getComments()
             comments[0].attributes()
         """
-        return getComments(self, count)
+        return getComments(self, count, extraParams=extraParams)
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None):
+                    quantity_amount=None, quantity_unit=None,
+                    extraParams={}):
         """
         Add Metadata to a ResourceItem.
 
@@ -292,7 +295,7 @@ class ResourceItem(Entity):
                                                     value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit)
+                             quantity_amount, quantity_unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

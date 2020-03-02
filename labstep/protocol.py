@@ -66,7 +66,7 @@ def getProtocols(user, count=100, search_query=None,
     return getEntities(user, Protocol, count, params)
 
 
-def newProtocol(user, name):
+def newProtocol(user, name, extraParams={}):
     """
     Create a new Labstep Protocol.
 
@@ -83,11 +83,12 @@ def newProtocol(user, name):
     protocol
         An object representing the new Labstep Protocol.
     """
-    fields = {'name': name}
-    return newEntity(user, Protocol, fields)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, Protocol, params)
 
 
-def editProtocol(protocol, name=None, deleted_at=None):
+def editProtocol(protocol, name=None, deleted_at=None, extraParams={}):
     """
     Edit an existing Protocol.
 
@@ -105,15 +106,17 @@ def editProtocol(protocol, name=None, deleted_at=None):
     protocol
         An object representing the edited Protocol.
     """
-    fields = {'name': name,
-              'deleted_at': deleted_at}
-    return editEntity(protocol, fields)
+    filterParams = {'name': name,
+                    'deleted_at': deleted_at}
+    params = {**filterParams, **extraParams}
+    return editEntity(protocol, params)
 
 
 class ProtocolMaterial(Entity):
     __entityName__ = 'protocol-value'
 
-    def edit(self, name=None, amount=None, units=None, resource=None):
+    def edit(self, name=None, amount=None, units=None, resource=None,
+             extraParams={}):
         """
         Edit an existing Protocol Material.
 
@@ -143,7 +146,7 @@ class ProtocolMaterial(Entity):
         """
         fields = {'name': name,
                   'value': amount,
-                  'units': units}
+                  'units': units, **extraParams}
 
         if resource is not None:
             fields['resource_id'] = resource.id
@@ -158,7 +161,7 @@ class ProtocolStep(Entity):
 class ProtocolTable(Entity):
     __entityName__ = 'protocol-table'
 
-    def edit(self, name=None, data=None):
+    def edit(self, name=None, data=None, extraParams={}):
         """
         Edit an existing Protocol Table.
 
@@ -201,15 +204,17 @@ class ProtocolTable(Entity):
             protocol_tables[0].edit(name='New Table Name', data=data)
         """
 
-        fields = {'name': name,
-                  'data': data}
-        return editEntity(self, fields)
+        filterParams = {'name': name,
+                        'data': data}
+        params = {**filterParams, **extraParams}
+        return editEntity(self, params)
 
 
 class ProtocolTimer(Entity):
     __entityName__ = 'protocol-timer'
 
-    def edit(self, name=None, hours=None, minutes=None, seconds=None):
+    def edit(self, name=None, hours=None, minutes=None, seconds=None,
+             extraParams={}):
         """
         Edit an existing Protocol Timer.
 
@@ -238,16 +243,17 @@ class ProtocolTimer(Entity):
             protocol_timers[0].edit(name='New Timer Name',
                                     minutes=1, seconds=17)
         """
-        fields = {'name': name}
+        filterParams = {'name': name}
 
         if hours is not None:
-            fields['hours'] = hours
+            filterParams['hours'] = hours
         if minutes is not None:
-            fields['minutes'] = minutes
+            filterParams['minutes'] = minutes
         if seconds is not None:
-            fields['seconds'] = seconds
+            filterParams['seconds'] = seconds
 
-        return editEntity(self, fields)
+        params = {**filterParams, **extraParams}
+        return editEntity(self, params)
 
 
 class Protocol(PrimaryEntity):
@@ -265,7 +271,7 @@ class Protocol(PrimaryEntity):
     """
     __entityName__ = 'protocol-collection'
 
-    def edit(self, name):
+    def edit(self, name, extraParams={}):
         """
         Edit an existing Protocol.
 
@@ -286,7 +292,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        return editProtocol(self, name)
+        return editProtocol(self, name, extraParams=extraParams)
 
     def delete(self):
         """
@@ -321,7 +327,8 @@ class Protocol(PrimaryEntity):
         steps = self.last_version['protocol_steps']
         return listToClass(steps, ProtocolStep, self.__user__)
 
-    def addMaterial(self, name=None, amount=None, units=None, resource=None):
+    def addMaterial(self, name=None, amount=None, units=None, resource=None,
+                    extraParams={}):
         """
         Add a new material to the Protocol.
 
@@ -351,15 +358,16 @@ class Protocol(PrimaryEntity):
             protocol.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource=resource)
         """
-        fields = {'protocol_id': self.last_version['id'],
-                  'name': name,
-                  'value': amount,
-                  'units': units}
+        filterParams = {'protocol_id': self.last_version['id'],
+                        'name': name,
+                        'value': amount,
+                        'units': units}
 
         if resource is not None:
-            fields['resource_id'] = resource.id
+            filterParams['resource_id'] = resource.id
 
-        return newEntity(self.__user__, ProtocolMaterial, fields)
+        params = {**filterParams, **extraParams}
+        return newEntity(self.__user__, ProtocolMaterial, params)
 
     def getMaterials(self):
         """

@@ -4,3 +4,4 @@ sphinxcontrib-programoutput
 labstep
 pandas
 python-dotenv
+requests

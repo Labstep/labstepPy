@@ -60,7 +60,7 @@ def getResources(user, count=100, search_query=None, tag_id=None,
     return getEntities(user, Resource, count, params)
 
 
-def newResource(user, name):
+def newResource(user, name, extraParams={}):
     """
     Create a new Labstep Resource.
 
@@ -77,11 +77,13 @@ def newResource(user, name):
     resource
         An object representing the new Labstep Resource.
     """
-    fields = {'name': name}
-    return newEntity(user, Resource, fields)
+    filterParams = {'name': name}
+    params = {**filterParams, **extraParams}
+    return newEntity(user, Resource, params)
 
 
-def editResource(resource, name=None, deleted_at=None, resource_category=None):
+def editResource(resource, name=None, deleted_at=None, resource_category=None,
+                 extraParams={}):
     """
     Edit an existing Resource.
 
@@ -101,13 +103,14 @@ def editResource(resource, name=None, deleted_at=None, resource_category=None):
     resource
         An object representing the edited Resource.
     """
-    fields = {'name': name,
-              'deleted_at': deleted_at}
+    filterParams = {'name': name,
+                    'deleted_at': deleted_at}
 
     if resource_category is not None:
-        fields['resource_category_id'] = resource_category.id
+        filterParams['resource_category_id'] = resource_category.id
 
-    return editEntity(resource, fields)
+    params = {**filterParams, **extraParams}
+    return editEntity(resource, params)
 
 
 class Resource(PrimaryEntity):
@@ -125,7 +128,7 @@ class Resource(PrimaryEntity):
     """
     __entityName__ = 'resource'
 
-    def edit(self, name):
+    def edit(self, name, extraParams={}):
         """
         Edit an existing Resource.
 
@@ -146,7 +149,7 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             my_resource.edit(name='A New Resource Name')
         """
-        return editResource(self, name)
+        return editResource(self, name, extraParams=extraParams)
 
     def delete(self):
         """
@@ -163,7 +166,8 @@ class Resource(PrimaryEntity):
 
     def addMetadata(self, fieldType="default", fieldName=None,
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None):
+                    quantity_amount=None, quantity_unit=None,
+                    extraParams={}):
         """
         Add Metadata to a Resource.
 
@@ -198,7 +202,8 @@ class Resource(PrimaryEntity):
                                                value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit)
+                             quantity_amount, quantity_unit,
+                             extraParams=extraParams)
 
     def getMetadata(self):
         """
@@ -219,7 +224,7 @@ class Resource(PrimaryEntity):
         """
         return getMetadata(self)
 
-    def setResourceCategory(self, resource_category):
+    def setResourceCategory(self, resource_category, extraParams={}):
         """
         Add a Labstep ResourceCategory to a Resource.
 
@@ -244,9 +249,10 @@ class Resource(PrimaryEntity):
             # Set the Resource Category
             my_resource = my_resource.setResourceCategory(resource_category)
         """
-        return editResource(self, resource_category=resource_category)
+        return editResource(self, resource_category=resource_category,
+                            extraParams=extraParams)
 
-    def newOrderRequest(self, quantity=1):
+    def newOrderRequest(self, quantity=1, extraParams={}):
         """
         Create a new Labstep OrderRequest.
 
@@ -267,7 +273,8 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             order_request = my_resource.newOrderRequest(quantity=2)
         """
-        return newOrderRequest(self.__user__, self, quantity)
+        return newOrderRequest(self.__user__, self, quantity,
+                               extraParams=extraParams)
 
     def getItems(self, count=100, search_query=None, extraParams={}):
         """
@@ -300,7 +307,7 @@ class Resource(PrimaryEntity):
 
     def newItem(self, name=None, availability='available',
                 quantity_amount=None, quantity_unit=None,
-                location=None):
+                location=None, extraParams={}):
         """
         Create a new Labstep ResourceItem.
 
@@ -332,4 +339,5 @@ class Resource(PrimaryEntity):
         """
         return newResourceItem(self.__user__, self, name,
                                availability, quantity_amount,
-                               quantity_unit, location)
+                               quantity_unit, location,
+                               extraParams=extraParams)

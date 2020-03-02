@@ -4,7 +4,8 @@
 import requests
 from .config import API_ROOT
 from .entity import Entity, newEntity, editEntity
-from .helpers import (listToClass, url_join, handleError, handleDate)
+from .helpers import (listToClass, url_join, handleError,
+                      handleDate, getHeaders)
 
 
 def getMetadata(entity):
@@ -27,7 +28,8 @@ def getMetadata(entity):
 
 def addMetadataTo(entity, fieldType="default", fieldName=None,
                   value=None, date=None,
-                  quantity_amount=None, quantity_unit=None):
+                  quantity_amount=None, quantity_unit=None,
+                  extraParams={}):
     """
     Add Metadata to a Resource.
 
@@ -55,17 +57,18 @@ def addMetadataTo(entity, fieldType="default", fieldName=None,
     metadata
         An object representing the new Labstep Metadata.
     """
-    fields = {'metadata_thread_id': entity.metadata_thread['id'],
-              'type': fieldType,
-              'label': fieldName,
-              'value': value,
-              'date': handleDate(date),
-              'quantity_amount': quantity_amount,
-              'quantity_unit': quantity_unit}
-    return newEntity(entity.__user__, Metadata, fields)
+    filterParams = {'metadata_thread_id': entity.metadata_thread['id'],
+                    'type': fieldType,
+                    'label': fieldName,
+                    'value': value,
+                    'date': handleDate(date),
+                    'quantity_amount': quantity_amount,
+                    'quantity_unit': quantity_unit}
+    params = {**filterParams, **extraParams}
+    return newEntity(entity.__user__, Metadata, params)
 
 
-def editMetadata(metadata, fieldName=None, value=None):
+def editMetadata(metadata, fieldName=None, value=None, extraParams={}):
     """
     Edit the value of an existing Metadata.
 
@@ -83,9 +86,10 @@ def editMetadata(metadata, fieldName=None, value=None):
     metadata
         An object representing the edited Metadata.
     """
-    fields = {'label': fieldName,
-              'value': value}
-    return editEntity(metadata, fields)
+    filterParams = {'label': fieldName,
+                    'value': value}
+    params = {**filterParams, **extraParams}
+    return editEntity(metadata, params)
 
 
 def deleteMetadata(metadata):
@@ -101,7 +105,7 @@ def deleteMetadata(metadata):
     -------
     None
     """
-    headers = {'apikey': metadata.__user__.api_key}
+    headers = getHeaders(metadata.__user__)
     url = url_join(API_ROOT, "/api/generic/metadata/", str(metadata.id))
     r = requests.delete(url, headers=headers)
     handleError(r)
@@ -123,7 +127,7 @@ class Metadata(Entity):
     """
     __entityName__ = 'metadata'
 
-    def edit(self, fieldName=None, value=None):
+    def edit(self, fieldName=None, value=None, extraParams={}):
         """
         Edit the value of an existing Metadata.
 
@@ -145,7 +149,7 @@ class Metadata(Entity):
 
             metadata.edit(value='2.50')
         """
-        return editMetadata(self, fieldName, value)
+        return editMetadata(self, fieldName, value, extraParams=extraParams)
 
     def delete(self):
         """
