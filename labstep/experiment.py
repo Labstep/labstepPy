@@ -4,6 +4,7 @@
 
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
 from .primaryEntity import PrimaryEntity
+from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
 
@@ -313,6 +314,61 @@ class ExperimentStep(Entity):
             exp_protocol_steps[2].complete()
         """
         return self.edit(completed_at=getTime())
+
+    def addComment(self, body, filepath=None):
+        """
+        Add a comment and/or file to this step.
+
+        Parameters
+        ----------
+        body (str)
+            The body of the comment.
+        filepath (str)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
+
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.getSteps()
+            exp_protocol_steps[0].addComment('This step failed')
+        """
+        return addCommentWithFile(self, body, filepath)
+
+    def getComments(self, count=100):
+        """
+        Retrieve the Comments attached to this step.
+
+        Parameters
+        ----------
+
+        count (int)
+            The number of comments to return
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        ::
+
+           experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.getSteps()
+            exp_protocol_steps[0].getComments()
+        """
+        return getComments(self, count)
+
 
 
 class ExperimentTable(Entity):
