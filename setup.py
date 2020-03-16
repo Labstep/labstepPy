@@ -4,7 +4,7 @@ with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setup(name='labstep',
-      version='2.2.3',
+      version='2.3.0',
       description='Python SDK for working with the Labstep API',
       long_description=long_description,
       url='http://github.com/Labstep/labstepPy',
