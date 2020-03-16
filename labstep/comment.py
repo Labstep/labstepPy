@@ -123,3 +123,49 @@ class Comment(Entity):
             my_comment.edit(body='My new comment.')
         """
         return editComment(self, body, extraParams=extraParams)
+
+    def addComment(self, body, filepath=None):
+        """
+        Add a comment and/or file about this comment.
+
+        Parameters
+        ----------
+        body (str)
+            The body of the comment.
+        filepath (str)
+            A Labstep File entity to attach to the comment,
+            including the filepath.
+
+        Returns
+        -------
+        :class:`~labstep.comment.Comment`
+            The comment added.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            my_experiment.getComments()[0].addComment(body='I am commenting!',
+                                     filepath='pwd/file_to_upload.dat')
+        """
+        return addCommentWithFile(self, body, filepath)
+
+    def getComments(self, count=100):
+        """
+        Retrieve the Comments attached to this Comment.
+
+        Returns
+        -------
+        List[:class:`~labstep.comment.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperiment(17000)
+            comments = entity.getComments()[0].getComments()
+            comments[0]
+        """
+        return getComments(self, count)
