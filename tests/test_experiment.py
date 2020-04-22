@@ -12,7 +12,8 @@ testName = labstep.helpers.getTime()
 new_entity = testUser.newExperiment(testName)
 entity = testUser.getExperiment(new_entity.id)
 entity.addComment(testName)
-exp_protocol = entity.addProtocol(testUser.getProtocol(4926))
+protocol = testUser.newProtocol('Test')
+exp_protocol = entity.addProtocol(protocol)
 entity = testUser.getExperiment(entity.id)
 
 
@@ -29,8 +30,8 @@ class TestExperiment:
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.getProtocol(4926)
-        result = entity.addProtocol(get_protocol)
+        protocol = testUser.newProtocol('Test')
+        result = entity.addProtocol(protocol)
         assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
 
