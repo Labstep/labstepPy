@@ -98,11 +98,19 @@ Always ensure you are using the latest version of the SDK by running:
 If you have further issues please contact **barney@labstep.com** for support.
 
 
+Contributors
+----------------
+
+- Sze May Yee
+- Barney Walker
+
 Getting Involved
 ----------------
 labstepPy is an Open Source package. 
 
 Feel free to submit bug reports, feature requests or PRs on Github `here <https://github.com/Labstep/labstepPy>`_.
+
+If you are interested in contributing please contact **barney@labstep.com**.
 
 
 Indices and tables

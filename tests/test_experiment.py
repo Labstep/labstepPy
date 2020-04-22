@@ -11,8 +11,31 @@ testName = labstep.helpers.getTime()
 # Make new entity
 new_entity = testUser.newExperiment(testName)
 entity = testUser.getExperiment(new_entity.id)
-entity.addComment(testName)
-exp_protocol = entity.addProtocol(testUser.getProtocol(4926))
+protocol = testUser.newProtocol('Test')
+protocol.addComment(testName)
+protocol.addComment(testName)
+protocol.addMaterial(testName, amount='0.1', units='ml')
+protocol.addTimer(name=testName, hours=4, minutes=15)
+data = {
+    "rowCount": 6,
+    "columnCount": 6,
+    "colHeaderData": {},
+    "data": {
+        "dataTable": {
+            0: {
+                0: {
+                    "value": 'Cell A1'
+                },
+                1: {
+                    "value": 'Cell B1'
+                }
+            }
+        }
+    }
+}
+protocol.addTable(name=testName, data=data)
+protocol = testUser.getProtocol(protocol.id)
+exp_protocol = entity.addProtocol(protocol)
 entity = testUser.getExperiment(entity.id)
 
 
