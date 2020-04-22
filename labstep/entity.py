@@ -144,3 +144,6 @@ class Entity:
                              v in all_attributes if not (k.startswith('__'))}
         pp = pprint.PrettyPrinter(indent=1)
         return pp.pformat(entity_attributes)
+
+    def update(self):
+        update(self, getEntity(self.__user__, type(self), self.id).__data__)
