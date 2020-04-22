@@ -109,6 +109,7 @@ def update(entity, newData):
     -------
     the updated entity
     """
+    entity.__data__ = newData
     for key in newData:
         setattr(entity, key, newData[key])
     return entity

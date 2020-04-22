@@ -22,6 +22,8 @@ def getMetadata(entity):
     metadatas
         An array of Metadata objects for the Entity.
     """
+    if 'metadatas' not in entity.metadata_thread:
+        entity.update()
     metadatas = entity.metadata_thread['metadatas']
     return listToClass(metadatas, Metadata, entity.__user__)
 
