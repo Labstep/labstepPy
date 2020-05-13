@@ -33,6 +33,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+            pip install twine
             pip install -e .
 
       - save_cache:
@@ -58,6 +59,25 @@ jobs:
             . venv/bin/activate
             pytest tests/
 
+      -run:
+          name: build
+          command: |
+            . venv/bin/activate
+            # create a source distribution
+            python setup.py sdist
+
+            # create a wheel
+            python setup.py bdist_wheel
+
+      -run:
+          name: deploy
+          environment: 
+            TWINE_USER: "__token__"
+          command: |
+            . venv/bin/activate
+            export TWINE_PASSWORD=$TWINE_TEST_PASSWORD 
+            twine upload -r testpypi dist/*
+            
       - store_artifacts:
           path: test-reports
           destination: test-reports
