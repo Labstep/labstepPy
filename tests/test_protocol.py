@@ -130,4 +130,4 @@ class TestProtocol:
         metadata = entity.addDataElement(fieldType="default", fieldName="test")
         newEntity = testUser.getProtocol(entity.id)
         dataElements = newEntity.getDataElements()
-        assert len(dataElements) == 0
+        assert len(dataElements) == 1
