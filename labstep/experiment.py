@@ -241,12 +241,12 @@ class ExperimentProtocol(Entity):
                     quantity_amount=None, quantity_unit=None,
                     extraParams={}):
         """
-        Add Metadata to a ExperimentProtocol.
+        Add a Data Element to a Protocol within an Experiment.  
 
         Parameters
         ----------
         fieldType (str)
-            The Metadata field type. Options are: "default", "date",
+            The field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
         fieldName (str)
             The name of the field.
@@ -263,7 +263,7 @@ class ExperimentProtocol(Entity):
         Returns
         -------
         :class:`~labstep.metadata.Metadata`
-            An object representing the new Labstep Metadata.
+            An object representing the new Labstep Data Element.
 
         Example
         -------
@@ -280,12 +280,12 @@ class ExperimentProtocol(Entity):
 
     def getDataElements(self):
         """
-        Retrieve the Metadata of a Labstep ExperimentProtocol.
+        Retrieve the Data Elements of a Protocol within an Experiment.
 
         Returns
         -------
         :class:`~labstep.metadata.Metadata`
-            An array of Metadata objects for the ExperimentProtocol.
+            An array of objects representing the Labstep Data Elements on a Protocol within an Experiment.
 
         Example
         -------
@@ -667,12 +667,12 @@ class Experiment(PrimaryEntity):
                     quantity_amount=None, quantity_unit=None,
                     extraParams={}):
         """
-        Add Metadata to a Experiment.
+        Add Data Elements to a Labstep Experiment.
 
         Parameters
         ----------
         fieldType (str)
-            The Metadata field type. Options are: "default", "date",
+            The field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
         fieldName (str)
             The name of the field.
@@ -689,7 +689,7 @@ class Experiment(PrimaryEntity):
         Returns
         -------
         :class:`~labstep.metadata.Metadata`
-            An object representing the new Labstep Metadata.
+            An object representing the new Labstep Data Element.
 
         Example
         -------
@@ -705,12 +705,12 @@ class Experiment(PrimaryEntity):
 
     def getDataElements(self):
         """
-        Retrieve the Metadata of a Labstep ExperimentProtocol.
+        Retrieve the Data Elements of a Protocol within an Experiment.
 
         Returns
         -------
         :class:`~labstep.metadata.Metadata`
-            An array of Metadata objects for the ExperimentProtocol.
+            An array of objects representing Data Elements on a Protocol within an Experiment.
 
         Example
         -------
