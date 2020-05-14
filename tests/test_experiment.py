@@ -102,3 +102,13 @@ class TestExperiment:
             and sig.statement == 'test' \
             and sig.revoked_at is not None, \
             'FAILED SIGNATURES TEST'
+
+    def test_getDataElements(self):
+        dataElements = entity.getDataElements()
+        assert len(dataElements) == 0
+
+    def test_addDataElementTo(self):
+        dataElement = entity.addDataElement(fieldType="default", fieldName="test")
+        newEntity = testUser.getExperiment(entity.id)
+        dataElements = newEntity.getDataElements()
+        assert len(dataElements) == 1

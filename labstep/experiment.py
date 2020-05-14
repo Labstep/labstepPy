@@ -7,7 +7,7 @@ from .primaryEntity import PrimaryEntity
 from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
-
+from .metadata import Metadata, addMetadataTo, getMetadata
 
 def getExperiment(user, experiment_id):
     """
@@ -235,6 +235,67 @@ class ExperimentProtocol(Entity):
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
 
+
+    def addDataElement(self, fieldType="default", fieldName=None,
+                    value=None, date=None,
+                    quantity_amount=None, quantity_unit=None,
+                    extraParams={}):
+        """
+        Add Metadata to a ExperimentProtocol.
+
+        Parameters
+        ----------
+        fieldType (str)
+            The Metadata field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        fieldName (str)
+            The name of the field.
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        quantity_amount (float)
+            The quantity.
+        quantity_unit (str)
+            The unit accompanying the quantity_amount entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Metadata.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_protocol = experiment.getProtocols()[0]
+            dataElement = experiment_protocol.addDataElement(fieldName="Refractive Index",
+                                               value="1.73")
+        """
+        return addMetadataTo(self, fieldType, fieldName, value, date,
+                             quantity_amount, quantity_unit,
+                             extraParams=extraParams)
+
+    def getDataElements(self):
+        """
+        Retrieve the Metadata of a Labstep ExperimentProtocol.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of Metadata objects for the ExperimentProtocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            metadata = exp_protocol.getDataElements()
+        """
+        return getMetadata(self)
 
 class ExperimentMaterial(Entity):
     __entityName__ = 'experiment-value'
@@ -600,6 +661,66 @@ class Experiment(PrimaryEntity):
             protocols[0].attributes()
         """
         return listToClass(self.experiments, ExperimentProtocol, self.__user__)
+
+    def addDataElement(self, fieldType="default", fieldName=None,
+                    value=None, date=None,
+                    quantity_amount=None, quantity_unit=None,
+                    extraParams={}):
+        """
+        Add Metadata to a Experiment.
+
+        Parameters
+        ----------
+        fieldType (str)
+            The Metadata field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        fieldName (str)
+            The name of the field.
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        quantity_amount (float)
+            The quantity.
+        quantity_unit (str)
+            The unit accompanying the quantity_amount entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Metadata.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            dataElement = experiment.addDataElement(fieldName="Refractive Index",
+                                               value="1.73")
+        """
+        return addMetadataTo(self, fieldType, fieldName, value, date,
+                             quantity_amount, quantity_unit,
+                             extraParams=extraParams)
+
+    def getDataElements(self):
+        """
+        Retrieve the Metadata of a Labstep ExperimentProtocol.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of Metadata objects for the ExperimentProtocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            dataElements = exp_protocol.getDataElements()
+        """
+        return getMetadata(self)
 
     def getSignatures(self):
         """
