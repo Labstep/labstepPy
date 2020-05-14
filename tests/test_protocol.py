@@ -121,3 +121,13 @@ class TestProtocol:
         result = table.edit(name=testName)
         assert result.name == testName, \
             'FAILED TO EDIT TABLE'
+
+    def test_getDataElements(self):
+        dataElements = entity.getDataElements()
+        assert len(dataElements) == 0
+
+    def test_addDataElement(self):
+        metadata = entity.addDataElement(fieldType="default", fieldName="test")
+        newEntity = testUser.getProtocol(entity.id)
+        dataElements = newEntity.getDataElements()
+        assert len(dataElements) == 0

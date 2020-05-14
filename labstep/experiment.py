@@ -7,7 +7,8 @@ from .primaryEntity import PrimaryEntity
 from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
-from .metadata import Metadata, addMetadataTo, getMetadata
+from .metadata import addMetadataTo, getMetadata
+
 
 def getExperiment(user, experiment_id):
     """
@@ -235,13 +236,12 @@ class ExperimentProtocol(Entity):
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
 
-
     def addDataElement(self, fieldType="default", fieldName=None,
-                    value=None, date=None,
-                    quantity_amount=None, quantity_unit=None,
-                    extraParams={}):
+                       value=None, date=None,
+                       quantity_amount=None, quantity_unit=None,
+                       extraParams={}):
         """
-        Add a Data Element to a Protocol within an Experiment.  
+        Add a Data Element to a Protocol within an Experiment.
 
         Parameters
         ----------
@@ -296,6 +296,7 @@ class ExperimentProtocol(Entity):
             metadata = exp_protocol.getDataElements()
         """
         return getMetadata(self)
+
 
 class ExperimentMaterial(Entity):
     __entityName__ = 'experiment-value'
@@ -663,9 +664,9 @@ class Experiment(PrimaryEntity):
         return listToClass(self.experiments, ExperimentProtocol, self.__user__)
 
     def addDataElement(self, fieldType="default", fieldName=None,
-                    value=None, date=None,
-                    quantity_amount=None, quantity_unit=None,
-                    extraParams={}):
+                       value=None, date=None,
+                       quantity_amount=None, quantity_unit=None,
+                       extraParams={}):
         """
         Add Data Elements to a Labstep Experiment.
 
