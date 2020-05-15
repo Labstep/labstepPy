@@ -87,8 +87,8 @@ jobs:
             TWINE_USERNAME: "__token__"
           command: |
             . venv/bin/activate
-            export TWINE_PASSWORD=$TWINE_TEST_PASSWORD 
-            REPOSITORY=$([ "$CIRCLE_BRANCH" == "master" ] && echo "pypi" || echo "testpypi")
+            export TWINE_PASSWORD=$([ "$CIRCLE_BRANCH" == "master" ] && echo $TWINE_PRODUCTION_PASSWORD || echo $TWINE_TEST_PASSWORD ) 
+            export REPOSITORY=$([ "$CIRCLE_BRANCH" == "master" ] && echo "pypi" || echo "testpypi")
             twine check dist/*
             twine upload -r $REPOSITORY dist/* --skip-existing
               
