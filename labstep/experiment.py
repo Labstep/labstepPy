@@ -274,7 +274,7 @@ class ExperimentProtocol(Entity):
             dataElement = experiment_protocol.addDataElement("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldType, fieldName, value, date,
+        return addMetadataTo(self, fieldName, fieldType, value, date,
                              number, unit,
                              extraParams=extraParams)
 
@@ -700,7 +700,7 @@ class Experiment(PrimaryEntity):
             dataElement = experiment.addDataElement("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldType, fieldName, value, date,
+        return addMetadataTo(self, fieldName, fieldType, value, date,
                              number, unit,
                              extraParams=extraParams)
 

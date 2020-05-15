@@ -294,7 +294,7 @@ class ResourceItem(Entity):
             metadata = my_resource_item.addMetadata("Refractive Index",
                                                     value="1.73")
         """
-        return addMetadataTo(self, fieldType, fieldName, value, date,
+        return addMetadataTo(self, fieldName, fieldType, value, date,
                              number, unit, extraParams=extraParams)
 
     def getMetadata(self):

@@ -201,7 +201,7 @@ class Resource(PrimaryEntity):
             metadata = resource.addMetadata("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldType, fieldName, value, date,
+        return addMetadataTo(self, fieldName, fieldType, value, date,
                              number, unit,
                              extraParams=extraParams)
 
