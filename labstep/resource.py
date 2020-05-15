@@ -306,7 +306,7 @@ class Resource(PrimaryEntity):
                                 extraParams=extraParams)
 
     def newItem(self, name=None, availability='available',
-                number=None, unit=None,
+                quantity_amount=None, quantity_unit=None,
                 location=None, extraParams={}):
         """
         Create a new Labstep ResourceItem.
@@ -318,9 +318,9 @@ class Resource(PrimaryEntity):
         availability (str)
             The status of the ResourceItem. Options are:
             "available" and "unavailable".
-        number (float)
+        quantity_amount (float)
             The quantity of the ResourceItem.
-        unit (str)
+        quantity_unit (str)
             The unit of the quantity.
         location (obj)
             The ResourceLocation of the ResourceItem.
@@ -338,6 +338,6 @@ class Resource(PrimaryEntity):
             item = my_resource.newItem(name='Test Item')
         """
         return newResourceItem(self.__user__, self, name,
-                               availability, number,
-                               unit, location,
+                               availability, quantity_amount,
+                               quantity_unit, location,
                                extraParams=extraParams)
