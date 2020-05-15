@@ -74,13 +74,6 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      # - run:
-      #   name: verify git tag vs. version
-      #   command: |
-      #     python3 -m venv venv
-      #     . venv/bin/activate
-      #     python setup.py verify
-
       - run:
           name: build dist
           command: |
@@ -95,8 +88,9 @@ jobs:
           command: |
             . venv/bin/activate
             export TWINE_PASSWORD=$TWINE_TEST_PASSWORD 
-            env
-            twine upload -r testpypi dist/*
+            REPOSITORY=$([ "$CIRCLE_BRANCH" == "master" ] && echo "pypi" || echo "testpypi")
+            twine check dist/*
+            twine upload -r $REPOSITORY dist/* --skip-existing
               
 workflows:
   version: 2
@@ -107,4 +101,4 @@ workflows:
           requires: [test]
           filters:
             branches:
-              only: devops/publish-to-pypi
+              only: [develop, master, devops/publish-to-pypi]
