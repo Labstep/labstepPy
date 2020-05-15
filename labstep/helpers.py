@@ -3,7 +3,7 @@
 
 from datetime import datetime
 from time import gmtime, strftime
-from .config import version
+from .version import version
 
 
 def url_join(*args):
