@@ -55,11 +55,35 @@ jobs:
 
       # Download and cache dependencies
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+            pip install twine
+            pip install -e .
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: build dist
+          command: |
+            . venv/bin/activate
+            # create a source distribution
+            python setup.py sdist
+
+            # create a wheel
+            python setup.py bdist_wheel       
+               
 workflows:
   version: 2
   build_test_deploy:
@@ -67,4 +91,4 @@ workflows:
       - test
       - build:
           requires:
-            - test
+           - test
