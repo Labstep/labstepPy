@@ -48,6 +48,9 @@ jobs:
           destination: test-reports
 
   build:
+    branches:
+      only:
+        - devops/publish-to-pypi
     docker:
       - image: circleci/python:3.6.1      
     steps:
@@ -104,6 +107,4 @@ workflows:
     jobs:
       - test
       - build:
-          branches:
-            only:
-              - devops/publish-to-pypi
+          requires: test
