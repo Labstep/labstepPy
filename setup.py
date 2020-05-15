@@ -1,7 +1,4 @@
-import os
-import sys
 from setuptools import setup
-from setuptools.command.install import install
 
 with open("README.rst", "r") as fh:
     long_description = fh.read()
