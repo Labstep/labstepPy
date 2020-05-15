@@ -94,15 +94,6 @@ class TestExperiment:
         assert comment.body == 'test',\
             'FAILED COMMENT COMMENTING TEST'
 
-    def test_signatures(self):
-        sig = entity.addSignature('test', lock=True)
-        sigs = entity.getSignatures()
-        sig.revoke()
-        assert sig.id == sigs[0].id \
-            and sig.statement == 'test' \
-            and sig.revoked_at is not None, \
-            'FAILED SIGNATURES TEST'
-
     def test_getDataElements(self):
         dataElements = entity.getDataElements()
         assert len(dataElements) == 0
@@ -112,3 +103,12 @@ class TestExperiment:
         newEntity = testUser.getExperiment(entity.id)
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1
+
+    def test_signatures(self):
+        sig = entity.addSignature('test', lock=True)
+        sigs = entity.getSignatures()
+        sig.revoke()
+        assert sig.id == sigs[0].id \
+            and sig.statement == 'test' \
+            and sig.revoked_at is not None, \
+            'FAILED SIGNATURES TEST'
