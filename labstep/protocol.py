@@ -3,7 +3,9 @@
 
 from .primaryEntity import PrimaryEntity
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .helpers import (listToClass, getTime, createdAtFrom, createdAtTo)
+from .helpers import (listToClass, getTime, handleDate,
+                      createdAtFrom, createdAtTo)
+from .metadata import Metadata
 
 
 def getProtocol(user, protocol_id):
@@ -326,6 +328,77 @@ class Protocol(PrimaryEntity):
         """
         steps = self.last_version['protocol_steps']
         return listToClass(steps, ProtocolStep, self.__user__)
+
+    def getDataElements(self):
+        """
+        Retrieve the Data Elements of a Protocol.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of objects representing the Labstep Data Elements
+            on a Protocol.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            metadata = exp_protocol.getDataElements()
+        """
+        metadataThread = self.last_version['metadata_thread']
+        return listToClass(
+            metadataThread['metadatas'],
+            Metadata, self.__user__
+        )
+
+    def addDataElement(self, fieldName, fieldType="default",
+                       value=None, date=None,
+                       number=None, unit=None,
+                       extraParams={}):
+        """
+        Add a Data Element to a Protocol.
+
+        Parameters
+        ----------
+        fieldName (str)
+            The name of the field.
+        fieldType (str)
+            The field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        number (float)
+            The quantity.
+        unit (str)
+            The unit accompanying the number entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Data Element.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            dataElement = protocol.addDataElement("Refractive Index",
+                                               value="1.73")
+        """
+        metadataThread = self.last_version['metadata_thread']
+        filterParams = {'metadata_thread_id': metadataThread['id'],
+                        'type': fieldType,
+                        'label': fieldName,
+                        'value': value,
+                        'date': handleDate(date),
+                        'number': number,
+                        'unit': unit}
+        params = {**filterParams, **extraParams}
+        return newEntity(self.__user__, Metadata, params)
 
     def addMaterial(self, name=None, amount=None, units=None, resource=None,
                     extraParams={}):

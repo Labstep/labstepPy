@@ -3,7 +3,7 @@
 
 from datetime import datetime
 from time import gmtime, strftime
-from .config import version
+from .version import version
 
 
 def url_join(*args):
@@ -109,6 +109,7 @@ def update(entity, newData):
     -------
     the updated entity
     """
+    entity.__data__ = newData
     for key in newData:
         setattr(entity, key, newData[key])
     return entity

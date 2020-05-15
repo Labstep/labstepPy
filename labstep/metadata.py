@@ -22,13 +22,15 @@ def getMetadata(entity):
     metadatas
         An array of Metadata objects for the Entity.
     """
+    if 'metadatas' not in entity.metadata_thread:
+        entity.update()
     metadatas = entity.metadata_thread['metadatas']
     return listToClass(metadatas, Metadata, entity.__user__)
 
 
-def addMetadataTo(entity, fieldType="default", fieldName=None,
+def addMetadataTo(entity, fieldName, fieldType="default",
                   value=None, date=None,
-                  quantity_amount=None, quantity_unit=None,
+                  number=None, unit=None,
                   extraParams={}):
     """
     Add Metadata to a Resource.
@@ -37,20 +39,20 @@ def addMetadataTo(entity, fieldType="default", fieldName=None,
     ----------
     entity (obj)
         The Resource to add Metadata to.
+    fieldName (str)
+        The name of the field.
     fieldType (str)
         The Metadata field type. Options are: "default", "date",
         "quantity", or "number". The "default" type is "Text".
-    fieldName (str)
-        The name of the field.
     value (str)
         The value accompanying the fieldName entry.
     date (str)
         The date accompanying the fieldName entry. Must be
         in the format of "YYYY-MM-DD HH:MM".
-    quantity_amount (float)
+    number (float)
         The quantity.
-    quantity_unit (str)
-        The unit accompanying the quantity_amount entry.
+    unit (str)
+        The unit accompanying the number entry.
 
     Returns
     -------
@@ -62,8 +64,8 @@ def addMetadataTo(entity, fieldType="default", fieldName=None,
                     'label': fieldName,
                     'value': value,
                     'date': handleDate(date),
-                    'quantity_amount': quantity_amount,
-                    'quantity_unit': quantity_unit}
+                    'number': number,
+                    'unit': unit}
     params = {**filterParams, **extraParams}
     return newEntity(entity.__user__, Metadata, params)
 

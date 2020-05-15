@@ -97,7 +97,7 @@ def getFiles(user, count=100, search_query=None, file_type=None,
             entities = user.getFiles(search_query='bacteria')
         """
     filterParams = {'search_query': search_query,
-                    'file_type': file_type}
+                    'filetype': file_type}
     params = {**filterParams, **extraParams}
     return getEntities(user, File, count, params)
 

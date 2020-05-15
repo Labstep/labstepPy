@@ -11,8 +11,29 @@ testName = labstep.helpers.getTime()
 # Make new entity
 new_entity = testUser.newExperiment(testName)
 entity = testUser.getExperiment(new_entity.id)
-entity.addComment(testName)
-exp_protocol = entity.addProtocol(testUser.getProtocol(4926))
+protocol = testUser.newProtocol('Test')
+protocol.addComment(testName)
+protocol.addComment(testName)
+data = {
+    "rowCount": 6,
+    "columnCount": 6,
+    "colHeaderData": {},
+    "data": {
+        "dataTable": {
+            0: {
+                0: {
+                    "value": 'Cell A1'
+                },
+                1: {
+                    "value": 'Cell B1'
+                }
+            }
+        }
+    }
+}
+protocol.addTable(name=testName, data=data)
+protocol = testUser.getProtocol(protocol.id)
+exp_protocol = entity.addProtocol(protocol)
 entity = testUser.getExperiment(entity.id)
 
 
@@ -44,11 +65,6 @@ class TestExperiment:
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
-    def test_getComments(self):
-        result = entity.getComments()
-        assert result[0].id is not None, \
-            'FAILED TO GET COMMENTS'
-
     def test_addTag(self):
         result = entity.addTag(testName)
         assert result is not None, \
@@ -58,23 +74,6 @@ class TestExperiment:
         result = entity.getTags()
         assert result[0].id is not None, \
             'FAILED TO GET TAGS'
-
-    # ExperimentMaterial
-    # def test_addMaterial(self):
-    #     result = entity.addMaterial()
-    #     assert result is not None, \
-    #         'FAILED TO ADD MATERIAL'
-
-    def test_getMaterials(self):
-        result = exp_protocol.getMaterials()
-        assert result[0].id is not None, \
-            'FAILED TO GET MATERIALS'
-
-    def test_editMaterial(self):
-        material = exp_protocol.getMaterials()[0]
-        result = material.edit(amount='0.1', units='ml')
-        assert result.value == '0.1', \
-            'FAILED TO EDIT MATERIAL'
 
     # ExperimentStep
     def test_getSteps(self):
@@ -88,33 +87,22 @@ class TestExperiment:
         assert result.ended_at is not None, \
             'FAILED TO COMPLETE STEP'
 
-    # ExperimentTable
-    # def test_addTable(self):
-    #     result = entity.addTable(data=data)
-    #     assert result is not None, \
-    #         'FAILED TO ADD TABLE'
+    def test_commenting_on_comments(self):
+        comment = entity.getComments()[0]
+        comment.addComment('test')
+        comment = comment.getComments()[0]
+        assert comment.body == 'test',\
+            'FAILED COMMENT COMMENTING TEST'
 
-    def test_getTables(self):
-        result = exp_protocol.getTables()
-        assert result[0].id is not None, \
-            'FAILED TO GET TABLES'
+    def test_getDataElements(self):
+        dataElements = entity.getDataElements()
+        assert len(dataElements) == 0
 
-    # ExperimentTimer
-    # def test_addTimer(self):
-    #     result = entity.addTimer()
-    #     assert result is not None, \
-    #         'FAILED TO ADD TIMER'
-
-    def test_getTimers(self):
-        result = exp_protocol.getTimers()
-        assert result[0].id is not None, \
-            'FAILED TO GET TIMERS'
-
-    def test_editTimer(self):
-        timer = exp_protocol.getTimers()[0]
-        result = timer.edit(minutes=17)
-        assert result.minutes == 17, \
-            'FAILED TO EDIT TIMER'
+    def test_addDataElementTo(self):
+        dataElement = entity.addDataElement('testField', fieldType="default",)
+        newEntity = testUser.getExperiment(entity.id)
+        dataElements = newEntity.getDataElements()
+        assert len(dataElements) == 1
 
     def test_signatures(self):
         sig = entity.addSignature('test', lock=True)
