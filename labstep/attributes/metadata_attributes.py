@@ -6,4 +6,4 @@ import labstep
 
 user = labstep.login('apitest@labstep.com', 'apitestpass')
 entity = user.newResource("Acetic Acid")
-print(entity.addMetadata(fieldName="Refractive Index", value="1.73"))
+print(entity.addMetadata("Refractive Index", value="1.73"))

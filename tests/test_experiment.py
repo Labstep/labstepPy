@@ -94,6 +94,16 @@ class TestExperiment:
         assert comment.body == 'test',\
             'FAILED COMMENT COMMENTING TEST'
 
+    def test_getDataElements(self):
+        dataElements = entity.getDataElements()
+        assert len(dataElements) == 0
+
+    def test_addDataElementTo(self):
+        dataElement = entity.addDataElement('testField', fieldType="default",)
+        newEntity = testUser.getExperiment(entity.id)
+        dataElements = newEntity.getDataElements()
+        assert len(dataElements) == 1
+
     def test_signatures(self):
         sig = entity.addSignature('test', lock=True)
         sigs = entity.getSignatures()

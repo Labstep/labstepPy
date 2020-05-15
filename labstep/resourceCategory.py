@@ -155,9 +155,9 @@ class ResourceCategory(PrimaryEntity):
         """
         return editResourceCategory(self, deleted_at=getTime())
 
-    def addMetadata(self, fieldType="default", fieldName=None,
+    def addMetadata(self, fieldName, fieldType="default",
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None,
+                    number=None, unit=None,
                     extraParams={}):
         """
         Add Metadata to a Resource Category.
@@ -174,10 +174,10 @@ class ResourceCategory(PrimaryEntity):
         date (str)
             The date and time accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
-        quantity_amount (float)
+        number (float)
             The quantity.
-        quantity_unit (str)
-            The unit accompanying the quantity_amount entry.
+        unit (str)
+            The unit accompanying the number entry.
 
         Returns
         -------
@@ -188,12 +188,12 @@ class ResourceCategory(PrimaryEntity):
         -------
         ::
 
-            my_resource_category = user.getResourceCategory(17000)
-            metadata = my_resource_category.addMetadata(fieldName="Refractive Index",
+            resource_category = user.getResourceCategory(17000)
+            metadata = my_resource_category.addMetadata("Refractive Index",
                                                         value="1.73")
         """
-        return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams=extraParams)
+        return addMetadataTo(self, fieldName, fieldType, value, date,
+                             number, unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

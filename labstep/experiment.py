@@ -7,6 +7,7 @@ from .primaryEntity import PrimaryEntity
 from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
+from .metadata import addMetadataTo, getMetadata
 
 
 def getExperiment(user, experiment_id):
@@ -234,6 +235,67 @@ class ExperimentProtocol(Entity):
         """
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
+
+    def addDataElement(self, fieldName, fieldType="default",
+                       value=None, date=None,
+                       number=None, unit=None,
+                       extraParams={}):
+        """
+        Add a Data Element to a Protocol within an Experiment.
+
+        Parameters
+        ----------
+        fieldName (str)
+            The name of the field.
+        fieldType (str)
+            The field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        number (float)
+            The quantity.
+        unit (str)
+            The unit accompanying the number entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Data Element.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_protocol = experiment.getProtocols()[0]
+            dataElement = experiment_protocol.addDataElement("Refractive Index",
+                                               value="1.73")
+        """
+        return addMetadataTo(self, fieldName, fieldType, value, date,
+                             number, unit,
+                             extraParams=extraParams)
+
+    def getDataElements(self):
+        """
+        Retrieve the Data Elements of a Protocol within an Experiment.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of objects representing the Labstep Data Elements on a Protocol within an Experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            metadata = exp_protocol.getDataElements()
+        """
+        return getMetadata(self)
 
 
 class ExperimentMaterial(Entity):
@@ -600,6 +662,66 @@ class Experiment(PrimaryEntity):
             protocols[0].attributes()
         """
         return listToClass(self.experiments, ExperimentProtocol, self.__user__)
+
+    def addDataElement(self, fieldName, fieldType="default",
+                       value=None, date=None,
+                       number=None, unit=None,
+                       extraParams={}):
+        """
+        Add Data Elements to a Labstep Experiment.
+
+        Parameters
+        ----------
+        fieldName (str)
+            The name of the field.
+        fieldType (str)
+            The field type. Options are: "default", "date",
+            "quantity", or "number". The "default" type is "Text".
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date and time accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        number (float)
+            The quantity.
+        unit (str)
+            The unit accompanying the number entry.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An object representing the new Labstep Data Element.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            dataElement = experiment.addDataElement("Refractive Index",
+                                               value="1.73")
+        """
+        return addMetadataTo(self, fieldName, fieldType, value, date,
+                             number, unit,
+                             extraParams=extraParams)
+
+    def getDataElements(self):
+        """
+        Retrieve the Data Elements of a Protocol within an Experiment.
+
+        Returns
+        -------
+        :class:`~labstep.metadata.Metadata`
+            An array of objects representing Data Elements on a Protocol within an Experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            dataElements = exp_protocol.getDataElements()
+        """
+        return getMetadata(self)
 
     def getSignatures(self):
         """

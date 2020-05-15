@@ -257,29 +257,29 @@ class ResourceItem(Entity):
         """
         return getComments(self, count, extraParams=extraParams)
 
-    def addMetadata(self, fieldType="default", fieldName=None,
+    def addMetadata(self, fieldName, fieldType="default",
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None,
+                    number=None, unit=None,
                     extraParams={}):
         """
         Add Metadata to a ResourceItem.
 
         Parameters
         ----------
+        fieldName (str)
+            The name of the field.
         fieldType (str)
             The Metadata field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
-        fieldName (str)
-            The name of the field.
         value (str)
             The value accompanying the fieldName entry.
         date (str)
             The date and time accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
-        quantity_amount (float)
+        number (float)
             The quantity.
-        quantity_unit (str)
-            The unit accompanying the quantity_amount entry.
+        unit (str)
+            The unit accompanying the number entry.
 
         Returns
         -------
@@ -291,11 +291,11 @@ class ResourceItem(Entity):
         ::
 
             my_resource_item = user.getResourceItem(17000)
-            metadata = my_resource_item.addMetadata(fieldName="Refractive Index",
+            metadata = my_resource_item.addMetadata("Refractive Index",
                                                     value="1.73")
         """
-        return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams=extraParams)
+        return addMetadataTo(self, fieldName, fieldType, value, date,
+                             number, unit, extraParams=extraParams)
 
     def getMetadata(self):
         """
