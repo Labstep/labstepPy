@@ -104,7 +104,7 @@ workflows:
     jobs:
       - test
       - build:
-          requires: test
+          requires: [test]
           filters:
             branches:
               only: devops/publish-to-pypi
