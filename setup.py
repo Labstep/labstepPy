@@ -3,8 +3,10 @@ from setuptools import setup
 with open("README.rst", "r") as fh:
     long_description = fh.read()
 
+VERSION = '2.3.1'
+
 setup(name='labstep',
-      version='2.3.1',
+      version=VERSION,
       description='Python SDK for working with the Labstep API',
       long_description=long_description,
       url='http://github.com/Labstep/labstepPy',
