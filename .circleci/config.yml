@@ -60,16 +60,16 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-    - run:
-        name: install dependencies
-        command: |
-          python3 -m venv venv
-          . venv/bin/activate
-          pip install -r requirements.txt
-          pip install twine
-          pip install -e .
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+            pip install twine
+            pip install -e .
 
-    - save_cache:
+      - save_cache:
         paths:
           - ./venv
         key: v1-dependencies-{{ checksum "requirements.txt" }}
