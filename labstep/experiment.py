@@ -236,29 +236,29 @@ class ExperimentProtocol(Entity):
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
 
-    def addDataElement(self, fieldType="default", fieldName=None,
+    def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
-                       quantity_amount=None, quantity_unit=None,
+                       number=None, unit=None,
                        extraParams={}):
         """
         Add a Data Element to a Protocol within an Experiment.
 
         Parameters
         ----------
+        fieldName (str)
+            The name of the field.
         fieldType (str)
             The field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
-        fieldName (str)
-            The name of the field.
         value (str)
             The value accompanying the fieldName entry.
         date (str)
             The date and time accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
-        quantity_amount (float)
+        number (float)
             The quantity.
-        quantity_unit (str)
-            The unit accompanying the quantity_amount entry.
+        unit (str)
+            The unit accompanying the number entry.
 
         Returns
         -------
@@ -271,11 +271,11 @@ class ExperimentProtocol(Entity):
 
             experiment = user.getExperiment(17000)
             experiment_protocol = experiment.getProtocols()[0]
-            dataElement = experiment_protocol.addDataElement(fieldName="Refractive Index",
+            dataElement = experiment_protocol.addDataElement("Refractive Index",
                                                value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit,
+                             number, unit,
                              extraParams=extraParams)
 
     def getDataElements(self):
@@ -663,29 +663,29 @@ class Experiment(PrimaryEntity):
         """
         return listToClass(self.experiments, ExperimentProtocol, self.__user__)
 
-    def addDataElement(self, fieldType="default", fieldName=None,
+    def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
-                       quantity_amount=None, quantity_unit=None,
+                       number=None, unit=None,
                        extraParams={}):
         """
         Add Data Elements to a Labstep Experiment.
 
         Parameters
         ----------
+        fieldName (str)
+            The name of the field.
         fieldType (str)
             The field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
-        fieldName (str)
-            The name of the field.
         value (str)
             The value accompanying the fieldName entry.
         date (str)
             The date and time accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
-        quantity_amount (float)
+        number (float)
             The quantity.
-        quantity_unit (str)
-            The unit accompanying the quantity_amount entry.
+        unit (str)
+            The unit accompanying the number entry.
 
         Returns
         -------
@@ -697,11 +697,11 @@ class Experiment(PrimaryEntity):
         ::
 
             experiment = user.getExperiment(17000)
-            dataElement = experiment.addDataElement(fieldName="Refractive Index",
+            dataElement = experiment.addDataElement("Refractive Index",
                                                value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit,
+                             number, unit,
                              extraParams=extraParams)
 
     def getDataElements(self):

@@ -60,7 +60,7 @@ def getResourceItems(user, resource, count=100, search_query=None,
 
 
 def newResourceItem(user, resource, name=None, availability=None,
-                    quantity_amount=None, quantity_unit=None,
+                    number=None, unit=None,
                     location=None, extraParams={}):
     """
     Create a new Labstep ResourceItem.
@@ -77,9 +77,9 @@ def newResourceItem(user, resource, name=None, availability=None,
     availability (str)
         The status of the ResourceItem. Options are:
         "available" and "unavailable".
-    quantity_amount (float)
+    number (float)
         The quantity of the ResourceItem.
-    quantity_unit (str)
+    unit (str)
         The unit of the quantity.
     location (obj)
         The ResourceLocation of the ResourceItem.
@@ -92,8 +92,8 @@ def newResourceItem(user, resource, name=None, availability=None,
     filterParams = {'resource_id': resource.id,
                     'name': name,
                     'status': handleString(availability),
-                    'quantity_amount': quantity_amount,
-                    'quantity_unit': quantity_unit}
+                    'number': number,
+                    'unit': unit}
 
     if location is not None:
         filterParams['resource_location_id'] = location.id
@@ -103,7 +103,7 @@ def newResourceItem(user, resource, name=None, availability=None,
 
 
 def editResourceItem(resourceItem, name=None, availability=None,
-                     quantity_amount=None, quantity_unit=None,
+                     number=None, unit=None,
                      location=None, deleted_at=None, extraParams={}):
     """
     Edit an existing ResourceItem.
@@ -117,9 +117,9 @@ def editResourceItem(resourceItem, name=None, availability=None,
     availability (str)
         The status of the ResourceItem. Options are:
         "available" and "unavailable".
-    quantity_amount (float)
+    number (float)
         The quantity of the ResourceItem.
-    quantity_unit (str)
+    unit (str)
         The unit of the quantity.
     location (obj)
         The ResourceLocation of the ResourceItem.
@@ -133,11 +133,11 @@ def editResourceItem(resourceItem, name=None, availability=None,
     """
     filterParams = {'name': name,
                     'status': handleString(availability),
-                    'quantity_unit': quantity_unit,
+                    'unit': unit,
                     'deleted_at': deleted_at}
 
-    if quantity_amount is not None:
-        filterParams['quantity_amount'] = float(quantity_amount)
+    if number is not None:
+        filterParams['number'] = float(number)
 
     if location is not None:
         filterParams['resource_location_id'] = location.id
@@ -162,7 +162,7 @@ class ResourceItem(Entity):
     __entityName__ = 'resource-item'
 
     def edit(self, name=None, availability=None,
-             quantity_amount=None, quantity_unit=None,
+             number=None, unit=None,
              location=None, extraParams={}):
         """
         Edit an existing ResourceItem.
@@ -174,9 +174,9 @@ class ResourceItem(Entity):
         availability (str)
             The status of the OrderRequest. Options are:
             "available" and "unavailable".
-        quantity_amount (float)
+        number (float)
             The quantity of the ResourceItem.
-        quantity_unit (str)
+        unit (str)
             The unit of the quantity.
         location (ResourceLocation)
             The :class:`~labstep.resourceLocation.ResourceLocation` of the ResourceItem.
@@ -194,7 +194,7 @@ class ResourceItem(Entity):
             my_resource_item.edit(name='A New ResourceItem Name')
         """
         return editResourceItem(self, name, availability,
-                                quantity_amount, quantity_unit,
+                                number, unit,
                                 location, extraParams=extraParams)
 
     def delete(self):
@@ -257,29 +257,29 @@ class ResourceItem(Entity):
         """
         return getComments(self, count, extraParams=extraParams)
 
-    def addMetadata(self, fieldType="default", fieldName=None,
+    def addMetadata(self, fieldName, fieldType="default",
                     value=None, date=None,
-                    quantity_amount=None, quantity_unit=None,
+                    number=None, unit=None,
                     extraParams={}):
         """
         Add Metadata to a ResourceItem.
 
         Parameters
         ----------
+        fieldName (str)
+            The name of the field.
         fieldType (str)
             The Metadata field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
-        fieldName (str)
-            The name of the field.
         value (str)
             The value accompanying the fieldName entry.
         date (str)
             The date and time accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
-        quantity_amount (float)
+        number (float)
             The quantity.
-        quantity_unit (str)
-            The unit accompanying the quantity_amount entry.
+        unit (str)
+            The unit accompanying the number entry.
 
         Returns
         -------
@@ -291,11 +291,11 @@ class ResourceItem(Entity):
         ::
 
             my_resource_item = user.getResourceItem(17000)
-            metadata = my_resource_item.addMetadata(fieldName="Refractive Index",
+            metadata = my_resource_item.addMetadata("Refractive Index",
                                                     value="1.73")
         """
         return addMetadataTo(self, fieldType, fieldName, value, date,
-                             quantity_amount, quantity_unit, extraParams=extraParams)
+                             number, unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

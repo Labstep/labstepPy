@@ -352,29 +352,29 @@ class Protocol(PrimaryEntity):
             Metadata, self.__user__
         )
 
-    def addDataElement(self, fieldType="default", fieldName=None,
+    def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
-                       quantity_amount=None, quantity_unit=None,
+                       number=None, unit=None,
                        extraParams={}):
         """
         Add a Data Element to a Protocol.
 
         Parameters
         ----------
+        fieldName (str)
+            The name of the field.
         fieldType (str)
             The field type. Options are: "default", "date",
             "quantity", or "number". The "default" type is "Text".
-        fieldName (str)
-            The name of the field.
         value (str)
             The value accompanying the fieldName entry.
         date (str)
             The date and time accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
-        quantity_amount (float)
+        number (float)
             The quantity.
-        quantity_unit (str)
-            The unit accompanying the quantity_amount entry.
+        unit (str)
+            The unit accompanying the number entry.
 
         Returns
         -------
@@ -386,7 +386,7 @@ class Protocol(PrimaryEntity):
         ::
 
             protocol = user.getProtocol(17000)
-            dataElement = protocol.addDataElement(fieldName="Refractive Index",
+            dataElement = protocol.addDataElement("Refractive Index",
                                                value="1.73")
         """
         metadataThread = self.last_version['metadata_thread']
@@ -395,8 +395,8 @@ class Protocol(PrimaryEntity):
                         'label': fieldName,
                         'value': value,
                         'date': handleDate(date),
-                        'quantity_amount': quantity_amount,
-                        'quantity_unit': quantity_unit}
+                        'number': number,
+                        'unit': unit}
         params = {**filterParams, **extraParams}
         return newEntity(self.__user__, Metadata, params)
 
