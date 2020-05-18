@@ -112,17 +112,3 @@ class TestExperiment:
             and sig.statement == 'test' \
             and sig.revoked_at is not None, \
             'FAILED SIGNATURES TEST'
-
-    def test_commenting_on_steps(self):
-        step = exp_protocol.getSteps()[0]
-        step.addComment('test')
-        comment = step.getComments()[0]
-        assert comment.body == 'test',\
-            'FAILED STEP COMMENTING TEST'
-
-    def test_commenting_on_comments(self):
-        comment = entity.getComments()[0]
-        comment.addComment('test')
-        comment = comment.getComments()[0]
-        assert comment.body == 'test',\
-            'FAILED COMMENT COMMENTING TEST'
