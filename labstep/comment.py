@@ -19,7 +19,7 @@ def getComments(entity, count=100, extraParams={}):
     comments
         List of the comments attached.
     """
-    filterParams = {'parent_thread_id': entity.thread['id']}
+    filterParams = {'parent_thread_id': entity.thread['id'], 'search': None}
     params = {**filterParams, **extraParams}
     return getEntities(entity.__user__, Comment, count, params)
 
