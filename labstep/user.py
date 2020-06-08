@@ -728,7 +728,7 @@ class User(Entity):
         """
         return newResourceCategory(self, name, extraParams=extraParams)
 
-    def newResourceLocation(self, name, extraParams={}):
+    def newResourceLocation(self, name, outer_location=None, extraParams={}):
         """
         Create a new Labstep ResourceLocation.
 
@@ -748,7 +748,7 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        return newResourceLocation(self, name, extraParams=extraParams)
+        return newResourceLocation(self, name, outer_location=outer_location, extraParams=extraParams)
 
     def newOrderRequest(self, resource, quantity=1, extraParams={}):
         """
