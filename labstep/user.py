@@ -748,7 +748,8 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        return newResourceLocation(self, name, outer_location=outer_location, extraParams=extraParams)
+        return newResourceLocation(self, name, outer_location=outer_location,
+                                   extraParams=extraParams)
 
     def newOrderRequest(self, resource, quantity=1, extraParams={}):
         """
