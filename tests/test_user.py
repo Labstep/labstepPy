@@ -49,6 +49,12 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET RESOURCE'
 
+    def test_getResourceLocation(self):
+        entity = testUser.newResourceLocation(testName)
+        result = testUser.getResourceLocation(entity.id)
+        assert result.name == testName, \
+            'FAILED TO GET RESOURCE LOCATION'
+
     def test_getResourceCategory(self):
         entity = testUser.newResourceCategory(testName)
         result = testUser.getResourceCategory(entity.id)
