@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from .file import newFile, getFile, getFiles
+from .workspace import getWorkspace, getWorkspaces, newWorkspace
+from .tag import getTags, newTag
+from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 import requests
 import json
 import urllib.parse
@@ -13,11 +17,8 @@ from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
 from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
-from .resourceLocation import getResourceLocations, newResourceLocation
-from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
-from .tag import getTags, newTag
-from .workspace import getWorkspace, getWorkspaces, newWorkspace
-from .file import newFile, getFile, getFiles
+from .resourceLocation import (getResourceLocation, getResourceLocations,
+                               newResourceLocation)
 
 
 def newUser(first_name, last_name, email, password,
@@ -239,6 +240,28 @@ class User(Entity):
             entity = user.getResourceCategory(17000)
         """
         return getResourceCategory(self, resourceCategory_id)
+
+    def getResourceLocation(self, resourceLocation_id):
+        """
+        Retrieve a specific Labstep ResourceLocation.
+
+        Parameters
+        ----------
+        resourceLocation_id (int)
+            The id of the ResourceLocation to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.resourceLocation.ResourceLocation`
+            An object representing a ResourceLocation on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getResourceLocation(17000)
+        """
+        return getResourceLocation(self, resourceLocation_id)
 
     def getOrderRequest(self, order_request_id):
         """
@@ -728,7 +751,9 @@ class User(Entity):
         """
         return newResourceCategory(self, name, extraParams=extraParams)
 
-    def newResourceLocation(self, name, extraParams={}):
+    def newResourceLocation(self, name,
+                            outer_location_id=None,
+                            extraParams={}):
         """
         Create a new Labstep ResourceLocation.
 
@@ -736,6 +761,13 @@ class User(Entity):
         ----------
         name (str)
             Give your ResourceLocation a name.
+
+        outer_location_id (int)
+            Id of existing location to create the location within
+
+        extraParams (dict)
+            (Advanced) Dictionary of extra parameters to pass in the
+            POST request
 
         Returns
         -------
@@ -748,7 +780,10 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        return newResourceLocation(self, name, extraParams=extraParams)
+        return newResourceLocation(self,
+                                   name,
+                                   outer_location_id=outer_location_id,
+                                   extraParams=extraParams)
 
     def newOrderRequest(self, resource, quantity=1, extraParams={}):
         """

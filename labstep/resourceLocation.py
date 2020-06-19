@@ -4,8 +4,28 @@
 
 import requests
 from .config import API_ROOT
-from .entity import Entity, getEntities, newEntity, editEntity, getHeaders
+from .entity import Entity, getEntity, getEntities, newEntity, editEntity, getHeaders
 from .helpers import url_join, handleError
+
+
+def getResourceLocation(user, resourceLocation_id):
+    """
+    Retrieve a specific Labstep ResourceLocation.
+
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user. Must have property
+        'api_key'. See 'login'.
+    resourceLocation_id (int)
+        The id of the ResourceLocation to retrieve.
+
+    Returns
+    -------
+    ResourceLocation
+        An object representing a Labstep ResourceLocation.
+    """
+    return getEntity(user, ResourceLocation, id=resourceLocation_id)
 
 
 def getResourceLocations(user, count=100, search_query=None, tag_id=None,
@@ -37,7 +57,7 @@ def getResourceLocations(user, count=100, search_query=None, tag_id=None,
     return getEntities(user, ResourceLocation, count, params)
 
 
-def newResourceLocation(user, name, extraParams={}):
+def newResourceLocation(user, name, outer_location_id=None, extraParams={}):
     """
     Create a new Labstep ResourceLocation.
 
@@ -49,6 +69,9 @@ def newResourceLocation(user, name, extraParams={}):
     name (str)
         Give your ResourceLocation a name.
 
+    outer_location_id (int)
+        Id of existing location to create the location within
+
     Returns
     -------
     ResourceLocation
@@ -56,6 +79,10 @@ def newResourceLocation(user, name, extraParams={}):
     """
     filterParams = {'name': name}
     params = {**filterParams, **extraParams}
+
+    if outer_location_id is not None:
+        params['outer_location_id'] = outer_location_id
+
     return newEntity(user, ResourceLocation, params)
 
 
