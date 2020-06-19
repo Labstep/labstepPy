@@ -104,7 +104,7 @@ def newResourceItem(user, resource, name=None, availability=None,
 
 def editResourceItem(resourceItem, name=None, availability=None,
                      quantity_amount=None, quantity_unit=None,
-                     location=None, deleted_at=None, extraParams={}):
+                     location_id=None, deleted_at=None, extraParams={}):
     """
     Edit an existing ResourceItem.
 
@@ -121,8 +121,8 @@ def editResourceItem(resourceItem, name=None, availability=None,
         The quantity of the ResourceItem.
     quantity_unit (str)
         The unit of the quantity.
-    location (obj)
-        The ResourceLocation of the ResourceItem.
+    location_id (int)
+        The id of the ResourceLocation for the ResourceItem.
     deleted_at (str)
         The timestamp at which the ResourceItem is deleted/archived.
 
@@ -139,8 +139,8 @@ def editResourceItem(resourceItem, name=None, availability=None,
     if quantity_amount is not None:
         filterParams['quantity_amount'] = float(quantity_amount)
 
-    if location is not None:
-        filterParams['resource_location_id'] = location.id
+    if location_id is not None:
+        filterParams['resource_location_id'] = location_id
 
     params = {**filterParams, **extraParams}
     return editEntity(resourceItem, params)
@@ -163,7 +163,7 @@ class ResourceItem(Entity):
 
     def edit(self, name=None, availability=None,
              quantity_amount=None, quantity_unit=None,
-             location=None, extraParams={}):
+             location_id=None, extraParams={}):
         """
         Edit an existing ResourceItem.
 
@@ -178,8 +178,8 @@ class ResourceItem(Entity):
             The quantity of the ResourceItem.
         quantity_unit (str)
             The unit of the quantity.
-        location (ResourceLocation)
-            The :class:`~labstep.resourceLocation.ResourceLocation` of the ResourceItem.
+        location_id (ResourceLocation)
+            The id of the :class:`~labstep.resourceLocation.ResourceLocation` of the ResourceItem.
 
         Returns
         -------
@@ -193,9 +193,9 @@ class ResourceItem(Entity):
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.edit(name='A New ResourceItem Name')
         """
-        return editResourceItem(self, name, availability,
-                                quantity_amount, quantity_unit,
-                                location, extraParams=extraParams)
+        return editResourceItem(self, name=name, availability=availability,
+                                quantity_amount=quantity_amount, quantity_unit=quantity_unit,
+                                location_id=location_id, extraParams=extraParams)
 
     def delete(self):
         """

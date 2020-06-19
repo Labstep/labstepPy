@@ -57,7 +57,7 @@ def getResourceLocations(user, count=100, search_query=None, tag_id=None,
     return getEntities(user, ResourceLocation, count, params)
 
 
-def newResourceLocation(user, name, outer_location=None, extraParams={}):
+def newResourceLocation(user, name, outer_location_id=None, extraParams={}):
     """
     Create a new Labstep ResourceLocation.
 
@@ -69,8 +69,8 @@ def newResourceLocation(user, name, outer_location=None, extraParams={}):
     name (str)
         Give your ResourceLocation a name.
 
-    outer_location (:class:`~labstep.resourceLocation.ResourceLocation`)
-        Existing location to create the location within
+    outer_location_id (int)
+        Id of existing location to create the location within
 
     Returns
     -------
@@ -80,8 +80,8 @@ def newResourceLocation(user, name, outer_location=None, extraParams={}):
     filterParams = {'name': name}
     params = {**filterParams, **extraParams}
 
-    if outer_location is not None:
-        params['outer_location_id'] = outer_location.id
+    if outer_location_id is not None:
+        params['outer_location_id'] = outer_location_id
 
     return newEntity(user, ResourceLocation, params)
 
