@@ -99,7 +99,7 @@ class TestExperiment:
         assert len(dataElements) == 0
 
     def test_addDataElementTo(self):
-        dataElement = entity.addDataElement('testField', fieldType="default",)
+        entity.addDataElement('testField', fieldType="default",)
         newEntity = testUser.getExperiment(entity.id)
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1

@@ -300,52 +300,6 @@ class ExperimentProtocol(Entity):
         """
         return getMetadata(self)
 
-    def addMaterial(self, name=None, amount=None, units=None, resource=None, resource_item=None,
-                    extraParams={}):
-        """
-        Add a new material to the ExperimentProtocol.
-
-        Parameters
-        ----------
-        name (str)
-            The name of the material to add.
-        amount (str)
-            The amount used.
-        units (str)
-            The units for the amount.
-        resource (Resource)
-            The :class:`~labstep.resource.Resource` used.
-        resource_item (ResourceItem)
-            The specific :class:`~labstep.resource.ResourceItem` used.
-
-        Returns
-        -------
-        :class:`~labstep.experiment.ExperimentMaterial`
-            The newly added material entity.
-
-        Example
-        -------
-        ::
-
-            experiment = user.getExperiment(17000)
-            experiment_protocol = experiment.getProtocols()[0]
-            resource = user.getResources(search_query='Sample A')[0]
-            protocol.addMaterial(name='Sample A', amount='2', units='ml',
-                                 resource=resource)
-        """
-        filterParams = {'experiment_id': self.id,
-                        'name': name,
-                        'value': amount,
-                        'units': units}
-
-        if resource is not None:
-            filterParams['resource_id'] = resource.id
-        if resource_item is not None:
-            filterParams['resource_item_id'] = resource_item.id
-
-        params = {**filterParams, **extraParams}
-        return newEntity(self.__user__, ExperimentMaterial, params)
-
     def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
                        number=None, unit=None,
