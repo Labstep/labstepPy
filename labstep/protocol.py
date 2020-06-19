@@ -431,6 +431,9 @@ class Protocol(PrimaryEntity):
             protocol.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource=resource)
         """
+        if amount is not None:
+            amount = str(amount)
+
         filterParams = {'protocol_id': self.last_version['id'],
                         'name': name,
                         'value': amount,

@@ -205,6 +205,9 @@ class ExperimentProtocol(Entity):
             experiment.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource=resource)
         """
+        if amount is not None:
+            amount = str(amount)
+
         filterParams = {'experiment_id': self.id,
                         'name': name,
                         'value': amount,
@@ -856,6 +859,9 @@ class Experiment(PrimaryEntity):
             experiment.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource=resource)
         """
+        if amount is not None:
+            amount = str(amount)
+
         filterParams = {'experiment_id': self.root_experiment['id'],
                         'name': name,
                         'value': amount,
