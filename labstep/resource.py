@@ -55,7 +55,7 @@ def getResources(user, count=100, search_query=None, tag_id=None,
         A list of Resource objects.
     """
     params = {'search_query': search_query,
-              'tag_id': tag_id, 
+              'tag_id': tag_id,
               **extraParams}
     return getEntities(user, Resource, count, params)
 
@@ -198,7 +198,10 @@ class Resource(PrimaryEntity):
             metadata = resource.addMetadata("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldName=fieldName, fieldType=fieldType, value=value, date=date,
+        return addMetadataTo(self,
+                             fieldName=fieldName,
+                             fieldType=fieldType,
+                             value=value, date=date,
                              number=number, unit=unit,
                              extraParams=extraParams)
 
@@ -228,7 +231,8 @@ class Resource(PrimaryEntity):
         Parameters
         ----------
         resource_category_id (int)
-            The id of :class:`~labstep.resourceCategory.ResourceCategory` to set for
+            The id of :class:`~labstep.resourceCategory.ResourceCategory`
+            to set for
             the Resource.
 
         Returns
