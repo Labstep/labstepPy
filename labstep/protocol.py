@@ -117,6 +117,10 @@ def editProtocol(protocol, name=None, deleted_at=None, extraParams={}):
 class ProtocolMaterial(Entity):
     __entityName__ = 'protocol-value'
 
+    def __init__(self, data, user):
+        super().__init__(data, user)
+        self.amount = self.value
+
     def edit(self, name=None, amount=None, units=None, resource=None,
              extraParams={}):
         """

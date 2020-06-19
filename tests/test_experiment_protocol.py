@@ -31,10 +31,6 @@ class TestExperimentProtocol:
         dataElements = refreshed_experiment_protocol.getDataElements()
         assert len(dataElements) == 1
 
-    def test_getMaterials(self):
-        materials = experiment_protocol.getMaterials()
-        assert len(materials) == 0
-
     def test_addMaterial(self):
         resource = testUser.newResource('test')
         resource_item = resource.newItem('test')
@@ -43,9 +39,12 @@ class TestExperimentProtocol:
                                         units='uL',
                                         resource=resource,
                                         resource_item=resource_item)
-        material = experiment_protocol.getMaterials()[0]
+
+        updated_exp = testUser.getExperiment(new_entity.id)
+        updated_exp_protocol = updated_exp.getProtocols()[0]
+        material = updated_exp_protocol.getMaterials()[0]
         assert material.name == 'testMaterial' \
-            and material.amount == 10 \
+            and material.amount == '10' \
             and material.unit == 'uL' \
             and material.resource['id'] == resource.id \
             and material.resource_item['id'] == resource_item.id

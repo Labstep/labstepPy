@@ -104,10 +104,6 @@ class TestExperiment:
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1
 
-    def test_getMaterials(self):
-        materials = entity.getMaterials()
-        assert len(materials) == 0
-
     def test_addMaterial(self):
         resource = testUser.newResource('test')
         resource_item = resource.newItem('test')
@@ -118,7 +114,7 @@ class TestExperiment:
                            resource_item=resource_item)
         material = entity.getMaterials()[0]
         assert material.name == 'testMaterial' \
-            and material.amount == 10 \
+            and material.amount == '10' \
             and material.unit == 'uL' \
             and material.resource['id'] == resource.id \
             and material.resource_item['id'] == resource_item.id \

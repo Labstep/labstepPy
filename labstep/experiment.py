@@ -349,6 +349,10 @@ class ExperimentProtocol(Entity):
 class ExperimentMaterial(Entity):
     __entityName__ = 'experiment-value'
 
+    def __init__(self, data, user):
+        super().__init__(data, user)
+        self.amount = self.value
+
     def edit(self, amount=None, units=None, resource=None, resourceItem=None):
         """
         Edit an existing Experiment Material.
