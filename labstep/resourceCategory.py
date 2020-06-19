@@ -74,8 +74,7 @@ def newResourceCategory(user, name, extraParams={}):
     ResourceCategory
         An object representing the new Labstep ResourceCategory.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
+    params = {'name': name, **extraParams}
     return newEntity(user, ResourceCategory, params)
 
 
@@ -98,9 +97,9 @@ def editResourceCategory(resourceCategory, name=None, deleted_at=None,
     ResourceCategory
         An object representing the edited ResourceCategory.
     """
-    filterParams = {'name': name,
-                    'deleted_at': deleted_at}
-    params = {**filterParams, **extraParams}
+    params = {'name': name,
+              'deleted_at': deleted_at,
+              **extraParams}
     return editEntity(resourceCategory, params)
 
 

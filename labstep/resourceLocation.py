@@ -8,7 +8,7 @@ from .entity import Entity, getEntity, getEntities, newEntity, editEntity, getHe
 from .helpers import url_join, handleError
 
 
-def getResourceLocation(user, resourceLocation_id):
+def getResourceLocation(user, resource_location_id):
     """
     Retrieve a specific Labstep ResourceLocation.
 
@@ -17,7 +17,7 @@ def getResourceLocation(user, resourceLocation_id):
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    resourceLocation_id (int)
+    resource_location_id (int)
         The id of the ResourceLocation to retrieve.
 
     Returns
@@ -25,7 +25,7 @@ def getResourceLocation(user, resourceLocation_id):
     ResourceLocation
         An object representing a Labstep ResourceLocation.
     """
-    return getEntity(user, ResourceLocation, id=resourceLocation_id)
+    return getEntity(user, ResourceLocation, id=resource_location_id)
 
 
 def getResourceLocations(user, count=100, search_query=None, tag_id=None,
@@ -51,9 +51,9 @@ def getResourceLocations(user, count=100, search_query=None, tag_id=None,
     ResourceLocations
         A list of ResourceLocation objects.
     """
-    filterParams = {'search_query': search_query,
-                    'tag_id': tag_id}
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'tag_id': tag_id,
+              **extraParams}
     return getEntities(user, ResourceLocation, count, params)
 
 
@@ -77,12 +77,7 @@ def newResourceLocation(user, name, outer_location_id=None, extraParams={}):
     ResourceLocation
         An object representing the new Labstep ResourceLocation.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
-
-    if outer_location_id is not None:
-        params['outer_location_id'] = outer_location_id
-
+    params = {'name': name, 'outer_location_id': outer_location_id, **extraParams}
     return newEntity(user, ResourceLocation, params)
 
 
@@ -104,31 +99,8 @@ def editResourceLocation(resourceLocation, name, extraParams={}):
     ResourceLocation
         An object representing the edited ResourceLocation.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
+    params = {'name': name, **extraParams}
     return editEntity(resourceLocation, params)
-
-
-def deleteResourceLocation(resourceLocation):
-    """
-    Delete an existing ResourceLocation.
-
-    Parameters
-    ----------
-    resourceLocation (obj)
-        The ResourceLocation to delete.
-
-    Returns
-    -------
-    resourceLocation
-        An object representing the ResourceLocation to delete.
-    """
-    headers = getHeaders(resourceLocation.__user__)
-    url = url_join(API_ROOT, "/api/generic/", ResourceLocation.__entityName__,
-                   str(resourceLocation.id))
-    r = requests.delete(url, headers=headers)
-    handleError(r)
-    return None
 
 
 class ResourceLocation(Entity):
@@ -177,18 +149,22 @@ class ResourceLocation(Entity):
         """
         Delete an existing ResourceLocation.
 
-        Example
+        Parameters
+        ----------
+        resourceLocation (obj)
+            The ResourceLocation to delete.
+
+        Returns
         -------
-        ::
-
-            # Get all ResourceLocations, since there is no function
-            # to get one ResourceLocation.
-            resource_locations = user.getResourceLocations()
-
-            # Select the tag by using python index.
-            resource_locations[1].delete()
+        resourceLocation
+            An object representing the ResourceLocation to delete.
         """
-        return deleteResourceLocation(self)
+        headers = getHeaders(self.__user__)
+        url = url_join(API_ROOT, "/api/generic/", ResourceLocation.__entityName__,
+                       str(self.id))
+        r = requests.delete(url, headers=headers)
+        handleError(r)
+        return None
 
     '''def addComment(self, body, filepath=None):
         """

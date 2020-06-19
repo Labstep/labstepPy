@@ -54,9 +54,9 @@ def getResources(user, count=100, search_query=None, tag_id=None,
     resources
         A list of Resource objects.
     """
-    filterParams = {'search_query': search_query,
-                    'tag_id': tag_id}
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'tag_id': tag_id, 
+              **extraParams}
     return getEntities(user, Resource, count, params)
 
 
@@ -77,12 +77,12 @@ def newResource(user, name, extraParams={}):
     resource
         An object representing the new Labstep Resource.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
+    params = {'name': name, **extraParams}
     return newEntity(user, Resource, params)
 
 
-def editResource(resource, name=None, deleted_at=None, resource_category=None,
+def editResource(resource, name=None, deleted_at=None,
+                 resource_category_id=None,
                  extraParams={}):
     """
     Edit an existing Resource.
@@ -95,21 +95,18 @@ def editResource(resource, name=None, deleted_at=None, resource_category=None,
         The new name of the Experiment.
     deleted_at (str)
         The timestamp at which the Resource is deleted/archived.
-    resource_category (obj)
-        The ResourceCategory to add to a Resource.
+    resource_category_id (obj)
+        The id of the ResourceCategory to add to a Resource.
 
     Returns
     -------
     resource
         An object representing the edited Resource.
     """
-    filterParams = {'name': name,
-                    'deleted_at': deleted_at}
-
-    if resource_category is not None:
-        filterParams['resource_category_id'] = resource_category.id
-
-    params = {**filterParams, **extraParams}
+    params = {'name': name,
+              'resource_category_id': resource_category_id,
+              'deleted_at': deleted_at,
+              **extraParams}
     return editEntity(resource, params)
 
 
@@ -201,8 +198,8 @@ class Resource(PrimaryEntity):
             metadata = resource.addMetadata("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldName, fieldType, value, date,
-                             number, unit,
+        return addMetadataTo(self, fieldName=fieldName, fieldType=fieldType, value=value, date=date,
+                             number=number, unit=unit,
                              extraParams=extraParams)
 
     def getMetadata(self):
@@ -224,15 +221,15 @@ class Resource(PrimaryEntity):
         """
         return getMetadata(self)
 
-    def setResourceCategory(self, resource_category, extraParams={}):
+    def setResourceCategory(self, resource_category_id, extraParams={}):
         """
         Add a Labstep ResourceCategory to a Resource.
 
         Parameters
         ----------
-        resource_category (ResourceCategory)
-            The :class:`~labstep.resourceCategory.ResourceCategory` to add
-            to the Resource.
+        resource_category_id (int)
+            The id of :class:`~labstep.resourceCategory.ResourceCategory` to set for
+            the Resource.
 
         Returns
         -------
@@ -247,9 +244,9 @@ class Resource(PrimaryEntity):
             resource_category = user.getResourceCategory(170)
 
             # Set the Resource Category
-            my_resource = my_resource.setResourceCategory(resource_category)
+            my_resource = my_resource.setResourceCategory(resource_category.id)
         """
-        return editResource(self, resource_category=resource_category,
+        return editResource(self, resource_category_id=resource_category_id,
                             extraParams=extraParams)
 
     def newOrderRequest(self, quantity=1, extraParams={}):
@@ -307,7 +304,7 @@ class Resource(PrimaryEntity):
 
     def newItem(self, name=None, availability='available',
                 quantity_amount=None, quantity_unit=None,
-                location=None, extraParams={}):
+                resource_location_id=None, extraParams={}):
         """
         Create a new Labstep ResourceItem.
 
@@ -322,8 +319,8 @@ class Resource(PrimaryEntity):
             The quantity of the ResourceItem.
         quantity_unit (str)
             The unit of the quantity.
-        location (obj)
-            The ResourceLocation of the ResourceItem.
+        resource_location_id (int)
+            The id of the ResourceLocation of the ResourceItem.
 
         Returns
         -------
@@ -337,7 +334,11 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             item = my_resource.newItem(name='Test Item')
         """
-        return newResourceItem(self.__user__, self, name,
-                               availability, quantity_amount,
-                               quantity_unit, location,
+        return newResourceItem(self.__user__,
+                               name=name,
+                               resource_id=self.id,
+                               availability=availability,
+                               quantity_amount=quantity_amount,
+                               quantity_unit=quantity_unit,
+                               resource_location_id=resource_location_id,
                                extraParams=extraParams)

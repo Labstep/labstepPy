@@ -27,8 +27,7 @@ def newFile(user, filepath, extraParams={}):
         An object representing the uploaded file to Labstep.
     """
     files = {'file': open(filepath, 'rb')}
-    filterParams = {'group_id': user.activeWorkspace}
-    params = {**filterParams, **extraParams}
+    params = {'group_id': user.activeWorkspace, **extraParams}
     headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/file/upload")
     r = requests.post(url, headers=headers, files=files, data=params)
@@ -96,9 +95,9 @@ def getFiles(user, count=100, search_query=None, file_type=None,
 
             entities = user.getFiles(search_query='bacteria')
         """
-    filterParams = {'search_query': search_query,
-                    'filetype': file_type}
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'filetype': file_type,
+              **extraParams}
     return getEntities(user, File, count, params)
 
 

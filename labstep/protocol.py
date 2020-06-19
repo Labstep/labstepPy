@@ -60,11 +60,11 @@ def getProtocols(user, count=100, search_query=None,
     protocols
         A list of Protocol objects.
     """
-    filterParams = {'search_query': search_query,
-                    'created_at_from': createdAtFrom(created_at_from),
-                    'created_at_to': createdAtTo(created_at_to),
-                    'tag_id': tag_id}
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'created_at_from': createdAtFrom(created_at_from),
+              'created_at_to': createdAtTo(created_at_to),
+              'tag_id': tag_id,
+              **extraParams}
     return getEntities(user, Protocol, count, params)
 
 
@@ -85,8 +85,7 @@ def newProtocol(user, name, extraParams={}):
     protocol
         An object representing the new Labstep Protocol.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
+    params = {'name': name, **extraParams}
     return newEntity(user, Protocol, params)
 
 
@@ -108,16 +107,16 @@ def editProtocol(protocol, name=None, deleted_at=None, extraParams={}):
     protocol
         An object representing the edited Protocol.
     """
-    filterParams = {'name': name,
-                    'deleted_at': deleted_at}
-    params = {**filterParams, **extraParams}
+    params = {'name': name,
+              'deleted_at': deleted_at,
+              **extraParams}
     return editEntity(protocol, params)
 
 
 class ProtocolMaterial(Entity):
     __entityName__ = 'protocol-value'
 
-    def edit(self, name=None, amount=None, units=None, resource=None,
+    def edit(self, name=None, amount=None, units=None, resource_id=None,
              extraParams={}):
         """
         Edit an existing Protocol Material.
@@ -130,8 +129,9 @@ class ProtocolMaterial(Entity):
             The amount of the Protocol Material.
         units (str)
             The units of the amount.
-        resource (Resource)
-            The :class:`~labstep.resource.Resource` of the Protocol Material.
+        resource_id (Resource)
+            The id of the :class:`~labstep.resource.Resource` of
+            the Protocol Material.
 
         Returns
         -------
@@ -146,14 +146,12 @@ class ProtocolMaterial(Entity):
             protocol_materials = exp_protocol.getMaterials()
             protocol_materials[0].edit(value=1.7, units='ml')
         """
-        fields = {'name': name,
+        params = {'name': name,
+                  'resource_id': resource_id,
                   'value': amount,
-                  'units': units, **extraParams}
-
-        if resource is not None:
-            fields['resource_id'] = resource.id
-
-        return editEntity(self, fields)
+                  'units': units,
+                  **extraParams}
+        return editEntity(self, params)
 
 
 class ProtocolStep(Entity):
@@ -206,9 +204,9 @@ class ProtocolTable(Entity):
             protocol_tables[0].edit(name='New Table Name', data=data)
         """
 
-        filterParams = {'name': name,
-                        'data': data}
-        params = {**filterParams, **extraParams}
+        params = {'name': name,
+                  'data': data,
+                  **extraParams}
         return editEntity(self, params)
 
 
@@ -245,16 +243,15 @@ class ProtocolTimer(Entity):
             protocol_timers[0].edit(name='New Timer Name',
                                     minutes=1, seconds=17)
         """
-        filterParams = {'name': name}
+        params = {'name': name, **extraParams}
 
         if hours is not None:
-            filterParams['hours'] = hours
+            params['hours'] = hours
         if minutes is not None:
-            filterParams['minutes'] = minutes
+            params['minutes'] = minutes
         if seconds is not None:
-            filterParams['seconds'] = seconds
+            params['seconds'] = seconds
 
-        params = {**filterParams, **extraParams}
         return editEntity(self, params)
 
 
@@ -390,17 +387,17 @@ class Protocol(PrimaryEntity):
                                                value="1.73")
         """
         metadataThread = self.last_version['metadata_thread']
-        filterParams = {'metadata_thread_id': metadataThread['id'],
-                        'type': fieldType,
-                        'label': fieldName,
-                        'value': value,
-                        'date': handleDate(date),
-                        'number': number,
-                        'unit': unit}
-        params = {**filterParams, **extraParams}
+        params = {'metadata_thread_id': metadataThread['id'],
+                  'type': fieldType,
+                  'label': fieldName,
+                  'value': value,
+                  'date': handleDate(date),
+                  'number': number,
+                  'unit': unit,
+                  **extraParams}
         return newEntity(self.__user__, Metadata, params)
 
-    def addMaterial(self, name=None, amount=None, units=None, resource=None,
+    def addMaterial(self, name=None, amount=None, units=None, resource_id=None,
                     extraParams={}):
         """
         Add a new material to the Protocol.
@@ -431,15 +428,13 @@ class Protocol(PrimaryEntity):
             protocol.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource=resource)
         """
-        filterParams = {'protocol_id': self.last_version['id'],
-                        'name': name,
-                        'value': amount,
-                        'units': units}
+        params = {'protocol_id': self.last_version['id'],
+                  'resource_id': resource_id,
+                  'name': name,
+                  'value': amount,
+                  'units': units,
+                  **extraParams}
 
-        if resource is not None:
-            filterParams['resource_id'] = resource.id
-
-        params = {**filterParams, **extraParams}
         return newEntity(self.__user__, ProtocolMaterial, params)
 
     def getMaterials(self):
@@ -489,13 +484,12 @@ class Protocol(PrimaryEntity):
             protocol = user.getProtocol(17000)
             protocol.addTimer(name='Refluxing', hours='4', minutes='30')
         """
-        fields = {'protocol_id': self.last_version['id'],
+        params = {'protocol_id': self.last_version['id'],
                   'name': name,
                   'hours': hours,
                   'minutes': minutes,
-                  'seconds': seconds
-                  }
-        return newEntity(self.__user__, ProtocolTimer, fields)
+                  'seconds': seconds}
+        return newEntity(self.__user__, ProtocolTimer, params)
 
     def getTimers(self):
         """
@@ -559,11 +553,10 @@ class Protocol(PrimaryEntity):
             protocol.addTable(name='Calibration', data=data)
         """
 
-        fields = {'protocol_id': self.last_version['id'],
+        params = {'protocol_id': self.last_version['id'],
                   'name': name,
-                  'data': data,
-                  }
-        return newEntity(self.__user__, ProtocolTable, fields)
+                  'data': data}
+        return newEntity(self.__user__, ProtocolTable, params)
 
     def getTables(self):
         """
