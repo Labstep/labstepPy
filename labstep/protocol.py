@@ -90,7 +90,7 @@ def newProtocol(user, name, extraParams={}):
     return newEntity(user, Protocol, params)
 
 
-def editProtocol(protocol, name=None, deleted_at=None, extraParams={}):
+def editProtocol(protocol, name=None, content_state=None, deleted_at=None, extraParams={}):
     """
     Edit an existing Protocol.
 
@@ -100,6 +100,8 @@ def editProtocol(protocol, name=None, deleted_at=None, extraParams={}):
         The Protocol to edit.
     name (str)
         The new name of the Protocol.
+    content_state (dict):
+        JSON representing the content state of the protocol.
     deleted_at (str)
         The timestamp at which the Protocol is deleted/archived.
 
@@ -109,6 +111,7 @@ def editProtocol(protocol, name=None, deleted_at=None, extraParams={}):
         An object representing the edited Protocol.
     """
     filterParams = {'name': name,
+                    'content_state': content_state,
                     'deleted_at': deleted_at}
     params = {**filterParams, **extraParams}
     return editEntity(protocol, params)
@@ -277,7 +280,7 @@ class Protocol(PrimaryEntity):
     """
     __entityName__ = 'protocol-collection'
 
-    def edit(self, name, extraParams={}):
+    def edit(self, name, content_state=None, extraParams={}):
         """
         Edit an existing Protocol.
 
@@ -298,7 +301,8 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        return editProtocol(self, name, extraParams=extraParams)
+        return editProtocol(self, name, content_state=content_state,
+                            extraParams=extraParams)
 
     def delete(self):
         """
