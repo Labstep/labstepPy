@@ -152,6 +152,8 @@ def addProtocolToExperiment(experiment, protocol):
 class ExperimentProtocol(Entity):
     __entityName__ = 'experiment'
 
+    __isLegacy__ = True
+
     def getMaterials(self):
         """
         Returns a list of the materials in a Protocol within an Experiment.
@@ -170,6 +172,7 @@ class ExperimentProtocol(Entity):
             exp_protocol_materials = exp_protocol.getMaterials()
             exp_protocol_materials[0].attributes()
         """
+        self.update()
         materials = self.experiment_values
         return listToClass(materials, ExperimentMaterial, self.__user__)
 
@@ -239,6 +242,7 @@ class ExperimentProtocol(Entity):
             exp_protocol_steps = exp_protocol.getSteps()
             exp_protocol_steps[0].attributes()
         """
+        self.update()
         steps = self.experiment_steps
         return listToClass(steps, ExperimentStep, self.__user__)
 
@@ -260,6 +264,7 @@ class ExperimentProtocol(Entity):
             exp_protocol_tables = exp_protocol.getTables()
             exp_protocol_tables[0].attributes()
         """
+        self.update()
         tables = self.experiment_tables
         return listToClass(tables, ExperimentTable, self.__user__)
 
@@ -281,6 +286,7 @@ class ExperimentProtocol(Entity):
             exp_protocol_timers = exp_protocol.getTimers()
             exp_protocol_timers[0].attributes()
         """
+        self.update()
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
 
@@ -713,6 +719,7 @@ class Experiment(PrimaryEntity):
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
+        self.update()
         return listToClass(self.experiments, ExperimentProtocol, self.__user__)
 
     def addDataElement(self, fieldName, fieldType="default",

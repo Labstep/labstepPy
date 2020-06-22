@@ -45,6 +45,6 @@ class TestExperimentProtocol:
         material = updated_exp_protocol.getMaterials()[0]
         assert material.name == 'testMaterial' \
             and material.amount == '10' \
-            and material.unit == 'uL' \
+            and material.units == 'uL' \
             and material.resource['id'] == resource.id \
             and material.resource_item['id'] == resource_item.id
