@@ -149,7 +149,7 @@ class OrderRequest(PrimaryEntity):
         status (str)
             The status of the OrderRequest. Options are: "new", "approved",
             "ordered", "back_ordered", "received", and "cancelled".
-        resource_id (Resource)
+        resource_id (int)
             The id of the :class:`~labstep.resource.Resource` being requested.
         quantity (int)
             The quantity of the OrderRequest.
