@@ -99,10 +99,26 @@ class TestExperiment:
         assert len(dataElements) == 0
 
     def test_addDataElementTo(self):
-        dataElement = entity.addDataElement('testField', fieldType="default",)
+        entity.addDataElement('testField', fieldType="default",)
         newEntity = testUser.getExperiment(entity.id)
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1
+
+    def test_addMaterial(self):
+        resource = testUser.newResource('test')
+        resource_item = resource.newItem('test')
+        entity.addMaterial('testMaterial',
+                           amount=10,
+                           units='uL',
+                           resource=resource,
+                           resource_item=resource_item)
+        material = entity.getMaterials()[0]
+        assert material.name == 'testMaterial' \
+            and material.amount == '10' \
+            and material.units == 'uL' \
+            and material.resource['id'] == resource.id \
+            and material.resource_item['id'] == resource_item.id \
+
 
     def test_signatures(self):
         sig = entity.addSignature('test', lock=True)
