@@ -127,7 +127,7 @@ class TestProtocol:
         assert len(dataElements) == 0
 
     def test_addDataElement(self):
-        metadata = entity.addDataElement(fieldType="default", fieldName="test")
+        entity.addDataElement(fieldType="default", fieldName="test")
         newEntity = testUser.getProtocol(entity.id)
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1

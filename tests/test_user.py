@@ -49,6 +49,12 @@ class TestUser:
         assert result.name == testName, \
             'FAILED TO GET RESOURCE'
 
+    def test_getResourceLocation(self):
+        entity = testUser.newResourceLocation(testName)
+        result = testUser.getResourceLocation(entity.id)
+        assert result.name == testName, \
+            'FAILED TO GET RESOURCE LOCATION'
+
     def test_getResourceCategory(self):
         entity = testUser.newResourceCategory(testName)
         result = testUser.getResourceCategory(entity.id)
@@ -57,7 +63,7 @@ class TestUser:
 
     def test_getOrderRequest(self):
         new_resource = testUser.newResource(testName)
-        entity = testUser.newOrderRequest(new_resource)
+        entity = testUser.newOrderRequest(resource_id=new_resource.id)
         result = testUser.getOrderRequest(entity.id)
         assert result.name == testName, \
             'FAILED TO GET ORDER REQUEST'
@@ -154,7 +160,7 @@ class TestUser:
 
     def test_newOrderRequest(self):
         entity = testUser.newResource(testName)
-        result = testUser.newOrderRequest(entity)
+        result = testUser.newOrderRequest(resource_id=entity.id)
         assert result.name == testName, \
             'FAILED TO CREATE NEW ORDER REQUEST'
 

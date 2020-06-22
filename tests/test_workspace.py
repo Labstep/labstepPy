@@ -60,7 +60,7 @@ class TestWorkspace:
 
     def test_getOrderRequests(self):
         new_resource = testUser.newResource(testName)
-        testUser.newOrderRequest(new_resource)
+        new_resource.newOrderRequest()
         result = entity.getOrderRequests()
         assert result[0].id, \
             'FAILED TO GET ORDER REQUESTS'

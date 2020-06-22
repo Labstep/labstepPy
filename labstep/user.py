@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from .file import newFile, getFile, getFiles
+from .workspace import getWorkspace, getWorkspaces, newWorkspace
+from .tag import getTags, newTag
+from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
 import requests
 import json
 import urllib.parse
@@ -13,29 +17,26 @@ from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
 from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
-from .resourceLocation import getResourceLocations, newResourceLocation
-from .orderRequest import getOrderRequest, getOrderRequests, newOrderRequest
-from .tag import getTags, newTag
-from .workspace import getWorkspace, getWorkspaces, newWorkspace
-from .file import newFile, getFile, getFiles
+from .resourceLocation import (getResourceLocation, getResourceLocations,
+                               newResourceLocation)
 
 
 def newUser(first_name, last_name, email, password,
             share_link_token=None, extraParams={}):
     url = url_join(API_ROOT, "public-api/user")
-    filterParams = {
+    params = {
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
         "password": password,
-        "share_link_token": share_link_token
+        "share_link_token": share_link_token,
+        **extraParams
     }
-    params = {**filterParams, **extraParams}
 
-    fields = dict(
+    params = dict(
         filter(lambda field: field[1] is not None, params.items()))
 
-    r = requests.post(url, json=fields)
+    r = requests.post(url, json=params)
     handleError(r)
     return User(json.loads(r.content))
 
@@ -98,10 +99,10 @@ def login(username, password):
 
         user = labstep.login('myaccount@labstep.com', 'mypassword')
     """
-    fields = {'username': username,
+    params = {'username': username,
               'password': password}
     url = url_join(API_ROOT, "/public-api/user/login")
-    r = requests.post(url, json=fields, headers={})
+    r = requests.post(url, json=params, headers={})
     handleError(r)
     return User(json.loads(r.content))
 
@@ -218,13 +219,13 @@ class User(Entity):
         """
         return getResource(self, resource_id)
 
-    def getResourceCategory(self, resourceCategory_id):
+    def getResourceCategory(self, resource_category_id):
         """
         Retrieve a specific Labstep ResourceCategory.
 
         Parameters
         ----------
-        resourceCategory_id (int)
+        resource_category_id (int)
             The id of the ResourceCategory to retrieve.
 
         Returns
@@ -238,7 +239,29 @@ class User(Entity):
 
             entity = user.getResourceCategory(17000)
         """
-        return getResourceCategory(self, resourceCategory_id)
+        return getResourceCategory(self, resource_category_id)
+
+    def getResourceLocation(self, resource_location_id):
+        """
+        Retrieve a specific Labstep ResourceLocation.
+
+        Parameters
+        ----------
+        resource_location_id (int)
+            The id of the ResourceLocation to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.resourceLocation.ResourceLocation`
+            An object representing a ResourceLocation on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getResourceLocation(17000)
+        """
+        return getResourceLocation(self, resource_location_id)
 
     def getOrderRequest(self, order_request_id):
         """
@@ -728,7 +751,9 @@ class User(Entity):
         """
         return newResourceCategory(self, name, extraParams=extraParams)
 
-    def newResourceLocation(self, name, extraParams={}):
+    def newResourceLocation(self, name,
+                            outer_location_id=None,
+                            extraParams={}):
         """
         Create a new Labstep ResourceLocation.
 
@@ -736,6 +761,13 @@ class User(Entity):
         ----------
         name (str)
             Give your ResourceLocation a name.
+
+        outer_location_id (int)
+            The id of existing location to create the location within
+
+        extraParams (dict)
+            (Advanced) Dictionary of extra parameters to pass in the
+            POST request
 
         Returns
         -------
@@ -748,16 +780,20 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        return newResourceLocation(self, name, extraParams=extraParams)
+        return newResourceLocation(self,
+                                   name,
+                                   outer_location_id=outer_location_id,
+                                   extraParams=extraParams)
 
-    def newOrderRequest(self, resource, quantity=1, extraParams={}):
+    def newOrderRequest(self, resource_id, quantity=1, extraParams={}):
         """
         Create a new Labstep OrderRequest.
 
         Parameters
         ----------
-        resource (Resource)
-            The :class:`~labstep.resource.Resource` to request more items of.
+        resource_id (int)
+            The id of the :class:`~labstep.resource.Resource`
+            to request more items of.
         quantity (int)
             The quantity of items requested.
 
@@ -771,9 +807,11 @@ class User(Entity):
         ::
 
             my_resource = user.getResource(17000)
-            entity = user.newOrderRequest(my_resource, quantity=2)
+            entity = user.newOrderRequest(my_resource.id, quantity=2)
         """
-        return newOrderRequest(self, resource, quantity=quantity,
+        return newOrderRequest(self,
+                               resource_id=resource_id,
+                               quantity=quantity,
                                extraParams=extraParams)
 
     def newTag(self, name, type, extraParams={}):

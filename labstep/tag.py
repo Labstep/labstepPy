@@ -33,9 +33,9 @@ def getTags(user, count=1000, type=None, search_query=None, extraParams={}):
     tags
         A list of tag objects.
     """
-    filterParams = {'search_query': search_query,
-                    'type': handleString(type)}
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'type': handleString(type),
+              **extraParams}
     return getEntities(user, Tag, count, params)
 
 
@@ -80,9 +80,9 @@ def newTag(user, name, type, extraParams={}):
     tag
         An object representing the new Labstep Tag.
     """
-    filterParams = {'name': name,
-                    'type': handleString(type)}
-    params = {**filterParams, **extraParams}
+    params = {'name': name,
+              'type': handleString(type),
+              **extraParams}
     return newEntity(user, Tag, params)
 
 
@@ -163,30 +163,8 @@ def editTag(tag, name, extraParams={}):
     tag
         An object representing the edited Tag.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
+    params = {'name': name, **extraParams}
     return editEntity(tag, params)
-
-
-def deleteTag(tag):
-    """
-    Delete an existing tag.
-
-    Parameters
-    ----------
-    tag (obj)
-        The tag to delete.
-
-    Returns
-    -------
-    tag
-        An object representing the tag to delete.
-    """
-    headers = getHeaders(tag.__user__)
-    url = url_join(API_ROOT, "/api/generic/tag/", str(tag.id))
-    r = requests.delete(url, headers=headers)
-    handleError(r)
-    return None
 
 
 class Tag(Entity):
@@ -233,17 +211,22 @@ class Tag(Entity):
 
     def delete(self):
         """
-        Delete an existing Tag.
+        Delete an existing tag.
 
-        Example
+        Parameters
+        ----------
+        tag (obj)
+            The tag to delete.
+
+        Returns
         -------
-        ::
-
-            # Get all tags, since there is no function
-            # to get one tag.
-            tags = user.getTags()
-
-            # Select the tag by using python index.
-            tags[1].delete()
+        tag
+            An object representing the tag to delete.
         """
-        return deleteTag(self)
+        headers = getHeaders(self.__user__)
+        url = url_join(API_ROOT, "/api/generic/",
+                       Tag.__entityName__,
+                       str(self.id))
+        r = requests.delete(url, headers=headers)
+        handleError(r)
+        return None

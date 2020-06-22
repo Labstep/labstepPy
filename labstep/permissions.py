@@ -28,14 +28,14 @@ def newPermission(entity, workspace_id, permission):
     headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl')
 
-    fields = {
+    params = {
         'id': entity.id,
         'entity_class': entityName.replace('-', '_'),
         'action': 'grant',
         'group_id': workspace_id,
         'permission': permission
     }
-    r = requests.post(url, headers=headers, json=fields)
+    r = requests.post(url, headers=headers, json=params)
     handleError(r)
     return entity
 
@@ -64,7 +64,7 @@ def editPermission(entity, workspace_id, permission):
     headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl')
 
-    fields = {
+    params = {
         'id': entity.id,
         'entity_class': entityName.replace('-', '_'),
         'action': 'set',
@@ -72,7 +72,7 @@ def editPermission(entity, workspace_id, permission):
         'group_owner_id': workspace_id,
         'permission': permission
     }
-    r = requests.post(url, headers=headers, json=fields)
+    r = requests.post(url, headers=headers, json=params)
     handleError(r)
     return entity
 
@@ -99,13 +99,13 @@ def revokePermission(entity, workspace_id):
     headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", 'acl')
 
-    fields = {
+    params = {
         'id': entity.id,
         'entity_class': entityName.replace('-', '_'),
         'action': 'revoke',
         'group_id': workspace_id
     }
-    r = requests.post(url, headers=headers, json=fields)
+    r = requests.post(url, headers=headers, json=params)
     handleError(r)
     return entity
 
@@ -156,8 +156,8 @@ def transferOwnership(entity, workspace_id):
     headers = getHeaders(entity.__user__)
     url = url_join(API_ROOT, "api/generic/", entityName,
                    str(entity.id), 'transfer-ownership')
-    fields = {'group_id': workspace_id}
-    r = requests.post(url, headers=headers, json=fields)
+    params = {'group_id': workspace_id}
+    r = requests.post(url, headers=headers, json=params)
     handleError(r)
     return
 

@@ -59,14 +59,14 @@ def addMetadataTo(entity, fieldName, fieldType="default",
     metadata
         An object representing the new Labstep Metadata.
     """
-    filterParams = {'metadata_thread_id': entity.metadata_thread['id'],
-                    'type': fieldType,
-                    'label': fieldName,
-                    'value': value,
-                    'date': handleDate(date),
-                    'number': number,
-                    'unit': unit}
-    params = {**filterParams, **extraParams}
+    params = {'metadata_thread_id': entity.metadata_thread['id'],
+              'type': fieldType,
+              'label': fieldName,
+              'value': value,
+              'date': handleDate(date),
+              'number': number,
+              'unit': unit,
+              **extraParams}
     return newEntity(entity.__user__, Metadata, params)
 
 
@@ -88,30 +88,9 @@ def editMetadata(metadata, fieldName=None, value=None, extraParams={}):
     metadata
         An object representing the edited Metadata.
     """
-    filterParams = {'label': fieldName,
-                    'value': value}
-    params = {**filterParams, **extraParams}
+    params = {'label': fieldName,
+              'value': value, **extraParams}
     return editEntity(metadata, params)
-
-
-def deleteMetadata(metadata):
-    """
-    Delete an existing Metadata.
-
-    Parameters
-    ----------
-    metadata (obj)
-        The Metadata to delete.
-
-    Returns
-    -------
-    None
-    """
-    headers = getHeaders(metadata.__user__)
-    url = url_join(API_ROOT, "/api/generic/metadata/", str(metadata.id))
-    r = requests.delete(url, headers=headers)
-    handleError(r)
-    return None
 
 
 class Metadata(Entity):
@@ -155,12 +134,21 @@ class Metadata(Entity):
 
     def delete(self):
         """
-        Delete an existing Metadata field.
+        Delete an existing Metadata.
 
-        Example
+        Parameters
+        ----------
+        metadata (obj)
+            The Metadata to delete.
+
+        Returns
         -------
-        ::
-
-            metadata.delete()
+        None
         """
-        return deleteMetadata(self)
+        headers = getHeaders(self.__user__)
+        url = url_join(API_ROOT, "/api/generic/",
+                       Metadata.__entityName__,
+                       str(self.id))
+        r = requests.delete(url, headers=headers)
+        handleError(r)
+        return None
