@@ -90,7 +90,8 @@ def newProtocol(user, name, extraParams={}):
     return newEntity(user, Protocol, params)
 
 
-def editProtocol(protocol, name=None, content_state=None, deleted_at=None, extraParams={}):
+def editProtocol(protocol, name=None, content_state=None, deleted_at=None,
+                 extraParams={}):
     """
     Edit an existing Protocol.
 
