@@ -28,7 +28,7 @@ def getResourceItem(user, resourceItem_id):
     return getEntity(user, ResourceItem, id=resourceItem_id)
 
 
-def getResourceItems(user, resource, count=100, search_query=None,
+def getResourceItems(user, resource_id, count=100, search_query=None,
                      extraParams={}):
     """
     Retrieve a list of a user's ResourceItems on Labstep,
@@ -39,8 +39,8 @@ def getResourceItems(user, resource, count=100, search_query=None,
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    resource (obj)
-        The Resource to retrieve the ResourceItems for.
+    resource_id (obj)
+        The id of Resource to retrieve the ResourceItems for.
     count (int)
         The number of ResourceItems to retrieve.
     search_query (str)
@@ -53,15 +53,15 @@ def getResourceItems(user, resource, count=100, search_query=None,
     ResourceItems
         A list of ResourceItem objects.
     """
-    filterParams = {'search_query': search_query,
-                    'resource_id': resource.id}
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'resource_id': resource_id,
+              **extraParams}
     return getEntities(user, ResourceItem, count, params)
 
 
-def newResourceItem(user, resource, name=None, availability=None,
+def newResourceItem(user, resource_id, name=None, availability=None,
                     quantity_amount=None, quantity_unit=None,
-                    location=None, extraParams={}):
+                    resource_location_id=None, extraParams={}):
     """
     Create a new Labstep ResourceItem.
 
@@ -70,8 +70,8 @@ def newResourceItem(user, resource, name=None, availability=None,
     user (obj)
         The Labstep user creating the ResourceItem.
         Must have property 'api_key'. See 'login'.
-    resource (obj)
-        The Resource to add a new ResourceItem to.
+    resource_id (int)
+        The id of the Resource to add a new ResourceItem to.
     name (str)
         The new name of the ResourceItem.
     availability (str)
@@ -81,30 +81,28 @@ def newResourceItem(user, resource, name=None, availability=None,
         The quantity of the ResourceItem.
     quantity_unit (str)
         The unit of the quantity.
-    location (obj)
-        The ResourceLocation of the ResourceItem.
+    resource_location_id (int)
+        The id of the ResourceLocation of the ResourceItem.
 
     Returns
     -------
     resource
         An object representing the new Labstep ResourceItem.
     """
-    filterParams = {'resource_id': resource.id,
-                    'name': name,
-                    'status': handleString(availability),
-                    'quantity_amount': quantity_amount,
-                    'quantity_unit': quantity_unit}
+    params = {'resource_id': resource_id,
+              'resource_location_id': resource_location_id,
+              'name': name,
+              'status': handleString(availability),
+              'quantity_amount': quantity_amount,
+              'quantity_unit': quantity_unit,
+              **extraParams}
 
-    if location is not None:
-        filterParams['resource_location_id'] = location.id
-
-    params = {**filterParams, **extraParams}
     return newEntity(user, ResourceItem, params)
 
 
 def editResourceItem(resourceItem, name=None, availability=None,
                      quantity_amount=None, quantity_unit=None,
-                     location_id=None, deleted_at=None, extraParams={}):
+                     resource_location_id=None, deleted_at=None, extraParams={}):
     """
     Edit an existing ResourceItem.
 
@@ -131,18 +129,16 @@ def editResourceItem(resourceItem, name=None, availability=None,
     ResourceItem
         An object representing the edited ResourceItem.
     """
-    filterParams = {'name': name,
-                    'status': handleString(availability),
-                    'quantity_unit': quantity_unit,
-                    'deleted_at': deleted_at}
+    params = {'name': name,
+              'status': handleString(availability),
+              'resource_location_id': resource_location_id,
+              'quantity_unit': quantity_unit,
+              'deleted_at': deleted_at,
+              **extraParams}
 
     if quantity_amount is not None:
-        filterParams['quantity_amount'] = float(quantity_amount)
+        params['quantity_amount'] = float(quantity_amount)
 
-    if location_id is not None:
-        filterParams['resource_location_id'] = location_id
-
-    params = {**filterParams, **extraParams}
     return editEntity(resourceItem, params)
 
 
@@ -163,7 +159,7 @@ class ResourceItem(Entity):
 
     def edit(self, name=None, availability=None,
              quantity_amount=None, quantity_unit=None,
-             location_id=None, extraParams={}):
+             resource_location_id=None, extraParams={}):
         """
         Edit an existing ResourceItem.
 
@@ -178,7 +174,7 @@ class ResourceItem(Entity):
             The quantity of the ResourceItem.
         quantity_unit (str)
             The unit of the quantity.
-        location_id (ResourceLocation)
+        resource_location_id (int)
             The id of the :class:`~labstep.resourceLocation.ResourceLocation` of the ResourceItem.
 
         Returns
@@ -195,7 +191,7 @@ class ResourceItem(Entity):
         """
         return editResourceItem(self, name=name, availability=availability,
                                 quantity_amount=quantity_amount, quantity_unit=quantity_unit,
-                                location_id=location_id, extraParams=extraParams)
+                                resource_location_id=resource_location_id, extraParams=extraParams)
 
     def delete(self):
         """
@@ -294,8 +290,8 @@ class ResourceItem(Entity):
             metadata = my_resource_item.addMetadata("Refractive Index",
                                                     value="1.73")
         """
-        return addMetadataTo(self, fieldName, fieldType, value, date,
-                             number, unit, extraParams=extraParams)
+        return addMetadataTo(self, fieldName, fieldType=fieldType, value=value, date=date,
+                             number=number, unit=unit, extraParams=extraParams)
 
     def getMetadata(self):
         """

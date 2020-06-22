@@ -42,8 +42,8 @@ class TestExperimentProtocol:
         experiment_protocol.addMaterial('testMaterial',
                                         amount=10,
                                         units='uL',
-                                        resource=resource,
-                                        resource_item=resource_item)
+                                        resource_id=resource.id,
+                                        resource_item_id=resource_item.id)
 
         updated_exp = testUser.getExperiment(new_entity.id)
         updated_exp_protocol = updated_exp.getProtocols()[0]

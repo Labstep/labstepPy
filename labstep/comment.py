@@ -19,12 +19,13 @@ def getComments(entity, count=100, extraParams={}):
     comments
         List of the comments attached.
     """
-    filterParams = {'parent_thread_id': entity.thread['id'], 'search': None}
-    params = {**filterParams, **extraParams}
+    params = {'parent_thread_id': entity.thread['id'],
+              'search': None,
+              **extraParams}
     return getEntities(entity.__user__, Comment, count, params)
 
 
-def addComment(entity, body, file=None, extraParams={}):
+def addComment(entity, body, file_id=None, extraParams={}):
     """
     Add a comment to a Labstep entity such as an Experiment or Resource.
 
@@ -46,14 +47,11 @@ def addComment(entity, body, file=None, extraParams={}):
     """
     threadId = entity.thread['id']
 
-    filterParams = {'body': body,
-                    'parent_thread_id': threadId,
-                    }
+    params = {'body': body,
+              'parent_thread_id': threadId,
+              'file_id': file_id,
+              **extraParams}
 
-    if file is not None:
-        filterParams['file_id'] = [file.id]
-
-    params = {**filterParams, **extraParams}
     return newEntity(entity.__user__, Comment, params)
 
 
@@ -72,10 +70,10 @@ def addCommentWithFile(entity, body, filepath, extraParams={}):
         A Labstep File entity to attach to the comment.
     """
     if filepath is not None:
-        lsFile = newFile(entity.__user__, filepath)
+        file_id = newFile(entity.__user__, filepath).id
     else:
-        lsFile = None
-    return addComment(entity, body, lsFile, extraParams=extraParams)
+        file_id = None
+    return addComment(entity, body, file_id=file_id, extraParams=extraParams)
 
 
 def editComment(comment, body, extraParams={}):
@@ -94,8 +92,7 @@ def editComment(comment, body, extraParams={}):
     comment
         An object representing the edited comment.
     """
-    filterParams = {'body': body}
-    params = {**filterParams, **extraParams}
+    params = {'body': body, **extraParams}
     return editEntity(comment, params)
 
 

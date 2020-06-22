@@ -51,15 +51,14 @@ def getOrderRequests(user, count=100, search_query=None, tag_id=None, status=Non
     OrderRequests
         A list of OrderRequest objects.
     """
-    filterParams = {'search_query': search_query,
-                    'tag_id': tag_id,
-                    'status': handleString(status)
-                    }
-    params = {**filterParams, **extraParams}
+    params = {'search_query': search_query,
+              'tag_id': tag_id,
+              'status': handleString(status),
+              **extraParams}
     return getEntities(user, OrderRequest, count, params)
 
 
-def newOrderRequest(user, resource, quantity=1, extraParams={}):
+def newOrderRequest(user, resource_id=None, quantity=1, extraParams={}):
     """
     Create a new Labstep OrderRequest.
 
@@ -68,8 +67,8 @@ def newOrderRequest(user, resource, quantity=1, extraParams={}):
     user (obj)
         The Labstep user creating the OrderRequest.
         Must have property 'api_key'. See 'login'.
-    resource (obj)
-        The Labstep Resource.
+    resource_id (obj)
+        The id of the Labstep Resource being requested.
     quantity (int)
         The quantity of the new OrderRequest.
 
@@ -78,13 +77,13 @@ def newOrderRequest(user, resource, quantity=1, extraParams={}):
     OrderRequest
         An object representing the new Labstep OrderRequest.
     """
-    filterParams = {'resource_id': resource.id,
-                    'quantity': quantity}
-    params = {**filterParams, **extraParams}
+    params = {'resource_id': resource_id,
+              'quantity': quantity,
+              **extraParams}
     return newEntity(user, OrderRequest, params)
 
 
-def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
+def editOrderRequest(orderRequest, status=None, resource_id=None, quantity=None,
                      price=None, currency=None, deleted_at=None, extraParams={}):
     """
     Edit an existing OrderRequest.
@@ -96,8 +95,8 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     status (str)
         The status of the OrderRequest. Options are: "new", "approved",
         "ordered", "back_ordered", "received", and "cancelled".
-    resource (obj)
-        The Resource of the OrderRequest.
+    resource_id (obj)
+        The id of the Resource being requested.
     quantity (int)
         The quantity of the OrderRequest.
     price (int)
@@ -114,15 +113,14 @@ def editOrderRequest(orderRequest, status=None, resource=None, quantity=None,
     OrderRequest
         An object representing the edited OrderRequest.
     """
-    filterParams = {'status': handleString(status),
-                    'quantity': quantity,
-                    'price': price,
-                    'currency': currency,
-                    'deleted_at': deleted_at}
-    if resource is not None:
-        filterParams['resource_id'] = resource.id
+    params = {'status': handleString(status),
+              'resource_id': resource_id,
+              'quantity': quantity,
+              'price': price,
+              'currency': currency,
+              'deleted_at': deleted_at,
+              **extraParams}
 
-    params = {**filterParams, **extraParams}
     return editEntity(orderRequest, params)
 
 
@@ -141,7 +139,7 @@ class OrderRequest(PrimaryEntity):
     """
     __entityName__ = 'order-request'
 
-    def edit(self, status=None, resource=None, quantity=None,
+    def edit(self, status=None, resource_id=None, quantity=None,
              price=None, currency=None, extraParams={}):
         """
         Edit an existing OrderRequest.
@@ -151,8 +149,8 @@ class OrderRequest(PrimaryEntity):
         status (str)
             The status of the OrderRequest. Options are: "new", "approved",
             "ordered", "back_ordered", "received", and "cancelled".
-        resource (Resource)
-            The :class:`~labstep.resource.Resource` of the OrderRequest.
+        resource_id (Resource)
+            The id of the :class:`~labstep.resource.Resource` being requested.
         quantity (int)
             The quantity of the OrderRequest.
         price (int)
@@ -175,8 +173,8 @@ class OrderRequest(PrimaryEntity):
             my_orderRequest.edit(status="back_ordered", quantity=3,
                                  price=50, currency="GBP")
         """
-        return editOrderRequest(self, status, resource, quantity,
-                                price, currency, extraParams=extraParams)
+        return editOrderRequest(self, status=status, resource_id=resource_id, quantity=quantity,
+                                price=price, currency=currency, extraParams=extraParams)
 
     def delete(self):
         """

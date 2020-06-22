@@ -59,8 +59,7 @@ def getWorkspaces(user, count=100, search_query=None, extraParams={}):
     workspaces
         A list of Workspace objects.
     """
-    filterParams = {'name': search_query}
-    params = {**filterParams, **extraParams}
+    params = {'name': search_query, **extraParams}
     return getEntities(user, Workspace, count, params)
 
 
@@ -81,8 +80,7 @@ def newWorkspace(user, name, extraParams={}):
     workspace
         An object representing the new Labstep Workspace.
     """
-    filterParams = {'name': name}
-    params = {**filterParams, **extraParams}
+    params = {'name': name, **extraParams}
     return newEntity(user, Workspace, params)
 
 
@@ -104,9 +102,9 @@ def editWorkspace(workspace, name=None, deleted_at=None, extraParams={}):
     workspace
         An object representing the Workspace to edit.
     """
-    filterParams = {'name': name,
-                    'deleted_at': deleted_at}
-    params = {**filterParams, **extraParams}
+    params = {'name': name,
+              'deleted_at': deleted_at,
+              **extraParams}
     return editEntity(workspace, params)
 
 
@@ -200,8 +198,7 @@ class Workspace(Entity):
                                               created_at_to='2019-01-31',
                                               tag_id=800)
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getExperiments(self.__user__, count, search_query,
                               created_at_from, created_at_to, tag_id,
                               extraParams=extraParams)
@@ -242,8 +239,7 @@ class Workspace(Entity):
                                             created_at_to='2019-01-31',
                                             tag_id=800)
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getProtocols(self.__user__, count, search_query,
                             created_at_from, created_at_to, tag_id,
                             extraParams=extraParams)
@@ -275,8 +271,7 @@ class Workspace(Entity):
             entity = workspace.getResources(search_query='bacteria',
                                             tag_id=800)
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getResources(self.__user__, count, search_query,
                             tag_id, extraParams=extraParams)
 
@@ -307,8 +302,7 @@ class Workspace(Entity):
             entity = workspace.getResourceCategorys(search_query='properties',
                                                     tag_id=800)
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getResourceCategorys(self.__user__, count, search_query, tag_id,
                                     extraParams=extraParams)
 
@@ -336,8 +330,7 @@ class Workspace(Entity):
             entity = workspace.getResourceLocations(search_query='properties',
                                                     tag_id=800)
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getResourceLocations(self.__user__, count, search_query,
                                     extraParams=extraParams)
 
@@ -396,8 +389,7 @@ class Workspace(Entity):
 
             entity = workspace.getTags(search_query='bacteria')
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getTags(self.__user__, count, type, search_query,
                        extraParams=extraParams)
 
@@ -428,8 +420,7 @@ class Workspace(Entity):
 
             files = workspace.getFiles(search_query='bacteria')
         """
-        groupParams = {'group_id': self.id}
-        extraParams = {**groupParams, **extraParams}
+        extraParams = {'group_id': self.id, **extraParams}
         return getFiles(self.__user__, count, search_query, file_type, extraParams=extraParams)
 
     def sendInvites(self, emails, message):

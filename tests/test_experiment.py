@@ -110,8 +110,8 @@ class TestExperiment:
         entity.addMaterial('testMaterial',
                            amount=10,
                            units='uL',
-                           resource=resource,
-                           resource_item=resource_item)
+                           resource_id=resource.id,
+                           resource_item_id=resource_item.id)
         material = entity.getMaterials()[0]
         assert material.name == 'testMaterial' \
             and material.amount == '10' \
