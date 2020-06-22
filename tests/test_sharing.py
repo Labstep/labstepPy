@@ -66,7 +66,7 @@ class TestSharing:
             'FAILED TO SHARE RESOURCE CATEGORY'
 
     def test_share_orderRequest(self):
-        entity = testUser.newOrderRequest(testUser.newResource(testName))
+        entity = testUser.newResource(testName).newOrderRequest()
         entity.shareWith(workspace.id, 'view')
         permission = entity.getPermissions()[0]
         permission.set('edit')

@@ -912,4 +912,7 @@ class Experiment(PrimaryEntity):
                   'units': units,
                   **extraParams}
 
+        if params['value'] is not None:
+            params['value'] = str(params['value'])
+
         return newEntity(self.__user__, ExperimentMaterial, params)

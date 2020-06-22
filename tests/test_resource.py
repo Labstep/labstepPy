@@ -59,7 +59,7 @@ class TestResource:
 
     def test_setResourceCategory(self):
         my_resourceCategory = testUser.getResourceCategorys()[0]
-        result = entity.setResourceCategory(my_resourceCategory)
+        result = entity.setResourceCategory(my_resourceCategory.id)
         assert result.resource_category is not None, \
             'FAILED TO ADD METADATA'
 

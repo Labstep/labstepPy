@@ -304,7 +304,9 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             items = my_resource.getItems()
         """
-        return getResourceItems(self.__user__, self, count=count,
+        return getResourceItems(self.__user__,
+                                resource_id=self.id,
+                                count=count,
                                 search_query=search_query,
                                 extraParams=extraParams)
 
