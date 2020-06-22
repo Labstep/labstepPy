@@ -274,7 +274,9 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             order_request = my_resource.newOrderRequest(quantity=2)
         """
-        return newOrderRequest(self.__user__, self, quantity,
+        return newOrderRequest(self.__user__,
+                               resource_id=self.id,
+                               quantity=quantity,
                                extraParams=extraParams)
 
     def getItems(self, count=100, search_query=None, extraParams={}):
