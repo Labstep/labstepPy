@@ -419,8 +419,8 @@ class Protocol(PrimaryEntity):
             The amount required by the protocol.
         units (str)
             The units for the amount.
-        resource (Resource)
-            The specific :class:`~labstep.resource.Resource` recommended for
+        resource_id (int)
+            The id of the :class:`~labstep.resource.Resource` recommended for
             use with the protocol.
 
         Returns
@@ -435,7 +435,7 @@ class Protocol(PrimaryEntity):
             protocol = user.getProtocol(17000)
             resource = user.getResources(search_query='Sample A')[0]
             protocol.addMaterial(name='Sample A', amount='2', units='ml',
-                                 resource=resource)
+                                 resource_id=resource.id)
         """
         params = {'protocol_id': self.last_version['id'],
                   'resource_id': resource_id,
@@ -444,8 +444,8 @@ class Protocol(PrimaryEntity):
                   'units': units,
                   **extraParams}
 
-        if params['amount'] is not None:
-            params['amount'] = str(params['amount'])
+        if params['value'] is not None:
+            params['value'] = str(params['value'])
 
         return newEntity(self.__user__, ProtocolMaterial, params)
 

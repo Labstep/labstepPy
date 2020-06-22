@@ -213,7 +213,7 @@ class ExperimentProtocol(Entity):
         materials = self.experiment_values
         return listToClass(materials, ExperimentMaterial, self.__user__)
 
-    def addMaterial(self, name=None, amount=None, units=None, resource=None, resource_item=None,
+    def addMaterial(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None,
                     extraParams={}):
         """
         Add a new material to the ExperimentProtocol.
@@ -226,10 +226,10 @@ class ExperimentProtocol(Entity):
             The amount used.
         units (str)
             The units for the amount.
-        resource (Resource)
-            The :class:`~labstep.resource.Resource` used.
-        resource_item (ResourceItem)
-            The specific :class:`~labstep.resource.ResourceItem` used.
+        resource_id (int)
+            The id of the :class:`~labstep.resource.Resource` used.
+        resource_item_id (ResourceItem)
+            The id of the specific :class:`~labstep.resource.ResourceItem` used.
 
         Returns
         -------
@@ -243,22 +243,19 @@ class ExperimentProtocol(Entity):
             experiment = user.getExperiment(17000)
             resource = user.getResources(search_query='Sample A')[0]
             experiment.addMaterial(name='Sample A', amount='2', units='ml',
-                                 resource=resource)
+                                 resource_id=resource.id)
         """
-        if amount is not None:
-            amount = str(amount)
+        params = {'experiment_id': self.id,
+                  'name': name,
+                  'resource_id': resource_id,
+                  'resource_item_id': resource_item_id,
+                  'value': amount,
+                  'units': units,
+                  **extraParams}
 
-        filterParams = {'experiment_id': self.id,
-                        'name': name,
-                        'value': amount,
-                        'units': units}
+        if params['value'] is not None:
+            params['value'] = str(params['value'])
 
-        if resource is not None:
-            filterParams['resource_id'] = resource.id
-        if resource_item is not None:
-            filterParams['resource_item_id'] = resource_item.id
-
-        params = {**filterParams, **extraParams}
         return newEntity(self.__user__, ExperimentMaterial, params)
 
     def getSteps(self):
@@ -406,10 +403,10 @@ class ExperimentMaterial(Entity):
             The amount of the Experiment Material.
         units (str)
             The units of the amount.
-        resource (Resource)
+        resource_id (int)
             The :class:`~labstep.resource.Resource` of the Experiment Material.
-        resourceItem (ResourceItem)
-            The :class:`~labstep.resource.ResourceItem` of the Experiment Material.
+        resource_item_id (int)
+            The id of the :class:`~labstep.resource.ResourceItem` of the Experiment Material.
 
         Returns
         -------
