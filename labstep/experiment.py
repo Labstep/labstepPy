@@ -154,6 +154,44 @@ class ExperimentProtocol(Entity):
 
     __isLegacy__ = True
 
+    def edit(self, name=None, content_state=None, started_at=None, ended_at=None, extraParams={}):
+        """
+        Edit an existing ExperimentProtocol.
+
+        Parameters
+        ----------
+        name (str)
+            The new name of the ExperimentProtocol.
+        content_state (str)
+            The new content_state of the ExperimentProtocol.
+        started_at (str)
+            The date the ExperimentProtocol was started in the format of "YYYY-MM-DD HH:MM".
+        ended_at (str)
+            The date the ExperimentProtocol was finished in the format of "YYYY-MM-DD HH:MM".
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentProtocol`
+            An object representing the edited ExperimentProtocol.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            protocols = my_experiment.getProtocols()
+            protocols[0].edit(name='A New Experiment Name',
+                               started_at='2018-06-06 12:05')
+        """
+        fields = {
+            'name': name,
+            'content_state': content_state,
+            'started_at': started_at,
+            'ended_at': ended_at,
+            **extraParams
+        }
+        return editEntity(self, fields)
+
     def getMaterials(self):
         """
         Returns a list of the materials in a Protocol within an Experiment.

@@ -17,6 +17,11 @@ experiment_protocol = entity.addProtocol(protocol)
 
 
 class TestExperimentProtocol:
+    def test_edit(self):
+        experiment_protocol.edit(name='Edit Test')
+        experiment_protocol.update()
+        assert experiment_protocol.name == 'Edit Test'
+
     def test_getDataElements(self):
         dataElements = experiment_protocol.getDataElements()
         assert len(dataElements) == 0
