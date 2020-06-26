@@ -111,10 +111,19 @@ def editProtocol(protocol, name=None, content_state=None, deleted_at=None,
         An object representing the edited Protocol.
     """
     params = {'name': name,
-              'content_state': content_state,
               'deleted_at': deleted_at,
               **extraParams}
+
+    if content_state is not None:
+        editEntity(ProtocolVersion(protocol.last_version,
+                                   protocol.__user__),
+                   {"content_state": content_state})
+
     return editEntity(protocol, params)
+
+
+class ProtocolVersion(Entity):
+    __entityName__ = 'protocol'
 
 
 class ProtocolMaterial(Entity):
@@ -278,7 +287,7 @@ class Protocol(PrimaryEntity):
     """
     __entityName__ = 'protocol-collection'
 
-    def edit(self, name, content_state=None, extraParams={}):
+    def edit(self, name=None, content_state=None, extraParams={}):
         """
         Edit an existing Protocol.
 
@@ -299,7 +308,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        return editProtocol(self, name, content_state=content_state,
+        return editProtocol(self, name=name, content_state=content_state,
                             extraParams=extraParams)
 
     def delete(self):
@@ -314,6 +323,20 @@ class Protocol(PrimaryEntity):
             my_protocol.delete()
         """
         return editProtocol(self, deleted_at=getTime())
+
+    def newVersion(self):
+        """
+        Start a new version of the Protocol.
+
+        Example
+        -------
+        ::
+
+            my_protocol = user.getProtocol(17000)
+            new_version = my_protocol.newVersion()
+        """
+        newEntity(self.__user__, ProtocolVersion, {"collection_id": self.id})
+        return self.update()
 
     def getSteps(self):
         """
