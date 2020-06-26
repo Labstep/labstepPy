@@ -50,7 +50,7 @@ class TestExperiment:
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.getProtocol(4926)
+        get_protocol = testUser.newProtocol('Test')
         result = entity.addProtocol(get_protocol)
         assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
