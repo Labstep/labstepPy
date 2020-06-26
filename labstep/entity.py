@@ -174,4 +174,6 @@ class Entity:
         return pp.pformat(entity_attributes)
 
     def update(self):
-        return update(self, getEntity(self.__user__, type(self), self.id).__data__)
+        return update(self, getEntity(self.__user__,
+                                      type(self),
+                                      self.id).__data__)
