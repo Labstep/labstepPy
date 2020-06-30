@@ -125,7 +125,7 @@ class Workspace(Entity):
 
     share_link = None
 
-    def edit(self, name, extraParams={}):
+    def edit(self, name=None, extraParams={}):
         """
         Edit an existing Workspace.
 

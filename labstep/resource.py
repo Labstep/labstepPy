@@ -125,7 +125,7 @@ class Resource(PrimaryEntity):
     """
     __entityName__ = 'resource'
 
-    def edit(self, name, extraParams={}):
+    def edit(self, name=None, extraParams={}):
         """
         Edit an existing Resource.
 

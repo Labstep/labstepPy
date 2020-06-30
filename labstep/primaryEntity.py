@@ -5,7 +5,7 @@ from .permissions import getPermissions, newPermission, transferOwnership
 
 
 class PrimaryEntity(Entity):
-    def addComment(self, body, filepath=None):
+    def addComment(self, body, filepath=None, extraParams={}):
         """
         Add a comment and/or file to a Labstep Entity.
 
@@ -30,7 +30,9 @@ class PrimaryEntity(Entity):
             my_experiment.addComment(body='I am commenting!',
                                      filepath='pwd/file_to_upload.dat')
         """
-        return addCommentWithFile(self, body, filepath)
+        return addCommentWithFile(self, body=body,
+                                  filepath=filepath,
+                                  extraParams=extraParams)
 
     def getComments(self, count=100):
         """

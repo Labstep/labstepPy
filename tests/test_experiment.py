@@ -39,7 +39,27 @@ entity = testUser.getExperiment(entity.id)
 
 class TestExperiment:
     def test_edit(self):
-        result = entity.edit('Pytest Edited', 'Description Edited')
+        content_state = {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "attrs": {"align": None},
+                    "content": [
+                        {
+                            "type": "text",
+                                    "text": "test"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "attrs": {"align": None}
+                }
+            ]
+        }
+
+        result = entity.edit('Pytest Edited', content_state)
         assert result.name == 'Pytest Edited', \
             'FAILED TO EDIT EXPERIMENT'
 
@@ -50,7 +70,7 @@ class TestExperiment:
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.getProtocol(4926)
+        get_protocol = testUser.newProtocol('Test')
         result = entity.addProtocol(get_protocol)
         assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'

@@ -118,7 +118,7 @@ class ResourceLocation(Entity):
     """
     __entityName__ = 'resource-location'
 
-    def edit(self, name, extraParams={}):
+    def edit(self, name=None, extraParams={}):
         """
         Edit an existing ResourceLocation.
 

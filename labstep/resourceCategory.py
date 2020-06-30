@@ -118,7 +118,7 @@ class ResourceCategory(PrimaryEntity):
     """
     __entityName__ = 'resource-category'
 
-    def edit(self, name, extraParams={}):
+    def edit(self, name=None, extraParams={}):
         """
         Edit an existing ResourceCategory.
 
