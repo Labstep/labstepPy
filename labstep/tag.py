@@ -182,7 +182,7 @@ class Tag(Entity):
     """
     __entityName__ = 'tag'
 
-    def edit(self, name, extraParams={}):
+    def edit(self, name=None, extraParams={}):
         """
         Edit the name of an existing Tag.
 

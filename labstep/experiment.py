@@ -119,7 +119,7 @@ def editExperiment(experiment, name=None, description=None, started_at=None,
         An object representing the edited Experiment.
     """
     params = {'name': name,
-              'description': description,
+              'state': description,
               'started_at': handleDate(started_at),
               'deleted_at': deleted_at,
               **extraParams}
