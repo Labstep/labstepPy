@@ -40,4 +40,4 @@ for counter, name in enumerate(data['Name']):
     else:
         location = location[0]
 
-    new_item.edit(location=location)
+    new_item.edit(resource_location_id=location.id)
