@@ -5,6 +5,8 @@ from fixtures import (workspace, experiment, protocol,
                       resource, resourceCategory, orderRequest)
 # Make new entity
 
+workspace = workspace()
+
 
 class TestSharing:
     def test_share_experiment(self):

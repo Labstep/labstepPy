@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from fixtures import experiment, protocol, user, testString
+from fixtures import experiment, protocol, resource, testString
 
-
-# Make new entity
 entity = experiment()
-protocol = protocol()
-exp_protocol = entity.addProtocol(protocol)
-entity = user.getExperiment(entity.id)
 
 
 class TestExperiment:
@@ -38,13 +33,13 @@ class TestExperiment:
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):
-        entityToDelete = user.newExperiment(testString)
+        entityToDelete = experiment()
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = user.newProtocol('Test')
+        get_protocol = protocol(empty=True)
         result = entity.addProtocol(get_protocol)
         assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
@@ -69,18 +64,6 @@ class TestExperiment:
         assert result[0].id is not None, \
             'FAILED TO GET TAGS'
 
-    # ExperimentStep
-    def test_getSteps(self):
-        result = exp_protocol.getSteps()
-        assert result[0].id is not None, \
-            'FAILED TO GET STEPS'
-
-    def test_completeStep(self):
-        steps = exp_protocol.getSteps()
-        result = steps[0].complete()
-        assert result.ended_at is not None, \
-            'FAILED TO COMPLETE STEP'
-
     def test_commenting_on_comments(self):
         comment = entity.getComments()[0]
         comment.addComment('test')
@@ -93,24 +76,24 @@ class TestExperiment:
         assert len(dataElements) == 0
 
     def test_addDataElementTo(self):
-        entity.addDataElement('testField', fieldType="default",)
-        newEntity = user.getExperiment(entity.id)
-        dataElements = newEntity.getDataElements()
+        entity.addDataElement('testField', fieldType="default")
+        entity.update()
+        dataElements = entity.getDataElements()
         assert len(dataElements) == 1
 
     def test_addMaterial(self):
-        resource = user.newResource('test')
-        resource_item = resource.newItem('test')
+        test_resource = resource()
+        resource_item = test_resource.newItem('test')
         entity.addMaterial('testMaterial',
                            amount=10,
                            units='uL',
-                           resource_id=resource.id,
+                           resource_id=test_resource.id,
                            resource_item_id=resource_item.id)
-        material = entity.getMaterials()[0]
+        material = entity.getMaterials()[1]
         assert material.name == 'testMaterial' \
             and material.amount == '10' \
             and material.units == 'uL' \
-            and material.resource['id'] == resource.id \
+            and material.resource['id'] == test_resource.id \
             and material.resource_item['id'] == resource_item.id \
 
 

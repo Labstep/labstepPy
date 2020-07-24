@@ -141,9 +141,20 @@ def contentStateWithSteps(steps):
     }
 
 
-def protocol():
-    new_entity = user.newProtocol(testString)
-    entity = user.getProtocol(new_entity.id)
+def experiment(empty=False):
+    entity = user.newExperiment(testString)
+    if empty is True:
+        return entity
+    entity.addProtocol(user.newProtocol(testString))
+    entity.addMaterial(testString)
+    return entity.update()
+
+
+def protocol(empty=False):
+    entity = user.newProtocol(testString)
+    if empty is True:
+        return entity
+
     entity.addComment(testString)
     entity.addMaterial(testString, amount='0.1', units='ml')
     entity.addTimer(name=testString, hours=4, minutes=15)
@@ -151,12 +162,12 @@ def protocol():
     steps = entity.addSteps(2)
     entity.edit(content_state=contentStateWithSteps(steps))
 
-    return user.getProtocol(entity.id)
+    return entity.update()
 
 
 def experimentProtocol():
     entity = user.newExperiment(testString)
-    experiment_protocol = entity.addProtocol(protocol(user))
+    experiment_protocol = entity.addProtocol(protocol())
     return experiment_protocol
 
 
@@ -164,13 +175,14 @@ def resource():
     entity = user.newResource(testString)
     entity.addMetadata(fieldName='test', value=testString)
     entity.addComment(testString)
-    return entity
+    return entity.update()
 
 
 def resourceCategory():
-    entity = user.newResourceCategory(testString())
+    entity = user.newResourceCategory(testString)
     entity.addMetadata(fieldName='test', value=testString)
     entity.addComment(testString)
+    return entity.update()
 
 
 def orderRequest():
@@ -178,14 +190,14 @@ def orderRequest():
     entity = new_resource.newOrderRequest()
     entity.addMetadata(fieldName='test', value=testString)
     entity.addComment(testString)
-    return entity
+    return entity.update()
 
 
 def resourceItem():
     entity = resource().newItem(name='Pytest Acetone')
     entity.addMetadata(fieldName='test', value=testString)
     entity.addComment(testString)
-    return entity
+    return entity.update()
 
 
 def resourceLocation():

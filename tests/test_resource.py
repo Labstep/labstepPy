@@ -4,7 +4,7 @@
 from fixtures import user, resource, testString
 
 # Make new entity
-entity = resource(user)
+entity = resource()
 
 
 class TestResource:

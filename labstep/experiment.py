@@ -910,7 +910,7 @@ class Experiment(PrimaryEntity):
                                  resource_id=resource.id)
         """
 
-        params = {'experiment_id': self.root_experiment['id'],
+        params = {'experiment_id': self.entry.id,
                   'name': name,
                   'resource_id': resource_id,
                   'resource_item_id': resource_item_id,
