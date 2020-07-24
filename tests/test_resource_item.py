@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from fixtures import user, testString, resource, resourceItem
+from fixtures import testString, resource, resourceItem
 
 # Make new entity
 entity = resourceItem()
