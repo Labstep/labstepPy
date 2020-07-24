@@ -184,7 +184,7 @@ def editEntity(entity, fields):
                    entity.__entityName__, str(entity.id))
     r = requests.put(url, json=new_fields, headers=headers)
     handleError(r)
-    return update(entity, json.loads(r.content))
+    return entity.update()
 
 
 class Entity:

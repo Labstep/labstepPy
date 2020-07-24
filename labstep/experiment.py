@@ -70,7 +70,7 @@ def getExperiments(user, count=100, search_query=None,
     return getEntities(user, Experiment, count, params)
 
 
-def newExperiment(user, name, description=None, extraParams={}):
+def newExperiment(user, name, entry=None, extraParams={}):
     """
     Create a new Labstep Experiment.
 
@@ -80,9 +80,9 @@ def newExperiment(user, name, description=None, extraParams={}):
         The Labstep user creating the Experiment.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your Experiment a name.
-    description (str)
-        Give your Experiment a description.
+        The name of the experiment.
+    entry (obj)
+        A JSON object representing the state of the Experiment Entry.
 
     Returns
     -------
@@ -90,12 +90,12 @@ def newExperiment(user, name, description=None, extraParams={}):
         An object representing the new Labstep Experiment.
     """
     params = {'name': name,
-              'description': description,
+              'state': entry,
               **extraParams}
     return newEntity(user, Experiment, params)
 
 
-def editExperiment(experiment, name=None, description=None, started_at=None,
+def editExperiment(experiment, name=None, entry=None, started_at=None,
                    deleted_at=None, extraParams={}):
     """
     Edit an existing Experiment.
@@ -106,8 +106,8 @@ def editExperiment(experiment, name=None, description=None, started_at=None,
         The Experiment to edit.
     name (str)
         The new name of the Experiment.
-    description (str)
-        The new description for the Experiment.
+    entry (obj)
+        A JSON object representing the state of the Experiment Entry.
     started_at (str)
         The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
     deleted_at (str)
@@ -119,7 +119,7 @@ def editExperiment(experiment, name=None, description=None, started_at=None,
         An object representing the edited Experiment.
     """
     params = {'name': name,
-              'state': description,
+              'state': entry,
               'started_at': handleDate(started_at),
               'deleted_at': deleted_at,
               **extraParams}
@@ -668,7 +668,7 @@ class Experiment(PrimaryEntity):
         super().__init__(data, user)
         self.entry = ExperimentProtocol(self.root_experiment, user)
 
-    def edit(self, name=None, description=None, started_at=None, extraParams={}):
+    def edit(self, name=None, entry=None, started_at=None, extraParams={}):
         """
         Edit an existing Experiment.
 
@@ -676,8 +676,8 @@ class Experiment(PrimaryEntity):
         ----------
         name (str)
             The new name of the Experiment.
-        description (str)
-            The new description of the Experiment.
+        entry (obj)
+            A JSON object representing the state of the Experiment Entry.
         started_at (str)
             The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
 
@@ -692,10 +692,9 @@ class Experiment(PrimaryEntity):
 
             my_experiment = user.getExperiment(17000)
             my_experiment.edit(name='A New Experiment Name',
-                               description='A new description!',
                                started_at='2018-06-06 12:05')
         """
-        return editExperiment(self, name, description, started_at, extraParams=extraParams)
+        return editExperiment(self, name=name, entry=entry, started_at=started_at, extraParams=extraParams)
 
     def delete(self):
         """
