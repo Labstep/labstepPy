@@ -3,36 +3,16 @@
 
 import labstep
 
+from fixtures import protocolWithElements
+
 testUser = labstep.login('apitest@labstep.com', 'apitestpass')
 
 # Set variables
 testName = labstep.helpers.getTime()
 
 # Make new entity
-new_entity = testUser.newExperiment(testName)
-entity = testUser.getExperiment(new_entity.id)
-protocol = testUser.newProtocol('Test')
-protocol.addComment(testName)
-protocol.addComment(testName)
-data = {
-    "rowCount": 6,
-    "columnCount": 6,
-    "colHeaderData": {},
-    "data": {
-        "dataTable": {
-            0: {
-                0: {
-                    "value": 'Cell A1'
-                },
-                1: {
-                    "value": 'Cell B1'
-                }
-            }
-        }
-    }
-}
-protocol.addTable(name=testName, data=data)
-protocol = testUser.getProtocol(protocol.id)
+entity = testUser.newExperiment(testName)
+protocol = protocolWithElements(testUser)
 exp_protocol = entity.addProtocol(protocol)
 entity = testUser.getExperiment(entity.id)
 

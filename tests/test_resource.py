@@ -14,6 +14,8 @@ entity = testUser.getResource(new_entity.id)
 entity.addMetadata(fieldName='test', value=testName)
 entity.addComment(testName)
 
+my_resourceCategory = testUser.getResourceCategorys()[0]
+esult = entity.setResourceCategory(my_resourceCategory.id)
 
 class TestResource:
     def test_edit(self):

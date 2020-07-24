@@ -3,66 +3,12 @@
 
 import labstep
 
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
+from fixtures import protocolWithElements, tableData, contentStateEmpty
 
-# Set variables
+testUser = labstep.login('apitest@labstep.com', 'apitestpass')
 testName = labstep.helpers.getTime()
 
-# Make new entity
-new_entity = testUser.newProtocol(testName)
-entity = testUser.getProtocol(new_entity.id)
-entity.addComment(testName)
-entity.addMaterial(testName, amount='0.1', units='ml')
-entity.addTimer(name=testName, hours=4, minutes=15)
-
-data = {
-    "rowCount": 6,
-    "columnCount": 6,
-    "colHeaderData": {},
-    "data": {
-        "dataTable": {
-            0: {
-                0: {
-                    "value": 'Cell A1'
-                },
-                1: {
-                    "value": 'Cell B1'
-                }
-            }
-        }
-    }
-}
-result = entity.addTable(name=testName, data=data)
-
-entity = testUser.getProtocol(entity.id)
-
-content_state = {
-    "object": "value",
-    "document": {
-        "object": "document",
-        "data": [],
-        "nodes": [
-            {
-                "object": "block",
-                "type": "paragraph",
-                "isVoid": False,
-                "data": [],
-                "nodes": [
-                    {
-                        "object": "text",
-                        "leaves": [
-                            {
-                                "object": "leaf",
-                                "text": " ",
-                                "marks": []
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
-}
+entity = protocolWithElements(testUser)
 
 
 class TestProtocol:
@@ -96,6 +42,10 @@ class TestProtocol:
         result = entity.getTags()
         assert result[0].id is not None,\
             'FAILED TO GET TAGS'
+
+    def test_addSteps(self):
+        result = entity.addSteps(2)
+        assert len(result) == 2
 
     def test_getSteps(self):
         result = entity.getSteps()
@@ -135,7 +85,7 @@ class TestProtocol:
             'FAILED TO EDIT TIMER'
 
     def test_addTable(self):
-        result = entity.addTable(name=testName, data=data)
+        result = entity.addTable(name=testName, data=tableData)
         assert result is not None,\
             'FAILED TO ADD TABLE'
 
@@ -161,8 +111,8 @@ class TestProtocol:
         assert len(dataElements) == 1
 
     def test_edit_content_state(self):
-        result = entity.edit(content_state=content_state)
-        assert result.last_version['content_state'] == content_state,\
+        result = entity.edit(name='updated', content_state=contentStateEmpty)
+        assert result.last_version['content_state'] == contentStateEmpty,\
             'FAILED TO EDIT PROTOCOL CONTENT STATE'
 
     def test_new_version(self):

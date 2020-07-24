@@ -664,6 +664,10 @@ class Experiment(PrimaryEntity):
     """
     __entityName__ = 'experiment-workflow'
 
+    def __init__(self, data, user):
+        super().__init__(data, user)
+        self.entry = ExperimentProtocol(self.root_experiment, user)
+
     def edit(self, name=None, description=None, started_at=None, extraParams={}):
         """
         Edit an existing Experiment.
@@ -792,9 +796,13 @@ class Experiment(PrimaryEntity):
             dataElement = experiment.addDataElement("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldName, fieldType, value, date,
-                             number, unit,
-                             extraParams=extraParams)
+        return self.entry.addDataElement(fieldName=fieldName,
+                                         fieldType=fieldType,
+                                         value=value,
+                                         date=date,
+                                         number=number,
+                                         unit=unit,
+                                         extraParams=extraParams)
 
     def getDataElements(self):
         """
@@ -813,7 +821,7 @@ class Experiment(PrimaryEntity):
             exp_protocol = experiment.getProtocols()[0]
             dataElements = exp_protocol.getDataElements()
         """
-        return getMetadata(self)
+        return self.entry.getDataElements()
 
     def getSignatures(self):
         """
@@ -850,7 +858,7 @@ class Experiment(PrimaryEntity):
         }
         return newEntity(self.__user__, ExperimentSignature, params)
 
-    def getMaterials(self, count=100):
+    def getMaterials(self):
         """
         Returns a list of the materials in the Experiment.
 
@@ -867,9 +875,7 @@ class Experiment(PrimaryEntity):
             exp_materials = experiment.getMaterials()
             print(exp_materials[0])
         """
-        return getEntities(self.__user__, ExperimentMaterial,
-                           count=count,
-                           filterParams={'experiment_workflow_id': self.id})
+        return self.entry.getMaterials()
 
     def addMaterial(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None,
                     extraParams={}):
