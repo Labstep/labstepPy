@@ -1,26 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import user, newString
 
 
 class TestTag:
     def test_edit(self):
-        entity = testUser.newTag(testName, 'experiment_workflow')
-        newName = labstep.helpers.getTime()
+        entity = user.newTag(newString(), 'experiment_workflow')
+        newName = newString()
         result = entity.edit(newName)
         result.delete()
         assert result.name == newName, \
             'FAILED TO EDIT TAG NAME'
 
     def test_delete(self):
-        testName = labstep.helpers.getTime()
-        entityToDelete = testUser.newTag(testName, 'experiment_workflow')
+        entityToDelete = user.newTag(newString(), 'experiment_workflow')
         result = entityToDelete.delete()
         assert result is None, \
             'FAILED TO DELETE TAG'

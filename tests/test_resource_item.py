@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import user, testString, resource, resourceItem
 
 # Make new entity
-resource = testUser.newResource(testName)
-entity = resource.newItem(name='Pytest Acetone')
-entity.addMetadata(fieldName='test', value=testName)
-entity.addComment(testName)
+entity = resourceItem()
 
 
 class TestResource:
@@ -22,13 +14,13 @@ class TestResource:
             'FAILED TO EDIT RESOURCE ITEM'
 
     def test_delete(self):
-        entityToDelete = resource.newItem('testDelete')
+        entityToDelete = resource().newItem('testDelete')
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE RESOURCE ITEM'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_resource.py')
+        result = entity.addComment(testString, './tests/test_resource.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -38,8 +30,8 @@ class TestResource:
             'FAILED TO GET COMMENTS'
 
     def test_addMetadata(self):
-        result = entity.addMetadata(fieldName=testName, value=testName)
-        assert result.label == testName, \
+        result = entity.addMetadata(fieldName=testString, value=testString)
+        assert result.label == testString, \
             'FAILED TO ADD METADATA'
 
     def test_getMetadata(self):

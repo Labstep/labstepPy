@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import resource, testString
 
 # Make new entity
-new_entity = testUser.newResource(testName)
-entity = new_entity.addMetadata(fieldName=testName, value=testName)
+new_entity = resource()
+entity = new_entity.addMetadata(fieldName=testString, value=testString)
 
 
 class TestMetadata:

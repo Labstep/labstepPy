@@ -667,6 +667,7 @@ class Experiment(PrimaryEntity):
     def __init__(self, data, user):
         super().__init__(data, user)
         self.entry = ExperimentProtocol(self.root_experiment, user)
+        del self.root_experiment
 
     def edit(self, name=None, entry=None, started_at=None, extraParams={}):
         """

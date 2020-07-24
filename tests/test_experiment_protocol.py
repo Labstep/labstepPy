@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-from fixtures import experimentProtocol
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import user, experimentProtocol
 
 # Make new entity
-experiment_protocol = experimentProtocol(testUser)
+experiment_protocol = experimentProtocol(user)
 
 
 class TestExperimentProtocol:
@@ -30,7 +23,7 @@ class TestExperimentProtocol:
         assert result.label == 'test'
 
     def test_addMaterial(self):
-        resource = testUser.newResource('test')
+        resource = user.newResource('test')
         item = resource.newItem('test')
         material = experiment_protocol.addMaterial('testMaterial',
                                                    amount=10,

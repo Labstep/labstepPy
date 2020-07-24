@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import user, orderRequest, testString
 
 # Make new entity
-new_resource = testUser.newResource(testName)
-new_entity = new_resource.newOrderRequest()
-entity = testUser.getOrderRequest(new_entity.id)
-entity.addMetadata(fieldName='test', value=testName)
-entity.addComment(testName)
+entity = orderRequest()
 
 
 class TestOrderRequest:
@@ -23,7 +14,7 @@ class TestOrderRequest:
             'FAILED TO EDIT ORDER REQUEST'
 
     def test_delete(self):
-        test_resource = testUser.newResource('testDelete')
+        test_resource = user.newResource('testDelete')
         entityToDelete = test_resource.newOrderRequest()
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
@@ -31,11 +22,11 @@ class TestOrderRequest:
 
     def test_getResource(self):
         result = entity.getResource()
-        assert result.id == new_resource.id, \
-            'FAILED TO GET METADATA'
+        assert result.id is not None, \
+            'FAILED TO GET RESOURCE'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_order_request.py')
+        result = entity.addComment(testString, './tests/test_order_request.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -45,7 +36,7 @@ class TestOrderRequest:
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
-        result = entity.addTag(testName)
+        result = entity.addTag(testString)
         assert result is not None, \
             'FAILED TO ADD TAG'
 
@@ -55,8 +46,8 @@ class TestOrderRequest:
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
-        result = entity.addMetadata(fieldName=testName, value=testName)
-        assert result.label == testName, \
+        result = entity.addMetadata(fieldName=testString, value=testString)
+        assert result.label == testString, \
             'FAILED TO ADD METADATA'
 
     def test_getMetadata(self):

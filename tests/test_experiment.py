@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
+from fixtures import experiment, protocol, user, testString
 
-from fixtures import protocolWithElements
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
 
 # Make new entity
-entity = testUser.newExperiment(testName)
-protocol = protocolWithElements(testUser)
+entity = experiment()
+protocol = protocol()
 exp_protocol = entity.addProtocol(protocol)
-entity = testUser.getExperiment(entity.id)
+entity = user.getExperiment(entity.id)
 
 
 class TestExperiment:
@@ -44,13 +38,13 @@ class TestExperiment:
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):
-        entityToDelete = testUser.newExperiment(testName)
+        entityToDelete = user.newExperiment(testString)
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.newProtocol('Test')
+        get_protocol = user.newProtocol('Test')
         result = entity.addProtocol(get_protocol)
         assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
@@ -61,12 +55,12 @@ class TestExperiment:
             'FAILED TO GET PROTOCOLS'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_experiment.py')
+        result = entity.addComment(testString, './tests/test_experiment.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_addTag(self):
-        result = entity.addTag(testName)
+        result = entity.addTag(testString)
         assert result is not None, \
             'FAILED TO ADD TAG'
 
@@ -100,12 +94,12 @@ class TestExperiment:
 
     def test_addDataElementTo(self):
         entity.addDataElement('testField', fieldType="default",)
-        newEntity = testUser.getExperiment(entity.id)
+        newEntity = user.getExperiment(entity.id)
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1
 
     def test_addMaterial(self):
-        resource = testUser.newResource('test')
+        resource = user.newResource('test')
         resource_item = resource.newItem('test')
         entity.addMaterial('testMaterial',
                            amount=10,

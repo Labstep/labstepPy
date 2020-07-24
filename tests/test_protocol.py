@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from fixtures import user, protocol, tableData, testString, contentStateEmpty
 
-import labstep
-
-from fixtures import protocolWithElements, tableData, contentStateEmpty
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-testName = labstep.helpers.getTime()
-
-entity = protocolWithElements(testUser)
+entity = protocol()
 
 
 class TestProtocol:
@@ -18,13 +12,13 @@ class TestProtocol:
             'FAILED TO EDIT PROTOCOL'
 
     def test_delete(self):
-        entityToDelete = testUser.newProtocol(testName)
+        entityToDelete = user.newProtocol(testString)
         result = entityToDelete.delete()
         assert result.deleted_at is not None,\
             'FAILED TO DELETE PROTOCOL'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_protocol.py')
+        result = entity.addComment(testString, './tests/test_protocol.py')
         assert result is not None,\
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -34,7 +28,7 @@ class TestProtocol:
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
-        result = entity.addTag(testName)
+        result = entity.addTag(testString)
         assert result is not None,\
             'FAILED TO ADD TAG'
 
@@ -53,7 +47,7 @@ class TestProtocol:
             'FAILED TO GET STEPS'
 
     def test_addMaterial(self):
-        result = entity.addMaterial(name=testName, amount='2.0', units='ml')
+        result = entity.addMaterial(name=testString, amount='2.0', units='ml')
         assert result is not None,\
             'FAILED TO ADD MATERIAL'
 
@@ -69,7 +63,7 @@ class TestProtocol:
             'FAILED TO EDIT MATERIAL'
 
     def test_addTimer(self):
-        result = entity.addTimer(name=testName, minutes=20, seconds=30)
+        result = entity.addTimer(name=testString, minutes=20, seconds=30)
         assert result is not None,\
             'FAILED TO ADD TIMER'
 
@@ -85,7 +79,7 @@ class TestProtocol:
             'FAILED TO EDIT TIMER'
 
     def test_addTable(self):
-        result = entity.addTable(name=testName, data=tableData)
+        result = entity.addTable(name=testString, data=tableData)
         assert result is not None,\
             'FAILED TO ADD TABLE'
 
@@ -96,8 +90,8 @@ class TestProtocol:
 
     def test_editTable(self):
         table = entity.getTables()[0]
-        result = table.edit(name=testName)
-        assert result.name == testName,\
+        result = table.edit(name=testString)
+        assert result.name == testString,\
             'FAILED TO EDIT TABLE'
 
     def test_getDataElements(self):
@@ -106,7 +100,7 @@ class TestProtocol:
 
     def test_addDataElement(self):
         entity.addDataElement(fieldType="default", fieldName="test")
-        newEntity = testUser.getProtocol(entity.id)
+        newEntity = user.getProtocol(entity.id)
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1
 

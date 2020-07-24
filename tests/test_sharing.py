@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
-
+from fixtures import (workspace, experiment, protocol,
+                      resource, resourceCategory, orderRequest)
 # Make new entity
-workspace = testUser.newWorkspace(testName)
 
 
 class TestSharing:
     def test_share_experiment(self):
-        entity = testUser.newExperiment(testName)
+        entity = experiment()
         entity.shareWith(workspace.id, 'view')
         permission = entity.getPermissions()[0]
         permission.set('edit')
@@ -27,7 +21,7 @@ class TestSharing:
             'FAILED TO SHARE EXPERIMENT'
 
     def test_share_protocol(self):
-        entity = testUser.newProtocol(testName)
+        entity = protocol()
         entity.shareWith(workspace.id, 'view')
         permission = entity.getPermissions()[0]
         permission.set('edit')
@@ -40,7 +34,7 @@ class TestSharing:
             'FAILED TO SHARE PROTOCOL'
 
     def test_share_resource(self):
-        entity = testUser.newResource(testName)
+        entity = resource()
         entity.shareWith(workspace.id, 'view')
         permission = entity.getPermissions()[0]
         permission.set('edit')
@@ -53,7 +47,7 @@ class TestSharing:
             'FAILED TO SHARE RESOURCE'
 
     def test_share_resourceCategory(self):
-        entity = testUser.newResourceCategory(testName)
+        entity = resourceCategory()
         entity.shareWith(workspace.id, 'view')
         permission = entity.getPermissions()[0]
         permission.set('edit')
@@ -66,7 +60,7 @@ class TestSharing:
             'FAILED TO SHARE RESOURCE CATEGORY'
 
     def test_share_orderRequest(self):
-        entity = testUser.newResource(testName).newOrderRequest()
+        entity = orderRequest()
         entity.shareWith(workspace.id, 'view')
         permission = entity.getPermissions()[0]
         permission.set('edit')

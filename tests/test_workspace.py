@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import user, workspace, testString
 
 # Make new entity
-new_entity = testUser.newWorkspace(testName)
-entity = testUser.getWorkspace(new_entity.id)
-testUser.setWorkspace(entity.id)
+entity = workspace()
+
+user.setWorkspace(entity.id)
 
 
 class TestWorkspace:
@@ -21,52 +16,52 @@ class TestWorkspace:
             'FAILED TO EDIT WORKSPACE'
 
     def test_delete(self):
-        entityToDelete = testUser.newWorkspace(testName)
+        entityToDelete = user.newWorkspace(testString)
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE WORKSPACE'
 
     # getMany()
     def test_getExperiments(self):
-        testUser.newExperiment(testName)
+        user.newExperiment(testString)
         result = entity.getExperiments()
         assert result[0].id, \
             'FAILED TO GET EXPERIMENTS'
 
     def test_getProtocols(self):
-        testUser.newProtocol(testName)
+        user.newProtocol(testString)
         result = entity.getProtocols()
         assert result[0].id, \
             'FAILED TO GET PROTOCOLS'
 
     def test_getResources(self):
-        testUser.newResource(testName)
+        user.newResource(testString)
         result = entity.getResources()
         assert result[0].id, \
             'FAILED TO GET RESOURCES'
 
     def test_getResourceCategorys(self):
-        testUser.newResourceCategory(testName)
+        user.newResourceCategory(testString)
         result = entity.getResourceCategorys()
         assert result[0].id, \
             'FAILED TO GET RESOURCE CATEGORYS'
 
     def test_getResourceLocations(self):
-        new_RL = testUser.newResourceLocation(testName)
+        new_RL = user.newResourceLocation(testString)
         result = entity.getResourceLocations()
         new_RL.delete()
         assert result[0].id, \
             'FAILED TO GET RESOURCE LOCATIONS'
 
     def test_getOrderRequests(self):
-        new_resource = testUser.newResource(testName)
+        new_resource = user.newResource(testString)
         new_resource.newOrderRequest()
         result = entity.getOrderRequests()
         assert result[0].id, \
             'FAILED TO GET ORDER REQUESTS'
 
     def test_getTags(self):
-        new_tag = testUser.newTag('test_newTag', type='experiment_workflow')
+        new_tag = user.newTag('test_newTag', type='experiment_workflow')
         result = entity.getTags()
         new_tag.delete()
         assert result[0].id, \
