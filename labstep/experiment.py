@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .entity import Entity, getEntity, getEntities, newEntity, newEntities, editEntity
 from .primaryEntity import PrimaryEntity
 from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
@@ -257,6 +257,25 @@ class ExperimentProtocol(Entity):
             params['value'] = str(params['value'])
 
         return newEntity(self.__user__, ExperimentMaterial, params)
+
+    def addSteps(self, N):
+        """
+        Add steps to a Protocol within an Experiment
+
+        Parameters
+        ----------
+        N (int)
+            The number of steps to add.
+
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.addSteps(5)
+        """
+        steps = [{"experiment_id": self.id}]*N
+        return newEntities(self.__user__, ExperimentStep, steps)
 
     def getSteps(self):
         """
@@ -797,12 +816,12 @@ class Experiment(PrimaryEntity):
                                                value="1.73")
         """
         return self.root_experiment.addDataElement(fieldName=fieldName,
-                                         fieldType=fieldType,
-                                         value=value,
-                                         date=date,
-                                         number=number,
-                                         unit=unit,
-                                         extraParams=extraParams)
+                                                   fieldType=fieldType,
+                                                   value=value,
+                                                   date=date,
+                                                   number=number,
+                                                   unit=unit,
+                                                   extraParams=extraParams)
 
     def getDataElements(self):
         """

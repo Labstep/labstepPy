@@ -36,8 +36,12 @@ class TestExperimentProtocol:
             and material.units == 'uL' \
             and material.resource['id'] == resource.id \
             and material.resource_item['id'] == item.id
-
     # ExperimentStep
+
+    def test_addSteps(self):
+        result = experiment_protocol.addSteps(2)
+        assert len(result) == 2
+
     def test_getSteps(self):
         result = experiment_protocol.getSteps()
         assert result[0].id is not None, \
