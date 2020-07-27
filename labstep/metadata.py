@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
-from .config import API_ROOT
 from .entity import Entity, newEntity, editEntity
-from .helpers import (listToClass, url_join, handleError,
-                      handleDate, getHeaders)
+from .helpers import (listToClass,
+                      handleDate, getTime)
 
 TYPE_DEFAULT = 'default'
 TYPE_NUMERIC = 'numeric'
@@ -125,14 +123,14 @@ def addMetadataTo(entity, fieldName, fieldType="default",
             ",".join(violations), fieldType)
         raise ValueError(msg)
 
-    filterParams = {'metadata_thread_id': entity.metadata_thread['id'],
-                    'type': fieldType,
-                    'label': fieldName,
-                    'value': value,
-                    'date': handleDate(date),
-                    'number': number,
-                    'unit': unit}
-    params = {**filterParams, **extraParams}
+    params = {'metadata_thread_id': entity.metadata_thread['id'],
+              'type': fieldType,
+              'label': fieldName,
+              'value': value,
+              'date': handleDate(date),
+              'number': number,
+              'unit': unit, **extraParams}
+
     return newEntity(entity.__user__, Metadata, params)
 
 
@@ -158,26 +156,6 @@ def editMetadata(metadata, fieldName=None, value=None, extraParams={}):
                     'value': value}
     params = {**filterParams, **extraParams}
     return editEntity(metadata, params)
-
-
-def deleteMetadata(metadata):
-    """
-    Delete an existing Metadata.
-
-    Parameters
-    ----------
-    metadata (obj)
-        The Metadata to delete.
-
-    Returns
-    -------
-    None
-    """
-    headers = getHeaders(metadata.__user__)
-    url = url_join(API_ROOT, "/api/generic/metadata/", str(metadata.id))
-    r = requests.delete(url, headers=headers)
-    handleError(r)
-    return None
 
 
 class Metadata(Entity):
@@ -229,4 +207,4 @@ class Metadata(Entity):
 
             metadata.delete()
         """
-        return deleteMetadata(self)
+        return editMetadata(self, deleted_at=getTime())
