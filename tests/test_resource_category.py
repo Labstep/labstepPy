@@ -2,18 +2,9 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-import labstep
+from fixtures import user, resourceCategory, testString
 
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
-
-# Make new entity
-new_entity = testUser.newResourceCategory(testName)
-entity = testUser.getResourceCategory(new_entity.id)
-entity.addMetadata(fieldName='test', value=testName)
-entity.addComment(testName)
+entity = resourceCategory()
 
 
 class TestResourceCategory:
@@ -23,13 +14,13 @@ class TestResourceCategory:
             'FAILED TO EDIT RESOURCE CATEGORY'
 
     def test_delete(self):
-        entityToDelete = testUser.newResourceCategory('testDelete')
+        entityToDelete = user.newResourceCategory('testDelete')
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE RESOURCE CATEGORY'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_resource_category.py')
+        result = entity.addComment(testString, './tests/test_resource_category.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -39,7 +30,7 @@ class TestResourceCategory:
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
-        result = entity.addTag(testName)
+        result = entity.addTag(testString)
         assert result is not None, \
             'FAILED TO ADD TAG'
 
@@ -49,10 +40,10 @@ class TestResourceCategory:
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
-        new_resource_category = testUser.newResourceCategory(testName)
-        result = new_resource_category.addMetadata(fieldName=testName,
-                                                   value=testName)
-        assert result.label == testName, \
+        new_resource_category = user.newResourceCategory(testString)
+        result = new_resource_category.addMetadata(fieldName=testString,
+                                                   value=testString)
+        assert result.label == testString, \
             'FAILED TO ADD METADATA'
 
     def test_getMetadata(self):

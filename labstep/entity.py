@@ -133,6 +133,33 @@ def newEntity(user, entityClass, fields):
     return entityClass(json.loads(r.content), user)
 
 
+def newEntities(user, entityClass, items):
+    """
+    Parameters
+    ----------
+    user (obj)
+        The Labstep user.
+    entityClass (class)
+        The Class of the entity to retrieve.
+    items (List[])
+        List of info on entities to create.
+
+    Returns
+    -------
+    entities
+        List of Labstep Entities created.
+    """
+    headers = getHeaders(user)
+    url = url_join(API_ROOT,
+                   "/api/generic/",
+                   entityClass.__entityName__,
+                   'batch')
+    r = requests.post(url, headers=headers, json={"items": items})
+    handleError(r)
+    entities = json.loads(r.content)
+    return list(map(lambda entity: entityClass(entity, user), entities))
+
+
 def editEntity(entity, fields):
     """
     Parameters
@@ -174,6 +201,6 @@ class Entity:
         return pp.pformat(entity_attributes)
 
     def update(self):
-        return update(self, getEntity(self.__user__,
-                                      type(self),
-                                      self.id).__data__)
+        data = getEntity(self.__user__, type(self), self.id).__data__
+        self.__init__(data, self.__user__)
+        return self

@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
-
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+from fixtures import user, resource, testString
 
 # Make new entity
-new_entity = testUser.newResource(testName)
-entity = testUser.getResource(new_entity.id)
-entity.addMetadata(fieldName='test', value=testName)
-entity.addComment(testName)
+entity = resource()
 
 
 class TestResource:
@@ -22,13 +14,13 @@ class TestResource:
             'FAILED TO EDIT RESOURCE'
 
     def test_delete(self):
-        entityToDelete = testUser.newResource('testDelete')
+        entityToDelete = user.newResource('testDelete')
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE RESOURCE'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_resource.py')
+        result = entity.addComment(testString, './tests/test_resource.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -38,7 +30,7 @@ class TestResource:
             'FAILED TO GET COMMENTS'
 
     def test_addTag(self):
-        result = entity.addTag(testName)
+        result = entity.addTag(testString)
         assert result is not None, \
             'FAILED TO ADD TAG'
 
@@ -48,8 +40,8 @@ class TestResource:
             'FAILED TO GET TAGS'
 
     def test_addMetadata(self):
-        result = entity.addMetadata(fieldName=testName, value=testName)
-        assert result.label == testName, \
+        result = entity.addMetadata(fieldName=testString, value=testString)
+        assert result.label == testString, \
             'FAILED TO ADD METADATA'
 
     def test_getMetadata(self):
@@ -58,9 +50,10 @@ class TestResource:
             'FAILED TO GET METADATA'
 
     def test_setResourceCategory(self):
-        my_resourceCategory = testUser.getResourceCategorys()[0]
-        result = entity.setResourceCategory(my_resourceCategory.id)
-        assert result.resource_category is not None, \
+        my_resourceCategory = user.getResourceCategorys()[0]
+        entity.setResourceCategory(my_resourceCategory.id)
+        entity.update()
+        assert entity.resource_category is not None, \
             'FAILED TO ADD METADATA'
 
     def test_newOrderRequest(self):
@@ -69,7 +62,7 @@ class TestResource:
             'FAILED TO MAKE NEW ORDER REQUEST'
 
     def test_newItem(self):
-        result = entity.newItem(name=testName)
+        result = entity.newItem(name=testString)
         assert result.id, \
             'FAILED TO MAKE NEW ITEM'
 

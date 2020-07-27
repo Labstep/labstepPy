@@ -13,8 +13,7 @@ user.setWorkspace(workspace.id)
 
 
 # Create an Experiment
-my_experiment = user.newExperiment(name='Trial 1',
-                                        description='Aspirin is a drug...')
+my_experiment = user.newExperiment(name='Trial 1')
 
 # Upload the reaction scheme
 user.newFile('./aspirin_reaction_scheme.png')

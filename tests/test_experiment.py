@@ -1,76 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
+from fixtures import (experiment, protocol, resource,
+                      testString, proseMirrorState)
 
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
-
-# Make new entity
-new_entity = testUser.newExperiment(testName)
-entity = testUser.getExperiment(new_entity.id)
-protocol = testUser.newProtocol('Test')
-protocol.addComment(testName)
-protocol.addComment(testName)
-data = {
-    "rowCount": 6,
-    "columnCount": 6,
-    "colHeaderData": {},
-    "data": {
-        "dataTable": {
-            0: {
-                0: {
-                    "value": 'Cell A1'
-                },
-                1: {
-                    "value": 'Cell B1'
-                }
-            }
-        }
-    }
-}
-protocol.addTable(name=testName, data=data)
-protocol = testUser.getProtocol(protocol.id)
-exp_protocol = entity.addProtocol(protocol)
-entity = testUser.getExperiment(entity.id)
+entity = experiment()
 
 
 class TestExperiment:
     def test_edit(self):
-        content_state = {
-            "type": "doc",
-            "content": [
-                {
-                    "type": "paragraph",
-                    "attrs": {"align": None},
-                    "content": [
-                        {
-                            "type": "text",
-                                    "text": "test"
-                        }
-                    ]
-                },
-                {
-                    "type": "paragraph",
-                    "attrs": {"align": None}
-                }
-            ]
-        }
 
-        result = entity.edit('Pytest Edited', content_state)
-        assert result.name == 'Pytest Edited', \
+        entity.edit('Pytest Edited', entry=proseMirrorState)
+        entity.update()
+        assert entity.name == 'Pytest Edited' and \
+            entity.entry == proseMirrorState,\
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):
-        entityToDelete = testUser.newExperiment(testName)
+        entityToDelete = experiment()
         result = entityToDelete.delete()
         assert result.deleted_at is not None, \
             'FAILED TO DELETE EXPERIMENT'
 
     def test_addProtocol(self):
-        get_protocol = testUser.newProtocol('Test')
+        get_protocol = protocol(empty=True)
         result = entity.addProtocol(get_protocol)
         assert result is not None, \
             'FAILED TO ADD PROTOCOL TO EXPERIMENT'
@@ -81,12 +34,12 @@ class TestExperiment:
             'FAILED TO GET PROTOCOLS'
 
     def test_addComment(self):
-        result = entity.addComment(testName, './tests/test_experiment.py')
+        result = entity.addComment(testString, './tests/test_experiment.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
     def test_addTag(self):
-        result = entity.addTag(testName)
+        result = entity.addTag(testString)
         assert result is not None, \
             'FAILED TO ADD TAG'
 
@@ -94,18 +47,6 @@ class TestExperiment:
         result = entity.getTags()
         assert result[0].id is not None, \
             'FAILED TO GET TAGS'
-
-    # ExperimentStep
-    def test_getSteps(self):
-        result = exp_protocol.getSteps()
-        assert result[0].id is not None, \
-            'FAILED TO GET STEPS'
-
-    def test_completeStep(self):
-        steps = exp_protocol.getSteps()
-        result = steps[0].complete()
-        assert result.ended_at is not None, \
-            'FAILED TO COMPLETE STEP'
 
     def test_commenting_on_comments(self):
         comment = entity.getComments()[0]
@@ -119,24 +60,24 @@ class TestExperiment:
         assert len(dataElements) == 0
 
     def test_addDataElementTo(self):
-        entity.addDataElement('testField', fieldType="default",)
-        newEntity = testUser.getExperiment(entity.id)
-        dataElements = newEntity.getDataElements()
+        entity.addDataElement('testField', fieldType="default")
+        entity.update()
+        dataElements = entity.getDataElements()
         assert len(dataElements) == 1
 
     def test_addMaterial(self):
-        resource = testUser.newResource('test')
-        resource_item = resource.newItem('test')
+        test_resource = resource()
+        resource_item = test_resource.newItem('test')
         entity.addMaterial('testMaterial',
                            amount=10,
                            units='uL',
-                           resource_id=resource.id,
+                           resource_id=test_resource.id,
                            resource_item_id=resource_item.id)
-        material = entity.getMaterials()[0]
+        material = entity.getMaterials()[1]
         assert material.name == 'testMaterial' \
             and material.amount == '10' \
             and material.units == 'uL' \
-            and material.resource['id'] == resource.id \
+            and material.resource['id'] == test_resource.id \
             and material.resource_item['id'] == resource_item.id \
 
 

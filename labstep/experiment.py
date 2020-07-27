@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .entity import Entity, getEntity, getEntities, newEntity, newEntities, editEntity
 from .primaryEntity import PrimaryEntity
 from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
@@ -70,7 +70,7 @@ def getExperiments(user, count=100, search_query=None,
     return getEntities(user, Experiment, count, params)
 
 
-def newExperiment(user, name, description=None, extraParams={}):
+def newExperiment(user, name, entry=None, extraParams={}):
     """
     Create a new Labstep Experiment.
 
@@ -80,9 +80,9 @@ def newExperiment(user, name, description=None, extraParams={}):
         The Labstep user creating the Experiment.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your Experiment a name.
-    description (str)
-        Give your Experiment a description.
+        The name of the experiment.
+    entry (obj)
+        A JSON object representing the state of the Experiment Entry.
 
     Returns
     -------
@@ -90,12 +90,12 @@ def newExperiment(user, name, description=None, extraParams={}):
         An object representing the new Labstep Experiment.
     """
     params = {'name': name,
-              'description': description,
+              'state': entry,
               **extraParams}
     return newEntity(user, Experiment, params)
 
 
-def editExperiment(experiment, name=None, description=None, started_at=None,
+def editExperiment(experiment, name=None, entry=None, started_at=None,
                    deleted_at=None, extraParams={}):
     """
     Edit an existing Experiment.
@@ -106,8 +106,8 @@ def editExperiment(experiment, name=None, description=None, started_at=None,
         The Experiment to edit.
     name (str)
         The new name of the Experiment.
-    description (str)
-        The new description for the Experiment.
+    entry (obj)
+        A JSON object representing the state of the Experiment Entry.
     started_at (str)
         The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
     deleted_at (str)
@@ -119,7 +119,7 @@ def editExperiment(experiment, name=None, description=None, started_at=None,
         An object representing the edited Experiment.
     """
     params = {'name': name,
-              'state': description,
+              'state': entry,
               'started_at': handleDate(started_at),
               'deleted_at': deleted_at,
               **extraParams}
@@ -257,6 +257,25 @@ class ExperimentProtocol(Entity):
             params['value'] = str(params['value'])
 
         return newEntity(self.__user__, ExperimentMaterial, params)
+
+    def addSteps(self, N):
+        """
+        Add steps to a Protocol within an Experiment
+
+        Parameters
+        ----------
+        N (int)
+            The number of steps to add.
+
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_steps = exp_protocol.addSteps(5)
+        """
+        steps = [{"experiment_id": self.id}]*N
+        return newEntities(self.__user__, ExperimentStep, steps)
 
     def getSteps(self):
         """
@@ -664,7 +683,15 @@ class Experiment(PrimaryEntity):
     """
     __entityName__ = 'experiment-workflow'
 
-    def edit(self, name=None, description=None, started_at=None, extraParams={}):
+    def __init__(self, data, user):
+        super().__init__(data, user)
+        if hasattr(self, 'state'):
+            self.entry = self.state
+        if hasattr(self, 'root_experiment'):
+            self.root_experiment = ExperimentProtocol(
+                self.root_experiment, user)
+
+    def edit(self, name=None, entry=None, started_at=None, extraParams={}):
         """
         Edit an existing Experiment.
 
@@ -672,8 +699,8 @@ class Experiment(PrimaryEntity):
         ----------
         name (str)
             The new name of the Experiment.
-        description (str)
-            The new description of the Experiment.
+        entry (obj)
+            A JSON object representing the state of the Experiment Entry.
         started_at (str)
             The start date of the Experiment in the format of "YYYY-MM-DD HH:MM".
 
@@ -688,10 +715,9 @@ class Experiment(PrimaryEntity):
 
             my_experiment = user.getExperiment(17000)
             my_experiment.edit(name='A New Experiment Name',
-                               description='A new description!',
                                started_at='2018-06-06 12:05')
         """
-        return editExperiment(self, name, description, started_at, extraParams=extraParams)
+        return editExperiment(self, name=name, entry=entry, started_at=started_at, extraParams=extraParams)
 
     def delete(self):
         """
@@ -792,9 +818,13 @@ class Experiment(PrimaryEntity):
             dataElement = experiment.addDataElement("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldName, fieldType, value, date,
-                             number, unit,
-                             extraParams=extraParams)
+        return self.root_experiment.addDataElement(fieldName=fieldName,
+                                                   fieldType=fieldType,
+                                                   value=value,
+                                                   date=date,
+                                                   number=number,
+                                                   unit=unit,
+                                                   extraParams=extraParams)
 
     def getDataElements(self):
         """
@@ -813,7 +843,7 @@ class Experiment(PrimaryEntity):
             exp_protocol = experiment.getProtocols()[0]
             dataElements = exp_protocol.getDataElements()
         """
-        return getMetadata(self)
+        return self.root_experiment.getDataElements()
 
     def getSignatures(self):
         """
@@ -850,7 +880,7 @@ class Experiment(PrimaryEntity):
         }
         return newEntity(self.__user__, ExperimentSignature, params)
 
-    def getMaterials(self, count=100):
+    def getMaterials(self):
         """
         Returns a list of the materials in the Experiment.
 
@@ -867,9 +897,7 @@ class Experiment(PrimaryEntity):
             exp_materials = experiment.getMaterials()
             print(exp_materials[0])
         """
-        return getEntities(self.__user__, ExperimentMaterial,
-                           count=count,
-                           filterParams={'experiment_workflow_id': self.id})
+        return self.root_experiment.getMaterials()
 
     def addMaterial(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None,
                     extraParams={}):
@@ -904,7 +932,7 @@ class Experiment(PrimaryEntity):
                                  resource_id=resource.id)
         """
 
-        params = {'experiment_id': self.root_experiment['id'],
+        params = {'experiment_id': self.root_experiment.id,
                   'name': name,
                   'resource_id': resource_id,
                   'resource_item_id': resource_item_id,
