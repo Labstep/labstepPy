@@ -17,5 +17,5 @@ class TestMetadata:
         entityToDelete = new_entity.addMetadata(fieldName='testDelete',
                                                 value='testDelete')
         result = entityToDelete.delete()
-        assert result is None, \
+        assert result.deleted_at is not None, \
             'FAILED TO DELETE METADATA'
