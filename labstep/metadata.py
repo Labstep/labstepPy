@@ -54,6 +54,7 @@ ALLOWED_FIELDS = {
     ],
 }
 
+
 def getMetadata(entity):
     """
     Retrieve the Metadata of a Labstep Entity.
@@ -105,7 +106,7 @@ def addMetadataTo(entity, fieldName, fieldType="default",
     metadata
         An object representing the new Labstep Metadata.
     """
-    if not fieldType in FIELDS: 
+    if fieldType not in FIELDS:
         msg = "Not a supported metadata type '{}'".format(fieldType)
         raise ValueError(msg)
 
@@ -120,7 +121,8 @@ def addMetadataTo(entity, fieldName, fieldType="default",
     fields = set(fields.keys())
     violations = fields - allowedFieldsForType
     if violations:
-        msg = 'Unallowed fields [{}] for type {}'.format(",".join(violations), fieldtype)
+        msg = 'Unallowed fields [{}] for type {}'.format(
+            ",".join(violations), fieldType)
         raise ValueError(msg)
 
     filterParams = {'metadata_thread_id': entity.metadata_thread['id'],
