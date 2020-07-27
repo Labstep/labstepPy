@@ -685,8 +685,11 @@ class Experiment(PrimaryEntity):
 
     def __init__(self, data, user):
         super().__init__(data, user)
-        self.entry = self.state
-        self.root_experiment = ExperimentProtocol(self.root_experiment, user)
+        if hasattr(self, 'state'):
+            self.entry = self.state
+        if hasattr(self, 'root_experiment'):
+            self.root_experiment = ExperimentProtocol(
+                self.root_experiment, user)
 
     def edit(self, name=None, entry=None, started_at=None, extraParams={}):
         """
