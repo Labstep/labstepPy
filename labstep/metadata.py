@@ -206,4 +206,4 @@ class Metadata(Entity):
 
             metadata.delete()
         """
-        return editMetadata(self, deleted_at=getTime())
+        return editMetadata(self, extraParams={'deleted_at': getTime()})
