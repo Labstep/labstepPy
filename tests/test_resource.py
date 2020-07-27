@@ -51,8 +51,9 @@ class TestResource:
 
     def test_setResourceCategory(self):
         my_resourceCategory = user.getResourceCategorys()[0]
-        result = entity.setResourceCategory(my_resourceCategory.id)
-        assert result.resource_category is not None, \
+        entity.setResourceCategory(my_resourceCategory.id)
+        entity.update()
+        assert entity.resource_category is not None, \
             'FAILED TO ADD METADATA'
 
     def test_newOrderRequest(self):
