@@ -152,9 +152,8 @@ def editMetadata(metadata, fieldName=None, value=None, extraParams={}):
     metadata
         An object representing the edited Metadata.
     """
-    filterParams = {'label': fieldName,
-                    'value': value}
-    params = {**filterParams, **extraParams}
+    params = {'label': fieldName,
+              'value': value, **extraParams}
     return editEntity(metadata, params)
 
 
