@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import labstep
+from fixtures import user, resourceLocation, newString
 
-testUser = labstep.login('apitest@labstep.com', 'apitestpass')
-
-# Set variables
-testName = labstep.helpers.getTime()
+entity = resourceLocation()
 
 
 class TestResourceLocation:
     def test_edit(self):
-        entity = testUser.newResourceLocation(testName)
-        newName = labstep.helpers.getTime()
+        newName = newString()
         result = entity.edit(newName)
         result.delete()
         assert result.name == newName, \
             'FAILED TO EDIT RESOURCE LOCATION'
 
     def test_delete(self):
-        testName = labstep.helpers.getTime()
-        entityToDelete = testUser.newResourceLocation(testName)
+        entityToDelete = user.newResourceLocation(newString())
         result = entityToDelete.delete()
         assert result is None, \
             'FAILED TO DELETE RESOURCE LOCATION'

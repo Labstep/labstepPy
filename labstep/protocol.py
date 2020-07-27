@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .primaryEntity import PrimaryEntity
-from .entity import Entity, getEntity, getEntities, newEntity, editEntity
+from .metadata import Metadata
 from .helpers import (listToClass, getTime, handleDate,
                       createdAtFrom, createdAtTo)
-from .metadata import Metadata
+from .primaryEntity import PrimaryEntity
+from .entity import (Entity, getEntity, getEntities,
+                     newEntity, newEntities, editEntity)
 
 
 def getProtocol(user, protocol_id):
@@ -118,6 +119,7 @@ def editProtocol(protocol, name=None, content_state=None, deleted_at=None,
         editEntity(ProtocolVersion(protocol.last_version,
                                    protocol.__user__),
                    {"content_state": content_state})
+        protocol.update()
 
     return editEntity(protocol, params)
 
@@ -337,6 +339,24 @@ class Protocol(PrimaryEntity):
         """
         newEntity(self.__user__, ProtocolVersion, {"collection_id": self.id})
         return self.update()
+
+    def addSteps(self, N):
+        """
+        Add steps to the protocol
+
+        Parameters
+        ----------
+        N (int)
+            The number of steps to add.
+
+        Example
+        -------
+        ::
+            my_protocol = user.newProtocol('My API Protocol')
+            my_protocol.addSteps(5)
+        """
+        steps = [{"protocol_id": self.last_version["id"]}]*N
+        return newEntities(self.__user__, ProtocolStep, steps)
 
     def getSteps(self):
         """

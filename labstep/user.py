@@ -657,7 +657,7 @@ class User(Entity):
 
     # newEntity()
 
-    def newExperiment(self, name, description=None, extraParams={}):
+    def newExperiment(self, name, entry=None, extraParams={}):
         """
         Create a new Labstep Experiment.
 
@@ -665,8 +665,8 @@ class User(Entity):
         ----------
         name (str)
             Give your Experiment a name.
-        description (str)
-            Give your Experiment a description.
+        entry (obj)
+            A JSON object representing the state of the Experiment Entry.
 
         Returns
         -------
@@ -677,12 +677,10 @@ class User(Entity):
         -------
         ::
 
-            entity = user.newExperiment(name='The Synthesis of Aspirin',
-                                        description='Aspirin is an analgesic
-                                        used to reduce pain.')
+            entity = user.newExperiment(name='The Synthesis of Aspirin')
         """
         return newExperiment(self, name,
-                             description=description,
+                             entry=entry,
                              extraParams=extraParams)
 
     def newProtocol(self, name, extraParams={}):
