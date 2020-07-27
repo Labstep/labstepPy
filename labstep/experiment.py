@@ -666,8 +666,8 @@ class Experiment(PrimaryEntity):
 
     def __init__(self, data, user):
         super().__init__(data, user)
-        self.entry = ExperimentProtocol(self.root_experiment, user)
-        del self.root_experiment
+        self.entry = self.state
+        self.root_experiment = ExperimentProtocol(self.root_experiment, user)
 
     def edit(self, name=None, entry=None, started_at=None, extraParams={}):
         """
@@ -796,7 +796,7 @@ class Experiment(PrimaryEntity):
             dataElement = experiment.addDataElement("Refractive Index",
                                                value="1.73")
         """
-        return self.entry.addDataElement(fieldName=fieldName,
+        return self.root_experiment.addDataElement(fieldName=fieldName,
                                          fieldType=fieldType,
                                          value=value,
                                          date=date,
@@ -821,7 +821,7 @@ class Experiment(PrimaryEntity):
             exp_protocol = experiment.getProtocols()[0]
             dataElements = exp_protocol.getDataElements()
         """
-        return self.entry.getDataElements()
+        return self.root_experiment.getDataElements()
 
     def getSignatures(self):
         """
@@ -875,7 +875,7 @@ class Experiment(PrimaryEntity):
             exp_materials = experiment.getMaterials()
             print(exp_materials[0])
         """
-        return self.entry.getMaterials()
+        return self.root_experiment.getMaterials()
 
     def addMaterial(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None,
                     extraParams={}):
@@ -910,7 +910,7 @@ class Experiment(PrimaryEntity):
                                  resource_id=resource.id)
         """
 
-        params = {'experiment_id': self.entry.id,
+        params = {'experiment_id': self.root_experiment.id,
                   'name': name,
                   'resource_id': resource_id,
                   'resource_item_id': resource_item_id,

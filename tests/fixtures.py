@@ -20,6 +20,26 @@ tableData = {
     }
 }
 
+proseMirrorState = {
+    "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "attrs": {"align": None},
+                    "content": [
+                        {
+                            "type": "text",
+                                    "text": "test"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "attrs": {"align": None}
+                }
+            ]
+}
+
 
 contentStateEmpty = {
     "object": "value",

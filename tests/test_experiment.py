@@ -1,35 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from fixtures import experiment, protocol, resource, testString
+from fixtures import (experiment, protocol, resource,
+                      testString, proseMirrorState)
 
 entity = experiment()
 
 
 class TestExperiment:
     def test_edit(self):
-        content_state = {
-            "type": "doc",
-            "content": [
-                {
-                    "type": "paragraph",
-                    "attrs": {"align": None},
-                    "content": [
-                        {
-                            "type": "text",
-                                    "text": "test"
-                        }
-                    ]
-                },
-                {
-                    "type": "paragraph",
-                    "attrs": {"align": None}
-                }
-            ]
-        }
 
-        result = entity.edit('Pytest Edited', content_state)
-        assert result.name == 'Pytest Edited', \
+        entity.edit('Pytest Edited', entry=proseMirrorState)
+        entity.update()
+        assert entity.name == 'Pytest Edited' and \
+            entity.entry == proseMirrorState,\
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):
