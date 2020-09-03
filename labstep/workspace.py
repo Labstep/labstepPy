@@ -17,6 +17,21 @@ from .tag import getTags
 from .file import getFiles
 
 
+class Member(Entity):
+    """
+    Represents a member of a Labstep Workspace.
+
+    To see all attributes of the workspace run
+    ::
+        print(member)
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(member.name)
+    """
+    __entityName__ = 'user-group'
+
+
 def getWorkspace(user, workspace_id):
     """
     Retrieve a specific Labstep Workspace.
@@ -392,6 +407,12 @@ class Workspace(Entity):
         extraParams = {'group_id': self.id, **extraParams}
         return getTags(self.__user__, count, type, search_query,
                        extraParams=extraParams)
+
+    def getMembers(self, count=100, search_query=None, extraParams={}):
+        params = {'group_id': self.id,
+                  'search_query_user': search_query,
+                  **extraParams}
+        return getEntities(self.__user__, Member, count, params)
 
     def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
         """
