@@ -15,6 +15,7 @@ from .resourceLocation import getResourceLocations
 from .orderRequest import getOrderRequests
 from .tag import getTags
 from .file import getFiles
+from .sharelink import Sharelink
 
 
 class Member(Entity):
@@ -466,16 +467,7 @@ class Workspace(Entity):
         sendInvites(emails=['collegue1@labstep.com','collegue2@labstep.com'],message='Hi, please collaborate with me on Labstep!')
         """
         headers = getHeaders(self.__user__)
-        sharelink = self.share_link
-
-        if sharelink is None:
-            url = url_join(API_ROOT, "api/generic/share-link")
-            fields = {
-                "group_id": self.id
-            }
-            r = requests.post(url, json=fields, headers=headers)
-            handleError(r)
-            sharelink = json.loads(r.content)
+        sharelink = self.getSharelink()
 
         url = url_join(API_ROOT, "api/generic/share-link/email")
         fields = {
@@ -485,3 +477,17 @@ class Workspace(Entity):
         }
         r = requests.post(url, json=fields, headers=headers)
         handleError(r)
+
+    def getSharelink(self):
+
+        if self.share_link is None:
+            headers = getHeaders(self.__user__)
+            url = url_join(API_ROOT, "api/generic/share-link")
+            fields = {
+                "group_id": self.id
+            }
+            r = requests.post(url, json=fields, headers=headers)
+            handleError(r)
+            return Sharelink(json.loads(r.content), self.__user__)
+
+        return Sharelink(self.share_link, self.__user__)
