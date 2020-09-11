@@ -3,9 +3,10 @@
 # pylama:ignore=E501
 
 from .primaryEntity import PrimaryEntity
-from .entity import getEntity, getEntities, newEntity, editEntity
+from .entity import getEntity, getEntities, newEntity, editEntity, Entity
 from .helpers import getTime
 from .metadata import addMetadataTo, getMetadata
+from .resourceItem import ResourceItem
 
 
 def getResourceCategory(user, resourceCategory_id):
@@ -53,7 +54,7 @@ def getResourceCategorys(user, count=100, search_query=None, tag_id=None,
     """
     filterParams = {'search_query': search_query,
                     'tag_id': tag_id}
-    params = {**filterParams, **extraParams}
+    params = {**filterParams, **extraParams, 'is_template': True}
     return getEntities(user, ResourceCategory, count, params)
 
 
@@ -74,7 +75,7 @@ def newResourceCategory(user, name, extraParams={}):
     ResourceCategory
         An object representing the new Labstep ResourceCategory.
     """
-    params = {'name': name, **extraParams}
+    params = {'name': name, **extraParams, 'is_template': True}
     return newEntity(user, ResourceCategory, params)
 
 
@@ -116,7 +117,7 @@ class ResourceCategory(PrimaryEntity):
         print(my_resource_category.name)
         print(my_resource_category.id)
     """
-    __entityName__ = 'resource-category'
+    __entityName__ = 'resource'
 
     def edit(self, name=None, extraParams={}):
         """
@@ -154,12 +155,22 @@ class ResourceCategory(PrimaryEntity):
         """
         return editResourceCategory(self, deleted_at=getTime())
 
+    def getResourceTemplate(self):
+        return ResourceTemplate(self.__data__, self.__user__)
+
+    def getResourceItemTemplate(self):
+        return ResourceItem(self.resource_item_template, self.__user__)
+
+
+class ResourceTemplate(Entity):
+    __entityName__ = 'resource'
+
     def addMetadata(self, fieldName, fieldType="default",
                     value=None, date=None,
                     number=None, unit=None,
                     extraParams={}):
         """
-        Add Metadata to a Resource Category.
+        Add Metadata to the Resource Template.
 
         Parameters
         ----------
@@ -196,7 +207,7 @@ class ResourceCategory(PrimaryEntity):
 
     def getMetadata(self):
         """
-        Retrieve the Metadata of a Labstep Resource.
+        Retrieve the Metadata of the Resource Template.
 
         Returns
         -------

@@ -5,7 +5,7 @@ from .primaryEntity import PrimaryEntity
 from .entity import getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime
 from .metadata import addMetadataTo, getMetadata
-from .resourceItem import getResourceItems, newResourceItem
+from .resourceItem import getResourceItems, newResourceItem, ResourceItem
 from .orderRequest import newOrderRequest
 
 
@@ -104,7 +104,7 @@ def editResource(resource, name=None, deleted_at=None,
         An object representing the edited Resource.
     """
     params = {'name': name,
-              'resource_category_id': resource_category_id,
+              'template_id': resource_category_id,
               'deleted_at': deleted_at,
               **extraParams}
     return editEntity(resource, params)
@@ -350,3 +350,6 @@ class Resource(PrimaryEntity):
                                quantity_unit=quantity_unit,
                                resource_location_id=resource_location_id,
                                extraParams=extraParams)
+
+    def getResourceItemTemplate(self):
+        return ResourceItem(self.resource_item_template, self.__user__)
