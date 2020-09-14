@@ -117,6 +117,7 @@ class ResourceLocation(Entity):
         print(my_resource_location.id)
     """
     __entityName__ = 'resource-location'
+    __hasParentGroup__ = True
 
     def edit(self, name=None, extraParams={}):
         """

@@ -168,7 +168,7 @@ class ResourceItem(Entity):
         name (str)
             The new name of the ResourceItem.
         availability (str)
-            The status of the OrderRequest. Options are:
+            The availability of the ResourceItem. Options are:
             "available" and "unavailable".
         quantity_amount (float)
             The quantity of the ResourceItem.
