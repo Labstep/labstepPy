@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from fixtures import user, experimentProtocol
+from fixtures import user, experimentProtocol, proseMirrorState
 
 # Make new entity
 experiment_protocol = experimentProtocol()
@@ -13,6 +13,11 @@ class TestExperimentProtocol:
         experiment_protocol.update()
         assert experiment_protocol.name == 'Edit Test'
 
+    def test_edit_body(self):
+        experiment_protocol.edit(body=proseMirrorState)
+        experiment_protocol.update()
+        assert experiment_protocol.getBody() == proseMirrorState
+
     def test_getDataElements(self):
         dataElements = experiment_protocol.getDataElements()
         assert len(dataElements) == 0
@@ -22,7 +27,7 @@ class TestExperimentProtocol:
             fieldType="default", fieldName="test")
         assert result.label == 'test'
 
-    def test_addMaterial(self):
+    """ def test_addMaterial(self):
         resource = user.newResource('test')
         item = resource.newItem('test')
         material = experiment_protocol.addMaterial('testMaterial',
@@ -35,7 +40,7 @@ class TestExperimentProtocol:
             and material.amount == '10' \
             and material.units == 'uL' \
             and material.resource['id'] == resource.id \
-            and material.resource_item['id'] == item.id
+            and material.resource_item['id'] == item.id """
     # ExperimentStep
 
     def test_addSteps(self):

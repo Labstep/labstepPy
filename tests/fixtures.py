@@ -25,52 +25,46 @@ tableData = {
 
 proseMirrorState = {
     "type": "doc",
+    "content": [
+        {
+            "type": "paragraph",
+            "attrs": {"align": None},
             "content": [
                 {
-                    "type": "paragraph",
-                    "attrs": {"align": None},
-                    "content": [
-                        {
-                            "type": "text",
-                                    "text": "test"
-                        }
-                    ]
-                },
-                {
-                    "type": "paragraph",
-                    "attrs": {"align": None}
+                    "type": "text",
+                            "text": "test"
                 }
             ]
+        },
+        {
+            "type": "paragraph",
+            "attrs": {"align": None}
+        }
+    ]
 }
 
 
-contentStateEmpty = {
-    "object": "value",
-    "document": {
-        "object": "document",
-        "data": [],
-        "nodes": [
+def proseMirrorStateWithSteps(steps):
+    return {
+            "type": "doc",
+            "content": [
                 {
-                    "object": "block",
-                    "type": "paragraph",
-                    "isVoid": False,
-                    "data": [],
-                    "nodes": [
-                        {
-                            "object": "text",
-                            "leaves": [
-                                {
-                                    "object": "leaf",
-                                    "text": " ",
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ]
+                    "type": "protocol_step",
+                    "attrs": {"id": steps[0].id},
+                    "content": [{
+                            "type": "paragraph",
+                            "attrs": {"align": None}
+                    }]
                 },
-        ]
-    }
-}
+                {
+                    "type": "protocol_step",
+                    "attrs": {"id": steps[1].id},
+                    "content": [{
+                        "type": "paragraph",
+                        "attrs": {"align": None}}
+                    ]}
+            ]
+        }
 
 
 testString = labstep.helpers.getTime()
@@ -78,90 +72,6 @@ testString = labstep.helpers.getTime()
 
 def newString():
     return labstep.helpers.getTime()
-
-
-def contentStateWithSteps(steps):
-    return {
-        "object": "value",
-        "document": {
-            "object": "document",
-            "data": [],
-            "nodes": [
-                {
-                    "object": "block",
-                    "type": "paragraph",
-                    "isVoid": False,
-                    "data": [],
-                    "nodes": [
-                        {
-                            "object": "text",
-                            "leaves": [
-                                {
-                                    "object": "leaf",
-                                    "text": " ",
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "object": "block",
-                    "type": "protocol_step",
-                    "isVoid": False,
-                    "data": {"id": steps[0].id},
-                    "nodes": [
-                        {
-                            "object": "text",
-                            "leaves": [
-                                {
-                                    "object": "leaf",
-                                    "text": " ",
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "object": "block",
-                    "type": "protocol_step",
-                    "isVoid": False,
-                    "data": {"id": steps[1].id},
-                    "nodes": [
-                        {
-                            "object": "text",
-                            "leaves": [
-                                {
-                                    "object": "leaf",
-                                    "text": " ",
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "object": "block",
-                    "type": "paragraph",
-                    "isVoid": False,
-                    "data": [],
-                    "nodes": [
-                        {
-                            "object": "text",
-                            "leaves": [
-                                {
-                                    "object": "leaf",
-                                    "text": " ",
-                                    "marks": []
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    }
 
 
 def experiment(empty=False):
@@ -183,7 +93,7 @@ def protocol(empty=False):
     entity.addTimer(name=testString, hours=4, minutes=15)
     entity.addTable(name=testString, data=tableData)
     steps = entity.addSteps(2)
-    entity.edit(content_state=contentStateWithSteps(steps))
+    entity.edit(body=proseMirrorStateWithSteps(steps))
 
     return entity.update()
 

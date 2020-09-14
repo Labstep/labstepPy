@@ -90,7 +90,7 @@ def newProtocol(user, name, extraParams={}):
     return newEntity(user, Protocol, params)
 
 
-def editProtocol(protocol, name=None, content_state=None, deleted_at=None,
+def editProtocol(protocol, name=None, body=None, deleted_at=None,
                  extraParams={}):
     """
     Edit an existing Protocol.
@@ -101,8 +101,8 @@ def editProtocol(protocol, name=None, content_state=None, deleted_at=None,
         The Protocol to edit.
     name (str)
         The new name of the Protocol.
-    content_state (dict):
-        JSON representing the content state of the protocol.
+    body (dict):
+        JSON representing the the protocol document.
     deleted_at (str)
         The timestamp at which the Protocol is deleted/archived.
 
@@ -115,10 +115,10 @@ def editProtocol(protocol, name=None, content_state=None, deleted_at=None,
               'deleted_at': deleted_at,
               **extraParams}
 
-    if content_state is not None:
+    if body is not None:
         editEntity(ProtocolVersion(protocol.last_version,
                                    protocol.__user__),
-                   {"content_state": content_state})
+                   {"state": body})
         protocol.update()
 
     return editEntity(protocol, params)
@@ -289,14 +289,16 @@ class Protocol(PrimaryEntity):
     """
     __entityName__ = 'protocol-collection'
 
-    def edit(self, name=None, content_state=None, extraParams={}):
+    def edit(self, name=None, body=None, extraParams={}):
         """
         Edit an existing Protocol.
 
         Parameters
         ----------
         name (str)
-            The new name of the Protocol.
+            The name of the Protocol.
+        body (dict):
+            JSON representing the the protocol document.
 
         Returns
         -------
@@ -310,7 +312,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        return editProtocol(self, name=name, content_state=content_state,
+        return editProtocol(self, name=name, body=body,
                             extraParams=extraParams)
 
     def delete(self):
@@ -339,6 +341,42 @@ class Protocol(PrimaryEntity):
         """
         newEntity(self.__user__, ProtocolVersion, {"collection_id": self.id})
         return self.update()
+
+    def getBody(self):
+        """
+        Returns the body of the protocol as a JSON document
+
+        Example
+        -------
+        ::
+            my_protocol = user.newProtocol('My API Protocol')
+
+            my_protocol.edit(body={
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "attrs": {"align": None},
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "This is the the body of my protocol"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "paragraph",
+                        "attrs": {"align": None}
+                    }
+                ]
+            })
+
+            my_protocol.getBody()
+        """
+        self.update()
+        if 'state' not in self.last_version:
+            return None
+        return self.last_version['state']
 
     def addSteps(self, N):
         """
@@ -375,6 +413,9 @@ class Protocol(PrimaryEntity):
             protocol_steps = protocol.getSteps()
             protocol_steps[0].attributes()
         """
+        self.update()
+        if 'protocol_steps' not in self.last_version:
+            return []
         steps = self.last_version['protocol_steps']
         return listToClass(steps, ProtocolStep, self.__user__)
 
@@ -395,9 +436,12 @@ class Protocol(PrimaryEntity):
             protocol = user.getProtocol(17000)
             metadata = exp_protocol.getDataElements()
         """
-        metadataThread = self.last_version['metadata_thread']
+        self.update()
+        if 'metadatas' not in self.last_version['metadata_thread']:
+            return []
+
         return listToClass(
-            metadataThread['metadatas'],
+            self.last_version['metadata_thread']['metadatas'],
             Metadata, self.__user__
         )
 
@@ -509,6 +553,9 @@ class Protocol(PrimaryEntity):
             protocol_materials = protocol.getMaterials()
             protocol_materials[0].attributes()
         """
+        self.update()
+        if 'protocol_values' not in self.last_version:
+            return []
         materials = self.last_version['protocol_values']
         return listToClass(materials, ProtocolMaterial, self.__user__)
 
@@ -563,6 +610,10 @@ class Protocol(PrimaryEntity):
             protocol_timers = protocol.getTimers()
             protocol_timers[0].attributes()
         """
+        self.update()
+        if 'protocol_timers' not in self.last_version:
+            return []
+
         timers = self.last_version['protocol_timers']
         return listToClass(timers, ProtocolTimer, self.__user__)
 
@@ -630,5 +681,9 @@ class Protocol(PrimaryEntity):
             protocol_tables = protocol.getTables()
             protocol_tables[0].attributes()
         """
+        self.update()
+        if 'protocol_tables' not in self.last_version:
+            return []
+
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
