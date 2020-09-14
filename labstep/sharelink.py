@@ -50,6 +50,28 @@ class Sharelink(Entity):
         return editEntity(self, fields=fields)
 
     def sendEmails(self, emails, message=None):
+        """
+        Send sharelinks to collaborators via email.
+
+        Parameters
+        ----------
+        emails (list)
+            A list of the emails to send the invite to.
+        message (str)
+            A message to send with the invite.
+
+        Returns
+        -------
+        None
+
+        Example
+        -------
+        ::
+
+        sharelink.
+        sendEmails(emails=['collegue1@labstep.com','collegue2@labstep.com'],
+        message='Hi, please collaborate with me on Labstep!')
+        """
         headers = getHeaders(self.__user__)
 
         url = url_join(API_ROOT, "api/generic/share-link/email")
