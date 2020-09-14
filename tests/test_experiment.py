@@ -13,7 +13,7 @@ class TestExperiment:
         entity.edit('Pytest Edited', entry=proseMirrorState)
         entity.update()
         assert entity.name == 'Pytest Edited' and \
-            entity.entry == proseMirrorState,\
+            entity.getEntry() == proseMirrorState,\
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):

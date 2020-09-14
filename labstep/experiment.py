@@ -703,8 +703,6 @@ class Experiment(PrimaryEntity):
 
     def __init__(self, data, user):
         super().__init__(data, user)
-        if hasattr(self, 'state'):
-            self.entry = self.state
         if hasattr(self, 'root_experiment'):
             self.root_experiment = ExperimentProtocol(
                 self.root_experiment, user)
@@ -749,6 +747,20 @@ class Experiment(PrimaryEntity):
             my_experiment.delete()
         """
         return editExperiment(self, deleted_at=getTime())
+
+    def getEntry(self):
+        """
+        Returns a JSON document representing the entry for the experiment.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            print(my_experiment.getEntry())
+        """
+        self.update()
+        return self.root_experiment.state
 
     def addProtocol(self, protocol):
         """
