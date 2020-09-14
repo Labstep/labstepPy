@@ -113,7 +113,8 @@ def resource():
 
 def resourceCategory():
     entity = user.newResourceCategory(testString)
-    entity.addMetadata(fieldName='test', value=testString)
+    resourceTemplate = entity.getResourceTemplate()
+    resourceTemplate.addMetadata(fieldName='test', value=testString)
     entity.addComment(testString)
     return entity.update()
 

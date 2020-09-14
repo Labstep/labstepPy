@@ -194,8 +194,7 @@ class ResourceCategory(PrimaryEntity):
 
         Returns
         -------
-        :class:`~labstep.resourceItem.ResourceItem`
-            An object representing a ResourceItem on Labstep.
+        None
 
         Example
         -------

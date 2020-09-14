@@ -229,13 +229,6 @@ class Resource(PrimaryEntity):
         """
         Get the ResourceCategory of the Resource.
 
-        Parameters
-        ----------
-        resource_category_id (int)
-            The id of :class:`~labstep.resourceCategory.ResourceCategory`
-            to set for
-            the Resource.
-
         Returns
         -------
         :class:`~labstep.resourceCategory.ResourceCategory`
@@ -410,8 +403,7 @@ class Resource(PrimaryEntity):
 
         Returns
         -------
-        :class:`~labstep.resourceItem.ResourceItem`
-            An object representing a ResourceItem on Labstep.
+        None
 
         Example
         -------
@@ -437,8 +429,7 @@ class Resource(PrimaryEntity):
 
         Returns
         -------
-        :class:`~labstep.resourceItem.ResourceItem`
-            An object representing a ResourceItem on Labstep.
+        None
 
         Example
         -------

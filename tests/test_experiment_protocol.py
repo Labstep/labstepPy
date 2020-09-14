@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from fixtures import user, experimentProtocol, proseMirrorState
+from fixtures import experimentProtocol, proseMirrorState
 
 # Make new entity
 experiment_protocol = experimentProtocol()
