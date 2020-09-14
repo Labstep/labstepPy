@@ -72,12 +72,12 @@ class TestResource:
             'FAILED TO GET ITEMS'
 
     def test_enableItemTemplate(self):
-        entity.enableItemTemplate()
+        entity.enableCustomItemTemplate()
         itemTemplate = entity.getItemTemplate()
         assert itemTemplate.deleted_at is not None
 
     def test_disableItemTemplate(self):
-        entity.disableItemTemplate()
+        entity.disableCustomItemTemplate()
         itemTemplate = entity.getItemTemplate()
         assert itemTemplate.deleted_at is None
 

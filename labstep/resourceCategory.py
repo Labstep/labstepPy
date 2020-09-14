@@ -6,7 +6,7 @@ from .primaryEntity import PrimaryEntity
 from .entity import getEntity, getEntities, newEntity, editEntity, Entity
 from .helpers import getTime
 from .metadata import addMetadataTo, getMetadata
-from .resourceItem import ResourceItem
+from .resourceItem import ResourceItem, newResourceItem
 
 
 def getResourceCategory(user, resourceCategory_id):
@@ -209,7 +209,7 @@ class ResourceCategory(PrimaryEntity):
 
         '''
         if self.resource_item_template is None:
-            self.newItem(extraParams={'is_template': 1})
+            newResourceItem(self.__user__, self.id, extraParams={'is_template': 1})
         else:
             self.getItemTemplate().edit(extraParams={'deleted_at': None})
 

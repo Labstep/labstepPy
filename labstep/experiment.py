@@ -119,10 +119,14 @@ def editExperiment(experiment, name=None, entry=None, started_at=None,
         An object representing the edited Experiment.
     """
     params = {'name': name,
-              'state': entry,
               'started_at': handleDate(started_at),
               'deleted_at': deleted_at,
               **extraParams}
+
+    if entry is not None:
+        experiment.root_experiment.edit(body=entry)
+        experiment.update()
+
     return editEntity(experiment, params)
 
 
