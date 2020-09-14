@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from fixtures import user, protocol, tableData, testString, contentStateEmpty
+from fixtures import user, protocol, tableData, testString, proseMirrorState
 
 entity = protocol()
 
@@ -104,10 +104,10 @@ class TestProtocol:
         dataElements = newEntity.getDataElements()
         assert len(dataElements) == 1
 
-    def test_edit_content_state(self):
-        result = entity.edit(name='updated', content_state=contentStateEmpty)
-        assert result.last_version['content_state'] == contentStateEmpty,\
-            'FAILED TO EDIT PROTOCOL CONTENT STATE'
+    def test_edit_body(self):
+        result = entity.edit(name='updated', body=proseMirrorState)
+        assert result.getBody() == proseMirrorState,\
+            'FAILED TO EDIT PROTOCOL STATE'
 
     def test_new_version(self):
         oldId = entity.last_version['id']

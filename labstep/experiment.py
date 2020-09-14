@@ -153,7 +153,7 @@ class ExperimentProtocol(Entity):
 
     __isLegacy__ = True
 
-    def edit(self, name=None, content_state=None, started_at=None, ended_at=None, extraParams={}):
+    def edit(self, name=None, body=None, started_at=None, ended_at=None, extraParams={}):
         """
         Edit an existing ExperimentProtocol.
 
@@ -161,8 +161,8 @@ class ExperimentProtocol(Entity):
         ----------
         name (str)
             The new name of the ExperimentProtocol.
-        content_state (str)
-            The new content_state of the ExperimentProtocol.
+        body (dict)
+            A JSON object representing the new body of the ExperimentProtocol.
         started_at (str)
             The date the ExperimentProtocol was started in the format of "YYYY-MM-DD HH:MM".
         ended_at (str)
@@ -184,12 +184,26 @@ class ExperimentProtocol(Entity):
         """
         fields = {
             'name': name,
-            'content_state': content_state,
+            'state': body,
             'started_at': started_at,
             'ended_at': ended_at,
             **extraParams
         }
         return editEntity(self, fields)
+
+    def getBody(self):
+        """
+        Returns the body of the protocol as a JSON document
+
+        Example
+        -------
+        ::
+            my_experiment = user.getExperiment(17000)
+            protocols = my_experiment.getProtocols()
+            protocols[0].getBody()
+        """
+        self.update()
+        return getattr(self, 'state', None)
 
     def getMaterials(self):
         """
