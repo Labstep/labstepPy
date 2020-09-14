@@ -407,6 +407,28 @@ class Workspace(Entity):
                        extraParams=extraParams)
 
     def getMembers(self, count=100, search_query=None, extraParams={}):
+        """
+        Retrieve a list of the members of the workspace.
+
+        Parameters
+        ----------
+        count (int)
+            The number of Members to retrieve.
+
+        search_query (str)
+            Search for members by name.
+
+        Returns
+        -------
+        List[:class:`~labstep.workspace.Member`]
+            A list of the members of the workspace and their permissions.
+
+        Example
+        -------
+        ::
+
+            members = workspace.getMembers(search_query='john')
+        """
         params = {'group_id': self.id,
                   'search_query_user': search_query,
                   **extraParams}
@@ -466,6 +488,14 @@ class Workspace(Entity):
         self.getSharelink().sendEmails(emails=emails, message=message)
 
     def getSharelink(self):
+        """
+        Get the sharelink for the workspace.
+
+        Returns
+        -------
+        :class:`~labstep.sharelink.Sharelink`
+
+        """
 
         if self.share_link is None:
             return newSharelink(self.__user__, fields={

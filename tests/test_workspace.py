@@ -71,3 +71,12 @@ class TestWorkspace:
         result = entity.getFiles()
         assert len(result) >= 0, \
             'FAILED TO GET FILES'
+
+    def test_getMembers(self):
+        result = entity.getMembers()
+        assert len(result) >= 0, \
+            'FAILED TO GET MEMBERS'
+
+    def test_getSharelink():
+        sharelink = entity.getSharelink()
+        assert sharelink is not None

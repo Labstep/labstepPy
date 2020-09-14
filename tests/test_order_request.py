@@ -54,3 +54,7 @@ class TestOrderRequest:
         result = entity.getMetadata()
         assert result is not None, \
             'FAILED TO GET METADATA'
+
+    def test_getSharelink():
+        sharelink = entity.getSharelink()
+        assert sharelink is not None

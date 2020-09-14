@@ -115,3 +115,7 @@ class TestProtocol:
         assert result.id == entity.id \
             and result.last_version['id'] != oldId,\
             'FAILED TO EDIT PROTOCOL'
+
+    def test_getSharelink():
+        sharelink = entity.getSharelink()
+        assert sharelink is not None

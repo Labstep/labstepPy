@@ -2,6 +2,7 @@ from .entity import Entity
 from .comment import getComments, addCommentWithFile
 from .tag import tag, getAttachedTags
 from .permissions import getPermissions, newPermission, transferOwnership
+from .sharelink import getSharelink
 
 
 class PrimaryEntity(Entity):
@@ -108,6 +109,16 @@ class PrimaryEntity(Entity):
         List[:class:`~labstep.permissions.Permission`]
         """
         return getPermissions(self)
+
+    def getSharelink(self):
+        """
+        Returns a sharelink for the Entity.
+
+        Returns
+        -------
+        :class:`~labstep.sharelink.Sharelink`
+        """
+        return getSharelink(self)
 
     def shareWith(self, workspace_id, permission='view'):
         """

@@ -8,16 +8,26 @@ def newSharelink(user, fields):
     return newEntity(user, Sharelink, fields)
 
 
+def getSharelink(entity):
+    key = entity.__entityName__.replace('-', '_')+'_id'
+    if entity.share_link is None:
+        return newSharelink(entity.__user__, fields={
+            key: entity.id
+        })
+
+    return Sharelink(entity.share_link, entity.__user__)
+
+
 class Sharelink(Entity):
     """
-     Represents a Sharelink on Labstep.
+    Represents a Sharelink on Labstep.
     """
     __entityName__ = 'share-link'
     __isLegacy__ = True
 
     def edit(self, permission=None, extraParams={}):
         """
-        Edit an existing ResourceLocation.
+        Edit a sharelink.
 
         Parameters
         ----------
@@ -34,8 +44,8 @@ class Sharelink(Entity):
         -------
         ::
 
-            # Get an experiment
-            experiment = user.getExperiment(123)
+            # Get an workspace
+            workspace = user.getExperiment(123)
 
             # Get the sharelink for the experiment
             sharelink = experiment.getSharelink()

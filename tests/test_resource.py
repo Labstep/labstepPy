@@ -80,3 +80,7 @@ class TestResource:
         entity.disableItemTemplate()
         itemTemplate = entity.getItemTemplate()
         assert itemTemplate.deleted_at is None
+
+    def test_getSharelink():
+        sharelink = entity.getSharelink()
+        assert sharelink is not None
