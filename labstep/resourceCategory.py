@@ -54,7 +54,7 @@ def getResourceCategorys(user, count=100, search_query=None, tag_id=None,
     """
     filterParams = {'search_query': search_query,
                     'tag_id': tag_id}
-    params = {**filterParams, **extraParams, 'is_template': True}
+    params = {**filterParams, **extraParams, 'is_template': 1}
     return getEntities(user, ResourceCategory, count, params)
 
 
@@ -75,7 +75,7 @@ def newResourceCategory(user, name, extraParams={}):
     ResourceCategory
         An object representing the new Labstep ResourceCategory.
     """
-    params = {'name': name, **extraParams, 'is_template': True}
+    params = {'name': name, **extraParams, 'is_template': 1}
     return newEntity(user, ResourceCategory, params)
 
 
@@ -209,7 +209,7 @@ class ResourceCategory(PrimaryEntity):
 
         '''
         if self.resource_item_template is None:
-            self.newItem(extraParams={'is_template': True})
+            self.newItem(extraParams={'is_template': 1})
         else:
             self.getItemTemplate().edit(extraParams={'deleted_at': None})
 
