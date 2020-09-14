@@ -1,4 +1,11 @@
-from .entity import Entity, editEntity
+from .entity import Entity, editEntity, newEntity
+import requests
+from .config import API_ROOT
+from .helpers import url_join, handleError, getHeaders
+
+
+def newSharelink(user, fields):
+    return newEntity(user, Sharelink, fields)
 
 
 class Sharelink(Entity):
@@ -41,3 +48,15 @@ class Sharelink(Entity):
             **extraParams,
         }
         return editEntity(self, fields=fields)
+
+    def sendEmails(self, emails, message=None):
+        headers = getHeaders(self.__user__)
+
+        url = url_join(API_ROOT, "api/generic/share-link/email")
+        fields = {
+            "emails": emails,
+            "message": message,
+            "id": self.id
+        }
+        r = requests.post(url, json=fields, headers=headers)
+        handleError(r)

@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-import requests
-import json
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .config import API_ROOT
-from .helpers import getTime, getHeaders, url_join, handleError
+from .helpers import getTime
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -15,7 +12,7 @@ from .resourceLocation import getResourceLocations
 from .orderRequest import getOrderRequests
 from .tag import getTags
 from .file import getFiles
-from .sharelink import Sharelink
+from .sharelink import Sharelink, newSharelink
 
 
 class Member(Entity):
@@ -466,28 +463,13 @@ class Workspace(Entity):
         workspace.
         sendInvites(emails=['collegue1@labstep.com','collegue2@labstep.com'],message='Hi, please collaborate with me on Labstep!')
         """
-        headers = getHeaders(self.__user__)
-        sharelink = self.getSharelink()
-
-        url = url_join(API_ROOT, "api/generic/share-link/email")
-        fields = {
-            "emails": emails,
-            "message": message,
-            "id": sharelink['id']
-        }
-        r = requests.post(url, json=fields, headers=headers)
-        handleError(r)
+        self.getSharelink().sendEmails(emails=emails, message=message)
 
     def getSharelink(self):
 
         if self.share_link is None:
-            headers = getHeaders(self.__user__)
-            url = url_join(API_ROOT, "api/generic/share-link")
-            fields = {
+            return newSharelink(self.__user__, fields={
                 "group_id": self.id
-            }
-            r = requests.post(url, json=fields, headers=headers)
-            handleError(r)
-            return Sharelink(json.loads(r.content), self.__user__)
+            })
 
         return Sharelink(self.share_link, self.__user__)
