@@ -1,6 +1,9 @@
 import labstep
+import os
 
-user = labstep.login('apitest@labstep.com', 'apitestpass')
+TESTING_KEY = os.getenv('TESTING_KEY')
+
+user = labstep.authenticate('apitest@labstep.com', TESTING_KEY)
 
 tableData = {
     "rowCount": 6,

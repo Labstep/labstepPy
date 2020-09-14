@@ -181,6 +181,7 @@ class Tag(Entity):
         print(my_tag.id)
     """
     __entityName__ = 'tag'
+    __hasParentGroup__ = True
 
     def edit(self, name=None, extraParams={}):
         """

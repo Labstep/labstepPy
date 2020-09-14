@@ -156,10 +156,76 @@ class ResourceCategory(PrimaryEntity):
         return editResourceCategory(self, deleted_at=getTime())
 
     def getResourceTemplate(self):
+        '''
+        Returns the metadata template for resources of this category.
+
+        Example
+        -------
+        ::
+
+            my_resource_category = user.getResourceCategory(17000)
+            resourceTemplate = my_resource_category.getResourceTemplate()
+
+            resourceTemplate.getMetadata()
+            resourceTemplate.addMetadata('Vendor')
+        '''
         return ResourceTemplate(self.__data__, self.__user__)
 
-    def getResourceItemTemplate(self):
+    def getItemTemplate(self):
+        '''
+        Returns the item template for resources of this category.
+
+        Example
+        -------
+        ::
+
+            my_resource_category = user.getResourceCategory(17000)
+            itemTemplate = my_resource_category.getItemTemplate()
+
+            itemTemplate.getMetadata()
+            itemTemplate.addMetadata('Vendor')
+        '''
         return ResourceItem(self.resource_item_template, self.__user__)
+
+    def enableItemTemplate(self):
+        '''
+        Enable an item template for this resource category.
+        This template will be used to initialise new items for resources in this category, unless the resource has it's own custom template.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_resource = user.getResource(17000)
+            my_resource.enableCustomItemTemplate()
+
+            itemTemplate = my_resource.getItemTemplate()
+
+            itemTemplate.addMetadata('Expiry Date')
+
+        '''
+        if self.resource_item_template is None:
+            self.newItem(extraParams={'is_template': True})
+        else:
+            self.getItemTemplate().edit(extraParams={'deleted_at': None})
+
+    def disableItemTemplate(self):
+        '''
+        Disable the item template for this resource category.
+
+        Example
+        -------
+        ::
+
+            my_resource = user.getResource(17000)
+            my_resource.disableCustomItemTemplate()
+        '''
+        self.getItemTemplate().delete(extraParams={'deleted_at': None})
 
 
 class ResourceTemplate(Entity):

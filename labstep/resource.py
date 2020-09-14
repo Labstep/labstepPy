@@ -7,6 +7,7 @@ from .helpers import getTime
 from .metadata import addMetadataTo, getMetadata
 from .resourceItem import getResourceItems, newResourceItem, ResourceItem
 from .orderRequest import newOrderRequest
+from .resourceCategory import getResourceCategory
 
 
 def getResource(user, resource_id):
@@ -224,6 +225,34 @@ class Resource(PrimaryEntity):
         """
         return getMetadata(self)
 
+    def getResourceCategory(self):
+        """
+        Get the ResourceCategory of the Resource.
+
+        Parameters
+        ----------
+        resource_category_id (int)
+            The id of :class:`~labstep.resourceCategory.ResourceCategory`
+            to set for
+            the Resource.
+
+        Returns
+        -------
+        :class:`~labstep.resourceCategory.ResourceCategory`
+            An object representing the Resource Category on Labstep.
+
+        Example
+        -------
+        ::
+
+            # Get a Resource
+            resource = user.getResource(170)
+
+            # Get the Resource Category of the resource
+            resourceCategory = resource.getResourceCategory()
+        """
+        return getResourceCategory(self.template['id'])
+
     def setResourceCategory(self, resource_category_id, extraParams={}):
         """
         Add a Labstep ResourceCategory to a Resource.
@@ -351,5 +380,71 @@ class Resource(PrimaryEntity):
                                resource_location_id=resource_location_id,
                                extraParams=extraParams)
 
-    def getResourceItemTemplate(self):
+    def getItemTemplate(self):
+        '''
+        Get the template used for initialising new items of the resource.
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_resource = user.getResource(17000)
+            itemTemplate = my_resource.getItemTemplate()
+
+            itemTemplate.addMetadata('Expiry Date')
+
+        '''
+        if self.resource_item_template is None:
+            return None
+
         return ResourceItem(self.resource_item_template, self.__user__)
+
+    def enableCustomItemTemplate(self):
+        '''
+        Enable a custom item template for this resource.
+        If disabled the template for the Resource Category will be used.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_resource = user.getResource(17000)
+            my_resource.enableCustomItemTemplate()
+
+            itemTemplate = my_resource.getItemTemplate()
+
+            itemTemplate.addMetadata('Expiry Date')
+
+        '''
+        if self.resource_item_template is None:
+            self.newItem(extraParams={'is_template': True})
+        else:
+            self.getItemTemplate().edit(extraParams={'deleted_at': None})
+
+    def disableCustomItemTemplate(self):
+        '''
+        Disable custom item template for this resource.
+        If disabled the template for the Resource Category will be used.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_resource = user.getResource(17000)
+            my_resource.disableCustomItemTemplate()
+        '''
+        self.getItemTemplate().delete()

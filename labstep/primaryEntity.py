@@ -5,6 +5,8 @@ from .permissions import getPermissions, newPermission, transferOwnership
 
 
 class PrimaryEntity(Entity):
+    __hasParentGroup__ = True
+
     def addComment(self, body, filepath=None, extraParams={}):
         """
         Add a comment and/or file to a Labstep Entity.
