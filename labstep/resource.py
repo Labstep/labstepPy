@@ -376,6 +376,7 @@ class Resource(PrimaryEntity):
     def getItemTemplate(self):
         '''
         Get the template used for initialising new items of the resource.
+
         Returns
         -------
         :class:`~labstep.resourceItem.ResourceItem`

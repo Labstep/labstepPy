@@ -349,6 +349,7 @@ class Protocol(PrimaryEntity):
         Example
         -------
         ::
+
             my_protocol = user.newProtocol('My API Protocol')
 
             my_protocol.edit(body={
@@ -390,6 +391,7 @@ class Protocol(PrimaryEntity):
         Example
         -------
         ::
+
             my_protocol = user.newProtocol('My API Protocol')
             my_protocol.addSteps(5)
         """

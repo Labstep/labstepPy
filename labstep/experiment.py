@@ -202,6 +202,7 @@ class ExperimentProtocol(Entity):
         Example
         -------
         ::
+
             my_experiment = user.getExperiment(17000)
             protocols = my_experiment.getProtocols()
             protocols[0].getBody()
@@ -288,6 +289,7 @@ class ExperimentProtocol(Entity):
         Example
         -------
         ::
+
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_steps = exp_protocol.addSteps(5)

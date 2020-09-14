@@ -136,8 +136,6 @@ class Workspace(Entity):
     """
     __entityName__ = 'group'
 
-    share_link = None
-
     def edit(self, name=None, extraParams={}):
         """
         Edit an existing Workspace.
@@ -290,8 +288,7 @@ class Workspace(Entity):
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None, extraParams={}):
         """
-        Retrieve a list of a User's Resource Categorys
-        across all Workspaces on Labstep,
+        Retrieve a list of Resource Categories within this specific Workspace,
         which can be filtered using the parameters:
 
         Parameters
@@ -321,7 +318,7 @@ class Workspace(Entity):
 
     def getResourceLocations(self, count=100, search_query=None, extraParams={}):
         """
-        Retrieve a list of a user's ResourceLocations on Labstep,
+        Retrieve a list of Resource Locations within this specific Workspace,
         which can be filtered using the parameters:
 
         Parameters
@@ -349,7 +346,7 @@ class Workspace(Entity):
 
     def getOrderRequests(self, count=100, name=None, status=None, tag_id=None, extraParams={}):
         """
-        Retrieve a list of a user's OrderRequests on Labstep,
+        Retrieve a list of Order Requests within this specific Workspace,
         which can be filtered using the parameters:
 
         Parameters
@@ -482,8 +479,9 @@ class Workspace(Entity):
         -------
         ::
 
-        workspace.
-        sendInvites(emails=['collegue1@labstep.com','collegue2@labstep.com'],message='Hi, please collaborate with me on Labstep!')
+            workspace.sendInvites(
+                emails=['collegue1@labstep.com','collegue2@labstep.com'],
+                message='Hi, please collaborate with me on Labstep!')
         """
         self.getSharelink().sendEmails(emails=emails, message=message)
 
@@ -494,6 +492,7 @@ class Workspace(Entity):
         Returns
         -------
         :class:`~labstep.sharelink.Sharelink`
+            The sharelink for the workspace
 
         """
 

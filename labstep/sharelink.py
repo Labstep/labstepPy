@@ -70,9 +70,6 @@ class Sharelink(Entity):
         message (str)
             A message to send with the invite.
 
-        Returns
-        -------
-        None
 
         Example
         -------

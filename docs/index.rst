@@ -79,6 +79,7 @@ own specific purposes.
    source/comment.rst
    source/tag.rst
    source/file.rst
+   source/sharelink.rst
 
 .. toctree::
    :caption: Examples

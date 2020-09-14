@@ -117,6 +117,7 @@ class PrimaryEntity(Entity):
         Returns
         -------
         :class:`~labstep.sharelink.Sharelink`
+            The sharelink for the entity
         """
         return getSharelink(self)
 

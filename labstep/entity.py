@@ -204,6 +204,9 @@ class Entity:
         return pp.pformat(entity_attributes)
 
     def update(self):
+        """
+        Fetches the most up-to-date version of the entity from Labstep.
+        """
         data = getEntity(self.__user__, type(self), self.id).__data__
         self.__init__(data, self.__user__)
         return self
