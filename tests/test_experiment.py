@@ -90,6 +90,6 @@ class TestExperiment:
             and sig.revoked_at is not None, \
             'FAILED SIGNATURES TEST'
 
-    def test_getSharelink():
+    def test_getSharelink(self):
         sharelink = entity.getSharelink()
         assert sharelink is not None

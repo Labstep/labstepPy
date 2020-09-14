@@ -244,7 +244,7 @@ class Resource(PrimaryEntity):
             # Get the Resource Category of the resource
             resourceCategory = resource.getResourceCategory()
         """
-        return getResourceCategory(self.template['id'])
+        return getResourceCategory(self.__user__, self.template['id'])
 
     def setResourceCategory(self, resource_category_id, extraParams={}):
         """

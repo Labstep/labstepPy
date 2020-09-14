@@ -77,6 +77,6 @@ class TestWorkspace:
         assert len(result) >= 0, \
             'FAILED TO GET MEMBERS'
 
-    def test_getSharelink():
+    def test_getSharelink(self):
         sharelink = entity.getSharelink()
         assert sharelink is not None
