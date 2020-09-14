@@ -759,8 +759,7 @@ class Experiment(PrimaryEntity):
             my_experiment = user.getExperiment(17000)
             print(my_experiment.getEntry())
         """
-        self.update()
-        return self.root_experiment.state
+        return getEntity(self.__user__, ExperimentProtocol, self.root_experiment.id).state
 
     def addProtocol(self, protocol):
         """
@@ -791,7 +790,7 @@ class Experiment(PrimaryEntity):
         """
         return addProtocolToExperiment(self, protocol)
 
-    def getProtocols(self):
+    def getProtocols(self, count=100):
         """
         Retrieve the Protocols attached to this Labstep Experiment.
 
@@ -808,8 +807,7 @@ class Experiment(PrimaryEntity):
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        self.update()
-        return listToClass(self.experiments, ExperimentProtocol, self.__user__)
+        return getEntities(self.__user__, ExperimentProtocol, count, {'is_root': 0, 'experiment_workflow_id': self.id})
 
     def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,

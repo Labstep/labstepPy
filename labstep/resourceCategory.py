@@ -185,6 +185,7 @@ class ResourceCategory(PrimaryEntity):
             itemTemplate.getMetadata()
             itemTemplate.addMetadata('Vendor')
         '''
+        self.update()
         return ResourceItem(self.resource_item_template, self.__user__)
 
     def enableItemTemplate(self):
@@ -208,6 +209,7 @@ class ResourceCategory(PrimaryEntity):
             itemTemplate.addMetadata('Expiry Date')
 
         '''
+        self.update()
         if self.resource_item_template is None:
             newResourceItem(self.__user__, self.id, extraParams={'is_template': 1})
         else:
@@ -224,7 +226,7 @@ class ResourceCategory(PrimaryEntity):
             my_resource = user.getResource(17000)
             my_resource.disableCustomItemTemplate()
         '''
-        self.getItemTemplate().delete(extraParams={'deleted_at': None})
+        self.getItemTemplate().delete()
 
 
 class ResourceTemplate(Entity):

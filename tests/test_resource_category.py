@@ -55,12 +55,13 @@ class TestResourceCategory:
     def test_enableItemTemplate(self):
         entity.enableItemTemplate()
         itemTemplate = entity.getItemTemplate()
-        assert itemTemplate.deleted_at is not None
+        assert itemTemplate.deleted_at is None
 
     def test_disableItemTemplate(self):
+        entity.enableItemTemplate()
         entity.disableItemTemplate()
         itemTemplate = entity.getItemTemplate()
-        assert itemTemplate.deleted_at is None
+        assert itemTemplate.deleted_at is not None
 
     def test_getSharelink(self):
         sharelink = entity.getSharelink()

@@ -391,6 +391,7 @@ class Resource(PrimaryEntity):
             itemTemplate.addMetadata('Expiry Date')
 
         '''
+        self.update()
         if self.resource_item_template is None:
             return None
 
@@ -418,7 +419,7 @@ class Resource(PrimaryEntity):
 
         '''
         if self.resource_item_template is None:
-            self.newItem(extraParams={'is_template': True})
+            self.newItem(extraParams={'is_template': 1})
         else:
             self.getItemTemplate().edit(extraParams={'deleted_at': None})
 
