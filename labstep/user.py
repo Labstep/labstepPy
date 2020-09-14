@@ -11,7 +11,7 @@ import urllib.parse
 
 from .config import API_ROOT
 from .entity import Entity
-from .helpers import url_join, handleError
+from .helpers import url_join, handleError, getHeaders
 from .experiment import getExperiment, getExperiments, newExperiment
 from .protocol import getProtocol, getProtocols, newProtocol
 from .resource import getResource, getResources, newResource
@@ -876,3 +876,24 @@ class User(Entity):
             entity = user.newFile('./structure_of_aspirin.png')
         """
         return newFile(self, filepath, extraParams=extraParams)
+
+    def acceptSharelink(self, token):
+        """
+        Accept a sharelink
+        Parameters
+        ----------
+        token (class)
+            The token of the sharelink.
+
+        Returns
+        -------
+        None
+        """
+        headers = getHeaders(self)
+        url = url_join(API_ROOT, "/api/generic/",
+                       'share-link')
+        params = {'token': token,
+                  'get_single': 1}
+        r = requests.get(url, headers=headers, params=params)
+        handleError(r)
+        return None
