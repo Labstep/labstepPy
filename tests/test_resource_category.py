@@ -20,7 +20,8 @@ class TestResourceCategory:
             'FAILED TO DELETE RESOURCE CATEGORY'
 
     def test_addComment(self):
-        result = entity.addComment(testString, './tests/test_resource_category.py')
+        result = entity.addComment(
+            testString, './tests/test_resource_category.py')
         assert result is not None, \
             'FAILED TO ADD COMMENT AND FILE'
 
@@ -41,12 +42,27 @@ class TestResourceCategory:
 
     def test_addMetadata(self):
         new_resource_category = user.newResourceCategory(testString)
-        result = new_resource_category.addMetadata(fieldName=testString,
-                                                   value=testString)
+        result = new_resource_category.getResourceTemplate().addMetadata(fieldName=testString,
+                                                                         value=testString)
         assert result.label == testString, \
             'FAILED TO ADD METADATA'
 
     def test_getMetadata(self):
-        result = entity.getMetadata()
+        result = entity.getResourceTemplate().getMetadata()
         assert result[0].id is not None, \
             'FAILED TO GET METADATA'
+
+    def test_enableItemTemplate(self):
+        entity.enableItemTemplate()
+        itemTemplate = entity.getItemTemplate()
+        assert itemTemplate.deleted_at is None
+
+    def test_disableItemTemplate(self):
+        entity.enableItemTemplate()
+        entity.disableItemTemplate()
+        itemTemplate = entity.getItemTemplate()
+        assert itemTemplate.deleted_at is not None
+
+    def test_getSharelink(self):
+        sharelink = entity.getSharelink()
+        assert sharelink is not None

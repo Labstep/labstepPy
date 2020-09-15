@@ -52,9 +52,9 @@ class TestResource:
     def test_setResourceCategory(self):
         my_resourceCategory = user.getResourceCategorys()[0]
         entity.setResourceCategory(my_resourceCategory.id)
-        entity.update()
-        assert entity.resource_category is not None, \
-            'FAILED TO ADD METADATA'
+        resourceCategory = entity.getResourceCategory()
+        assert resourceCategory is not None, \
+            'FAILED TO SET RESOURCE CATEGORY'
 
     def test_newOrderRequest(self):
         result = entity.newOrderRequest()
@@ -70,3 +70,18 @@ class TestResource:
         result = entity.getItems()
         assert result[0].id, \
             'FAILED TO GET ITEMS'
+
+    def test_enableItemTemplate(self):
+        entity.enableCustomItemTemplate()
+        itemTemplate = entity.getItemTemplate()
+        assert itemTemplate.deleted_at is None
+
+    def test_disableItemTemplate(self):
+        entity.enableCustomItemTemplate()
+        entity.disableCustomItemTemplate()
+        itemTemplate = entity.getItemTemplate()
+        assert itemTemplate.deleted_at is not None
+
+    def test_getSharelink(self):
+        sharelink = entity.getSharelink()
+        assert sharelink is not None

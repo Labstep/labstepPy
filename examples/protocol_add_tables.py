@@ -3,7 +3,7 @@
 
 import labstep
 
-user = labstep.login('apitest@labstep.com', 'apitestpass')
+user = labstep.login('myaccount@labstep.com', 'mypassword')
 
 protocol = user.newProtocol('My Protocol with Table')
 

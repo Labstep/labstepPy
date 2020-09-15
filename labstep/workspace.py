@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 # pylama:ignore=E501
 
-import requests
-import json
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
-from .config import API_ROOT
-from .helpers import getTime, getHeaders, url_join, handleError
+from .helpers import getTime
 from .experiment import getExperiments
 from .protocol import getProtocols
 from .resource import getResources
@@ -15,6 +12,22 @@ from .resourceLocation import getResourceLocations
 from .orderRequest import getOrderRequests
 from .tag import getTags
 from .file import getFiles
+from .sharelink import Sharelink, newSharelink
+
+
+class Member(Entity):
+    """
+    Represents a member of a Labstep Workspace.
+
+    To see all attributes of the workspace run
+    ::
+        print(member)
+
+    Specific attributes can be accessed via dot notation like so...
+    ::
+        print(member.name)
+    """
+    __entityName__ = 'user-group'
 
 
 def getWorkspace(user, workspace_id):
@@ -122,8 +135,6 @@ class Workspace(Entity):
         print(my_workspace.id)
     """
     __entityName__ = 'group'
-
-    share_link = None
 
     def edit(self, name=None, extraParams={}):
         """
@@ -277,8 +288,7 @@ class Workspace(Entity):
 
     def getResourceCategorys(self, count=100, search_query=None, tag_id=None, extraParams={}):
         """
-        Retrieve a list of a User's Resource Categorys
-        across all Workspaces on Labstep,
+        Retrieve a list of Resource Categories within this specific Workspace,
         which can be filtered using the parameters:
 
         Parameters
@@ -308,7 +318,7 @@ class Workspace(Entity):
 
     def getResourceLocations(self, count=100, search_query=None, extraParams={}):
         """
-        Retrieve a list of a user's ResourceLocations on Labstep,
+        Retrieve a list of Resource Locations within this specific Workspace,
         which can be filtered using the parameters:
 
         Parameters
@@ -336,7 +346,7 @@ class Workspace(Entity):
 
     def getOrderRequests(self, count=100, name=None, status=None, tag_id=None, extraParams={}):
         """
-        Retrieve a list of a user's OrderRequests on Labstep,
+        Retrieve a list of Order Requests within this specific Workspace,
         which can be filtered using the parameters:
 
         Parameters
@@ -393,6 +403,34 @@ class Workspace(Entity):
         return getTags(self.__user__, count, type, search_query,
                        extraParams=extraParams)
 
+    def getMembers(self, count=100, search_query=None, extraParams={}):
+        """
+        Retrieve a list of the members of the workspace.
+
+        Parameters
+        ----------
+        count (int)
+            The number of Members to retrieve.
+
+        search_query (str)
+            Search for members by name.
+
+        Returns
+        -------
+        List[:class:`~labstep.workspace.Member`]
+            A list of the members of the workspace and their permissions.
+
+        Example
+        -------
+        ::
+
+            members = workspace.getMembers(search_query='john')
+        """
+        params = {'group_id': self.id,
+                  'search_query_user': search_query,
+                  **extraParams}
+        return getEntities(self.__user__, Member, count, params)
+
     def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
         """
         Retrieve a list of Files in the Workspace on Labstep,
@@ -441,26 +479,26 @@ class Workspace(Entity):
         -------
         ::
 
-        workspace.
-        sendInvites(emails=['collegue1@labstep.com','collegue2@labstep.com'],message='Hi, please collaborate with me on Labstep!')
+            workspace.sendInvites(
+                emails=['collegue1@labstep.com','collegue2@labstep.com'],
+                message='Hi, please collaborate with me on Labstep!')
         """
-        headers = getHeaders(self.__user__)
-        sharelink = self.share_link
+        self.getSharelink().sendEmails(emails=emails, message=message)
 
-        if sharelink is None:
-            url = url_join(API_ROOT, "api/generic/share-link")
-            fields = {
+    def getSharelink(self):
+        """
+        Get the sharelink for the workspace.
+
+        Returns
+        -------
+        :class:`~labstep.sharelink.Sharelink`
+            The sharelink for the workspace
+
+        """
+
+        if self.share_link is None:
+            return newSharelink(self.__user__, fields={
                 "group_id": self.id
-            }
-            r = requests.post(url, json=fields, headers=headers)
-            handleError(r)
-            sharelink = json.loads(r.content)
+            })
 
-        url = url_join(API_ROOT, "api/generic/share-link/email")
-        fields = {
-            "emails": emails,
-            "message": message,
-            "id": sharelink['id']
-        }
-        r = requests.post(url, json=fields, headers=headers)
-        handleError(r)
+        return Sharelink(self.share_link, self.__user__)

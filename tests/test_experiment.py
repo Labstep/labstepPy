@@ -13,7 +13,7 @@ class TestExperiment:
         entity.edit('Pytest Edited', entry=proseMirrorState)
         entity.update()
         assert entity.name == 'Pytest Edited' and \
-            entity.entry == proseMirrorState,\
+            entity.getEntry() == proseMirrorState,\
             'FAILED TO EDIT EXPERIMENT'
 
     def test_delete(self):
@@ -89,3 +89,7 @@ class TestExperiment:
             and sig.statement == 'test' \
             and sig.revoked_at is not None, \
             'FAILED SIGNATURES TEST'
+
+    def test_getSharelink(self):
+        sharelink = entity.getSharelink()
+        assert sharelink is not None

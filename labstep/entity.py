@@ -127,7 +127,10 @@ def newEntity(user, entityClass, fields):
     url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
     fields = dict(
         filter(lambda field: field[1] is not None, fields.items()))
-    fields['group_id'] = user.activeWorkspace
+
+    if getattr(entityClass, '__hasParentGroup__', False):
+        fields['group_id'] = user.activeWorkspace
+
     r = requests.post(url, headers=headers, json=fields)
     handleError(r)
     return entityClass(json.loads(r.content), user)
@@ -201,6 +204,9 @@ class Entity:
         return pp.pformat(entity_attributes)
 
     def update(self):
+        """
+        Fetches the most up-to-date version of the entity from Labstep.
+        """
         data = getEntity(self.__user__, type(self), self.id).__data__
         self.__init__(data, self.__user__)
         return self

@@ -119,10 +119,14 @@ def editExperiment(experiment, name=None, entry=None, started_at=None,
         An object representing the edited Experiment.
     """
     params = {'name': name,
-              'state': entry,
               'started_at': handleDate(started_at),
               'deleted_at': deleted_at,
               **extraParams}
+
+    if entry is not None:
+        experiment.root_experiment.edit(body=entry)
+        experiment.update()
+
     return editEntity(experiment, params)
 
 
@@ -153,7 +157,7 @@ class ExperimentProtocol(Entity):
 
     __isLegacy__ = True
 
-    def edit(self, name=None, content_state=None, started_at=None, ended_at=None, extraParams={}):
+    def edit(self, name=None, body=None, started_at=None, ended_at=None, extraParams={}):
         """
         Edit an existing ExperimentProtocol.
 
@@ -161,8 +165,8 @@ class ExperimentProtocol(Entity):
         ----------
         name (str)
             The new name of the ExperimentProtocol.
-        content_state (str)
-            The new content_state of the ExperimentProtocol.
+        body (dict)
+            A JSON object representing the new body of the ExperimentProtocol.
         started_at (str)
             The date the ExperimentProtocol was started in the format of "YYYY-MM-DD HH:MM".
         ended_at (str)
@@ -184,12 +188,27 @@ class ExperimentProtocol(Entity):
         """
         fields = {
             'name': name,
-            'content_state': content_state,
+            'state': body,
             'started_at': started_at,
             'ended_at': ended_at,
             **extraParams
         }
         return editEntity(self, fields)
+
+    def getBody(self):
+        """
+        Returns the body of the protocol as a JSON document
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            protocols = my_experiment.getProtocols()
+            protocols[0].getBody()
+        """
+        self.update()
+        return getattr(self, 'state', None)
 
     def getMaterials(self):
         """
@@ -270,6 +289,7 @@ class ExperimentProtocol(Entity):
         Example
         -------
         ::
+
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_steps = exp_protocol.addSteps(5)
@@ -685,8 +705,6 @@ class Experiment(PrimaryEntity):
 
     def __init__(self, data, user):
         super().__init__(data, user)
-        if hasattr(self, 'state'):
-            self.entry = self.state
         if hasattr(self, 'root_experiment'):
             self.root_experiment = ExperimentProtocol(
                 self.root_experiment, user)
@@ -732,6 +750,19 @@ class Experiment(PrimaryEntity):
         """
         return editExperiment(self, deleted_at=getTime())
 
+    def getEntry(self):
+        """
+        Returns a JSON document representing the entry for the experiment.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            print(my_experiment.getEntry())
+        """
+        return getEntity(self.__user__, ExperimentProtocol, self.root_experiment.id).state
+
     def addProtocol(self, protocol):
         """
         Add a Labstep Protocol to a Labstep Experiment.
@@ -761,7 +792,7 @@ class Experiment(PrimaryEntity):
         """
         return addProtocolToExperiment(self, protocol)
 
-    def getProtocols(self):
+    def getProtocols(self, count=100):
         """
         Retrieve the Protocols attached to this Labstep Experiment.
 
@@ -778,8 +809,7 @@ class Experiment(PrimaryEntity):
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        self.update()
-        return listToClass(self.experiments, ExperimentProtocol, self.__user__)
+        return getEntities(self.__user__, ExperimentProtocol, count, {'is_root': 0, 'experiment_workflow_id': self.id})
 
     def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
