@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from .entity import Entity, newEntity, editEntity
+from .file import newFile
 from .helpers import (listToClass,
                       handleDate, getTime)
 
@@ -39,7 +40,7 @@ ALLOWED_FIELDS = {
         'date',
     ],
     TYPE_FILE: [
-        'file',
+        'file_id',
     ],
     TYPE_MOLECULE: [
         'molecule',
@@ -76,6 +77,7 @@ def getMetadata(entity):
 def addMetadataTo(entity, fieldName, fieldType="default",
                   value=None, date=None,
                   number=None, unit=None,
+                  filepath=None,
                   extraParams={}):
     """
     Add Metadata to a Resource.
@@ -88,7 +90,7 @@ def addMetadataTo(entity, fieldName, fieldType="default",
         The name of the field.
     fieldType (str)
         The Metadata field type. Options are: "default", "date",
-        "quantity", or "number". The "default" type is "Text".
+        "numeric", or "file". The "default" type is "Text".
     value (str)
         The value accompanying the fieldName entry.
     date (str)
@@ -98,12 +100,19 @@ def addMetadataTo(entity, fieldName, fieldType="default",
         The quantity.
     unit (str)
         The unit accompanying the number entry.
+    filepath (str)
+        Local path to the file to upload for type 'file'
 
     Returns
     -------
     metadata
         An object representing the new Labstep Metadata.
     """
+    if filepath is not None:
+        file_id = newFile(entity.__user__, filepath).id
+    else:
+        file_id = None
+
     if fieldType not in FIELDS:
         msg = "Not a supported metadata type '{}'".format(fieldType)
         raise ValueError(msg)
@@ -114,6 +123,7 @@ def addMetadataTo(entity, fieldName, fieldType="default",
         'date': date,
         'number': number,
         'unit': unit,
+        'file_id': file_id
     }
     fields = {k: v for k, v in fields.items() if v}
     fields = set(fields.keys())
@@ -129,7 +139,9 @@ def addMetadataTo(entity, fieldName, fieldType="default",
               'value': value,
               'date': handleDate(date),
               'number': number,
-              'unit': unit, **extraParams}
+              'unit': unit,
+              'file_id': file_id,
+              **extraParams}
 
     return newEntity(entity.__user__, Metadata, params)
 

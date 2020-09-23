@@ -385,6 +385,7 @@ class ExperimentProtocol(Entity):
     def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
                        number=None, unit=None,
+                       filepath=None,
                        extraParams={}):
         """
         Add a Data Element to a Protocol within an Experiment.
@@ -405,6 +406,8 @@ class ExperimentProtocol(Entity):
             The quantity.
         unit (str)
             The unit accompanying the number entry.
+        filepath (str)
+            Local path to the file to upload for type 'file'
 
         Returns
         -------
@@ -420,8 +423,12 @@ class ExperimentProtocol(Entity):
             dataElement = experiment_protocol.addDataElement("Refractive Index",
                                                value="1.73")
         """
-        return addMetadataTo(self, fieldName, fieldType, value, date,
-                             number, unit,
+        return addMetadataTo(self,
+                             fieldName=fieldName,
+                             fieldType=fieldType,
+                             value=value, date=date,
+                             number=number, unit=unit,
+                             filepath=filepath,
                              extraParams=extraParams)
 
 
@@ -814,6 +821,7 @@ class Experiment(PrimaryEntity):
     def addDataElement(self, fieldName, fieldType="default",
                        value=None, date=None,
                        number=None, unit=None,
+                       filepath=None,
                        extraParams={}):
         """
         Add Data Elements to a Labstep Experiment.
@@ -823,8 +831,8 @@ class Experiment(PrimaryEntity):
         fieldName (str)
             The name of the field.
         fieldType (str)
-            The field type. Options are: "default", "date",
-            "quantity", or "number". The "default" type is "Text".
+            The Metadata field type. Options are: "default", "date",
+            "numeric", or "file". The "default" type is "Text".
         value (str)
             The value accompanying the fieldName entry.
         date (str)
@@ -834,6 +842,8 @@ class Experiment(PrimaryEntity):
             The quantity.
         unit (str)
             The unit accompanying the number entry.
+        filepath (str)
+            Local path to the file to upload for type 'file'
 
         Returns
         -------
@@ -854,6 +864,7 @@ class Experiment(PrimaryEntity):
                                                    date=date,
                                                    number=number,
                                                    unit=unit,
+                                                   filepath=filepath,
                                                    extraParams=extraParams)
 
     def getDataElements(self):
