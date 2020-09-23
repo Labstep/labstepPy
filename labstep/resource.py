@@ -165,6 +165,7 @@ class Resource(PrimaryEntity):
     def addMetadata(self, fieldName, fieldType="default",
                     value=None, date=None,
                     number=None, unit=None,
+                    filepath=None,
                     extraParams={}):
         """
         Add Metadata to a Resource.
@@ -175,16 +176,18 @@ class Resource(PrimaryEntity):
             The name of the field.
         fieldType (str)
             The Metadata field type. Options are: "default", "date",
-            "quantity", or "number". The "default" type is "Text".
+            "numeric", or "file". The "default" type is "Text".
         value (str)
             The value accompanying the fieldName entry.
         date (str)
-            The date and time accompanying the fieldName entry. Must be
+            The date accompanying the fieldName entry. Must be
             in the format of "YYYY-MM-DD HH:MM".
         number (float)
-            The quantity.
+            The numeric value.
         unit (str)
             The unit accompanying the number entry.
+        filepath (str)
+            Local path to the file to upload for type 'file'
 
         Returns
         -------
@@ -204,6 +207,7 @@ class Resource(PrimaryEntity):
                              fieldType=fieldType,
                              value=value, date=date,
                              number=number, unit=unit,
+                             filepath=filepath,
                              extraParams=extraParams)
 
     def getMetadata(self):

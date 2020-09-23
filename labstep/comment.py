@@ -49,7 +49,7 @@ def addComment(entity, body, file_id=None, extraParams={}):
 
     params = {'body': body,
               'parent_thread_id': threadId,
-              'file_id': file_id,
+              'file_id': [[file_id]] if file_id is not None else None,
               **extraParams}
 
     return newEntity(entity.__user__, Comment, params)
