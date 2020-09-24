@@ -8,6 +8,8 @@ from .comment import getComments, addCommentWithFile
 from .helpers import (getTime, createdAtFrom, createdAtTo,
                       handleDate, listToClass)
 from .metadata import addMetadataTo, getMetadata
+from .collection import (addToCollection, getAttachedCollections,
+                         removeFromCollection)
 
 
 def getExperiment(user, experiment_id):
@@ -45,7 +47,7 @@ def getExperiments(user, count=100, search_query=None,
     count (int)
         The number of Experiments to retrieve.
     search_query (str)
-        Search for Experiments with this 'name'.
+        Search for Experiments containing this string in the name or entry.
     created_at_from (str)
         The start date of the search range, must be
         in the format of 'YYYY-MM-DD'.
@@ -985,3 +987,36 @@ class Experiment(PrimaryEntity):
             params['value'] = str(params['value'])
 
         return newEntity(self.__user__, ExperimentMaterial, params)
+
+    def addToCollection(self, collection_id):
+        """
+        Add the experiment to a collection.
+
+        Parameters
+        ----------
+        collection_id (int)
+            The id of the collection to add to
+
+        Returns
+        -------
+        None
+        """
+        return addToCollection(self, collection_id=collection_id)
+
+    def getCollections(self):
+        """
+        Returns the list of collections the protocol is in.
+        """
+        return getAttachedCollections(self)
+
+    def removeFromCollection(self, collection_id):
+        """
+        Remove the experiment from a collection.
+
+        Parameters
+        ----------
+        collection_id (int)
+            The id of the collection to remove from
+
+        """
+        return removeFromCollection(self, collection_id)

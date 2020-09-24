@@ -19,6 +19,7 @@ from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
 from .resourceLocation import (getResourceLocation, getResourceLocations,
                                newResourceLocation)
+from .collection import newCollection
 
 
 def newUser(first_name, last_name, email, password,
@@ -343,7 +344,7 @@ class User(Entity):
         count (int)
             The number of Experiments to retrieve.
         search_query (str)
-            Search for Experiments with this 'name'.
+            Search for Experiments containing this string in the name or entry.
         created_at_from (str)
             The start date of the search range, must be
             in the format of 'YYYY-MM-DD'.
@@ -876,6 +877,17 @@ class User(Entity):
             entity = user.newFile('./structure_of_aspirin.png')
         """
         return newFile(self, filepath, extraParams=extraParams)
+
+    def newCollection(self, name, type='experiment'):
+        """
+        Create a new Collection for Experiments (or Protocols)
+
+        Parameters
+        ----------
+        type (str)
+            The filepath to the file to attach.
+        """
+        return newCollection(self, name=name, type=type)
 
     def acceptSharelink(self, token):
         """

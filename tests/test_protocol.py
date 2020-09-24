@@ -119,3 +119,15 @@ class TestProtocol:
     def test_getSharelink(self):
         sharelink = entity.getSharelink()
         assert sharelink is not None
+
+    def test_addToCollection(self):
+        result = entity.addToCollection()
+        assert result is not None
+
+    def test_removeFromCollection(self):
+        result = entity.removeFromCollection()
+        assert result is not None
+
+    def test_getCollections(self):
+        result = entity.getCollections()
+        assert result is not None

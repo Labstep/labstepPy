@@ -13,6 +13,7 @@ from .orderRequest import getOrderRequests
 from .tag import getTags
 from .file import getFiles
 from .sharelink import Sharelink, newSharelink
+from .collection import getCollections, newCollection
 
 
 class Member(Entity):
@@ -185,7 +186,7 @@ class Workspace(Entity):
         count (int)
             The number of Experiments to retrieve.
         search_query (str)
-            Search for Experiments with this 'name'.
+            Search for Experiments containing this string in the name or entry.
         created_at_from (str)
             The start date of the search range, must be
             in the format of 'YYYY-MM-DD'.
@@ -502,3 +503,55 @@ class Workspace(Entity):
             })
 
         return Sharelink(self.share_link, self.__user__)
+
+    def getCollections(self, count=1000, search_query=None, type='experiment', extraParams={}):
+        """
+        Retrieve a list of Collections within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Collection to retrieve.
+        type (str)
+            Return only Collections of a certain type. Options are:
+           'experiment', 'protocol'.
+        search_query (str)
+            Search for Collections with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.collection.Collection`]
+            A list of Labstep Collections.
+
+        Example
+        -------
+        ::
+
+            entity = workspace.getCollections(search_query='bacteria')
+        """
+        extraParams = {'group_id': self.id, **extraParams}
+        return getCollections(self.__user__, count, type, search_query,
+                              extraParams=extraParams)
+
+    def newCollection(self, name, type='experiment'):
+        """
+        Create a new Collection within the Workspace for Experiments or Protocols.
+
+        Parameters
+        ----------
+        user (obj)
+            The Labstep user creating the Collection.
+            Must have property 'api_key'. See 'login'.
+        name (str)
+            Name of the new Collection.
+        type (str)
+            Return only collections of a certain type. Options are:
+           'experiment', 'protocol'. Defaults to 'experiment'
+
+        Returns
+        -------
+        collection
+            An object representing the new Labstep Collection.
+        """
+        return newCollection(self.__user__, name=name, type=type, extraParams={'group_id': self.id})

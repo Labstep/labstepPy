@@ -7,6 +7,8 @@ from .helpers import (listToClass, getTime, handleDate,
 from .primaryEntity import PrimaryEntity
 from .entity import (Entity, getEntity, getEntities,
                      newEntity, newEntities, editEntity)
+from .collection import (addToCollection, getAttachedCollections,
+                         removeFromCollection)
 
 
 def getProtocol(user, protocol_id):
@@ -689,3 +691,36 @@ class Protocol(PrimaryEntity):
 
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
+
+    def addToCollection(self, collection_id):
+        """
+        Add the protocol to a collection.
+
+        Parameters
+        ----------
+        collection_id (int)
+            The id of the collection to add to
+
+        Returns
+        -------
+        None
+        """
+        return addToCollection(self, collection_id=collection_id)
+
+    def getCollections(self):
+        """
+        Returns the list of collections the protocol is in.
+        """
+        return getAttachedCollections(self)
+
+    def removeFromCollection(self, collection_id):
+        """
+        Remove the protocol from a collection.
+
+        Parameters
+        ----------
+        collection_id (int)
+            The id of the collection to remove from
+
+        """
+        return removeFromCollection(self, collection_id)
