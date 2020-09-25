@@ -6,7 +6,6 @@ import json
 from .config import API_ROOT
 from .entity import Entity, getEntities, newEntity, editEntity, getHeaders
 from .helpers import (url_join, handleError, getTime)
-from .experiments import getExperiments
 
 
 def getCollections(user, count=1000,
@@ -60,7 +59,10 @@ def getAttachedCollections(entity, count=100):
         List of the collections attached.
     """
     key = entity.__entityName__.replace('-', '_')+'_id'
-    filterParams = {key: entity.id}
+    filterParams = {
+        key: entity.id,
+        'group_id': entity.__user__.activeWorkspace
+    }
     return getEntities(entity.__user__, Collection, count=count,
                        filterParams=filterParams)
 
@@ -227,44 +229,4 @@ class Collection(Entity):
         collection
             An object representing the collection to delete.
         """
-        return editCollection(self, extraParams={'deleted_at': getTime()})
-
-    def getExperiments(self, count=100, search_query=None,
-                       created_at_from=None, created_at_to=None, tag_id=None,
-                       extraParams={}):
-        """
-        Returns the Experiments within a Collection
-        (only for collections of type 'experiment')
-
-        Parameters
-        ----------
-        user (obj)
-            The Labstep user. Must have property
-            'api_key'. See 'login'.
-        count (int)
-            The number of Experiments to retrieve.
-        search_query (str)
-            Search for Experiments containing this string in the name or entry.
-        created_at_from (str)
-            The start date of the search range, must be
-            in the format of 'YYYY-MM-DD'.
-        created_at_to (str)
-            The end date of the search range, must be
-            in the format of 'YYYY-MM-DD'.
-        tag_id (int)
-            The id of the Tag to retrieve.
-        extraParams (dict)
-            Dictionary of extra filter parameters.
-
-        Returns
-        -------
-        List[:class:`~labstep.experiment.Experiment`]
-            A list of Experiment objects.
-        """
-        extraParams = {'folder_id': self.id, **extraParams}
-        return getExperiments(self.__user__, count=count,
-                              search_query=search_query,
-                              created_at_from=created_at_from,
-                              created_at_to=created_at_to,
-                              tag_id=tag_id,
-                              extraParams=extraParams)
+        return self.edit(extraParams={'deleted_at': getTime()})
