@@ -555,3 +555,10 @@ class Workspace(Entity):
             An object representing the new Labstep Collection.
         """
         return newCollection(self.__user__, name=name, type=type, extraParams={'group_id': self.id})
+
+    def setHome(self):
+        """
+        Sets this workspace as the default workspace for the active user.
+        """
+        member = Member(self.logged_user_user_group, self.__user__)
+        return editEntity(member, {"is_home": True})
