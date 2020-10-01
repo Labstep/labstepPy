@@ -28,6 +28,9 @@ def handleError(r):
         status code of the request is not 200.
     """
     if r.status_code != 200:
+        print(
+            '''Get the latest version of the SDK by running:
+        pip install labstep --upgrade''')
         raise Exception('Request Error {code}:{message}'.format(
             code=r.status_code, message=r.content))
     return

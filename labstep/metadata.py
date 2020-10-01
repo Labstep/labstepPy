@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .entity import Entity, newEntity, editEntity
+from .entity import Entity, newEntity, editEntity, getEntities
 from .file import newFile
-from .helpers import (listToClass,
-                      handleDate, getTime)
+from .helpers import (handleDate, getTime)
 
 TYPE_DEFAULT = 'default'
 TYPE_NUMERIC = 'numeric'
@@ -54,7 +53,7 @@ ALLOWED_FIELDS = {
 }
 
 
-def getMetadata(entity):
+def getMetadata(entity, count=1000, extraParams={}):
     """
     Retrieve the Metadata of a Labstep Entity.
 
@@ -68,10 +67,14 @@ def getMetadata(entity):
     metadatas
         An array of Metadata objects for the Entity.
     """
-    if 'metadatas' not in entity.metadata_thread:
-        entity.update()
-    metadatas = entity.metadata_thread['metadatas']
-    return listToClass(metadatas, Metadata, entity.__user__)
+    params = {
+        'metadata_thread_id': entity.metadata_thread['id'],
+        **extraParams
+    }
+    return getEntities(entity.__user__,
+                       Metadata,
+                       count=count,
+                       filterParams=params)
 
 
 def addMetadataTo(entity, fieldName, fieldType="default",
