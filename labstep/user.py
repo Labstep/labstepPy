@@ -404,7 +404,7 @@ class User(Entity):
         tag_id (int)
             The id of a tag to filter by.
         collection_id (int)
-            Get experiments in this collection.
+            Get protocols in this collection.
 
         Returns
         -------

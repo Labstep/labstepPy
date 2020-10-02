@@ -176,6 +176,7 @@ class Workspace(Entity):
     # getMany()
     def getExperiments(self, count=100, search_query=None,
                        created_at_from=None, created_at_to=None, tag_id=None,
+                       collection_id=None,
                        extraParams={}):
         """
         Retrieve a list of Experiments within this specific Workspace,
@@ -195,6 +196,8 @@ class Workspace(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get experiments in this collection.
 
         Returns
         -------
@@ -211,12 +214,17 @@ class Workspace(Entity):
                                               tag_id=800)
         """
         extraParams = {'group_id': self.id, **extraParams}
-        return getExperiments(self.__user__, count, search_query,
-                              created_at_from, created_at_to, tag_id,
+        return getExperiments(self.__user__,
+                              count=count, search_query=search_query,
+                              created_at_from=created_at_from,
+                              created_at_to=created_at_to,
+                              tag_id=tag_id,
+                              collection_id=collection_id,
                               extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None,
+                     collection_id=None,
                      extraParams={}):
         """
         Retrieve a list of Protocols within this specific Workspace,
@@ -236,6 +244,8 @@ class Workspace(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get protocols in this collection.
 
         Returns
         -------
@@ -252,8 +262,13 @@ class Workspace(Entity):
                                             tag_id=800)
         """
         extraParams = {'group_id': self.id, **extraParams}
-        return getProtocols(self.__user__, count, search_query,
-                            created_at_from, created_at_to, tag_id,
+        return getProtocols(self.__user__,
+                            count=count,
+                            search_query=search_query,
+                            created_at_from=created_at_from,
+                            created_at_to=created_at_to,
+                            tag_id=tag_id,
+                            collection_id=collection_id,
                             extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
