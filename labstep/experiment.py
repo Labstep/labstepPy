@@ -302,6 +302,54 @@ class ExperimentProtocol(Entity):
         steps = [{"experiment_id": self.id}]*N
         return newEntities(self.__user__, ExperimentStep, steps)
 
+    def addTable(self, name=None, data=None):
+        """
+        Add a new table to a Protocol within an Experiment.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the table.
+        data (json)
+            The data of the table in json format.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentTable`
+            The newly added table entity.
+
+        Example
+        -------
+        ::
+
+            data = {
+                "rowCount": 12,
+                "columnCount": 12,
+                "colHeaderData": {},
+                "data": {
+                    "dataTable": {
+                        0: {
+                            0: {
+                                "value": 'Cell A1'
+                            },
+                            1: {
+                                "value": 'Cell B1'
+                            }
+                        }
+                    }
+                }
+            }
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol.addTable(name='Calibration', data=data)
+        """
+
+        params = {'experiment_id': self.id,
+                  'name': name,
+                  'data': data}
+        return newEntity(self.__user__, ExperimentTable, params)
+
     def getSteps(self):
         """
         Returns a list of the steps in a Protocol within an Experiment.
@@ -330,7 +378,7 @@ class ExperimentProtocol(Entity):
 
         Returns
         -------
-        List[:class:`~labstep.experiment.ProtocolTable`]
+        List[:class:`~labstep.experiment.ExperimentTable`]
             List of the tables in an Experiment's Protocol.
 
         Example
@@ -1023,3 +1071,50 @@ class Experiment(PrimaryEntity):
 
         """
         return removeFromCollection(self, collection_id)
+
+    def addTable(self, name=None, data=None):
+        """
+        Add a new table to an Experiment.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the table.
+        data (json)
+            The data of the table in json format.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.ExperimentTable`
+            The newly added table entity.
+
+        Example
+        -------
+        ::
+
+            data = {
+                "rowCount": 12,
+                "columnCount": 12,
+                "colHeaderData": {},
+                "data": {
+                    "dataTable": {
+                        0: {
+                            0: {
+                                "value": 'Cell A1'
+                            },
+                            1: {
+                                "value": 'Cell B1'
+                            }
+                        }
+                    }
+                }
+            }
+
+            experiment = user.getExperiment(17000)
+            experiment.addTable(name='Calibration', data=data)
+        """
+
+        params = {'experiment_id': self.root_experiment.id,
+                  'name': name,
+                  'data': data}
+        return newEntity(self.__user__, ExperimentTable, params)
