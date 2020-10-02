@@ -333,6 +333,7 @@ class User(Entity):
     # getMany()
     def getExperiments(self, count=100, search_query=None,
                        created_at_from=None, created_at_to=None, tag_id=None,
+                       collection_id=None,
                        extraParams={}):
         """
         Retrieve a list of a User's Experiments
@@ -353,6 +354,8 @@ class User(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get experiments in this collection.
 
         Returns
         -------
@@ -374,10 +377,12 @@ class User(Entity):
                               created_at_from=created_at_from,
                               created_at_to=created_at_to,
                               tag_id=tag_id,
+                              collection_id=collection_id,
                               extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None,
+                     collection_id=None,
                      extraParams={}):
         """
         Retrieve a list of a User's Protocols
@@ -398,6 +403,8 @@ class User(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get experiments in this collection.
 
         Returns
         -------
@@ -419,6 +426,7 @@ class User(Entity):
                             created_at_from=created_at_from,
                             created_at_to=created_at_to,
                             tag_id=tag_id,
+                            collection_id=collection_id,
                             extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,

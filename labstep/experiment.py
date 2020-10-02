@@ -33,7 +33,7 @@ def getExperiment(user, experiment_id):
 
 
 def getExperiments(user, count=100, search_query=None,
-                   created_at_from=None, created_at_to=None, tag_id=None,
+                   created_at_from=None, created_at_to=None, tag_id=None, collection_id=None,
                    extraParams={}):
     """
     Retrieve a list of a user's Experiments on Labstep,
@@ -55,7 +55,9 @@ def getExperiments(user, count=100, search_query=None,
         The end date of the search range, must be
         in the format of 'YYYY-MM-DD'.
     tag_id (int)
-        The id of the Tag to retrieve.
+        Get experiments tagged with this tag.
+    collection_id (int)
+        Get experiments in this collection.
     extraParams (dict)
         Dictionary of extra filter parameters.
 
@@ -68,6 +70,7 @@ def getExperiments(user, count=100, search_query=None,
               'created_at_from': createdAtFrom(created_at_from),
               'created_at_to': createdAtTo(created_at_to),
               'tag_id': tag_id,
+              'folder_id': collection_id,
               **extraParams}
     return getEntities(user, Experiment, count, params)
 
