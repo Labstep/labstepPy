@@ -130,6 +130,6 @@ class TestProtocol:
     def test_removeFromCollection(self):
         collection = protocolCollection()
         entity.addToCollection(collection.id)
-        entity.removeFromCollection()
+        entity.removeFromCollection(collection.id)
         result = entity.getCollections()
         assert len(result) == 0

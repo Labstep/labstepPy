@@ -103,6 +103,6 @@ class TestExperiment:
     def test_removeFromCollection(self):
         collection = experimentCollection()
         entity.addToCollection(collection.id)
-        entity.removeFromCollection()
+        entity.removeFromCollection(collection.id)
         result = entity.getCollections()
         assert len(result) == 0
