@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from fixtures import (experiment, protocol, resource,
-                      testString, proseMirrorState)
+                      testString, proseMirrorState, experimentCollection)
 
 entity = experiment()
 
@@ -95,13 +95,14 @@ class TestExperiment:
         assert sharelink is not None
 
     def test_addToCollection(self):
-        result = entity.addToCollection()
-        assert result is not None
+        collection = experimentCollection()
+        entity.addToCollection(collection.id)
+        result = entity.getCollections()
+        assert result[0].id == collection.id
 
     def test_removeFromCollection(self):
-        result = entity.removeFromCollection()
-        assert result is not None
-
-    def test_getCollections(self):
+        collection = experimentCollection()
+        entity.addToCollection(collection.id)
+        entity.removeFromCollection()
         result = entity.getCollections()
-        assert result is not None
+        assert len(result) == 0

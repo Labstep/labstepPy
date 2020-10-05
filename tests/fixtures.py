@@ -143,8 +143,8 @@ def workspace():
 
 
 def protocolCollection():
-    return user.newCollection(type="protocol")
+    return user.newCollection(newString(), type="protocol")
 
 
 def experimentCollection():
-    return user.newCollection()
+    return user.newCollection(newString())
