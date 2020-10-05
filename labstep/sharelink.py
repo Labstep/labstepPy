@@ -44,8 +44,8 @@ class Sharelink(Entity):
         -------
         ::
 
-            # Get an workspace
-            workspace = user.getExperiment(123)
+            # Get an experiment
+            experiment = user.getExperiment(123)
 
             # Get the sharelink for the experiment
             sharelink = experiment.getSharelink()

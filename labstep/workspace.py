@@ -14,6 +14,7 @@ from .tag import getTags
 from .file import getFiles
 from .sharelink import Sharelink, newSharelink
 from .collection import getCollections, newCollection
+from .autoshare import Autoshare
 
 
 class Member(Entity):
@@ -577,3 +578,47 @@ class Workspace(Entity):
         """
         member = Member(self.logged_user_user_group, self.__user__)
         return editEntity(member, {"is_home": True})
+
+    def setAutosharing(self,
+                       experiment_sharing=None,
+                       protocol_sharing=None,
+                       resource_sharing=None):
+        """
+        Parameters
+        ----------
+        experiment_sharing (str)
+            Automatically share experiments
+            you create and own with this workspace. Set to True or False
+
+        protocol_sharing (str)
+            Automatically share protocols
+            you create and own with this workspace. Set to True or False
+
+        resource_sharing (str)
+            Automatically share resources
+            you create and own with this workspace. Set to True or False
+
+        Returns
+        -------
+        :class:`~labstep.autoshare.Autoshare`
+            An object representing the Autosharing policy.
+
+        Example
+        -------
+        ::
+
+            # Get an workspace
+            workspace = user.getWorkspaces(123)
+
+            workspace.setAutosharing(experiment_sharing='view')
+        """
+
+        if self.security_policy is None:
+            policy = newEntity(self.__user__, Autoshare, {
+                "user_group": self.logged_user_user_group['id']})
+        else:
+            policy = Autoshare(self.security_policy, self.__user__)
+
+        return policy.edit(experiment_sharing=experiment_sharing,
+                           protocol_sharing=protocol_sharing,
+                           resource_sharing=resource_sharing)
