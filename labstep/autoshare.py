@@ -41,13 +41,13 @@ class Autoshare(Entity):
         ::
 
             # Get an workspace
-            workspace = user.getExperiment(123)
+            workspace = user.getWorkspace(123)
 
-            # Get the sharelink for the experiment
-            sharelink = experiment.getSharelink()
+            # Set autosharing policy
+            policy = workspace.setAutosharing(experiment_sharing=True)
 
-            # Edit the sharelink
-            sharelink.edit(type='view')
+            # Edit the policy
+            policy.edit(protocol_sharing=True)
         """
         options = {
             True: 'edit',

@@ -610,7 +610,7 @@ class Workspace(Entity):
             # Get an workspace
             workspace = user.getWorkspaces(123)
 
-            workspace.setAutosharing(experiment_sharing='view')
+            workspace.setAutosharing(experiment_sharing=True)
         """
 
         if self.security_policy is None:
