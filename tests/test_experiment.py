@@ -102,6 +102,7 @@ class TestExperiment:
 
     def test_removeFromCollection(self):
         collection = experimentCollection()
+        entity = experiment()
         entity.addToCollection(collection.id)
         entity.removeFromCollection(collection.id)
         result = entity.getCollections()

@@ -129,6 +129,7 @@ class TestProtocol:
 
     def test_removeFromCollection(self):
         collection = protocolCollection()
+        entity = protocol()
         entity.addToCollection(collection.id)
         entity.removeFromCollection(collection.id)
         result = entity.getCollections()
