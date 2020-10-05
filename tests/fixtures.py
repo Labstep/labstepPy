@@ -140,3 +140,11 @@ def resourceLocation():
 
 def workspace():
     return user.newWorkspace(testString)
+
+
+def protocolCollection():
+    return user.newCollection(newString(), type="protocol")
+
+
+def experimentCollection():
+    return user.newCollection(newString())

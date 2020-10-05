@@ -80,3 +80,18 @@ class TestWorkspace:
     def test_getSharelink(self):
         sharelink = entity.getSharelink()
         assert sharelink is not None
+
+    def test_getCollections(self):
+        result = entity.getCollections()
+        assert len(result) >= 0
+
+    def test_autoSharing(self):
+        result = entity.setAutosharing(experiment_sharing=False,
+                                       protocol_sharing=False,
+                                       resource_sharing=False)
+
+        result = entity.setAutosharing(experiment_sharing=True,
+                                       protocol_sharing=True,
+                                       resource_sharing=True)
+
+        assert result is not None

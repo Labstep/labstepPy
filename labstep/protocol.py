@@ -7,6 +7,8 @@ from .helpers import (listToClass, getTime, handleDate,
 from .primaryEntity import PrimaryEntity
 from .entity import (Entity, getEntity, getEntities,
                      newEntity, newEntities, editEntity)
+from .collection import (addToCollection, getAttachedCollections,
+                         removeFromCollection)
 
 
 def getProtocol(user, protocol_id):
@@ -31,6 +33,7 @@ def getProtocol(user, protocol_id):
 
 def getProtocols(user, count=100, search_query=None,
                  created_at_from=None, created_at_to=None, tag_id=None,
+                 collection_id=None,
                  extraParams={}):
     """
     Retrieve a list of a user's Protocols on Labstep,
@@ -53,6 +56,8 @@ def getProtocols(user, count=100, search_query=None,
         in the format of 'YYYY-MM-DD'.
     tag_id (int)
         The id of the Tag to filter by.
+    collection_id (int)
+        Get experiments in this collection.
     extraParams (dict)
         Dictionary of extra filter parameters.
 
@@ -65,6 +70,7 @@ def getProtocols(user, count=100, search_query=None,
               'created_at_from': createdAtFrom(created_at_from),
               'created_at_to': createdAtTo(created_at_to),
               'tag_id': tag_id,
+              'folder_id': collection_id,
               **extraParams}
     return getEntities(user, Protocol, count, params)
 
@@ -689,3 +695,36 @@ class Protocol(PrimaryEntity):
 
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
+
+    def addToCollection(self, collection_id):
+        """
+        Add the protocol to a collection.
+
+        Parameters
+        ----------
+        collection_id (int)
+            The id of the collection to add to
+
+        Returns
+        -------
+        None
+        """
+        return addToCollection(self, collection_id=collection_id)
+
+    def getCollections(self):
+        """
+        Returns the list of collections the protocol is in.
+        """
+        return getAttachedCollections(self)
+
+    def removeFromCollection(self, collection_id):
+        """
+        Remove the protocol from a collection.
+
+        Parameters
+        ----------
+        collection_id (int)
+            The id of the collection to remove from
+
+        """
+        return removeFromCollection(self, collection_id)

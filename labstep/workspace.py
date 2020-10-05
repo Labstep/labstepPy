@@ -13,6 +13,8 @@ from .orderRequest import getOrderRequests
 from .tag import getTags
 from .file import getFiles
 from .sharelink import Sharelink, newSharelink
+from .collection import getCollections, newCollection
+from .autoshare import Autoshare
 
 
 class Member(Entity):
@@ -175,6 +177,7 @@ class Workspace(Entity):
     # getMany()
     def getExperiments(self, count=100, search_query=None,
                        created_at_from=None, created_at_to=None, tag_id=None,
+                       collection_id=None,
                        extraParams={}):
         """
         Retrieve a list of Experiments within this specific Workspace,
@@ -185,7 +188,7 @@ class Workspace(Entity):
         count (int)
             The number of Experiments to retrieve.
         search_query (str)
-            Search for Experiments with this 'name'.
+            Search for Experiments containing this string in the name or entry.
         created_at_from (str)
             The start date of the search range, must be
             in the format of 'YYYY-MM-DD'.
@@ -194,6 +197,8 @@ class Workspace(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get experiments in this collection.
 
         Returns
         -------
@@ -210,12 +215,17 @@ class Workspace(Entity):
                                               tag_id=800)
         """
         extraParams = {'group_id': self.id, **extraParams}
-        return getExperiments(self.__user__, count, search_query,
-                              created_at_from, created_at_to, tag_id,
+        return getExperiments(self.__user__,
+                              count=count, search_query=search_query,
+                              created_at_from=created_at_from,
+                              created_at_to=created_at_to,
+                              tag_id=tag_id,
+                              collection_id=collection_id,
                               extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None,
+                     collection_id=None,
                      extraParams={}):
         """
         Retrieve a list of Protocols within this specific Workspace,
@@ -235,6 +245,8 @@ class Workspace(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get protocols in this collection.
 
         Returns
         -------
@@ -251,8 +263,13 @@ class Workspace(Entity):
                                             tag_id=800)
         """
         extraParams = {'group_id': self.id, **extraParams}
-        return getProtocols(self.__user__, count, search_query,
-                            created_at_from, created_at_to, tag_id,
+        return getProtocols(self.__user__,
+                            count=count,
+                            search_query=search_query,
+                            created_at_from=created_at_from,
+                            created_at_to=created_at_to,
+                            tag_id=tag_id,
+                            collection_id=collection_id,
                             extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
@@ -502,3 +519,106 @@ class Workspace(Entity):
             })
 
         return Sharelink(self.share_link, self.__user__)
+
+    def getCollections(self, count=1000, search_query=None, type='experiment', extraParams={}):
+        """
+        Retrieve a list of Collections within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Collection to retrieve.
+        type (str)
+            Return only Collections of a certain type. Options are:
+           'experiment', 'protocol'.
+        search_query (str)
+            Search for Collections with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.collection.Collection`]
+            A list of Labstep Collections.
+
+        Example
+        -------
+        ::
+
+            entity = workspace.getCollections(search_query='bacteria')
+        """
+        extraParams = {'group_id': self.id, **extraParams}
+        return getCollections(self.__user__, count, type, search_query,
+                              extraParams=extraParams)
+
+    def newCollection(self, name, type='experiment'):
+        """
+        Create a new Collection within the Workspace for Experiments or Protocols.
+
+        Parameters
+        ----------
+        user (obj)
+            The Labstep user creating the Collection.
+            Must have property 'api_key'. See 'login'.
+        name (str)
+            Name of the new Collection.
+        type (str)
+            Return only collections of a certain type. Options are:
+           'experiment', 'protocol'. Defaults to 'experiment'
+
+        Returns
+        -------
+        collection
+            An object representing the new Labstep Collection.
+        """
+        return newCollection(self.__user__, name=name, type=type, extraParams={'group_id': self.id})
+
+    def setHome(self):
+        """
+        Sets this workspace as the default workspace for the active user.
+        """
+        member = Member(self.logged_user_user_group, self.__user__)
+        return editEntity(member, {"is_home": True})
+
+    def setAutosharing(self,
+                       experiment_sharing=None,
+                       protocol_sharing=None,
+                       resource_sharing=None):
+        """
+        Parameters
+        ----------
+        experiment_sharing (str)
+            Automatically share experiments
+            you create and own with this workspace. Set to True or False
+
+        protocol_sharing (str)
+            Automatically share protocols
+            you create and own with this workspace. Set to True or False
+
+        resource_sharing (str)
+            Automatically share resources
+            you create and own with this workspace. Set to True or False
+
+        Returns
+        -------
+        :class:`~labstep.autoshare.Autoshare`
+            An object representing the Autosharing policy.
+
+        Example
+        -------
+        ::
+
+            # Get an workspace
+            workspace = user.getWorkspaces(123)
+
+            workspace.setAutosharing(experiment_sharing='view')
+        """
+
+        if self.security_policy is None:
+            policy = newEntity(self.__user__, Autoshare, {
+                "user_group": self.logged_user_user_group['id']})
+        else:
+            policy = Autoshare(self.security_policy, self.__user__)
+
+        return policy.edit(experiment_sharing=experiment_sharing,
+                           protocol_sharing=protocol_sharing,
+                           resource_sharing=resource_sharing)

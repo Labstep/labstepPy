@@ -128,7 +128,8 @@ def newEntity(user, entityClass, fields):
     fields = dict(
         filter(lambda field: field[1] is not None, fields.items()))
 
-    if getattr(entityClass, '__hasParentGroup__', False):
+    if 'group_id' not in fields and getattr(entityClass,
+                                            '__hasParentGroup__', False):
         fields['group_id'] = user.activeWorkspace
 
     r = requests.post(url, headers=headers, json=fields)
