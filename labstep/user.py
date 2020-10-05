@@ -123,7 +123,11 @@ class User(Entity):
     """
 
     def __init__(self, user):
-        self.activeWorkspace = user['group']['id']
+        if user['group'] is None:
+            print('Warning: No default workspace. Please set a workspace to continue.')
+            self.activeWorkspace = None
+        else: 
+            self.activeWorkspace = user['group']['id']
         for key in user:
             setattr(self, key, user[key])
 
