@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from fixtures import user, protocol, tableData, testString, proseMirrorState
+from fixtures import user, protocol, tableData, testString, proseMirrorState, protocolCollection
 
 entity = protocol()
 
@@ -121,13 +121,14 @@ class TestProtocol:
         assert sharelink is not None
 
     def test_addToCollection(self):
-        result = entity.addToCollection()
-        assert result is not None
+        collection = protocolCollection()
+        entity.addToCollection(collection.id)
+        result = entity.getCollections()
+        assert result[0].id == collection.id
 
     def test_removeFromCollection(self):
-        result = entity.removeFromCollection()
-        assert result is not None
-
-    def test_getCollections(self):
+        collection = protocolCollection()
+        entity.addToCollection(collection.id)
+        entity.removeFromCollection()
         result = entity.getCollections()
-        assert result is not None
+        assert len(result) == 0
