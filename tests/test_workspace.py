@@ -80,3 +80,7 @@ class TestWorkspace:
     def test_getSharelink(self):
         sharelink = entity.getSharelink()
         assert sharelink is not None
+
+    def test_getCollections(self):
+        result = entity.getCollections()
+        assert len(result) >= 0

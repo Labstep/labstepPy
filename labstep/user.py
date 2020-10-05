@@ -19,6 +19,7 @@ from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
 from .resourceLocation import (getResourceLocation, getResourceLocations,
                                newResourceLocation)
+from .collection import newCollection
 
 
 def newUser(first_name, last_name, email, password,
@@ -332,6 +333,7 @@ class User(Entity):
     # getMany()
     def getExperiments(self, count=100, search_query=None,
                        created_at_from=None, created_at_to=None, tag_id=None,
+                       collection_id=None,
                        extraParams={}):
         """
         Retrieve a list of a User's Experiments
@@ -343,7 +345,7 @@ class User(Entity):
         count (int)
             The number of Experiments to retrieve.
         search_query (str)
-            Search for Experiments with this 'name'.
+            Search for Experiments containing this string in the name or entry.
         created_at_from (str)
             The start date of the search range, must be
             in the format of 'YYYY-MM-DD'.
@@ -352,6 +354,8 @@ class User(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get experiments in this collection.
 
         Returns
         -------
@@ -373,10 +377,12 @@ class User(Entity):
                               created_at_from=created_at_from,
                               created_at_to=created_at_to,
                               tag_id=tag_id,
+                              collection_id=collection_id,
                               extraParams=extraParams)
 
     def getProtocols(self, count=100, search_query=None,
                      created_at_from=None, created_at_to=None, tag_id=None,
+                     collection_id=None,
                      extraParams={}):
         """
         Retrieve a list of a User's Protocols
@@ -397,6 +403,8 @@ class User(Entity):
             in the format of 'YYYY-MM-DD'.
         tag_id (int)
             The id of a tag to filter by.
+        collection_id (int)
+            Get protocols in this collection.
 
         Returns
         -------
@@ -418,6 +426,7 @@ class User(Entity):
                             created_at_from=created_at_from,
                             created_at_to=created_at_to,
                             tag_id=tag_id,
+                            collection_id=collection_id,
                             extraParams=extraParams)
 
     def getResources(self, count=100, search_query=None, tag_id=None,
@@ -876,6 +885,17 @@ class User(Entity):
             entity = user.newFile('./structure_of_aspirin.png')
         """
         return newFile(self, filepath, extraParams=extraParams)
+
+    def newCollection(self, name, type='experiment'):
+        """
+        Create a new Collection for Experiments (or Protocols)
+
+        Parameters
+        ----------
+        type (str)
+            The filepath to the file to attach.
+        """
+        return newCollection(self, name=name, type=type)
 
     def acceptSharelink(self, token):
         """
