@@ -15,6 +15,7 @@ from .file import getFiles
 from .sharelink import Sharelink, newSharelink
 from .collection import getCollections, newCollection
 from .autoshare import Autoshare
+from .instrument import getInstruments
 
 
 class Member(Entity):
@@ -477,6 +478,34 @@ class Workspace(Entity):
         """
         extraParams = {'group_id': self.id, **extraParams}
         return getFiles(self.__user__, count, search_query, file_type, extraParams=extraParams)
+
+    def getInstruments(self, count=100, search_query=None,
+                       extraParams={}):
+        """
+        Retrieve a list of Instruments within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Instruments to retrieve.
+        search_query (str)
+            Search for Instruments by name of metadata fields.
+
+        Returns
+        -------
+        List[:class:`~labstep.instrument.Instrument`]
+            A list of Labstep Instruments.
+
+        Example
+        -------
+        ::
+
+            instruments = workspace.getInstruments(search_query='microscope')
+        """
+        extraParams = {'group_id': self.id, **extraParams}
+        return getInstruments(self.__user__, count, search_query,
+                              extraParams=extraParams)
 
     def sendInvites(self, emails, message):
         """

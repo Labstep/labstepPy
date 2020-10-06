@@ -20,6 +20,7 @@ from .resourceCategory import (getResourceCategory, getResourceCategorys,
 from .resourceLocation import (getResourceLocation, getResourceLocations,
                                newResourceLocation)
 from .collection import newCollection
+from .instrument import getInstrument, getInstruments, newInstrument
 
 
 def newUser(first_name, last_name, email, password,
@@ -334,6 +335,28 @@ class User(Entity):
             entity = user.getFile(17000)
         """
         return getFile(self, file_id)
+
+    def getInstrument(self, instrument_id):
+        """
+        Retrieve a specific Labstep Instrument.
+
+        Parameters
+        ----------
+        instrument_id (int)
+            The id of the Instrument to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.instrument.Instrument`
+            An object representing a Instrument on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getInstrument(17000)
+        """
+        return getInstrument(self, instrument_id)
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
@@ -669,6 +692,35 @@ class User(Entity):
                         file_type=file_type,
                         extraParams=extraParams)
 
+    def getInstruments(self, count=100, search_query=None,
+                       extraParams={}):
+        """
+        Retrieve a list of a User's Instruments
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Instruments to retrieve.
+        search_query (str)
+            Search for Instruments by name / metadata fields.
+
+        Returns
+        -------
+        List[:class:`~labstep.instrument.Instrument`]
+            A list of Labstep Instruments.
+
+        Example
+        -------
+        ::
+
+            entity = user.getInstruments(search_query='microscope')
+        """
+        return getInstruments(self,
+                              count=count,
+                              search_query=search_query,
+                              extraParams=extraParams)
     # newEntity()
 
     def newExperiment(self, name, entry=None, extraParams={}):
@@ -901,6 +953,28 @@ class User(Entity):
             The filepath to the file to attach.
         """
         return newCollection(self, name=name, type=type)
+
+    def newInstrument(self, name, extraParams={}):
+        """
+        Create a new Labstep Instrument.
+
+        Parameters
+        ----------
+        name (str)
+            Give your Instrument a name.
+
+        Returns
+        -------
+        :class:`~labstep.instrument.Instrument`
+            An object representing a Instrument on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.newInstrument(name='Microscope A')
+        """
+        return newInstrument(self, name, extraParams=extraParams)
 
     def acceptSharelink(self, token):
         """
