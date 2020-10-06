@@ -46,8 +46,8 @@ proseMirrorState = {
 
 def proseMirrorStateWithSteps(steps):
     return {
-            "type": "doc",
-            "content": [
+        "type": "doc",
+        "content": [
                 {
                     "type": "protocol_step",
                     "attrs": {"id": steps[0].id},
@@ -56,15 +56,15 @@ def proseMirrorStateWithSteps(steps):
                             "attrs": {"align": None}
                     }]
                 },
-                {
+            {
                     "type": "protocol_step",
                     "attrs": {"id": steps[1].id},
                     "content": [{
                         "type": "paragraph",
                         "attrs": {"align": None}}
                     ]}
-            ]
-        }
+        ]
+    }
 
 
 testString = labstep.helpers.getTime()
@@ -148,3 +148,7 @@ def protocolCollection():
 
 def experimentCollection():
     return user.newCollection(newString())
+
+
+def instrument():
+    return user.newInstrument(newString())
