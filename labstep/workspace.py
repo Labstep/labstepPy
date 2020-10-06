@@ -31,6 +31,9 @@ class Member(Entity):
     """
     __entityName__ = 'user-group'
 
+    def edit(self, type=None):
+        return editEntity(self, {'type': type})
+
 
 def getWorkspace(user, workspace_id):
     """
