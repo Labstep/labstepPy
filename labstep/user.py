@@ -20,7 +20,7 @@ from .resourceCategory import (getResourceCategory, getResourceCategorys,
 from .resourceLocation import (getResourceLocation, getResourceLocations,
                                newResourceLocation)
 from .collection import newCollection
-from .instrument import getInstrument, getInstruments, newInstrument
+from .device import getDevice, getDevices, newDevice
 
 
 def newUser(first_name, last_name, email, password,
@@ -336,27 +336,27 @@ class User(Entity):
         """
         return getFile(self, file_id)
 
-    def getInstrument(self, instrument_id):
+    def getDevice(self, device_id):
         """
-        Retrieve a specific Labstep Instrument.
+        Retrieve a specific Labstep Device.
 
         Parameters
         ----------
-        instrument_id (int)
-            The id of the Instrument to retrieve.
+        device_id (int)
+            The id of the Device to retrieve.
 
         Returns
         -------
-        :class:`~labstep.instrument.Instrument`
-            An object representing a Instrument on Labstep.
+        :class:`~labstep.device.Device`
+            An object representing a Device on Labstep.
 
         Example
         -------
         ::
 
-            entity = user.getInstrument(17000)
+            entity = user.getDevice(17000)
         """
-        return getInstrument(self, instrument_id)
+        return getDevice(self, device_id)
 
     # getMany()
     def getExperiments(self, count=100, search_query=None,
@@ -692,32 +692,32 @@ class User(Entity):
                         file_type=file_type,
                         extraParams=extraParams)
 
-    def getInstruments(self, count=100, search_query=None,
+    def getDevices(self, count=100, search_query=None,
                        extraParams={}):
         """
-        Retrieve a list of a User's Instruments
+        Retrieve a list of a User's Devices
         across all Workspaces on Labstep,
         which can be filtered using the parameters:
 
         Parameters
         ----------
         count (int)
-            The number of Instruments to retrieve.
+            The number of Devices to retrieve.
         search_query (str)
-            Search for Instruments by name / metadata fields.
+            Search for Devices by name / metadata fields.
 
         Returns
         -------
-        List[:class:`~labstep.instrument.Instrument`]
-            A list of Labstep Instruments.
+        List[:class:`~labstep.device.Device`]
+            A list of Labstep Devices.
 
         Example
         -------
         ::
 
-            entity = user.getInstruments(search_query='microscope')
+            entity = user.getDevices(search_query='microscope')
         """
-        return getInstruments(self,
+        return getDevices(self,
                               count=count,
                               search_query=search_query,
                               extraParams=extraParams)
@@ -954,27 +954,27 @@ class User(Entity):
         """
         return newCollection(self, name=name, type=type)
 
-    def newInstrument(self, name, extraParams={}):
+    def newDevice(self, name, extraParams={}):
         """
-        Create a new Labstep Instrument.
+        Create a new Labstep Device.
 
         Parameters
         ----------
         name (str)
-            Give your Instrument a name.
+            Give your Device a name.
 
         Returns
         -------
-        :class:`~labstep.instrument.Instrument`
-            An object representing a Instrument on Labstep.
+        :class:`~labstep.device.Device`
+            An object representing a Device on Labstep.
 
         Example
         -------
         ::
 
-            entity = user.newInstrument(name='Microscope A')
+            entity = user.newDevice(name='Microscope A')
         """
-        return newInstrument(self, name, extraParams=extraParams)
+        return newDevice(self, name, extraParams=extraParams)
 
     def acceptSharelink(self, token):
         """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .primaryEntity import PrimaryEntity
+from .primaryEntity import ShareableEntity
 from .entity import Entity, getEntity, getEntities, newEntity, editEntity
 from .helpers import getTime
 from .metadata import addMetadataTo, getMetadata
@@ -31,30 +31,30 @@ ALLOWED_FIELDS = {
 }
 
 
-def getInstrument(user, instrument_id):
+def getDevice(user, device_id):
     """
-    Retrieve a specific Labstep Instrument.
+    Retrieve a specific Labstep Device.
 
     Parameters
     ----------
     user (obj)
         The Labstep user. Must have property
         'api_key'. See 'login'.
-    instrument_id (int)
-        The id of the Instrument to retrieve.
+    device_id (int)
+        The id of the Device to retrieve.
 
     Returns
     -------
-    instrument
-        An object representing a Labstep Instrument.
+    device
+        An object representing a Labstep Device.
     """
-    return getEntity(user, Instrument, id=instrument_id)
+    return getEntity(user, Device, id=device_id)
 
 
-def getInstruments(user, count=100, search_query=None,
-                   extraParams={}):
+def getDevices(user, count=100, search_query=None,
+               extraParams={}):
     """
-    Retrieve a list of a user's Instruments on Labstep,
+    Retrieve a list of a user's Devices on Labstep,
     which can be filtered using the parameters:
 
     Parameters
@@ -63,120 +63,120 @@ def getInstruments(user, count=100, search_query=None,
         The Labstep user. Must have property
         'api_key'. See 'login'.
     count (int)
-        The number of Instruments to retrieve.
+        The number of Devices to retrieve.
     search_query (str)
-        Search for Instruments with this 'name'.
+        Search for Devices with this 'name'.
     extraParams (dict)
         Dictionary of extra filter parameters.
 
     Returns
     -------
-    instruments
-        A list of Instrument objects.
+    devices
+        A list of Device objects.
     """
     params = {'search_query': search_query,
               **extraParams}
-    return getEntities(user, Instrument, count, params)
+    return getEntities(user, Device, count, params)
 
 
-def newInstrument(user, name, extraParams={}):
+def newDevice(user, name, extraParams={}):
     """
-    Create a new Labstep Instrument.
+    Create a new Labstep Device.
 
     Parameters
     ----------
     user (obj)
-        The Labstep user creating the Instrument.
+        The Labstep user creating the Device.
         Must have property 'api_key'. See 'login'.
     name (str)
-        Give your Instrument a name.
+        Give your Device a name.
 
     Returns
     -------
-    instrument
-        An object representing the new Labstep Instrument.
+    device
+        An object representing the new Labstep Device.
     """
     params = {'name': name, **extraParams}
-    return newEntity(user, Instrument, params)
+    return newEntity(user, Device, params)
 
 
-def editInstrument(instrument, name=None, deleted_at=None,
-                   extraParams={}):
+def editDevice(device, name=None, deleted_at=None,
+               extraParams={}):
     """
-    Edit an existing Instrument.
+    Edit an existing Device.
 
     Parameters
     ----------
-    instrument (obj)
-        The Instrument to edit.
+    device (obj)
+        The Device to edit.
     name (str)
         The new name of the Experiment.
     deleted_at (str)
-        The timestamp at which the Instrument is deleted/archived.
-    instrument_category_id (obj)
-        The id of the InstrumentCategory to add to a Instrument.
+        The timestamp at which the Device is deleted/archived.
+    device_category_id (obj)
+        The id of the DeviceCategory to add to a Device.
 
     Returns
     -------
-    instrument
-        An object representing the edited Instrument.
+    device
+        An object representing the edited Device.
     """
     params = {'name': name,
               'deleted_at': deleted_at,
               **extraParams}
-    return editEntity(instrument, params)
+    return editEntity(device, params)
 
 
-class Instrument(PrimaryEntity):
+class Device(ShareableEntity):
     """
-    Represents a Instrument on Labstep.
+    Represents a Device on Labstep.
 
-    To see all attributes of the instrument run
+    To see all attributes of the device run
     ::
-        print(my_instrument)
+        print(my_device)
 
     Specific attributes can be accessed via dot notation like so...
     ::
-        print(my_instrument.name)
-        print(my_instrument.id)
+        print(my_device.name)
+        print(my_device.id)
     """
-    __entityName__ = 'instrument'
+    __entityName__ = 'device'
 
     def edit(self, name=None, extraParams={}):
         """
-        Edit an existing Instrument.
+        Edit an existing Device.
 
         Parameters
         ----------
         name (str)
-            The new name of the Instrument.
+            The new name of the Device.
 
         Returns
         -------
-        :class:`~labstep.instrument.Instrument`
-            An object representing the edited Instrument.
+        :class:`~labstep.device.Device`
+            An object representing the edited Device.
 
         Example
         -------
         ::
 
-            my_instrument = user.getInstrument(17000)
-            my_instrument.edit(name='A New Instrument Name')
+            my_device = user.getDevice(17000)
+            my_device.edit(name='A New Device Name')
         """
-        return editInstrument(self, name, extraParams=extraParams)
+        return editDevice(self, name, extraParams=extraParams)
 
     def delete(self):
         """
-        Delete an existing Instrument.
+        Delete an existing Device.
 
         Example
         -------
         ::
 
-            my_instrument = user.getInstrument(17000)
-            my_instrument.delete()
+            my_device = user.getDevice(17000)
+            my_device.delete()
         """
-        return editInstrument(self, deleted_at=getTime())
+        return editDevice(self, deleted_at=getTime())
 
     def addMetadata(self, fieldName, fieldType="default",
                     value=None, date=None,
@@ -184,7 +184,7 @@ class Instrument(PrimaryEntity):
                     filepath=None,
                     extraParams={}):
         """
-        Add Metadata to a Instrument.
+        Add Metadata to a Device.
 
         Parameters
         ----------
@@ -214,8 +214,8 @@ class Instrument(PrimaryEntity):
         -------
         ::
 
-            instrument = user.getInstrument(17000)
-            metadata = instrument.addMetadata("Refractive Index",
+            device = user.getDevice(17000)
+            metadata = device.addMetadata("Refractive Index",
                                                value="1.73")
         """
         return addMetadataTo(self,
@@ -228,19 +228,19 @@ class Instrument(PrimaryEntity):
 
     def getMetadata(self):
         """
-        Retrieve the Metadata of a Labstep Instrument.
+        Retrieve the Metadata of a Labstep Device.
 
         Returns
         -------
         :class:`~labstep.metadata.Metadata`
-            An array of Metadata objects for the Instrument.
+            An array of Metadata objects for the Device.
 
         Example
         -------
         ::
 
-            my_instrument = user.getInstrument(17000)
-            metadatas = my_instrument.getMetadata()
+            my_device = user.getDevice(17000)
+            metadatas = my_device.getMetadata()
             metadatas[0].attributes()
         """
         return getMetadata(self)
@@ -248,7 +248,7 @@ class Instrument(PrimaryEntity):
     def getData(self, count=100, search_query=None,
                 extraParams={}):
         """
-        Retrieve a list of the data sent by an instrument.
+        Retrieve a list of the data sent by an device.
 
         Parameters
         ----------
@@ -261,21 +261,21 @@ class Instrument(PrimaryEntity):
 
         Returns
         -------
-        InstrumentData
-            A list of InstrumentData objects.
+        DeviceData
+            A list of DeviceData objects.
         """
         params = {'search_query': search_query,
-                  'instrument_id': self.id,
+                  'device_id': self.id,
                   **extraParams}
-        return getEntities(self.__user__, InstrumentData, count, params)
+        return getEntities(self.__user__, DeviceData, count, params)
 
-    def newData(self, fieldName, fieldType="text",
+    def addData(self, fieldName, fieldType="text",
                 text=None,
                 number=None, unit=None,
                 filepath=None,
                 extraParams={}):
         """
-        Send new data from the Instrument.
+        Send new data from the Device.
 
         Parameters
         ----------
@@ -295,15 +295,15 @@ class Instrument(PrimaryEntity):
 
         Returns
         -------
-        :class:`~labstep.instrument.InstrumentData`
-            An object representing the new Instrument Data.
+        :class:`~labstep.device.DeviceData`
+            An object representing the new Device Data.
 
         Example
         -------
         ::
 
-            instrument = user.getInstrument(17000)
-            data = instrument.newData("Temperature","numeric",
+            device = user.getDevice(17000)
+            data = device.addData("Temperature","numeric",
                                                number=173, unit='K')
         """
         if fieldType not in FIELDS:
@@ -330,7 +330,7 @@ class Instrument(PrimaryEntity):
                 ",".join(violations), fieldType)
             raise ValueError(msg)
 
-        params = {'instrument_id': self.id,
+        params = {'device_id': self.id,
                   'type': fieldType,
                   'name': fieldName,
                   'value': text,
@@ -339,8 +339,20 @@ class Instrument(PrimaryEntity):
                   'file_id': file_id,
                   **extraParams}
 
-        return newEntity(self.__user__, InstrumentData, params)
+        return newEntity(self.__user__, DeviceData, params)
 
 
-class InstrumentData(Entity):
-    __entityName__ = 'instrument-data'
+class DeviceData(Entity):
+    __entityName__ = 'device-data'
+
+    def delete(self):
+        """
+        Delete a DeviceData.
+
+        Example
+        -------
+        ::
+
+            deviceData.delete()
+        """
+        return editEntity(self, fields={'deleted_at': getTime()})

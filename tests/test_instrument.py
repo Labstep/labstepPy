@@ -18,9 +18,9 @@ class TestInstrument:
         assert result.deleted_at is not None, \
             'FAILED TO DELETE INSTRUMENT'
 
-    def test_newData(self):
+    def test_addData(self):
         entity = instrument()
-        data = entity.newData('Test', 'numeric', 13, 'oC')
+        data = entity.addData('Test', 'numeric', 13, 'oC')
         assert data.name == 'Test' \
             and data.type == 'numeric' \
             and data.number == 13, \
@@ -28,6 +28,6 @@ class TestInstrument:
 
     def test_getData(self):
         entity = instrument()
-        first_data = entity.newData('Test', text='Words')
+        first_data = entity.addData('Test', text='Words')
         data = entity.getData(search_query='Test')
         assert data[0].id - first_data.id
