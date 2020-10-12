@@ -5,7 +5,7 @@ from .permissions import getPermissions, newPermission, transferOwnership
 from .sharelink import getSharelink
 
 
-class PrimaryEntity(Entity):
+class ShareableEntity(Entity):
     __hasParentGroup__ = True
 
     def addComment(self, body, filepath=None, extraParams={}):
@@ -56,50 +56,6 @@ class PrimaryEntity(Entity):
         """
         return getComments(self, count)
 
-    def addTag(self, name):
-        """
-        Add a tag to the Entity (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
-
-        Returns
-        -------
-        :class:`~labstep.experiment.Experiment`
-            The Experiment that was tagged.
-
-        Example
-        -------
-        ::
-
-            my_experiment = user.getExperiment(17000)
-            my_experiment.addTag(name='My Tag')
-        """
-        tag(self, name)
-        return self
-
-    def getTags(self):
-        """
-        Retrieve the Tags attached to a this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.tag.Tag`]
-            List of the tags attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getExperiment(17000)
-            tags = entity.getTags()
-            tags[0].attributes()
-        """
-        return getAttachedTags(self)
-
     def getPermissions(self):
         """
         Returns the sharing permissions for the Entity.
@@ -149,3 +105,50 @@ class PrimaryEntity(Entity):
             The id of the workspace to transfer ownership to
         """
         return transferOwnership(self, workspace_id)
+
+
+class PrimaryEntity(ShareableEntity):
+
+    def addTag(self, name):
+        """
+        Add a tag to the Entity (creates a
+        new tag if none exists).
+
+        Parameters
+        ----------
+        name (str)
+            The name of the tag to create.
+
+        Returns
+        -------
+        :class:`~labstep.experiment.Experiment`
+            The Experiment that was tagged.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            my_experiment.addTag(name='My Tag')
+        """
+        tag(self, name)
+        return self
+
+    def getTags(self):
+        """
+        Retrieve the Tags attached to a this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.tag.Tag`]
+            List of the tags attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperiment(17000)
+            tags = entity.getTags()
+            tags[0].attributes()
+        """
+        return getAttachedTags(self)

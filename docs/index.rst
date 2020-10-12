@@ -80,11 +80,13 @@ own specific purposes.
    source/tag.rst
    source/file.rst
    source/sharelink.rst
+   source/device.rst
 
 .. toctree::
    :caption: Examples
    :maxdepth: 2
 
+   source/device_integration.rst
    source/example_uses.rst
 
 Troubleshooting
