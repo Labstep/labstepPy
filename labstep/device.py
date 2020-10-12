@@ -11,11 +11,11 @@ TYPE_DEFAULT = 'default'
 TYPE_NUMERIC = 'numeric'
 TYPE_FILE = 'file'
 
-FIELDS = [
-    TYPE_DEFAULT,
-    TYPE_NUMERIC,
-    TYPE_FILE,
-]
+FIELD_TYPES = {
+    'text': TYPE_DEFAULT,
+    'numeric': TYPE_NUMERIC,
+    'file': TYPE_FILE,
+}
 
 ALLOWED_FIELDS = {
     TYPE_DEFAULT: [
@@ -306,7 +306,8 @@ class Device(ShareableEntity):
             data = device.addData("Temperature","numeric",
                                                number=173, unit='K')
         """
-        if fieldType not in FIELDS:
+
+        if fieldType not in FIELD_TYPES:
             msg = "Not a supported data type '{}'".format(fieldType)
             raise ValueError(msg)
 
@@ -315,7 +316,7 @@ class Device(ShareableEntity):
         else:
             file_id = None
 
-        allowedFieldsForType = set(ALLOWED_FIELDS[fieldType])
+        allowedFieldsForType = set(ALLOWED_FIELDS[FIELD_TYPES[fieldType]])
         fields = {
             'value': text,
             'number': number,
@@ -331,7 +332,7 @@ class Device(ShareableEntity):
             raise ValueError(msg)
 
         params = {'device_id': self.id,
-                  'type': fieldType,
+                  'type': FIELD_TYPES[fieldType],
                   'name': fieldName,
                   'value': text,
                   'number': number,

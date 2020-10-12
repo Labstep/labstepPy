@@ -150,5 +150,5 @@ def experimentCollection():
     return user.newCollection(newString())
 
 
-def instrument():
-    return user.newInstrument(newString())
+def device():
+    return user.newDevice(newString())
