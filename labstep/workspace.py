@@ -480,7 +480,7 @@ class Workspace(Entity):
         return getFiles(self.__user__, count, search_query, file_type, extraParams=extraParams)
 
     def getDevices(self, count=100, search_query=None,
-                       extraParams={}):
+                   extraParams={}):
         """
         Retrieve a list of Devices within this specific Workspace,
         which can be filtered using the parameters:
@@ -505,7 +505,7 @@ class Workspace(Entity):
         """
         extraParams = {'group_id': self.id, **extraParams}
         return getDevices(self.__user__, count, search_query,
-                              extraParams=extraParams)
+                          extraParams=extraParams)
 
     def sendInvites(self, emails, message):
         """

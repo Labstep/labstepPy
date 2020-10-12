@@ -693,7 +693,7 @@ class User(Entity):
                         extraParams=extraParams)
 
     def getDevices(self, count=100, search_query=None,
-                       extraParams={}):
+                   extraParams={}):
         """
         Retrieve a list of a User's Devices
         across all Workspaces on Labstep,
@@ -718,9 +718,9 @@ class User(Entity):
             entity = user.getDevices(search_query='microscope')
         """
         return getDevices(self,
-                              count=count,
-                              search_query=search_query,
-                              extraParams=extraParams)
+                          count=count,
+                          search_query=search_query,
+                          extraParams=extraParams)
     # newEntity()
 
     def newExperiment(self, name, entry=None, extraParams={}):
