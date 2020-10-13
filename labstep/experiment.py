@@ -95,9 +95,14 @@ def newExperiment(user, name, entry=None, extraParams={}):
         An object representing the new Labstep Experiment.
     """
     params = {'name': name,
-              'state': entry,
               **extraParams}
-    return newEntity(user, Experiment, params)
+
+    experiment = newEntity(user, Experiment, params)
+
+    if entry is not None:
+        experiment = experiment.edit(entry=entry)
+
+    return experiment
 
 
 def editExperiment(experiment, name=None, entry=None, started_at=None,
