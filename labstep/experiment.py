@@ -454,7 +454,7 @@ class ExperimentProtocol(Entity):
             The name of the field.
         fieldType (str)
             The field type. Options are: "default", "date",
-            "quantity", or "number". The "default" type is "Text".
+            "numeric", or "file". The "default" type is "Text".
         value (str)
             The value accompanying the fieldName entry.
         date (str)
