@@ -19,6 +19,7 @@ from .resourceCategory import (getResourceCategory, getResourceCategorys,
                                newResourceCategory)
 from .resourceLocation import (getResourceLocation, getResourceLocations,
                                newResourceLocation)
+from .resourceItem import (getResourceItem)
 from .collection import newCollection
 from .device import getDevice, getDevices, newDevice
 
@@ -225,6 +226,28 @@ class User(Entity):
             entity = user.getResource(17000)
         """
         return getResource(self, resource_id)
+
+    def getResourceItem(self, resource_item_id):
+        """
+        Retrieve a specific Labstep ResourceItem.
+
+        Parameters
+        ----------
+        resourceitem_id (int)
+            The id of the ResourceItem to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.resourceItem.ResourceItem`
+            An object representing a ResourceItem on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getResourceItem(17000)
+        """
+        return getResourceItem(self, resource_item_id)
 
     def getResourceCategory(self, resource_category_id):
         """
