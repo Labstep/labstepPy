@@ -10,6 +10,7 @@ from .helpers import (getTime, createdAtFrom, createdAtTo,
 from .metadata import addMetadataTo, getMetadata
 from .collection import (addToCollection, getAttachedCollections,
                          removeFromCollection)
+from .file import File, newFile
 
 
 def getExperiment(user, experiment_id):
@@ -488,6 +489,52 @@ class ExperimentProtocol(Entity):
                              number=number, unit=unit,
                              filepath=filepath,
                              extraParams=extraParams)
+
+    def addFile(self, filepath):
+        """
+        Add a file to an Experiment Protocol.
+
+        Parameters
+        ----------
+        filepath (str)
+            The path to the file to upload.
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_protocol = experiment.getProtocols()[0]
+            file = experiment_protocol.addFile(filepath='./my_file.csv')
+        """
+        params = {'experiment_id': self.id}
+        return newFile(self.__user__, filepath, extraParams=params)
+
+    def getFiles(self):
+        """
+        Returns a list of the files in a Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            List of the files in a Protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_protocol = experiment.getProtocols()[0]
+            filess = experiment_protocol.getFiles()
+        """
+        self.update()
+        files = self.files
+        return listToClass(files, File, self.__user__)
 
 
 class ExperimentMaterial(Entity):
@@ -1123,3 +1170,46 @@ class Experiment(PrimaryEntity):
                   'name': name,
                   'data': data}
         return newEntity(self.__user__, ExperimentTable, params)
+
+    def addFile(self, filepath):
+        """
+        Add a file to an experiment entry.
+        (Only use for files to be embedded in the body of the entry)
+
+        Parameters
+        ----------
+        filepath (str)
+            The path to the file to upload.
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.addFile(filepath='./my_file.csv')
+        """
+        return self.root_experiment.addFile(filepath)
+
+    def getFiles(self):
+        """
+        Returns a list of the files in a experiment entry.
+        (Only includes the files embedded in the body of the entry)
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            List of the files in a experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getexperiment(17000)
+            experiment_files = experiment.getFiles()
+        """
+        return self.root_experiment.getFiles()

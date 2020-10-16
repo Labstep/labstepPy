@@ -107,3 +107,9 @@ class TestExperiment:
         entity.removeFromCollection(collection.id)
         result = entity.getCollections()
         assert len(result) == 0
+
+    def test_addFile(self):
+        entity = experiment()
+        file = entity.addFile('./tests/test_protocol.py')
+        files = entity.getFiles()
+        assert files[0].id == file.id

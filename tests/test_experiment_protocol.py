@@ -57,3 +57,9 @@ class TestExperimentProtocol:
         result = steps[0].complete()
         assert result.ended_at is not None, \
             'FAILED TO COMPLETE STEP'
+
+    def test_addFile(self):
+        entity = experimentProtocol()
+        file = entity.addFile('./tests/test_protocol.py')
+        files = entity.getFiles()
+        assert files[0].id == file.id

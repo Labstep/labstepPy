@@ -5,6 +5,7 @@ from .metadata import Metadata
 from .helpers import (listToClass, getTime, handleDate,
                       createdAtFrom, createdAtTo)
 from .primaryEntity import PrimaryEntity
+from .file import File, newFile
 from .entity import (Entity, getEntity, getEntities,
                      newEntity, newEntities, editEntity)
 from .collection import (addToCollection, getAttachedCollections,
@@ -695,6 +696,53 @@ class Protocol(PrimaryEntity):
 
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
+
+    def addFile(self, filepath):
+        """
+        Add a file to a Protocol.
+
+        Parameters
+        ----------
+        filepath (str)
+            The path to the file to upload.
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol.addFile(filepath='./my_file.csv')
+        """
+        params = {'protocol_id': self.last_version['id']}
+        return newFile(self.__user__, filepath, extraParams=params)
+
+    def getFiles(self):
+        """
+        Returns a list of the files in a Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            List of the files in a Protocol.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol_files = protocol.getFiles()
+        """
+        self.update()
+        if 'files' not in self.last_version:
+            return []
+
+        files = self.last_version['files']
+        return listToClass(files, File, self.__user__)
 
     def addToCollection(self, collection_id):
         """
