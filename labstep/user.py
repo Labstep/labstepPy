@@ -949,7 +949,7 @@ class User(Entity):
         """
         return newWorkspace(self, name, extraParams=extraParams)
 
-    def newFile(self, filepath, extraParams={}):
+    def newFile(self, filepath=None, rawData=None, extraParams={}):
         """
         Upload a file to the Labstep entity Data.
 
@@ -964,7 +964,9 @@ class User(Entity):
 
             entity = user.newFile('./structure_of_aspirin.png')
         """
-        return newFile(self, filepath, extraParams=extraParams)
+        return newFile(self, filepath=filepath,
+                       rawData=rawData,
+                       extraParams=extraParams)
 
     def newCollection(self, name, type='experiment'):
         """

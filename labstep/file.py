@@ -9,7 +9,7 @@ from .helpers import url_join, handleError, getHeaders
 from .entity import Entity, getEntity, getEntities
 
 
-def newFile(user, filepath, extraParams={}):
+def newFile(user, filepath=None, rawData=None, extraParams={}):
     """
     Upload a file to the Labstep entity Data.
 
@@ -20,13 +20,20 @@ def newFile(user, filepath, extraParams={}):
         Must have property 'api_key'. See 'login'.
     filepath (str)
         The filepath to the file to attach.
+    rawData (bytes)
+        Raw data to upload as a file.
 
     Returns
     -------
     file
         An object representing the uploaded file to Labstep.
     """
-    files = {'file': open(filepath, 'rb')}
+    if filepath is not None:
+        rawData = open(filepath, 'rb')
+    if rawData is None:
+        raise Exception('Please specify filepath or raw data')
+
+    files = {'file': rawData}
     params = {'group_id': user.activeWorkspace, **extraParams}
     headers = getHeaders(user)
     url = url_join(API_ROOT, "/api/generic/file/upload")

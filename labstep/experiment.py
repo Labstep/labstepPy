@@ -490,7 +490,7 @@ class ExperimentProtocol(Entity):
                              filepath=filepath,
                              extraParams=extraParams)
 
-    def addFile(self, filepath):
+    def addFile(self, filepath=None, rawData=None):
         """
         Add a file to an Experiment Protocol.
 
@@ -498,6 +498,8 @@ class ExperimentProtocol(Entity):
         ----------
         filepath (str)
             The path to the file to upload.
+        rawData (bytes)
+            Raw data to upload as a file.
 
         Returns
         -------
@@ -513,7 +515,7 @@ class ExperimentProtocol(Entity):
             file = experiment_protocol.addFile(filepath='./my_file.csv')
         """
         params = {'experiment_id': self.id}
-        return newFile(self.__user__, filepath, extraParams=params)
+        return newFile(self.__user__, filepath=filepath, rawData=rawData, extraParams=params)
 
     def getFiles(self):
         """
@@ -1171,7 +1173,7 @@ class Experiment(PrimaryEntity):
                   'data': data}
         return newEntity(self.__user__, ExperimentTable, params)
 
-    def addFile(self, filepath):
+    def addFile(self, filepath=None, rawData=None):
         """
         Add a file to an experiment entry.
         (Only use for files to be embedded in the body of the entry)
@@ -1180,6 +1182,8 @@ class Experiment(PrimaryEntity):
         ----------
         filepath (str)
             The path to the file to upload.
+        rawData (bytes)
+            Raw bytes data to upload as file
 
         Returns
         -------
@@ -1193,7 +1197,7 @@ class Experiment(PrimaryEntity):
             experiment = user.getExperiment(17000)
             experiment.addFile(filepath='./my_file.csv')
         """
-        return self.root_experiment.addFile(filepath)
+        return self.root_experiment.addFile(filepath, rawData)
 
     def getFiles(self):
         """

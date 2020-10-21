@@ -697,7 +697,7 @@ class Protocol(PrimaryEntity):
         tables = self.last_version['protocol_tables']
         return listToClass(tables, ProtocolTable, self.__user__)
 
-    def addFile(self, filepath):
+    def addFile(self, filepath=None, rawData=None):
         """
         Add a file to a Protocol.
 
@@ -719,7 +719,10 @@ class Protocol(PrimaryEntity):
             protocol.addFile(filepath='./my_file.csv')
         """
         params = {'protocol_id': self.last_version['id']}
-        return newFile(self.__user__, filepath, extraParams=params)
+        return newFile(self.__user__,
+                       filepath=filepath,
+                       rawData=rawData,
+                       extraParams=params)
 
     def getFiles(self):
         """
