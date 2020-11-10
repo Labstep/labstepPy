@@ -32,7 +32,7 @@ def onDataDetected(event):
 # This will detect files that end in .csv
 my_event_handler = RegexMatchingEventHandler([r".*\.csv$"])
 # Set the handler for when files are created
-my_event_handler.on_created(onDataDetected)
+my_event_handler.on_created = onDataDetected
 # Set up the watchdog observer to watch a specific folder
 my_observer = Observer()
 path = '/path/to/device/output/folder'
