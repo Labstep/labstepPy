@@ -47,7 +47,7 @@ def addComment(entity, body, file_id=None, extraParams={}):
     """
     threadId = entity.thread['id']
 
-    params = {'body': body,
+    params = {'body': str(body) if body else None,
               'parent_thread_id': threadId,
               'file_id': [[file_id]] if file_id is not None else None,
               **extraParams}
@@ -92,7 +92,7 @@ def editComment(comment, body, extraParams={}):
     comment
         An object representing the edited comment.
     """
-    params = {'body': body, **extraParams}
+    params = {'body': str(body) if body else None, **extraParams}
     return editEntity(comment, params)
 
 
