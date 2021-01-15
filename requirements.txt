@@ -1,6 +1,6 @@
 pandas
 python-dotenv
-requests>=2.25
+requests
 pytest
 coverage
 Pylama
