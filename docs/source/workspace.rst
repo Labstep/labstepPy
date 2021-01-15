@@ -1,7 +1,7 @@
 Workspace
 ----------------------------------------------
 
-.. autoclass:: labstep.workspace.Workspace
+.. autoclass:: labstep.entities.workspace.model.Workspace
    :members:
    :undoc-members:
 
@@ -9,6 +9,6 @@ Workspace
 Member
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.workspace.Member
+.. autoclass:: labstep.entities.member.model.Member
    :members:
    :undoc-members:

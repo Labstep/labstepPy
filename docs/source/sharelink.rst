@@ -1,6 +1,6 @@
 Sharelink
 ----------------------------------------------
 
-.. autoclass:: labstep.sharelink.Sharelink
+.. autoclass:: labstep.entities.sharelink.model.Sharelink
    :members:
    :undoc-members:

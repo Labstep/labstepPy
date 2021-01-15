@@ -1,7 +1,7 @@
 Order Request
 ----------------------------------------------
 
-.. autoclass:: labstep.orderRequest.OrderRequest
+.. autoclass:: labstep.entities.orderRequest.model.OrderRequest
    :members:
    :undoc-members:
    :inherited-members:

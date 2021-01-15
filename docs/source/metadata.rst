@@ -1,6 +1,6 @@
 Metadata
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.metadata.Metadata
+.. autoclass:: labstep.entities.metadata.model.Metadata
    :members:
    :undoc-members:

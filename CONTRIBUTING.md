@@ -23,7 +23,7 @@ cd docs
 
 # Building the Package 
 
-```python setup.py sdist```
+```python3 setup.py sdist```
 
 
 # Publishing
@@ -32,11 +32,11 @@ Before publishing you may have to increment the verison number in `setup.py`.
 
 First publish to Test PyPi by running:
 
-```twine upload --repository-url https://test.pypi.org/legacy/ dist/*```
+```twine upload --repository-url https://test.pypi.org/legacy/ dist/* --skip-existing```
 
 When you are ready to publish to PyPi...
 
-```twine upload dist/*```
+```twine upload dist/* --skip-existing```
 
 # Reviewing the Release
 
@@ -44,4 +44,4 @@ Check out the updated docs at https://labsteppy.readthedocs.io/en/develop
 
 In a fresh python environment run
 
-```pip install -i https://test.pypi.org/simple/ labstep```
+```pip install --upgrade --force-reinstall -i https://test.pypi.org/simple/ labstep```

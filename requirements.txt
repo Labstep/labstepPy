@@ -1,7 +1,12 @@
-pytest
-Pylama
-sphinxcontrib-programoutput
-labstep
 pandas
 python-dotenv
-requests
+requests>=2.25
+pytest
+coverage
+Pylama
+Sphinx
+sphinx_rtd_theme
+sphinxcontrib-programoutput
+pycodestyle
+pylint
+beautifulsoup4

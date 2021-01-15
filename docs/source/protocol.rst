@@ -1,7 +1,7 @@
 Protocol
 ----------------------------------------------
 
-.. autoclass:: labstep.protocol.Protocol
+.. autoclass:: labstep.entities.protocol.model.Protocol
    :members:
    :inherited-members:
    :undoc-members:
@@ -9,27 +9,27 @@ Protocol
 Protocol Material
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.protocol.ProtocolMaterial
+.. autoclass:: labstep.entities.protocolMaterial.model.ProtocolMaterial
    :members:
    :undoc-members:
 
 Protocol Step
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.protocol.ProtocolStep
+.. autoclass:: labstep.entities.protocolStep.model.ProtocolStep
    :members:
    :undoc-members:
 
 Protocol Table
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.protocol.ProtocolTable
+.. autoclass:: labstep.entities.protocolTable.model.ProtocolTable
    :members:
    :undoc-members:
 
 Protocol Timer
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.protocol.ProtocolTimer
+.. autoclass:: labstep.entities.protocolTimer.model.ProtocolTimer
    :members:
    :undoc-members:
