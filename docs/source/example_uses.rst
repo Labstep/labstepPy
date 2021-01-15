@@ -23,7 +23,7 @@ from a *resource_import.csv* file:
 
 Deleting Multiple Entities
 ----------------------------------------------
-You can use **labstepPy** to easily delete
+You can use **labstep.entities.y.model** to easily delete
 multiple different Entities on Labstep (a list
 of Experiments, Protocols, or Tags, etc.),
 either from within a specific Workspace or by
@@ -35,7 +35,7 @@ performing a global delete.
 
 Downloading Files
 ----------------------------------------------
-You can use **labstepPy** to download files uploaded directly to Labstep or
+You can use **labstep.entities.y.model** to download files uploaded directly to Labstep or
 attached to different Labstep entities
 
 :download:`download_file.py <../../examples/download_file.py>`

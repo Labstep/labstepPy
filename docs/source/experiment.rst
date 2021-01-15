@@ -1,7 +1,7 @@
 Experiment
 ----------------------------------------------
 
-.. autoclass:: labstep.experiment.Experiment
+.. autoclass:: labstep.entities.experiment.model.Experiment
    :members:
    :inherited-members:
    :undoc-members:
@@ -9,34 +9,34 @@ Experiment
 Experiment Protocol
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.experiment.ExperimentProtocol
+.. autoclass:: labstep.entities.experimentProtocol.model.ExperimentProtocol
    :members:
    :undoc-members:
 
 Experiment Material
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.experiment.ExperimentMaterial
+.. autoclass:: labstep.entities.experimentMaterial.model.ExperimentMaterial
    :members:
    :undoc-members:
 
 Experiment Step
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.experiment.ExperimentStep
+.. autoclass:: labstep.entities.experimentStep.model.ExperimentStep
    :members:
    :undoc-members:
 
 Experiment Table
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.experiment.ExperimentTable
+.. autoclass:: labstep.entities.experimentTable.model.ExperimentTable
    :members:
    :undoc-members:
 
 Experiment Timer
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.experiment.ExperimentTimer
+.. autoclass:: labstep.entities.experimentTimer.model.ExperimentTimer
    :members:
    :undoc-members:

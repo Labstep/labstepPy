@@ -1,7 +1,7 @@
 Resource
 ----------------------------------------------
 
-.. autoclass:: labstep.resource.Resource
+.. autoclass:: labstep.entities.resource.model.Resource
    :inherited-members:
    :members:
    :undoc-members:
@@ -9,7 +9,7 @@ Resource
 ResourceCategory
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.resourceCategory.ResourceCategory
+.. autoclass:: labstep.entities.resourceCategory.model.ResourceCategory
    :inherited-members:
    :members:
    :undoc-members:
@@ -17,6 +17,6 @@ ResourceCategory
 ResourceLocation
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.resourceLocation.ResourceLocation
+.. autoclass:: labstep.entities.resourceLocation.model.ResourceLocation
    :members:
    :undoc-members:

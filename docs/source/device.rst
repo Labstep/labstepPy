@@ -1,7 +1,7 @@
 Device
 ----------------------------------------------
 
-.. autoclass:: labstep.device.Device
+.. autoclass:: labstep.entities.device.model.Device
    :inherited-members:
    :members:
    :undoc-members:
@@ -9,7 +9,7 @@ Device
 DeviceData
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.device.DeviceData
+.. autoclass:: labstep.entities.device.model.DeviceData
    :inherited-members:
    :members:
    :undoc-members:
