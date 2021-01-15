@@ -4,7 +4,7 @@
 
 from labstep.entities.file.repository import fileRepository
 from labstep.generic.entity.repository import entityRepository
-from labstep.service.helpers import handleDate
+from labstep.service.helpers import handleDate, handleString
 from labstep.entities.metadata.model import Metadata, FIELDS, ALLOWED_FIELDS
 
 
@@ -60,7 +60,7 @@ class MetadataRepository:
             "metadata_thread_id": entity.metadata_thread["id"],
             "type": fieldType,
             "label": fieldName,
-            "value": value,
+            "value": handleString(value),
             "date": handleDate(date),
             "number": number,
             "unit": unit,

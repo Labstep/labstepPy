@@ -37,5 +37,20 @@ class Entity:
         return self
 
     def export(self, rootPath):
+        """
+        Export the entity to the directory specified. 
+
+        Paramers
+        -------
+        path (str)
+            The path to the directory to save the experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.export('/my_folder')
+        """
         from labstep.generic.entity.repository import entityRepository
         return entityRepository.exportEntity(self, rootPath)

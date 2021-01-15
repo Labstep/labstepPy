@@ -929,7 +929,7 @@ class User(Entity):
 
         return workspaceRepository.newWorkspace(self, name, extraParams=extraParams)
 
-    def newFile(self, filepath, extraParams={}):
+    def newFile(self, filepath, rawData=None, extraParams={}):
         """
         Upload a file to the Labstep entity Data.
 
@@ -946,7 +946,7 @@ class User(Entity):
         """
         from labstep.entities.file.repository import fileRepository
 
-        return fileRepository.newFile(self, filepath, extraParams=extraParams)
+        return fileRepository.newFile(self, filepath, rawData=rawData, extraParams=extraParams)
 
     def newCollection(self, name, type="experiment"):
         """

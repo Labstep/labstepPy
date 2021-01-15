@@ -3,11 +3,8 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.service.helpers import (
-    getTime,
     createdAtFrom,
     createdAtTo,
-    handleDate,
-    listToClass,
 )
 from labstep.entities.protocol.model import Protocol
 from labstep.entities.protocolVersion.model import ProtocolVersion
@@ -85,14 +82,10 @@ class ProtocolRepository:
 
         # get html
         html = htmlExportService.getHTML(protocol)
+        html_with_paths = htmlExportService.insertFilepaths(expDir, html)
 
-        print(html)
-
-    def export(self, path):
-
-        from labstep.entities.protocol.repository import protocolRepository
-
-        return protocolRepository.exportProtocol(self, path)
+        with open(expDir.joinpath('entity.html'), 'w') as out:
+            out.write(html_with_paths)
 
 
 protocolRepository = ProtocolRepository()

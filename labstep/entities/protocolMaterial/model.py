@@ -45,4 +45,9 @@ class ProtocolMaterial(Entity):
         """
         from labstep.entities.protocolMaterial.repository import protocolMaterialRepository
 
-        return protocolMaterialRepository.editEntity(self, amount=amount, units=units, resource_id=resource_id)
+        return protocolMaterialRepository.editProtocolMaterial(self,
+                                                               name=name,
+                                                               amount=amount,
+                                                               units=units,
+                                                               resource_id=resource_id,
+                                                               extraParams=extraParams)

@@ -46,9 +46,9 @@ class RequestService:
         response = http.get(url, headers=headers, params=params)
         return response
 
-    def post(self, url, headers, json=None, files=None):
+    def post(self, url, headers, json=None, files=None, data=None):
         response = http.post(
-            url, headers=headers, json=json, files=files
+            url, headers=headers, json=json, files=files, data=data
         )
         return response
 

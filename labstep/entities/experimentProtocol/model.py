@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
+from labstep.entities.experimentMaterial.repository import experimentMaterialRepository
+from labstep.entities.file.repository import fileRepository
+from labstep.entities.file.model import File
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import (
     listToClass,
 )
-from labstep.entities.experimentMaterial.model import ExperimentMaterial
 from labstep.entities.experimentStep.model import ExperimentStep
 from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentTimer.model import ExperimentTimer
-from labstep.entities.experimentMaterial.repository import experimentMaterialRepository
 
 
 class ExperimentProtocol(Entity):
@@ -139,6 +140,7 @@ class ExperimentProtocol(Entity):
                                  resource_id=resource.id)
         """
         return experimentMaterialRepository.newExperimentMaterial(self.__user__,
+                                                                  experiment_id=self.id,
                                                                   name=name,
                                                                   amount=amount,
                                                                   units=units,
@@ -364,6 +366,54 @@ class ExperimentProtocol(Entity):
             filepath=filepath,
             extraParams=extraParams,
         )
+
+    def addFile(self, filepath=None, rawData=None):
+        """
+        Add a file to an Experiment Protocol.
+
+        Parameters
+        ----------
+        filepath (str)
+            The path to the file to upload.
+        rawData (bytes)
+            Raw data to upload as a file.
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_protocol = experiment.getProtocols()[0]
+            file = experiment_protocol.addFile(filepath='./my_file.csv')
+        """
+        params = {'experiment_id': self.id}
+        return fileRepository.newFile(self.__user__, filepath=filepath, rawData=rawData, extraParams=params)
+
+    def getFiles(self):
+        """
+        Returns a list of the files in a Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            List of the files in a Protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_protocol = experiment.getProtocols()[0]
+            filess = experiment_protocol.getFiles()
+        """
+        self.update()
+        files = self.files
+        return listToClass(files, File, self.__user__)
 
     def export(self, rootPath):
         from labstep.entities.experimentProtocol.repository import experimentProtocolRepository

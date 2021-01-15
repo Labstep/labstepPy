@@ -327,22 +327,12 @@ class Experiment(PrimaryEntity):
             experiment.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        from labstep.generic.entity.repository import entityRepository
-
-        params = {
-            "experiment_id": self.root_experiment.id,
-            "name": name,
-            "resource_id": resource_id,
-            "resource_item_id": resource_item_id,
-            "value": amount,
-            "units": units,
-            **extraParams,
-        }
-
-        if params["value"] is not None:
-            params["value"] = str(params["value"])
-
-        return entityRepository.newEntity(self.__user__, ExperimentMaterial, params)
+        return self.root_experiment.addMaterial(name=name,
+                                                resource_id=resource_id,
+                                                resource_item_id=resource_item_id,
+                                                amount=amount,
+                                                units=units,
+                                                extraParams=extraParams)
 
     def addToCollection(self, collection_id):
         """
@@ -430,8 +420,67 @@ class Experiment(PrimaryEntity):
                   "name": name, "data": data}
         return entityRepository.newEntity(self.__user__, ExperimentTable, params)
 
-    def export(self, path):
+    def addFile(self, filepath=None, rawData=None):
+        """
+        Add a file to an experiment entry.
+        (Only use for files to be embedded in the body of the entry)
 
+        Parameters
+        ----------
+        filepath (str)
+            The path to the file to upload.
+        rawData (bytes)
+            Raw bytes data to upload as file
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.addFile(filepath='./my_file.csv')
+        """
+        return self.root_experiment.addFile(filepath, rawData)
+
+    def getFiles(self):
+        """
+        Returns a list of the files in a experiment entry.
+        (Only includes the files embedded in the body of the entry)
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            List of the files in a experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment_files = experiment.getFiles()
+        """
+        return self.root_experiment.getFiles()
+
+    def export(self, path):
+        """
+        Export the experiment to the directory specified. 
+
+        Paramers
+        -------
+        path (str)
+            The path to the directory to save the experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.export('/my_folder')
+        """
         from labstep.entities.experiment.repository import experimentRepository
 
         return experimentRepository.exportExperiment(self, path)

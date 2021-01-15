@@ -48,13 +48,13 @@ class Autoshare(Entity):
         ::
 
             # Get an workspace
-            workspace = user.getWorkspace(123)
+            workspace = user.getExperiment(123)
 
-            # Set autosharing policy
-            policy = workspace.setAutosharing(experiment_sharing=True)
+            # Get the sharelink for the experiment
+            sharelink = experiment.getSharelink()
 
-            # Edit the policy
-            policy.edit(protocol_sharing=True)
+            # Edit the sharelink
+            sharelink.edit(type='view')
         """
         from labstep.generic.entity.repository import entityRepository
 

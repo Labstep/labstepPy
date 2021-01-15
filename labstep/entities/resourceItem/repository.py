@@ -4,7 +4,7 @@
 
 from labstep.entities.resourceItem.model import ResourceItem
 from labstep.generic.entity.repository import entityRepository
-from labstep.service.helpers import handleString
+from labstep.service.helpers import handleKeyword
 
 
 class ResourceItemRepository:
@@ -36,7 +36,7 @@ class ResourceItemRepository:
             "resource_id": resource_id,
             "resource_location_id": resource_location_id,
             "name": name,
-            "status": handleString(availability),
+            "status": handleKeyword(availability),
             "quantity_amount": quantity_amount,
             "quantity_unit": quantity_unit,
             **extraParams,
@@ -57,7 +57,7 @@ class ResourceItemRepository:
     ):
         params = {
             "name": name,
-            "status": handleString(availability),
+            "status": handleKeyword(availability),
             "resource_location_id": resource_location_id,
             "quantity_unit": quantity_unit,
             "deleted_at": deleted_at,

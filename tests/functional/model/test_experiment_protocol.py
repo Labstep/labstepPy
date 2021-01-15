@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from fixtures import experimentProtocol, proseMirrorState
+from fixtures import experimentProtocol, proseMirrorState, resource
 
 # Make new entity
 experiment_protocol = experimentProtocol()
+
 
 class TestExperimentProtocol:
     def test_edit(self):
@@ -27,20 +28,26 @@ class TestExperimentProtocol:
             fieldType="default", fieldName="test")
         assert result.label == 'test'
 
-    """ def test_addMaterial(self):
-        resource = user.newResource('test')
-        item = resource.newItem('test')
+    def test_addMaterial(self):
+        newResource = resource()
+        item = newResource.newItem('test')
         material = experiment_protocol.addMaterial('testMaterial',
                                                    amount=10,
                                                    units='uL',
-                                                   resource_id=resource.id,
+                                                   resource_id=newResource.id,
                                                    resource_item_id=item.id)
 
         assert material.name == 'testMaterial' \
             and material.amount == '10' \
             and material.units == 'uL' \
-            and material.resource['id'] == resource.id \
-            and material.resource_item['id'] == item.id """
+            and material.resource['id'] == newResource.id \
+            and material.resource_item['id'] == item.id
+
+    def test_editMaterial(self):
+        material = experiment_protocol.getMaterials()[0]
+        result = material.edit(name='New Sample Name')
+        assert result.name == 'New Sample Name',\
+            'FAILED TO EDIT MATERIAL'
 
     # ExperimentStep
     def test_addSteps(self):
@@ -57,3 +64,9 @@ class TestExperimentProtocol:
         result = steps[0].complete()
         assert result.ended_at is not None, \
             'FAILED TO COMPLETE STEP'
+
+    def test_addFile(self):
+        entity = experimentProtocol()
+        file = entity.addFile('./tests/data/sample.txt')
+        files = entity.getFiles()
+        assert files[0].id == file.id

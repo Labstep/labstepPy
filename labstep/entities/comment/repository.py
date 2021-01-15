@@ -5,7 +5,7 @@
 from labstep.entities.comment.model import Comment
 from labstep.generic.entity.repository import entityRepository
 from labstep.entities.file.repository import fileRepository
-
+from labstep.service.helpers import handleString
 
 class CommentRepository:
     def getComments(self, entity, count=100, extraParams={}):
@@ -27,7 +27,7 @@ class CommentRepository:
         threadId = entity.thread["id"]
 
         params = {
-            "body": body,
+            "body": handleString(body),
             "parent_thread_id": threadId,
             "file_id": [[fileId]] if fileId is not None else None,
             **extraParams,
