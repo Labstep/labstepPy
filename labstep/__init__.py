@@ -5,4 +5,4 @@
 
 """Labstep Python SDK"""
 
-from .entities.user.facade import login, authenticate
+from .entities.user.facade import login, authenticate, impersonate

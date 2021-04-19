@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-import json
-import urllib.parse
+from deprecated import deprecated
 from labstep.generic.entity.model import Entity
 from labstep.service.config import API_ROOT
-from labstep.service.helpers import url_join, handleError, getHeaders
+from labstep.service.helpers import url_join, getHeaders
 from labstep.service.request import requestService
 
 
@@ -23,9 +22,11 @@ class User(Entity):
         print(user.name)
         print(user.id)
     """
+    __entityName__ = "user"
 
-    def __init__(self, user):
-        if user["group"] is None:
+    def __init__(self, user, adminUser=None):
+        self.__user__ = adminUser if adminUser is not None else self
+        if 'group' not in user or user["group"] is None:
             print(
                 """Warning: No default workspace.
             Please set a workspace to continue."""
@@ -259,6 +260,29 @@ class User(Entity):
 
         return workspaceRepository.getWorkspace(self, workspace_id)
 
+    def getOrganization(self):
+        """
+        Returns the organization the user is part of.
+
+        Returns
+        -------
+        :class:`~labstep.entities.organization.model.Organization`
+            An object representing an Organization on Labstep.
+
+        Example
+        -------
+        ::
+
+            organization = user.getOrganization()
+        """
+        from labstep.entities.organization.repository import organizationRepository
+
+        if len(self.user_organizations) > 0:
+
+            organizationId = self.user_organizations[0]['organization']['id']
+
+            return organizationRepository.getOrganization(self, organizationId)
+
     def getFile(self, file_id):
         """
         Retrieve a specific Labstep File.
@@ -308,6 +332,7 @@ class User(Entity):
         return deviceRepository.getDevice(self, device_id)
 
     # getMany()
+
     def getExperiments(
         self,
         count=100,
@@ -641,44 +666,9 @@ class User(Entity):
             self, count=count, search_query=search_query, extraParams=extraParams
         )
 
+    @deprecated(version='3.0.3', reason="You should use workspace.getFiles instead")
     def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
-        """
-        Retrieve a list of a User's Files
-        across all Workspaces on Labstep,
-        which can be filtered using the parameters:
-
-        Parameters
-        ----------
-        count (int)
-            The number of files to retrieve.
-        file_type (str)
-            Return only files of a certain type. Options are:
-            'csv', 'doc',
-            'docx', 'jpg', 'pdf','png','ppt','pptx','svg','xls','xlsx',
-            'xml' or 'generic' for all others.
-        search_query (str)
-            Search for files with this name.
-
-        Returns
-        -------
-        List[:class:`~labstep.entities.file.model.File`]
-            A list of Labstep Files.
-
-        Example
-        -------
-        ::
-
-            entities = user.getFiles(search_query='bacteria')
-        """
-        from labstep.entities.file.repository import fileRepository
-
-        return fileRepository.getFiles(
-            self,
-            count=count,
-            search_query=search_query,
-            file_type=file_type,
-            extraParams=extraParams,
-        )
+        return []
 
     def getDevices(self, count=100, search_query=None, extraParams={}):
         """
@@ -764,7 +754,7 @@ class User(Entity):
 
         return protocolRepository.newProtocol(self, name, extraParams=extraParams)
 
-    def newResource(self, name, extraParams={}):
+    def newResource(self, name, resource_category_id=None, extraParams={}):
         """
         Create a new Labstep Resource.
 
@@ -772,6 +762,9 @@ class User(Entity):
         ----------
         name (str)
             Give your Resource a name.
+
+        resource_category_id (int)
+            ID of the resource category of the new resource
 
         Returns
         -------
@@ -786,7 +779,7 @@ class User(Entity):
         """
         from labstep.entities.resource.repository import resourceRepository
 
-        return resourceRepository.newResource(self, name, extraParams=extraParams)
+        return resourceRepository.newResource(self, name, resource_category_id=resource_category_id, extraParams=extraParams)
 
     def newResourceCategory(self, name, extraParams={}):
         """
@@ -988,6 +981,7 @@ class User(Entity):
     def acceptSharelink(self, token):
         """
         Accept a sharelink
+
         Parameters
         ----------
         token (class)

@@ -549,7 +549,7 @@ class Protocol(PrimaryEntity):
         """
         Export the protocol to the directory specified. 
 
-        Paramers
+        Parameters
         -------
         path (str)
             The path to the directory to save the protocol.

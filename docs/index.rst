@@ -70,17 +70,18 @@ own specific purposes.
    :maxdepth: 2
 
    source/user.rst
+   source/organization.rst
    source/workspace.rst
    source/experiment.rst
    source/protocol.rst
    source/resource.rst
    source/orderRequest.rst
+   source/device.rst
    source/metadata.rst
    source/comment.rst
    source/tag.rst
    source/file.rst
    source/sharelink.rst
-   source/device.rst
 
 .. toctree::
    :caption: Examples

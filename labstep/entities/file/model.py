@@ -49,6 +49,10 @@ class File(Entity):
             file = entities[0]
             file.save()
         """
+        if self.link_source is not None:
+            print('Warning: Files from External Cloud Providers cannot be downloaded')
+            return
+
         if name is None:
             name = self.name
 
@@ -59,3 +63,23 @@ class File(Entity):
 
         data = self.getData()
         open(filepath, "wb").write(data)
+
+    def export(self, path):
+        """
+        Export the file to the directory specified. 
+
+        Parameters
+        -------
+        path (str)
+            The path to the directory to save the file.
+
+        Example
+        -------
+        ::
+
+            file = user.getFile(17000)
+            file.export('/my_folder')
+        """
+        from labstep.entities.file.repository import fileRepository
+
+        return fileRepository.exportFile(self, path)

@@ -5,6 +5,7 @@ Resource
    :inherited-members:
    :members:
    :undoc-members:
+   
 
 ResourceCategory
 ++++++++++++++++++++++++++++++++++++++++++++++
@@ -14,9 +15,17 @@ ResourceCategory
    :members:
    :undoc-members:
 
+ResourceItem
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: labstep.entities.resourceItem.model.ResourceItem
+   :members:
+   :undoc-members:
+
 ResourceLocation
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.resourceLocation.model.ResourceLocation
    :members:
    :undoc-members:
+   

@@ -22,6 +22,7 @@ class TimeoutHTTPAdapter(HTTPAdapter):
 
     def send(self, request, **kwargs):
         timeout = kwargs.get("timeout")
+        #kwargs['verify'] = False
         if timeout is None:
             kwargs["timeout"] = self.timeout
         return super().send(request, **kwargs)
@@ -41,9 +42,18 @@ http.mount("https://", adapter)
 http.mount("http://", adapter)
 
 
+def encode_boolean_values(kv):
+    """ convert bool values to 'true'/'false' strings for json compat """
+    def enc(x): return x if not isinstance(
+        x, bool) else 'true' if x else 'false'
+
+    return None if kv is None else {k: enc(v) for k, v in kv.items()}
+
+
 class RequestService:
     def get(self, url, headers, params=None):
-        response = http.get(url, headers=headers, params=params)
+        response = http.get(url, headers=headers,
+                            params=encode_boolean_values(params))
         return response
 
     def post(self, url, headers, json=None, files=None, data=None):

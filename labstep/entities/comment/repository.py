@@ -7,6 +7,7 @@ from labstep.generic.entity.repository import entityRepository
 from labstep.entities.file.repository import fileRepository
 from labstep.service.helpers import handleString
 
+
 class CommentRepository:
     def getComments(self, entity, count=100, extraParams={}):
 
@@ -47,14 +48,16 @@ class CommentRepository:
         return entityRepository.editEntity(comment, params)
 
     def exportComment(self, comment, rootPath):
-        commentDir = entityRepository.exportEntity(comment, rootPath)
+        commentDir = entityRepository.exportEntity(
+            comment, rootPath)
 
         # export comment
         nestedCommentsDir = commentDir.joinpath('comments')
         nestedComments = comment.getComments(count=1000)
 
         for nestedComment in nestedComments:
-            nestedComment.export(nestedCommentsDir)
+            nestedComment.export(
+                nestedCommentsDir)
 
 
 commentRepository = CommentRepository()

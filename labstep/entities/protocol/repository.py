@@ -57,6 +57,8 @@ class ProtocolRepository:
 
     def exportProtocol(self, protocol, root_path):
 
+        protocol.update()
+
         expDir = entityRepository.exportEntity(protocol, root_path)
 
         # export notes

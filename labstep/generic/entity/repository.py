@@ -4,6 +4,7 @@
 
 import json
 from pathlib import Path
+from pathvalidate import sanitize_filepath
 from labstep.service.config import API_ROOT
 from labstep.service.helpers import (
     listToClass,
@@ -11,6 +12,7 @@ from labstep.service.helpers import (
     getHeaders,
 )
 from labstep.service.request import requestService
+from labstep.config.export import entityNameInFolderName
 
 
 class EntityRepository:
@@ -33,7 +35,7 @@ class EntityRepository:
             return entityClass(json.loads(response.content), user)
 
     def getEntities(self, user, entityClass, count, filterParams={}):
-        countParameter = min(count, 50)
+        countParameter = min(count, 50) if count is not None else None
         searchParams = {"search": 1, "cursor": -1, "count": countParameter}
 
         params = {**searchParams, **filterParams}
@@ -43,7 +45,8 @@ class EntityRepository:
         response = requestService.get(url, params=params, headers=headers)
         resp = json.loads(response.content)
         items = resp["items"]
-        expectedResults = min(resp["total"], count)
+        expectedResults = min(
+            resp["total"], count) if count is not None else resp["total"]
         while len(items) < expectedResults:
             params["cursor"] = resp["next_cursor"]
             response = requestService.get(url, headers=headers, params=params)
@@ -70,7 +73,7 @@ class EntityRepository:
         url = url_join(API_ROOT, "/api/generic/",
                        entityClass.__entityName__, "batch")
         response = requestService.post(
-            url, headers=headers, json={"items": items})
+            url, headers=headers, json={"items": items, "group_id": user.activeWorkspace})
         entities = json.loads(response.content)
         return list(map(lambda entity: entityClass(entity, user), entities))
 
@@ -87,11 +90,18 @@ class EntityRepository:
         entity.__init__(json.loads(response.content), entity.__user__)
         return entity
 
-    def exportEntity(self, entity, rootPath):
+    def exportEntity(self, entity, rootPath, folderName=None):
+
         from labstep.entities.file.model import File
 
-        entityDir = Path(rootPath).joinpath(
-            f'{entity.id}')
+        if folderName is None:
+            if entityNameInFolderName:
+                folderName = f'{entity.id} - {entity.name}' if hasattr(
+                    entity, 'name') else f'{entity.id}'
+            else:
+                folderName = str(entity.id)
+
+        entityDir = Path(rootPath).joinpath(sanitize_filepath(folderName))
         entityDir.mkdir(parents=True, exist_ok=True)
         infoFile = entityDir.joinpath('entity.json')
 
@@ -99,16 +109,15 @@ class EntityRepository:
             json.dump(entity.__data__, out, indent=2)
 
         if hasattr(entity, 'file') and entity.file is not None:
-            lsFile = entity.file
-            fileDir = entityDir.joinpath(f'files/{str(lsFile["id"])}')
-            fileDir.mkdir(parents=True, exist_ok=True)
-            File(lsFile, entity.__user__).save(fileDir)
+            lsFile = File(entity.file, entity.__user__)
+            fileDir = entityDir.joinpath('files')
+            lsFile.export(fileDir)
 
         if hasattr(entity, 'files') and entity.files is not None:
-            for lsFile in entity.files:
-                fileDir = entityDir.joinpath(f'files/{str(lsFile["id"])}')
-                fileDir.mkdir(parents=True, exist_ok=True)
-                File(lsFile, entity.__user__).save(fileDir)
+            for file in entity.files:
+                lsFile = File(file, entity.__user__)
+                fileDir = entityDir.joinpath('files')
+                lsFile.export(fileDir)
 
         return entityDir
 

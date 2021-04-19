@@ -45,5 +45,14 @@ class FileRepository:
                   "filetype": file_type, **extraParams}
         return entityRepository.getEntities(user, File, count, params)
 
+    def exportFile(self, file, root_path):
+
+        fileDir = entityRepository.exportEntity(
+            file, root_path)
+        file.save(fileDir)
+        if file.image_annotation is not None:
+            annotatedFile = File(file.image_annotation, file.__user__)
+            annotatedFile.export(root_path)
+
 
 fileRepository = FileRepository()

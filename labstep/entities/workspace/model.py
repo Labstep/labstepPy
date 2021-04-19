@@ -461,6 +461,7 @@ class Workspace(Entity):
     def sendInvites(self, emails, message):
         """
         Send invites to a Labstep Workspace via email.
+
         Parameters
         ----------
         emails (list)
@@ -599,6 +600,7 @@ class Workspace(Entity):
 
             workspace.setAutosharing(experiment_sharing='view')
         """
+        self.update()
 
         if self.security_policy is None:
             from labstep.generic.entity.repository import entityRepository
@@ -606,7 +608,7 @@ class Workspace(Entity):
             policy = entityRepository.newEntity(
                 self.__user__,
                 Autoshare,
-                {"user_group": self.logged_user_user_group["id"]},
+                {"user_group_id": self.logged_user_user_group["id"]},
             )
         else:
             policy = Autoshare(self.security_policy, self.__user__)

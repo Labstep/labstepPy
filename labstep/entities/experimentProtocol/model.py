@@ -239,6 +239,45 @@ class ExperimentProtocol(Entity):
         steps = self.experiment_steps
         return listToClass(steps, ExperimentStep, self.__user__)
 
+    def addTimer(self, name=None, hours=None, minutes=None, seconds=None):
+        """
+        Add a new timer to a Protocol within an Experiment.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the timer.
+        hours (int)
+            The hours of the timer.
+        minutes (int)
+            The minutes of the timer.
+        seconds (int)
+            The seconds of the timer.
+
+        Returns
+        -------
+        :class:`~labstep.entities.ExperimentTimer.model.ExperimentTimer`
+            The newly added timer entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol.addTimer(name='Refluxing', hours='4', minutes='30')
+        """
+        from labstep.generic.entity.repository import entityRepository
+
+        params = {
+            "experiment_id": self.id,
+            "name": name,
+            "hours": hours,
+            "minutes": minutes,
+            "seconds": seconds,
+        }
+        return entityRepository.newEntity(self.__user__, ExperimentTimer, params)
+
     def getTables(self):
         """
         Returns a list of the tables in a Protocol within an Experiment.
@@ -415,6 +454,7 @@ class ExperimentProtocol(Entity):
         files = self.files
         return listToClass(files, File, self.__user__)
 
-    def export(self, rootPath):
+    def export(self, rootPath, folderName=None):
+
         from labstep.entities.experimentProtocol.repository import experimentProtocolRepository
-        return experimentProtocolRepository.exportExperimentProtocol(self, rootPath)
+        return experimentProtocolRepository.exportExperimentProtocol(self, rootPath, folderName=folderName)

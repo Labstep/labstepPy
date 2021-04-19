@@ -70,3 +70,7 @@ def login(username, password):
         user = labstep.login('myaccount@labstep.com', 'mypassword')
     """
     return userRepository.login(username, password)
+
+
+def impersonate(username, apikey):
+    return userRepository.impersonate(username, apikey)

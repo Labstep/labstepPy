@@ -5,6 +5,7 @@ Device
    :inherited-members:
    :members:
    :undoc-members:
+   
 
 DeviceData
 ++++++++++++++++++++++++++++++++++++++++++++++
@@ -13,4 +14,5 @@ DeviceData
    :inherited-members:
    :members:
    :undoc-members:
+   
 

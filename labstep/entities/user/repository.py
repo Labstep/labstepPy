@@ -11,6 +11,12 @@ from labstep.service.request import requestService
 
 
 class UserRepository:
+    def getUser(self, username, apikey):
+        url = url_join(API_ROOT, f"api/generic/user/{username}")
+        response = requestService.get(url, headers={"apikey": apikey})
+        user = json.loads(response.content)
+        return User(user)
+
     def newUser(
         self,
         first_name,
@@ -30,7 +36,8 @@ class UserRepository:
             **extraParams,
         }
 
-        params = dict(filter(lambda field: field[1] is not None, params.items()))
+        params = dict(
+            filter(lambda field: field[1] is not None, params.items()))
 
         response = requestService.post(url=url, json=params, headers=None)
         return User(json.loads(response.content))
@@ -47,6 +54,15 @@ class UserRepository:
         url = url_join(API_ROOT, "/public-api/user/login")
         response = requestService.post(url=url, json=params, headers={})
         return User(json.loads(response.content))
+
+    def impersonate(self, username, apikey):
+        user = self.getUser(username, apikey)
+        url = url_join(API_ROOT, "api/generic/token/impersonate")
+        response = requestService.post(
+            url, json={'guid': user.guid}, headers={"apikey": apikey})
+        token = json.loads(response.content)['uuid']
+        user.api_key = token
+        return user
 
 
 userRepository = UserRepository()

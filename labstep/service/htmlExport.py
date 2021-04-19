@@ -3,7 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 import json
-import re
+import glob
 from bs4 import BeautifulSoup
 from labstep.service.request import requestService
 from labstep.service.config import API_ROOT
@@ -39,14 +39,16 @@ class HTMLExportService:
 
         soup = BeautifulSoup(html, 'html.parser')
 
-        for img in soup.find_all('img', {'data-file-id': True}):
+        for img in soup.find_all('img', {'data-file-id': True, 'data-file-is-link': False}):
             file_id = img['data-file-id']
-            path = list(rootDir.glob(f'**/files/{file_id}/*'))
+            file_name = glob.escape(img['data-file-name'])
+            path = list(rootDir.glob(f'**/files/{file_id}*/{file_name}'))
             img['src'] = str(path[0].relative_to(rootDir))
 
-        for a in soup.find_all('a', {'data-file-id': True}):
+        for a in soup.find_all('a', {'data-file-id': True, 'data-file-is-link': False}):
             file_id = a['data-file-id']
-            path = list(rootDir.glob(f'**/files/{file_id}/*'))
+            file_name = glob.escape(a['data-file-name'])
+            path = list(rootDir.glob(f'**/files/{file_id}*/{file_name}'))
             a['href'] = str(path[0].relative_to(rootDir))
 
         return str(soup)

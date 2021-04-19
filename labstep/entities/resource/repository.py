@@ -5,6 +5,7 @@
 from labstep.entities.resource.model import Resource
 from labstep.generic.entity.repository import entityRepository
 
+
 class ResourceRepository:
     def getResource(self, user, resource_id):
         return entityRepository.getEntity(user, Resource, id=resource_id)
@@ -12,11 +13,15 @@ class ResourceRepository:
     def getResources(
         self, user, count=100, search_query=None, tag_id=None, extraParams={}
     ):
-        params = {"search_query": search_query, "tag_id": tag_id, **extraParams}
+        params = {"search_query": search_query,
+                  "tag_id": tag_id, **extraParams}
         return entityRepository.getEntities(user, Resource, count, params)
 
-    def newResource(self, user, name, extraParams={}):
-        params = {"name": name, **extraParams}
+    def newResource(self, user, name, resource_category_id=None, extraParams={}):
+        params = {
+            "name": name,
+            "template_id": resource_category_id,
+            **extraParams}
         return entityRepository.newEntity(user, Resource, params)
 
     def editResource(

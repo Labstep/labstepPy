@@ -59,7 +59,7 @@ class MetadataRepository:
         params = {
             "metadata_thread_id": entity.metadata_thread["id"],
             "type": fieldType,
-            "label": fieldName,
+            "label": handleString(fieldName),
             "value": handleString(value),
             "date": handleDate(date),
             "number": number,
@@ -71,7 +71,11 @@ class MetadataRepository:
         return entityRepository.newEntity(entity.__user__, Metadata, params)
 
     def editMetadata(self, metadata, fieldName=None, value=None, extraParams={}):
-        params = {"label": fieldName, "value": value, **extraParams}
+        params = {
+            "label": handleString(fieldName),
+            "value": handleString(value),
+            **extraParams
+        }
         return entityRepository.editEntity(metadata, params)
 
 
