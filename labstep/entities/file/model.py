@@ -68,7 +68,7 @@ class File(Entity):
         """
         Export the file to the directory specified. 
 
-        Paramers
+        Parameters
         -------
         path (str)
             The path to the directory to save the file.
