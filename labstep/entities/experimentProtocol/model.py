@@ -455,5 +455,6 @@ class ExperimentProtocol(Entity):
         return listToClass(files, File, self.__user__)
 
     def export(self, rootPath, folderName=None):
+
         from labstep.entities.experimentProtocol.repository import experimentProtocolRepository
         return experimentProtocolRepository.exportExperimentProtocol(self, rootPath, folderName=folderName)

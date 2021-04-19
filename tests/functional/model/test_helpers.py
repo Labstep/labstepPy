@@ -9,7 +9,7 @@
 #     createdAtFrom,
 #     createdAtTo,
 #     handleDate,
-#     handleString
+#     handleKeyword
 # )
 
 
@@ -43,5 +43,5 @@
 #             'FAILED TO HANDLE DATE'
 
 #     def test_handleString(self):
-#         assert handleString('orDEr RequeST') == 'order_request', \
+#         assert handleKeyword('orDEr RequeST') == 'order_request', \
 #             'FAILED TO HANDLE STATUS'

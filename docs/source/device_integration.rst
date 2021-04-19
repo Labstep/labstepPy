@@ -47,4 +47,4 @@ This example requires the PySerial package which can be downloaded by running
 Further Help
 +++++++++++++++++++++++++++++++++++++
 
-For further help setting up integrations with instruments please contact **barney@labstep.entities.com.model**
+For further help setting up integrations with instruments please contact **support@labstep.com**
