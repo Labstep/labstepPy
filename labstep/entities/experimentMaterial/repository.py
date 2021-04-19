@@ -19,9 +19,9 @@ class ExperimentMaterialRepository:
         }
         return entityRepository.getEntities(user, ExperimentMaterial, count, params)
 
-    def newExperimentMaterial(self, user, name, resource_id=None, resource_item_id=None, amount=None, units=None, extraParams={}):
+    def newExperimentMaterial(self, user, experiment_id, name, resource_id=None, resource_item_id=None, amount=None, units=None, extraParams={}):
         params = {
-            "experiment_id": self.id,
+            "experiment_id": experiment_id,
             "name": name,
             "resource_id": resource_id,
             "resource_item_id": resource_item_id,
@@ -33,17 +33,19 @@ class ExperimentMaterialRepository:
         if params["value"] is not None:
             params["value"] = str(params["value"])
 
-        return entityRepository.newEntity(self.__user__, ExperimentMaterial, params)
+        return entityRepository.newEntity(user, ExperimentMaterial, params)
 
-    def editExperimentMaterial(self, amount=None, units=None, resource_id=None, resource_item_id=None):
+    def editExperimentMaterial(self, expermient_material, name=None, amount=None, units=None, resource_id=None, resource_item_id=None, extraParams={}):
         params = {
+            "name": name,
             "value": amount,
             "units": units,
             "resource_id": resource_id,
             "resource_item_id": resource_item_id,
+            **extraParams
         }
 
-        return entityRepository.editEntity(self, params)
+        return entityRepository.editEntity(expermient_material, params)
 
 
 experimentMaterialRepository = ExperimentMaterialRepository()

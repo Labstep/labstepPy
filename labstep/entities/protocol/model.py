@@ -4,17 +4,19 @@
 
 from labstep.entities.metadata.model import Metadata
 from labstep.generic.primaryEntity.model import PrimaryEntity
-from labstep.entities.protocolMaterial.model import ProtocolMaterial
 from labstep.entities.protocolStep.model import ProtocolStep
 from labstep.entities.protocolTable.model import ProtocolTable
 from labstep.entities.protocolTimer.model import ProtocolTimer
 from labstep.entities.protocolVersion.model import ProtocolVersion
+from labstep.entities.protocolMaterial.model import ProtocolMaterial
 from labstep.entities.protocolMaterial.repository import protocolMaterialRepository
 from labstep.service.helpers import (
     listToClass,
     getTime,
     handleDate,
 )
+from labstep.entities.file.model import File
+from labstep.entities.file.repository import fileRepository
 
 
 class Protocol(PrimaryEntity):
@@ -291,21 +293,12 @@ class Protocol(PrimaryEntity):
             protocol.addMaterial(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        from labstep.generic.entity.repository import entityRepository
-
-        params = {
-            "protocol_id": self.last_version["id"],
-            "resource_id": resource_id,
-            "name": name,
-            "value": amount,
-            "units": units,
-            **extraParams,
-        }
-
-        if params["value"] is not None:
-            params["value"] = str(params["value"])
-
-        return entityRepository.newEntity(self.__user__, ProtocolMaterial, params)
+        return protocolMaterialRepository.newProtocolMaterial(self.__user__,
+                                                              protocol_id=self.last_version["id"],
+                                                              resource_id=resource_id, name=name,
+                                                              amount=amount,
+                                                              units=units,
+                                                              extraParams=extraParams)
 
     def getMaterials(self, count=100, extraParams={}):
         """
@@ -324,10 +317,11 @@ class Protocol(PrimaryEntity):
             protocol_materials = protocol.getMaterials()
             protocol_materials[0].attributes()
         """
-        return protocolMaterialRepository.getProtocolMaterials(self.__user__,
-                                                               protocol_id=self.last_version['id'],
-                                                               count=count,
-                                                               extraParams=extraParams)
+        self.update()
+        if "protocol_values" not in self.last_version:
+            return []
+        materials = self.last_version["protocol_values"]
+        return listToClass(materials, ProtocolMaterial, self.__user__)
 
     def addTimer(self, name=None, hours=None, minutes=None, seconds=None):
         """
@@ -500,3 +494,73 @@ class Protocol(PrimaryEntity):
         from labstep.entities.collection.repository import collectionRepository
 
         return collectionRepository.removeFromCollection(self, collection_id)
+
+    def addFile(self, filepath=None, rawData=None):
+        """
+        Add a file to a Protocol.
+
+        Parameters
+        ----------
+        filepath (str)
+            The path to the file to upload.
+
+        Returns
+        -------
+        :class:`~labstep.file.File`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol.addFile(filepath='./my_file.csv')
+        """
+        params = {'protocol_id': self.last_version['id']}
+        return fileRepository.newFile(self.__user__,
+                                      filepath=filepath,
+                                      rawData=rawData,
+                                      extraParams=params)
+
+    def getFiles(self):
+        """
+        Returns a list of the files in a Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.file.File`]
+            List of the files in a Protocol.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol_files = protocol.getFiles()
+        """
+        self.update()
+        if 'files' not in self.last_version:
+            return []
+
+        files = self.last_version['files']
+        return listToClass(files, File, self.__user__)
+
+    def export(self, path):
+        """
+        Export the protocol to the directory specified. 
+
+        Paramers
+        -------
+        path (str)
+            The path to the directory to save the protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getProtocol(17000)
+            experiment.export('/my_folder')
+        """
+        from labstep.entities.protocol.repository import protocolRepository
+
+        return protocolRepository.exportProtocol(self, path)

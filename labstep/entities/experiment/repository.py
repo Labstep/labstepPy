@@ -2,18 +2,12 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-import os
-import json
-from pathlib import Path
 from labstep.service.helpers import (
-    getTime,
     createdAtFrom,
     createdAtTo,
     handleDate,
-    listToClass,
 )
 from labstep.entities.experiment.model import Experiment, ExperimentProtocol
-from labstep.service.request import requestService
 from labstep.generic.entity.repository import entityRepository
 from labstep.service.htmlExport import htmlExportService
 
@@ -86,11 +80,13 @@ class ExperimentRepository:
 
     def exportExperiment(self, experiment, root_path):
 
-        expDir = entityRepository.exportEntity(experiment, root_path)
+        experiment.update()
+
+        expDir = entityRepository.exportEntity(
+            experiment, root_path)
 
         # export entry
-        entryDir = expDir.joinpath('entry')
-        experiment.update().root_experiment.update().export(entryDir)
+        experiment.root_experiment.export(expDir, folderName='entry')
 
         # export protocols
         protocolsDir = expDir.joinpath('protocols')
@@ -110,7 +106,7 @@ class ExperimentRepository:
         html = htmlExportService.getHTML(experiment)
         html_with_paths = htmlExportService.insertFilepaths(expDir, html)
 
-        with open(expDir.joinpath('entity.html'), 'w') as out:
+        with open(expDir.joinpath('entity.html'), 'w', encoding="utf-8") as out:
             out.write(html_with_paths)
 
 

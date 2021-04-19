@@ -1,0 +1,6 @@
+Sphinx
+sphinx_rtd_theme
+sphinxcontrib-programoutput
+python-dotenv
+requests
+beautifulsoup4

@@ -12,7 +12,7 @@ class ExperimentMaterial(Entity):
         super().__init__(data, user)
         self.amount = self.value
 
-    def edit(self, amount=None, units=None, resource_id=None, resource_item_id=None):
+    def edit(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None):
         """
         Edit an existing Experiment Material.
 
@@ -44,4 +44,9 @@ class ExperimentMaterial(Entity):
         """
         from labstep.entities.experimentMaterial.repository import experimentMaterialRepository
 
-        return experimentMaterialRepository.editEntity(self, amount=amount, units=units, resource_id=resource_id, resource_item_id=resource_item_id)
+        return experimentMaterialRepository.editExperimentMaterial(self,
+                                                                   name=name,
+                                                                   amount=amount,
+                                                                   units=units,
+                                                                   resource_id=resource_id,
+                                                                   resource_item_id=resource_item_id)

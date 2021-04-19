@@ -8,7 +8,7 @@ from labstep.generic.entity.model import Entity
 class ExperimentTable(Entity):
     __entityName__ = "experiment-table"
 
-    def edit(self, data=None):
+    def edit(self, name=None, data=None):
         """
         Edit an existing Experiment Table.
 
@@ -52,5 +52,5 @@ class ExperimentTable(Entity):
         """
         from labstep.generic.entity.repository import entityRepository
 
-        params = {"data": data}
+        params = {"name": name, "data": data}
         return entityRepository.editEntity(self, params)

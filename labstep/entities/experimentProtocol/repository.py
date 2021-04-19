@@ -6,9 +6,12 @@ from labstep.generic.entity.repository import entityRepository
 
 
 class ExperimentProtocolRepository:
-    def exportExperimentProtocol(self, experimentProtocol, rootPath):
+    def exportExperimentProtocol(self, experimentProtocol, rootPath, folderName):
 
-        expDir = entityRepository.exportEntity(experimentProtocol, rootPath)
+        experimentProtocol.update()
+
+        expDir = entityRepository.exportEntity(
+            experimentProtocol, rootPath, folderName=folderName)
 
         # save materials
         materialsDir = expDir.joinpath('materials')

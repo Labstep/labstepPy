@@ -98,8 +98,13 @@ def handleDate(datetime):
         datetime = datetime.replace(" ", "T") + ":00" + timezone
         return datetime
 
-
 def handleString(string):
+    """
+    Casts to string or returns None
+    """
+    return str(string) if string else None
+
+def handleKeyword(string):
     """
     Returns
     -------

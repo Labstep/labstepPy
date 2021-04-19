@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from labstep.service.helpers import handleString
+from labstep.service.helpers import handleKeyword
 from labstep.entities.orderRequest.model import OrderRequest
 from labstep.generic.entity.repository import entityRepository
 
@@ -23,7 +23,7 @@ class OrderRequestRepository:
             "group_id": user.activeWorkspace,
             "search_query": search_query,
             "tag_id": tag_id,
-            "status": handleString(status),
+            "status": handleKeyword(status),
             **extraParams,
         }
         return entityRepository.getEntities(user, OrderRequest, count, params)
@@ -44,7 +44,7 @@ class OrderRequestRepository:
         extraParams={},
     ):
         params = {
-            "status": handleString(status),
+            "status": handleKeyword(status),
             "resource_id": resource_id,
             "quantity": quantity,
             "price": price,

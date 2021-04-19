@@ -4,7 +4,7 @@
 
 import json
 from labstep.service.config import API_ROOT
-from labstep.service.helpers import url_join, handleString, getHeaders
+from labstep.service.helpers import url_join, handleKeyword, getHeaders
 from labstep.entities.tag.model import Tag
 from labstep.service.request import requestService
 from labstep.generic.entity.repository import entityRepository
@@ -38,7 +38,7 @@ class TagRepository:
         """
         params = {
             "search_query": search_query,
-            "type": handleString(type),
+            "type": handleKeyword(type),
             **extraParams,
         }
         return entityRepository.getEntities(user, Tag, count, params)
@@ -84,7 +84,7 @@ class TagRepository:
         tag
             An object representing the new Labstep Tag.
         """
-        params = {"name": name, "type": handleString(type), **extraParams}
+        params = {"name": name, "type": handleKeyword(type), **extraParams}
         return entityRepository.newEntity(user, Tag, params)
 
     def addTagTo(self, entity, tag):

@@ -5,6 +5,7 @@
 from labstep.entities.comment.model import Comment
 from labstep.generic.entity.repository import entityRepository
 from labstep.entities.file.repository import fileRepository
+from labstep.service.helpers import handleString
 
 
 class CommentRepository:
@@ -27,7 +28,7 @@ class CommentRepository:
         threadId = entity.thread["id"]
 
         params = {
-            "body": body,
+            "body": handleString(body),
             "parent_thread_id": threadId,
             "file_id": [[fileId]] if fileId is not None else None,
             **extraParams,
@@ -47,14 +48,16 @@ class CommentRepository:
         return entityRepository.editEntity(comment, params)
 
     def exportComment(self, comment, rootPath):
-        commentDir = entityRepository.exportEntity(comment, rootPath)
+        commentDir = entityRepository.exportEntity(
+            comment, rootPath)
 
         # export comment
         nestedCommentsDir = commentDir.joinpath('comments')
         nestedComments = comment.getComments(count=1000)
 
         for nestedComment in nestedComments:
-            nestedComment.export(nestedCommentsDir)
+            nestedComment.export(
+                nestedCommentsDir)
 
 
 commentRepository = CommentRepository()

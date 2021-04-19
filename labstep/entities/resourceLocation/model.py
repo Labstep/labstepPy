@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-import requests
-from labstep.service.config import API_ROOT
 from labstep.generic.entity.model import Entity
-from labstep.service.helpers import url_join, handleError, getHeaders, getTime
+from labstep.service.helpers import getTime
 
 
 class ResourceLocation(Entity):
@@ -43,12 +41,8 @@ class ResourceLocation(Entity):
         -------
         ::
 
-            # Get all ResourceLocations, since there is no function
-            # to get one ResourceLocation.
-            resource_locations = user.getResourceLocations()
-
-            # Select the tag by using python index.
-            resource_locations[1].edit(name='A New ResourceLocation Name')
+            resource_location = user.getResourceLocation(123)
+            resource_location.edit(name='A New ResourceLocation Name')
         """
         from labstep.entities.resourceLocation.repository import resourceLocationRepository
 
@@ -60,19 +54,21 @@ class ResourceLocation(Entity):
         """
         Delete an existing ResourceLocation.
 
-        Parameters
-        ----------
-        resourceLocation (obj)
-            The ResourceLocation to delete.
-
         Returns
         -------
-        resourceLocation
-            An object representing the ResourceLocation to delete.
+        :class:`~labstep.entities.resourceLocation.model.ResourceLocation`
+            An object representing the deleted ResourceLocation.
+
+        Example
+        -------
+        ::
+
+            resource_location = user.getResourceLocation(123)
+            resource_location.delete()
         """
         return self.edit(extraParams={"deleted_at": getTime()})
 
-    '''def addComment(self, body, filepath=None):
+    def addComment(self, body, filepath=None, extraParams={}):
         """
         Add a comment and/or file to a Labstep ResourceLocation.
 
@@ -81,8 +77,7 @@ class ResourceLocation(Entity):
         body (str)
             The body of the comment.
         filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
+            Filepath of file to attach to the comment
 
         Returns
         -------
@@ -93,41 +88,113 @@ class ResourceLocation(Entity):
         -------
         ::
 
-            # Get all ResourceLocations, since there is no function
-            # to get one ResourceLocation.
-            resource_locations = user.getResourceLocations()
-
-            # Select the tag by using python index.
-            resource_locations[1].addComment(body='I am commenting!',
-                                             filepath='pwd/file_to_upload.dat')
+            resource_location = user.getResourceLocation(123)
+            resource_location.edit(name='A New ResourceLocation Name')
         """
-        return addCommentWithFile(self, body, filepath)'''
+        from labstep.entities.comment.repository import commentRepository
 
-    '''def addTag(self, name):
+        return commentRepository.addCommentWithFile(
+            self, body, filepath, extraParams=extraParams
+        )
+
+    def getComments(self, count=100, extraParams={}):
         """
-        Add a tag to the ResourceLocation (creates a
-        new tag if none exists).
-
-        Parameters
-        ----------
-        name (str)
-            The name of the tag to create.
+        Retrieve the Comments attached to this Labstep Entity.
 
         Returns
         -------
-        :class:`~labstep.entities.resourceLocation.model.ResourceLocation`
-            The ResourceLocation that was tagged.
+        List[:class:`~labstep.entities.comment.model.Comment`]
+            List of the comments attached.
 
         Example
         -------
         ::
 
-            # Get all ResourceLocations, since there is no function
-            # to get one ResourceLocation.
-            resource_locations = user.getResourceLocations()
-
-            # Select the tag by using python index.
-            resource_locations[1].addTag(name='My Tag')
+            entity = user.getResource(17000)
+            item = entity.getItems()[1]
+            comments = item.getComments()
+            comments[0].attributes()
         """
-        tag(self, name)
-        return self'''
+        from labstep.entities.comment.repository import commentRepository
+
+        return commentRepository.getComments(self, count, extraParams=extraParams)
+
+    def addMetadata(
+        self,
+        fieldName,
+        fieldType="default",
+        value=None,
+        date=None,
+        number=None,
+        unit=None,
+        filepath=None,
+        extraParams={},
+    ):
+        """
+        Add Metadata to a ResourceLocation.
+
+        Parameters
+        ----------
+        fieldName (str)
+            The name of the field.
+        fieldType (str)
+            The Metadata field type. Options are: "default", "date",
+            "numeric", or "file". The "default" type is "Text".
+        value (str)
+            The value accompanying the fieldName entry.
+        date (str)
+            The date accompanying the fieldName entry. Must be
+            in the format of "YYYY-MM-DD HH:MM".
+        number (float)
+            The numeric value.
+        unit (str)
+            The unit accompanying the number entry.
+        filepath (str)
+            Local path to the file to upload for type 'file'
+
+        Returns
+        -------
+        :class:`~labstep.entities.metadata.model.Metadata`
+            An object representing the new Labstep Metadata.
+
+        Example
+        -------
+        ::
+
+            resource_location = user.getResourceLocation(123)
+            resource_location.addMetadata("Refractive Index",
+                                                    value="1.73")
+        """
+        from labstep.entities.metadata.repository import metadataRepository
+
+        return metadataRepository.addMetadataTo(
+            self,
+            fieldName,
+            fieldType=fieldType,
+            value=value,
+            date=date,
+            number=number,
+            unit=unit,
+            filepath=filepath,
+            extraParams=extraParams,
+        )
+
+    def getMetadata(self):
+        """
+        Retrieve the Metadata of a Labstep ResourceLocation.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.metadata.model.Metadata`]
+            An array of Metadata objects for the ResourceLocation.
+
+        Example
+        -------
+        ::
+
+            resource_location = user.getResourceLocation(123)
+            metadata = resource_location.getMetadata()
+        """
+        from labstep.entities.metadata.repository import metadataRepository
+
+        return metadataRepository.getMetadata(self)
