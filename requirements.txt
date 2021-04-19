@@ -10,3 +10,5 @@ sphinxcontrib-programoutput
 pycodestyle
 pylint
 beautifulsoup4
+Deprecated
+pathvalidate
