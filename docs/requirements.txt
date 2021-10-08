@@ -1,6 +1,14 @@
+pandas
+python-dotenv
+requests
+pytest
+coverage
+Pylama
 Sphinx
 sphinx_rtd_theme
 sphinxcontrib-programoutput
-python-dotenv
-requests
+pycodestyle
+pylint
 beautifulsoup4
+Deprecated
+pathvalidate
