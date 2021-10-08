@@ -3,9 +3,12 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.generic.entity.repository import entityRepository
-
+from labstep.entities.experiment.model import ExperimentProtocol
 
 class ExperimentProtocolRepository:
+    def getExperimentProtocolByGuid(self, user, guid):
+        return entityRepository.getEntityByGuid(user, ExperimentProtocol, guid=guid)
+
     def exportExperimentProtocol(self, experimentProtocol, rootPath, folderName):
 
         experimentProtocol.update()
@@ -22,7 +25,7 @@ class ExperimentProtocolRepository:
 
         # save data
         dataDir = expDir.joinpath('data')
-        data = experimentProtocol.getDataElements()
+        data = experimentProtocol.getDataFields()
 
         for dat in data:
             dat.export(dataDir)

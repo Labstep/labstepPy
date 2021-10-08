@@ -1,115 +1,112 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
+import pytest
+from fixtures import (
+    experiment,
+    protocol,
+    resource,
+    workspace,
+    proseMirrorState,
+    experimentCollection,
+    loadFixtures
+)
 
-from fixtures import (experiment, protocol, resource,
-                      testString, proseMirrorState, experimentCollection)
-
-entity = experiment()
+from shared import sharedTests
 
 
 class TestExperiment:
+    @pytest.fixture
+    def entity(self):
+        return experiment()
+
+    @pytest.fixture
+    def protocolToAdd(self):
+        return protocol()
+
+    @pytest.fixture
+    def resourceToAdd(self):
+        return resource()
+
+    @pytest.fixture
+    def workspaceToShare(self):
+        return workspace()
+
+    @pytest.fixture
+    def collection(self):
+        return experimentCollection()
+
+    def setup_method(self):
+        loadFixtures('Python\\\\Experiment')
+
     def test_edit(self):
+        entity = experiment()
         entity.edit('Pytest Edited', entry=proseMirrorState)
         entity.update()
         assert entity.name == 'Pytest Edited' and \
-            entity.getEntry() == proseMirrorState,\
-            'FAILED TO EDIT EXPERIMENT'
+            entity.getEntry() == proseMirrorState
 
-    def test_delete(self):
-        entityToDelete = experiment()
-        result = entityToDelete.delete()
-        assert result.deleted_at is not None, \
-            'FAILED TO DELETE EXPERIMENT'
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
 
-    def test_addProtocol(self):
-        get_protocol = protocol(empty=True)
-        result = entity.addProtocol(get_protocol)
-        assert result is not None, \
-            'FAILED TO ADD PROTOCOL TO EXPERIMENT'
+    def test_commenting(self, entity):
+        assert sharedTests.commenting(entity)
 
-    def test_getProtocols(self):
+    def test_tagging(self, entity):
+        assert sharedTests.tagging(entity)
+
+    def test_sharelink(self, entity):
+        assert sharedTests.sharelink(entity)
+
+    def test_sharing(self, entity, workspaceToShare):
+        assert sharedTests.sharing(entity, workspaceToShare)
+
+    def test_collections(self, entity, collection):
+        assert sharedTests.collections(entity, collection)
+
+    def test_files(self, entity):
+        assert sharedTests.files(entity)
+
+    def test_dataFields(self, entity):
+        assert sharedTests.dataFields(entity)
+
+    def test_tables(self, entity):
+        assert sharedTests.tables(entity)
+
+    def test_protocols(self, entity, protocolToAdd):
+        protocolAdded = entity.addProtocol(protocolToAdd)
         result = entity.getProtocols()
-        assert result[0].id is not None, \
-            'FAILED TO GET PROTOCOLS'
+        assert result[0].id == protocolAdded.id
 
-    def test_addComment(self):
-        result = entity.addComment(testString, './tests/data/sample.txt')
-        assert result is not None, \
-            'FAILED TO ADD COMMENT AND FILE'
-
-    def test_addTag(self):
-        result = entity.addTag(testString)
-        assert result is not None, \
-            'FAILED TO ADD TAG'
-
-    def test_getTags(self):
-        result = entity.getTags()
-        assert result[0].id is not None, \
-            'FAILED TO GET TAGS'
-
-    def test_commenting_on_comments(self):
-        comment = entity.getComments()[0]
-        comment.addComment('test')
-        comment = comment.getComments()[0]
-        assert comment.body == 'test',\
-            'FAILED COMMENT COMMENTING TEST'
-
-    def test_getDataElements(self):
-        dataElements = entity.getDataElements()
-        assert len(dataElements) == 0
-
-    def test_addDataElementTo(self):
-        entity.addDataElement('testField', fieldType="default")
-        entity.update()
-        dataElements = entity.getDataElements()
-        assert len(dataElements) == 1
-
-    def test_addMaterial(self):
-        test_resource = resource()
-        resource_item = test_resource.newItem('test')
+    def test_materials(self, entity, resourceToAdd):
+        resource_item = resourceToAdd.newItem('test')
         entity.addMaterial('testMaterial',
                            amount=10,
                            units='uL',
-                           resource_id=test_resource.id,
+                           resource_id=resourceToAdd.id,
                            resource_item_id=resource_item.id)
         material = entity.getMaterials()[0]
         assert material.name == 'testMaterial' \
             and material.amount == '10' \
             and material.units == 'uL' \
-            and material.resource['id'] == test_resource.id \
+            and material.resource['id'] == resourceToAdd.id \
             and material.resource_item['id'] == resource_item.id \
 
 
     def test_signatures(self):
+        entity = experiment()
         sig = entity.addSignature('test', lock=True)
         sigs = entity.getSignatures()
         sig.revoke()
         assert sig.id == sigs[0].id \
             and sig.statement == 'test' \
-            and sig.revoked_at is not None, \
-            'FAILED SIGNATURES TEST'
+            and sig.revoked_at is not None
 
-    def test_getSharelink(self):
-        sharelink = entity.getSharelink()
-        assert sharelink is not None
-
-    def test_addToCollection(self):
-        collection = experimentCollection()
-        entity.addToCollection(collection.id)
-        result = entity.getCollections()
-        assert result[0].id == collection.id
-
-    def test_removeFromCollection(self):
-        collection = experimentCollection()
+    def test_signatureRequests(self):
         entity = experiment()
-        entity.addToCollection(collection.id)
-        entity.removeFromCollection(collection.id)
-        result = entity.getCollections()
-        assert len(result) == 0
-
-    def test_addFile(self):
-        entity = experiment()
-        file = entity.addFile('./tests/data/sample.txt')
-        files = entity.getFiles()
-        assert files[0].id == file.id
+        request = entity.requestSignature(2, message='test')
+        requests = entity.getSignatureRequests()
+        request.cancel()
+        assert request.id == requests[0].id \
+            and request.message == 'test' \
+            and request.deleted_at is not None

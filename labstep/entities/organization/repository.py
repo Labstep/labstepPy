@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import getHeaders, url_join
 from labstep.entities.organization.model import Organization
 from labstep.generic.entity.repository import entityRepository

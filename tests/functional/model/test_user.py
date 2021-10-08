@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
+from labstep.entities.user.model import User
 import labstep
+import pytest
 import os
 from dotenv import load_dotenv
-from fixtures import user, workspace, testString
+from fixtures import workspace, testString, loadFixtures, newString
 
 load_dotenv()
 LABSTEP_API_USERNAME = os.getenv("LABSTEP_API_USERNAME")
@@ -14,176 +16,170 @@ LABSTEP_API_PASSWORD = os.getenv("LABSTEP_API_PASSWORD")
 
 
 class TestUser:
+
+    @pytest.fixture
+    def user(self):
+        return labstep.login(LABSTEP_API_USERNAME, LABSTEP_API_PASSWORD)
+
+    @pytest.fixture
+    def otherWorkspace(self):
+        return workspace()
+
+    def setup_method(self):
+        loadFixtures('Python\\\\User')
+
     def test_login(self):
-        user = labstep.login(LABSTEP_API_USERNAME, LABSTEP_API_PASSWORD)
-        assert user.id is not None, \
-            f'FAILED TO LOGIN with {LABSTEP_API_USERNAME}'
+        loginUser = labstep.login(LABSTEP_API_USERNAME, LABSTEP_API_PASSWORD)
+        assert loginUser.id is not None
 
     def test_authenticate(self):
-        user = labstep.authenticate(
+        authUser = labstep.authenticate(
             LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
-        assert user.id is not None, \
-            'FAILED TO AUTHENTICATE'
+        assert authUser.id is not None
 
-    def test_setWorkspace(self):
-        my_workspace = user.newWorkspace('Test')
-        user.setWorkspace(my_workspace.id)
-        my_experiment = user.newExperiment('Test')
-        workspace_experiments = my_workspace.getExperiments()
-        assert workspace_experiments[0].id == my_experiment.id, \
-            'FAILED TO SET WORKSPACE'
+    def test_setWorkspace(self, user, otherWorkspace):
+        user.setWorkspace(otherWorkspace.id)
+        experiment = user.newExperiment('Test')
+        experiments = otherWorkspace.getExperiments()
+        assert experiments[0].id == experiment.id
 
     # getSingle()
-    def test_getExperiment(self):
+    def test_experiments(self, user):
         entity = user.newExperiment(testString)
         result = user.getExperiment(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET EXPERIMENT'
+        assert result.name == testString
 
-    def test_getProtocol(self):
+    def test_getProtocol(self, user):
         entity = user.newProtocol(testString)
         result = user.getProtocol(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET PROTOCOL'
+        assert result.name == testString
 
-    def test_getResource(self):
+    def test_getResource(self, user):
         entity = user.newResource(testString)
         result = user.getResource(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET RESOURCE'
+        assert result.name == testString
 
-    def test_getResourceLocation(self):
+    def test_getResourceLocation(self, user):
         entity = user.newResourceLocation(testString)
         result = user.getResourceLocation(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET RESOURCE LOCATION'
+        assert result.name == testString
 
-    def test_getResourceCategory(self):
+    def test_getResourceCategory(self, user):
         entity = user.newResourceCategory(testString)
         result = user.getResourceCategory(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET RESOURCE CATEGORY'
+        assert result.name == testString
 
-    def test_getOrderRequest(self):
+    def test_getOrderRequest(self, user):
         new_resource = user.newResource(testString)
         entity = user.newOrderRequest(resource_id=new_resource.id)
         result = user.getOrderRequest(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET ORDER REQUEST'
+        assert result.name == testString
 
-    def test_getWorkspace(self):
+    def test_getWorkspace(self, user):
         entity = user.newWorkspace(testString)
         result = user.getWorkspace(entity.id)
-        assert result.name == testString, \
-            'FAILED TO GET WORKSPACE'
+        assert result.name == testString
 
-    def test_getFile(self):
+    def test_getFile(self, user):
         entity = user.newFile('./tests/data/sample.txt')
         result = user.getFile(entity.id)
-        assert result.id == entity.id, \
-            'FAILED TO GET FILE'
+        assert result.id == entity.id
 
     # getMany()
-    def test_getExperiments(self):
+    def test_getExperiments(self, user):
+        user.newExperiment(testString)
         result = user.getExperiments(count=10)
-        assert result[0].id, \
-            'FAILED TO GET EXPERIMENTS'
+        assert result[0].id
 
-    def test_getProtocols(self):
+    def test_getProtocols(self, user):
+        user.newProtocol(testString)
         result = user.getProtocols(count=10)
-        assert result[0].id, \
-            'FAILED TO GET PROTOCOLS'
+        assert result[0].id
 
-    def test_getResources(self):
+    def test_getResources(self, user):
+        user.newResource(testString)
         result = user.getResources(count=10)
-        assert result[0].id, \
-            'FAILED TO GET RESOURCES'
+        assert result[0].id
 
-    def test_getResourceCategorys(self):
+    def test_getResourceItems(self, user):
+        resource = user.newResource(testString)
+        resource.newItem()
+        result = user.getResourceItems(count=10)
+        assert result[0].id
+
+    def test_getResourceCategorys(self, user):
+        user.newResourceCategory(testString)
         result = user.getResourceCategorys(count=10)
-        assert result[0].id, \
-            'FAILED TO GET RESOURCE CATEGORYS'
+        assert result[0].id
 
-    def test_getResourceLocations(self):
+    def test_getResourceLocations(self, user):
+        user.newResourceLocation(testString)
         result = user.getResourceLocations(count=10)
-        assert result[0].id, \
-            'FAILED TO GET RESOURCE LOCATIONS'
+        assert result[0].id
 
-    def test_getOrderRequests(self):
+    def test_getOrderRequests(self, user):
+        new_resource = user.newResource(testString)
+        entity = user.newOrderRequest(resource_id=new_resource.id)
         result = user.getOrderRequests(count=10)
-        assert result[0].id, \
-            'FAILED TO GET ORDER REQUESTS'
+        assert result[0].id
 
-    def test_getOrderRequestsWithFilter(self):
+    def test_getOrderRequestsWithFilter(self, user: User):
+        new_resource = user.newResource(testString)
+        entity = user.newOrderRequest(resource_id=new_resource.id)
         result = user.getOrderRequests(status='new', count=10)
-        assert result[0].id, \
-            'FAILED TO GET ORDER REQUESTS WITH FILTER'
+        assert result[0].id
 
-    def test_getTags(self):
+    def test_getTags(self, user):
+        user.newTag(newString(), type='experiment_workflow')
         result = user.getTags(count=10)
-        assert result[0].id, \
-            'FAILED TO GET TAGS'
+        assert result[0].id
 
-    def test_getWorkspaces(self):
+    def test_getWorkspaces(self, user):
+        user.newWorkspace(testString)
         result = user.getWorkspaces(count=10)
-        assert result[0].id, \
-            'FAILED TO GET WORKSPACES'
-
-    def test_getFiles(self):
-        result = user.getFiles(count=10)
-        assert result[0].id, \
-            'FAILED TO GET FILES'
+        assert result[0].id
 
     # newEntity()
-    def test_newExperiment(self):
+    def test_newExperiment(self, user):
         result = user.newExperiment(testString)
-        assert result.name == testString, \
-            'FAILED TO CREATE NEW EXPERIMENT'
+        assert result.name == testString
 
-    def test_newProtocol(self):
+    def test_newProtocol(self, user):
         result = user.newProtocol(testString)
-        assert result.name == testString, \
-            'FAILED TO CREATE NEW PROTOCOL'
+        assert result.name == testString
 
-    def test_newResource(self):
+    def test_newResource(self, user):
         result = user.newResource(testString)
-        assert result.name == testString, \
-            'FAILED TO CREATE NEW RESOURCE'
+        assert result.name == testString
 
-    def test_newResourceCategory(self):
+    def test_newResourceCategory(self, user):
         result = user.newResourceCategory(testString)
-        assert result.name == testString, \
-            'FAILED TO CREATE NEW RESOURCE CATEGORY'
+        assert result.name == testString
 
-    def test_newResourceLocation(self):
+    def test_newResourceLocation(self, user):
         result = user.newResourceLocation('testLocation')
         result.delete()
-        assert result.name == 'testLocation', \
-            'FAILED TO CREATE NEW RESOURCE LOCATION'
+        assert result.name == 'testLocation'
 
-    def test_newOrderRequest(self):
+    def test_newOrderRequest(self, user):
         entity = user.newResource(testString)
         result = user.newOrderRequest(resource_id=entity.id)
-        assert result.name == testString, \
-            'FAILED TO CREATE NEW ORDER REQUEST'
+        assert result.name == testString
 
-    def test_newTag(self):
-        result = user.newTag('test_newTag', type='experiment_workflow')
-        result.delete()
-        assert result.name == 'test_newTag', \
-            'FAILED TO CREATE NEW TAG'
+    def test_newTag(self, user):
+        name = newString()
+        result = user.newTag(name, type='experiment_workflow')
+        assert result.name == name
 
-    def test_newWorkspace(self):
+    def test_newWorkspace(self, user):
         result = user.newWorkspace(testString)
-        assert result.name == testString, \
-            'FAILED TO CREATE NEW WORKSPACE'
+        assert result.name == testString
 
-    def test_newFile(self):
+    def test_newFile(self, user):
         result = user.newFile('./tests/data/sample.txt')
-        assert result is not None, \
-            'FAILED TO ADD NEW FILE'
+        assert result is not None
 
-    def test_acceptShareLink(self):
+    def test_acceptShareLink(self, user):
         # FIXME should be a workspace the user isn't already in!
         newWorkspace = workspace()
         sharelink = newWorkspace.getSharelink()

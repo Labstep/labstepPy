@@ -138,5 +138,13 @@ def listToClass(items, entityClass, user):
     return list(map(lambda x: entityClass(x, user), items))
 
 
-def getHeaders(user):
-    return {"apikey": user.api_key, "User-Agent": f"Python SDK {VERSION}"}
+def getHeaders(user=None):
+    if user is None:
+        return {
+            "User-Agent": f"Python SDK {VERSION}"
+        }
+    else:
+        return {
+            "apikey": user.api_key,
+            "User-Agent": f"Python SDK {VERSION}"
+        }

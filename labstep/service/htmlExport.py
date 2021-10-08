@@ -6,7 +6,7 @@ import json
 import glob
 from bs4 import BeautifulSoup
 from labstep.service.request import requestService
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import (
     url_join,
     getHeaders,
@@ -30,7 +30,7 @@ class HTMLExportService:
             "type": "html"
         }
 
-        url = url_join(API_ROOT, 'api/generic', 'entity-export')
+        url = url_join(configService.getHost(), 'api/generic', 'entity-export')
         response = requestService.post(url, json=body, headers=headers)
 
         return json.loads(response.content)['html']

@@ -2,15 +2,64 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
+
 import labstep
 import os
+import subprocess
 from dotenv import load_dotenv
+from labstep.entities.protocol.model import Protocol
+from labstep.entities.experiment.model import Experiment
+from labstep.entities.device.model import Device
+from labstep.entities.resource.model import Resource
+from labstep.entities.workspace.model import Workspace
+from labstep.entities.resourceLocation.model import ResourceLocation
+from labstep.entities.resourceItem.model import ResourceItem
+from labstep.entities.orderRequest.model import OrderRequest
+from labstep.entities.resourceCategory.model import ResourceCategory
+from labstep.entities.experimentProtocol.model import ExperimentProtocol
+from labstep.entities.collection.model import Collection
+from labstep.entities.metadata.model import Metadata
 
-load_dotenv()
+load_dotenv(override=True)
+LABSTEP_API_URL = os.getenv("LABSTEP_API_URL")
 LABSTEP_API_USERNAME = os.getenv("LABSTEP_API_USERNAME")
 LABSTEP_API_APIKEY = os.getenv("LABSTEP_API_APIKEY")
+SYMFONY_CONSOLE_PATH = os.getenv("LABSTEP_SYMFONY_CONSOLE_PATH")
 
-user = labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
+
+def loadFixtures(name):
+    print(f'\nLoading Fixtures {name}')
+
+    command = f'php {SYMFONY_CONSOLE_PATH} labstep:load-fixtures {name} --force'
+    popen = subprocess.Popen(
+        command,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
+    )
+    retval = popen.wait()
+    stdoutValue, stderrValue = popen.communicate()
+    assert retval == 0
+    assert stderrValue is None
+    assert 'Database ready' in stdoutValue.decode('utf-8')
+    print('\nFixtures loaded')
+
+    command = f'php {SYMFONY_CONSOLE_PATH} fos:elastica:populate --env=prod'
+    popen = subprocess.Popen(
+        command,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
+    )
+    retval = popen.wait()
+    stdoutValue, stderrValue = popen.communicate()
+    assert stderrValue is None
+    print('\nES populated\n')
+
+
+def authUser():
+    return labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
+
 
 tableData = {
     "rowCount": 6,
@@ -81,81 +130,92 @@ def newString():
     return labstep.service.helpers.getTime()
 
 
-def experiment(empty=False):
-    entity = user.newExperiment(testString)
-    if empty is True:
-        return entity
-    entity.addProtocol(user.newProtocol(testString))
-    entity.addMaterial(testString)
-    return entity.update()
+def experiment():
+    user = authUser()
+    return user.newExperiment(testString)
 
 
-def protocol(empty=False):
-    entity = user.newProtocol(testString)
-    if empty is True:
-        return entity
-
-    entity.addComment(testString)
-    entity.addMaterial(testString, amount='0.1', units='ml')
-    entity.addTimer(name=testString, hours=4, minutes=15)
-    entity.addTable(name=testString, data=tableData)
-    steps = entity.addSteps(2)
-    entity.edit(body=proseMirrorStateWithSteps(steps))
-
-    return entity.update()
+def protocol():
+    user = authUser()
+    return user.newProtocol(testString)
 
 
 def experimentProtocol():
-    entity = user.newExperiment(testString)
-    experiment_protocol = entity.addProtocol(protocol())
+    user = authUser()
+    exp = user.newExperiment(testString)
+    experiment_protocol = exp.addProtocol(protocol())
     return experiment_protocol
 
 
 def resource():
-    entity = user.newResource(testString)
-    entity.addMetadata(fieldName='test', value=testString)
-    entity.addComment(testString)
-    return entity.update()
+    user = authUser()
+    return user.newResource(testString)
 
 
 def resourceCategory():
-    entity = user.newResourceCategory(testString)
-    resourceTemplate = entity.getResourceTemplate()
-    resourceTemplate.addMetadata(fieldName='test', value=testString)
-    entity.addComment(testString)
-    return entity.update()
+    user = authUser()
+    return user.newResourceCategory(testString)
 
 
 def orderRequest():
+    user = authUser()
     new_resource = resource()
-    entity = new_resource.newOrderRequest()
-    entity.addMetadata(fieldName='test', value=testString)
-    entity.addComment(testString)
-    return entity.update()
+    return user.newOrderRequest(resource_id=new_resource.id)
 
 
 def resourceItem():
-    entity = resource().newItem(name='Pytest Acetone')
-    entity.addMetadata(fieldName='test', value=testString)
-    entity.addComment(testString)
-    return entity.update()
+    return resource().newItem(name='Pytest Acetone')
 
 
 def resourceLocation():
+    user = authUser()
     return user.newResourceLocation(testString)
 
 
 def workspace():
+    user = authUser()
     return user.newWorkspace(testString)
 
 
 def protocolCollection():
+    user = authUser()
     return user.newCollection(newString(), type="protocol")
 
 
 def experimentCollection():
+    user = authUser()
     return user.newCollection(newString())
 
 
 def device():
+    user = authUser()
     return user.newDevice(newString())
+
+
+def metadata():
+    user = authUser()
+    resourceWithMetadata = user.newResource(testString)
+    return resourceWithMetadata.addMetadata(testString)
+
+
+def experimentDataField():
+    user = authUser()
+    exp = user.newExperiment(testString)
+    return exp.addDataField('Test')
+
+
+def protocolDataField():
+    user = authUser()
+    p = user.newProtocol(testString)
+    return p.addDataField('Test')
+
+
+def experimentMaterial():
+    user = authUser()
+    exp = user.newExperiment(testString)
+    return exp.addMaterial('Test')
+
+
+def tag():
+    user = authUser()
+    return user.newTag('Test Tag', type='experiment_workflow')

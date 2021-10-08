@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-VERSION = "3.3.1"
+VERSION = "3.5.0"

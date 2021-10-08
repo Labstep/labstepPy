@@ -77,7 +77,7 @@ class ProtocolRepository:
 
         # save data
         dataDir = expDir.joinpath('data')
-        data = protocol.getDataElements()
+        data = protocol.getDataFields()
 
         for dat in data:
             dat.export(dataDir)

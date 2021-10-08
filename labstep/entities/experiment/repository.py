@@ -13,8 +13,8 @@ from labstep.service.htmlExport import htmlExportService
 
 
 class ExperimentRepository:
-    def getExperiment(self, user, experiment_id):
-        return entityRepository.getEntity(user, Experiment, id=experiment_id)
+    def getExperiment(self, user, id):
+        return entityRepository.getEntity(user, Experiment, id=id)
 
     def getExperiments(
         self,

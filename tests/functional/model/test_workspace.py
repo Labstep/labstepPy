@@ -1,93 +1,93 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
+import pytest
+import labstep
+from fixtures import authUser, workspace, testString, loadFixtures
 
-from fixtures import user, workspace, testString
-
-# Make new entity
-entity = workspace()
-
-user.setWorkspace(entity.id)
+from shared import sharedTests
 
 
 class TestWorkspace:
-    def test_edit(self):
-        result = entity.edit('Pytest Edited')
-        assert result.name == 'Pytest Edited', \
-            'FAILED TO EDIT WORKSPACE'
 
-    def test_delete(self):
-        entityToDelete = user.newWorkspace(testString)
-        result = entityToDelete.delete()
-        assert result.deleted_at is not None, \
-            'FAILED TO DELETE WORKSPACE'
+    @pytest.fixture
+    def user(self):
+        return authUser()
+
+    @pytest.fixture
+    def entity(self):
+        return workspace()
+
+    def setup_method(self):
+        loadFixtures('Python')
+
+    def test_edit(self, entity):
+        assert sharedTests.edit(entity)
+
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
+
+    def test_getSharelink(self, entity):
+        assert sharedTests.sharelink(entity)
 
     # getMany()
-    def test_getExperiments(self):
+    def test_getExperiments(self, entity, user):
+        user.setWorkspace(entity.id)
         user.newExperiment(testString)
         result = entity.getExperiments()
-        assert result[0].id, \
-            'FAILED TO GET EXPERIMENTS'
+        assert result[0].id
 
-    def test_getProtocols(self):
+    def test_getProtocols(self, entity, user):
+        user.setWorkspace(entity.id)
         user.newProtocol(testString)
         result = entity.getProtocols()
-        assert result[0].id, \
-            'FAILED TO GET PROTOCOLS'
+        assert result[0].id
 
-    def test_getResources(self):
+    def test_getResources(self, entity, user):
+        user.setWorkspace(entity.id)
         user.newResource(testString)
         result = entity.getResources()
-        assert result[0].id, \
-            'FAILED TO GET RESOURCES'
+        assert result[0].id
 
-    def test_getResourceCategorys(self):
+    def test_getResourceCategorys(self, entity, user):
         user.setWorkspace(entity.id)
         user.newResourceCategory(testString)
         result = entity.getResourceCategorys()
-        assert result[0].id, \
-            'FAILED TO GET RESOURCE CATEGORYS'
+        assert result[0].id
 
-    def test_getResourceLocations(self):
+    def test_getResourceLocations(self, entity, user):
         user.setWorkspace(entity.id)
         new_RL = user.newResourceLocation(testString)
         result = entity.getResourceLocations()
-        assert result[0].id, \
-            'FAILED TO GET RESOURCE LOCATIONS'
+        assert result[0].id
 
-    def test_getOrderRequests(self):
+    def test_getOrderRequests(self, entity, user):
+        user.setWorkspace(entity.id)
         new_resource = user.newResource(testString)
         new_resource.newOrderRequest()
         result = entity.getOrderRequests()
-        assert result[0].id, \
-            'FAILED TO GET ORDER REQUESTS'
+        assert result[0].id
 
-    def test_getTags(self):
+    def test_getTags(self, entity, user):
+        user.setWorkspace(entity.id)
         new_tag = user.newTag('test_newTag', type='experiment_workflow')
         result = entity.getTags()
         new_tag.delete()
-        assert result[0].id, \
-            'FAILED TO GET TAGS'
+        assert result[0].id
 
-    def test_getFiles(self):
+    def test_getFiles(self, entity):
         result = entity.getFiles()
-        assert len(result) >= 0, \
-            'FAILED TO GET FILES'
+        assert len(result) >= 0
 
-    def test_getMembers(self):
+    def test_getMembers(self, entity):
         result = entity.getMembers()
-        assert len(result) >= 0, \
-            'FAILED TO GET MEMBERS'
+        assert len(result) >= 0
 
-    def test_getSharelink(self):
-        sharelink = entity.getSharelink()
-        assert sharelink is not None
-
-    def test_getCollections(self):
+    def test_getCollections(self, entity):
         result = entity.getCollections()
         assert len(result) >= 0
 
-    def test_autoSharing(self):
+    def test_autoSharing(self, entity):
         result = entity.setAutosharing(
             experiment_sharing=False,
             protocol_sharing=False,

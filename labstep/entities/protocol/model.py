@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
-
-from labstep.entities.metadata.model import Metadata
+from deprecated import deprecated
+from labstep.entities.protocolDataField.model import ProtocolDataField
 from labstep.generic.primaryEntity.model import PrimaryEntity
 from labstep.entities.protocolStep.model import ProtocolStep
 from labstep.entities.protocolTable.model import ProtocolTable
@@ -13,7 +13,6 @@ from labstep.entities.protocolMaterial.repository import protocolMaterialReposit
 from labstep.service.helpers import (
     listToClass,
     getTime,
-    handleDate,
 )
 from labstep.entities.file.model import File
 from labstep.entities.file.repository import fileRepository
@@ -178,14 +177,14 @@ class Protocol(PrimaryEntity):
         steps = self.last_version["protocol_steps"]
         return listToClass(steps, ProtocolStep, self.__user__)
 
-    def getDataElements(self):
+    def getDataFields(self):
         """
-        Retrieve the Data Elements of a Protocol.
+        Retrieve the Data Fields of a Protocol.
 
         Returns
         -------
         :class:`~labstep.entities.metadata.model.Metadata`
-            An array of objects representing the Labstep Data Elements
+            An array of objects representing the Labstep Data Fields
             on a Protocol.
 
         Example
@@ -193,17 +192,21 @@ class Protocol(PrimaryEntity):
         ::
 
             protocol = user.getProtocol(17000)
-            metadata = exp_protocol.getDataElements()
+            metadata = protocol.getDataFields()
         """
         self.update()
         if "metadatas" not in self.last_version["metadata_thread"]:
             return []
 
-        return listToClass(
-            self.last_version["metadata_thread"]["metadatas"], Metadata, self.__user__
-        )
+        def addId(field):
+            field.protocol_id = self.id
+            return field
 
-    def addDataElement(
+        return list(map(addId, listToClass(
+            self.last_version["metadata_thread"]["metadatas"], ProtocolDataField, self.__user__
+        )))
+
+    def addDataField(
         self,
         fieldName,
         fieldType="default",
@@ -211,10 +214,11 @@ class Protocol(PrimaryEntity):
         date=None,
         number=None,
         unit=None,
+        filepath=None,
         extraParams={},
     ):
         """
-        Add a Data Element to a Protocol.
+        Add a Data Field to a Protocol.
 
         Parameters
         ----------
@@ -236,30 +240,29 @@ class Protocol(PrimaryEntity):
         Returns
         -------
         :class:`~labstep.entities.metadata.model.Metadata`
-            An object representing the new Labstep Data Element.
+            An object representing the new Labstep Data Field.
 
         Example
         -------
         ::
 
             protocol = user.getProtocol(17000)
-            dataElement = protocol.addDataElement("Refractive Index",
+            dataField = protocol.addDataField("Refractive Index",
                                                value="1.73")
         """
-        from labstep.generic.entity.repository import entityRepository
+        from labstep.entities.protocolDataField.repository import protocolDataFieldRepository
 
-        metadataThread = self.last_version["metadata_thread"]
-        params = {
-            "metadata_thread_id": metadataThread["id"],
-            "type": fieldType,
-            "label": fieldName,
-            "value": value,
-            "date": handleDate(date),
-            "number": number,
-            "unit": unit,
-            **extraParams,
-        }
-        return entityRepository.newEntity(self.__user__, Metadata, params)
+        return protocolDataFieldRepository.addDataFieldTo(
+            ProtocolVersion(self.last_version, self.__user__),
+            fieldName=fieldName,
+            fieldType=fieldType,
+            value=value,
+            date=date,
+            number=number,
+            unit=unit,
+            filepath=filepath,
+            extraParams=extraParams,
+        )
 
     def addMaterial(
         self, name=None, amount=None, units=None, resource_id=None, extraParams={}
@@ -547,7 +550,7 @@ class Protocol(PrimaryEntity):
 
     def export(self, path):
         """
-        Export the protocol to the directory specified. 
+        Export the protocol to the directory specified.
 
         Parameters
         -------
@@ -564,3 +567,11 @@ class Protocol(PrimaryEntity):
         from labstep.entities.protocol.repository import protocolRepository
 
         return protocolRepository.exportProtocol(self, path)
+
+    @ deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
+    def addDataElement(self, *args, **kwargs):
+        return self.addDataField(*args, **kwargs)
+
+    @ deprecated(version='3.3.2', reason="You should use experiment.getDataFields instead")
+    def getDataElements(self):
+        return self.getDataFields()

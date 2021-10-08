@@ -4,7 +4,7 @@
 
 from deprecated import deprecated
 from labstep.generic.entity.model import Entity
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import url_join, getHeaders
 from labstep.service.request import requestService
 
@@ -556,6 +556,35 @@ class User(Entity):
             self, count=count, search_query=search_query, extraParams=extraParams
         )
 
+    def getResourceItems(self, count=100, search_query=None, extraParams={}):
+        """
+        Retrieve a list of a user's ResourceItems on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of ResourceItems to retrieve.
+        search_query (str)
+            Search for ResourceItems with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.resourceItem.model.ResourceItem`]
+            A list of ResourceItem objects.
+
+        Example
+        -------
+        ::
+
+            entity = user.getResourceItems(search_query='batch #5')
+        """
+        from labstep.entities.resourceItem.repository import resourceItemRepository
+
+        return resourceItemRepository.getResourceItems(
+            self, count=count, search_query=search_query, extraParams=extraParams
+        )
+
     def getOrderRequests(
         self, count=100, search_query=None, status=None, tag_id=None, extraParams={}
     ):
@@ -993,7 +1022,55 @@ class User(Entity):
         """
         # FIXME Refactor
         headers = getHeaders(self)
-        url = url_join(API_ROOT, "/api/generic/",
+        url = url_join(configService.getHost(), "/api/generic/",
                        "share-link", 'accept', token)
         requestService.post(url, headers=headers)
         return None
+
+    def getJupyterInstance(self, jupyterInstanceGuid):
+        """
+        Retrieve a specific Labstep Jupyter Instance.
+
+        Parameters
+        ----------
+        jupyterInstanceGuid (string)
+            The JupyterInstance guid.
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterInstance.model.JupyterInstance`
+            An object representing a JupyterInstance on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
+        """
+        from labstep.entities.jupyterInstance.repository import jupyterInstanceRepository
+
+        return jupyterInstanceRepository.getJupyterInstance(self, jupyterInstanceGuid)
+
+    def getJupyterNotebook(self, jupyterNotebookGuid):
+        """
+        Retrieve a specific Labstep Jupyter Notebook.
+
+        Parameters
+        ----------
+        jupyterNotebookGuid (string)
+            The JupyterNotebook guid.
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`
+            An object representing a JupyterNotebook on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getJupyterNotebook("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
+        """
+        from labstep.entities.jupyterNotebook.repository import jupyterNotebookRepository
+
+        return jupyterNotebookRepository.getJupyterNotebook(self, jupyterNotebookGuid)

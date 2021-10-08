@@ -43,7 +43,7 @@ class CommentRepository:
             fileId = None
         return self.addComment(entity, body, fileId=fileId, extraParams=extraParams)
 
-    def editComment(self, comment, body, extraParams={}):
+    def editComment(self, comment, body=None, extraParams={}):
         params = {"body": body, **extraParams}
         return entityRepository.editEntity(comment, params)
 

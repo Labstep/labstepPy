@@ -4,7 +4,7 @@
 
 import json
 from labstep.service.helpers import listToClass, url_join, getHeaders
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.request import requestService
 from labstep.entities.permission.model import Permission
 
@@ -14,7 +14,7 @@ class PermissionRepository:
         entityName = entity.__entityName__
 
         headers = getHeaders(entity.__user__)
-        url = url_join(API_ROOT, "api/generic/", "acl")
+        url = url_join(configService.getHost(), "api/generic/", "acl")
 
         params = {
             "id": entity.id,
@@ -30,7 +30,7 @@ class PermissionRepository:
         entityName = entity.__entityName__
 
         headers = getHeaders(entity.__user__)
-        url = url_join(API_ROOT, "api/generic/", "acl")
+        url = url_join(configService.getHost(), "api/generic/", "acl")
 
         params = {
             "id": entity.id,
@@ -47,7 +47,7 @@ class PermissionRepository:
         entityName = entity.__entityName__
 
         headers = getHeaders(entity.__user__)
-        url = url_join(API_ROOT, "api/generic/", "acl")
+        url = url_join(configService.getHost(), "api/generic/", "acl")
 
         params = {
             "id": entity.id,
@@ -62,7 +62,7 @@ class PermissionRepository:
         entityName = entity.__entityName__
         headers = getHeaders(entity.__user__)
         url = url_join(
-            API_ROOT,
+            configService.getHost(),
             "api/generic/",
             "acl",
             entityName.replace("-", "_"),
@@ -76,7 +76,7 @@ class PermissionRepository:
         entityName = entity.__entityName__
         headers = getHeaders(entity.__user__)
         url = url_join(
-            API_ROOT, "api/generic/", entityName, str(entity.id), "transfer-ownership"
+            configService.getHost(), "api/generic/", entityName, str(entity.id), "transfer-ownership"
         )
         params = {"group_id": workspace_id}
         requestService.post(url, headers=headers, json=params)

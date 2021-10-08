@@ -1,34 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
-
-from fixtures import user, resourceLocation, newString
-
-entity = resourceLocation()
+import pytest
+from fixtures import resourceLocation, testString, loadFixtures, resourceItem
+from shared import sharedTests
 
 
 class TestResourceLocation:
-    def test_edit(self):
-        newName = newString()
-        result = entity.edit(newName)
-        result.delete()
-        assert result.name == newName, \
-            'FAILED TO EDIT RESOURCE LOCATION'
 
-    # FIXME
-    # def test_delete(self):
-    #     entityToDelete = user.newResourceLocation(newString())
-    #     result = entityToDelete.delete()
-    #     assert result is None, \
-    #         'FAILED TO DELETE RESOURCE LOCATION'
+    @pytest.fixture
+    def entity(self):
+        return resourceLocation()
 
-    # def test_addComment(self):
-    #     result = entity.addComment(testName,
-    #                                './tests/data/sample.txt')
-    #     assert result is not None, \
-    #         'FAILED TO ADD COMMENT AND FILE'
+    @pytest.fixture
+    def item(self):
+        return resourceItem()
 
-    # def test_addTag(self):
-    #     result = entity.addTag(testName)
-    #     assert result is not None, \
-    #         'FAILED TO ADD TAG'
+    def setup_method(self):
+        loadFixtures('Python')
+
+    def test_edit(self, entity):
+        assert sharedTests.edit(entity)
+
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
+
+    def test_commenting(self, entity):
+        assert sharedTests.commenting(entity)
+
+    def test_metadata(self, entity):
+        assert sharedTests.metadata(entity)
+
+    def test_getItems(self, entity, item):
+        item.edit(resource_location_id=entity.id)
+        items = entity.getItems()
+        assert items[0].id == item.id

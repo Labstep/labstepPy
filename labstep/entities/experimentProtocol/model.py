@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
-
+from deprecated import deprecated
 from labstep.entities.experimentMaterial.repository import experimentMaterialRepository
 from labstep.entities.file.repository import fileRepository
 from labstep.entities.file.model import File
@@ -322,15 +322,15 @@ class ExperimentProtocol(Entity):
         timers = self.experiment_timers
         return listToClass(timers, ExperimentTimer, self.__user__)
 
-    def getDataElements(self):
+    def getDataFields(self):
         """
-        Retrieve the Data Elements of a Protocol within an Experiment.
+        Retrieve the Data Fields of a Protocol within an Experiment.
 
         Returns
         -------
-        :class:`~labstep.entities.metadata.model.Metadata`
+        :class:`~labstep.entities.experimentDataField.model.ExperimentDataField`
             An array of objects representing the Labstep
-            Data Elements on a Protocol within an Experiment.
+            Data Fields on a Protocol within an Experiment.
 
         Example
         -------
@@ -338,13 +338,13 @@ class ExperimentProtocol(Entity):
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
-            metadata = exp_protocol.getDataElements()
+            metadata = exp_protocol.getDataFields()
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
 
-        return metadataRepository.getMetadata(self)
+        return experimentDataFieldRepository.getDataFields(self)
 
-    def addDataElement(
+    def addDataField(
         self,
         fieldName,
         fieldType="default",
@@ -356,7 +356,7 @@ class ExperimentProtocol(Entity):
         extraParams={},
     ):
         """
-        Add a Data Element to a Protocol within an Experiment.
+        Add a Data Field to a Protocol within an Experiment.
 
         Parameters
         ----------
@@ -380,7 +380,7 @@ class ExperimentProtocol(Entity):
         Returns
         -------
         :class:`~labstep.entities.metadata.model.Metadata`
-            An object representing the new Labstep Data Element.
+            An object representing the new Labstep Data Field.
 
         Example
         -------
@@ -388,13 +388,13 @@ class ExperimentProtocol(Entity):
 
             experiment = user.getExperiment(17000)
             experiment_protocol = experiment.getProtocols()[0]
-            dataElement = experiment_protocol.addDataElement(
+            dataField = experiment_protocol.addDataField(
                 "Refractive Index", value="1.73"
             )
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
 
-        return metadataRepository.addMetadataTo(
+        return experimentDataFieldRepository.addDataFieldTo(
             self,
             fieldName=fieldName,
             fieldType=fieldType,
@@ -455,6 +455,15 @@ class ExperimentProtocol(Entity):
         return listToClass(files, File, self.__user__)
 
     def export(self, rootPath, folderName=None):
-
         from labstep.entities.experimentProtocol.repository import experimentProtocolRepository
         return experimentProtocolRepository.exportExperimentProtocol(self, rootPath, folderName=folderName)
+
+    @deprecated(version='3.3.2', reason="You should use experimentProtocol.addDataField instead")
+    def addDataElement(self, *args, **kwargs):
+
+        return self.addDataField(*args, **kwargs)
+
+    @deprecated(version='3.3.2', reason="You should use experimentProtocol.getDataFields instead")
+    def getDataElements(self):
+
+        return self.getDataFields()

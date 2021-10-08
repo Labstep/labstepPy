@@ -3,7 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 import json
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import url_join, getHeaders
 from labstep.entities.file.model import File
 from labstep.service.request import requestService
@@ -20,8 +20,8 @@ class FileRepository:
 
         files = {'file': rawData}
         params = {"group_id": user.activeWorkspace, **extraParams}
-        headers = getHeaders(user)
-        url = url_join(API_ROOT, "/api/generic/file/upload")
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/file/upload")
         response = requestService.post(
             url, headers=headers, files=files, data=params)
         data = json.loads(response.content)
@@ -31,8 +31,8 @@ class FileRepository:
         return entityRepository.getEntity(user, File, fileId, isDeleted=None)
 
     def downloadFile(self, user, fileId):
-        headers = getHeaders(user)
-        url = url_join(API_ROOT, "/api/generic/file/download", str(fileId))
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/file/download", str(fileId))
         response = requestService.post(url, headers=headers)
         rawData = requestService.get(json.loads(response.content)[
                                      "signed_url"], headers=None).content
@@ -48,7 +48,7 @@ class FileRepository:
     def exportFile(self, file, root_path):
 
         fileDir = entityRepository.exportEntity(
-            file, root_path)
+            file, root_path, folderName=str(file.id))
         file.save(fileDir)
         if file.image_annotation is not None:
             annotatedFile = File(file.image_annotation, file.__user__)

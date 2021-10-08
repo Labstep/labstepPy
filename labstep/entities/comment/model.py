@@ -3,6 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.generic.entity.model import Entity
+from labstep.service.helpers import getTime
 
 
 class Comment(Entity):
@@ -31,6 +32,22 @@ class Comment(Entity):
         from labstep.entities.comment.repository import commentRepository
 
         return commentRepository.editComment(self, body, extraParams=extraParams)
+
+    def delete(self):
+        """
+        Delete the comment.
+
+        Example
+        -------
+        ::
+
+            comment.delete()
+        """
+        from labstep.entities.comment.repository import commentRepository
+
+        return commentRepository.editComment(
+            self, extraParams={"deleted_at": getTime()}
+        )
 
     def addComment(self, body, filepath=None):
         """

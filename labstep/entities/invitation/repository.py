@@ -3,7 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.service.helpers import url_join, getHeaders
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.request import requestService
 from labstep.entities.invitation.model import Invitation
 from labstep.generic.entity.repository import entityRepository
@@ -11,9 +11,9 @@ from labstep.generic.entity.repository import entityRepository
 
 class InvitationRepository:
     def newInvitations(self, user, invitationType, emails, organization_id, workspace_id=None):
-        url = url_join(API_ROOT, 'api/generic',
+        url = url_join(configService.getHost(), 'api/generic',
                        'share-link-invitation', invitationType)
-        headers = getHeaders(user)
+        headers = getHeaders(user=user)
         json = {
             'emails': emails,
             'organization_id': organization_id,
