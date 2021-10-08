@@ -385,3 +385,22 @@ class Resource(PrimaryEntity):
             my_resource.disableCustomItemTemplate()
         """
         self.getItemTemplate().delete()
+
+    def getData(self):
+        """
+        Returns data linked to this resource via experiments.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.experimentDataField.model.ExperimentDataField`]
+
+        Example
+        -------
+        ::
+
+            my_resource = user.getResource(17000)
+            my_resource.getData()
+        """
+        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+
+        return experimentDataFieldRepository.getDataFields(self)

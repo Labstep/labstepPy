@@ -1,32 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
+import pytest
+from fixtures import authUser, experiment, newString, loadFixtures, experimentCollection
 
-from fixtures import user, newString
+from shared import sharedTests
+
 
 class TestCollection:
-    def test_edit(self):
-        entity = user.newCollection(newString(), 'experiment')
-        newName = newString()
-        result = entity.edit(newName)
-        result.delete()
-        assert result.name == newName, \
-            'FAILED TO EDIT COLLECTION NAME'
+    @pytest.fixture
+    def user(self):
+        return authUser()
 
-    def test_delete(self):
-        entityToDelete = user.newCollection(newString(), 'experiment')
-        result = entityToDelete.delete()
-        assert result.deleted_at is not None, \
-            'FAILED TO DELETE COLLECTION'
+    @pytest.fixture
+    def entity(self):
+        return experimentCollection()
 
-    def test_getExperiments(self):
-        collection = user.newCollection(newString(), 'experiment')
-        experiment = user.newExperiment(newString())
-        experiment.addToCollection(collection.id)
-        experiments = user.getExperiments(collection_id=collection.id)
-        assert experiments[0].id == experiment.id
+    def setup_method(self):
+        loadFixtures('Python\\\\Collection')
 
-    def test_getProtocols(self):
+    def test_edit(self, entity):
+        assert sharedTests.edit(entity)
+
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
+
+    def test_getExperiments(self, entity, user):
+        experimentToAdd = experiment()
+        experimentToAdd.addToCollection(entity.id)
+        experiments = user.getExperiments(collection_id=entity.id)
+        assert experiments[0].id == experimentToAdd.id
+
+    def test_getProtocols(self, user):
         collection = user.newCollection(newString(), 'protocol')
         protocol = user.newProtocol(newString())
         protocol.addToCollection(collection.id)

@@ -198,3 +198,22 @@ class ResourceLocation(Entity):
         from labstep.entities.metadata.repository import metadataRepository
 
         return metadataRepository.getMetadata(self)
+
+    def getItems(self, count=100, extraParams={}):
+        """
+        Get a list of items in this location.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.resourceItem.model.ResourceItem`]
+            An array of items in the ResourceLocation.
+
+        Example
+        -------
+        ::
+
+            resource_location = user.getResourceLocation(123)
+            items = resource_location.getItems() 
+        """
+        from labstep.entities.resourceItem.repository import resourceItemRepository
+        return resourceItemRepository.getResourceItems(self.__user__, count=count, extraParams={'resource_location_id': self.id, **extraParams})

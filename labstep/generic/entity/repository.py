@@ -5,7 +5,7 @@
 import json
 from pathlib import Path
 from pathvalidate import sanitize_filepath
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import (
     listToClass,
     url_join,
@@ -17,22 +17,26 @@ from labstep.config.export import entityNameInFolderName
 
 class EntityRepository:
     def getLegacyEntity(self, user, entityClass, id):
-        headers = getHeaders(user)
-        url = url_join(API_ROOT, "/api/generic/",
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/",
                        entityClass.__entityName__, str(id))
         response = requestService.get(url, headers=headers)
         return entityClass(json.loads(response.content), user)
 
     def getEntity(self, user, entityClass, id, isDeleted="both"):
-        if hasattr(entityClass, "__isLegacy__"):
+        if getattr(entityClass, "__isLegacy__", None):
             return self.getLegacyEntity(user, entityClass, id)
-        else:
-            params = {"is_deleted": isDeleted, "get_single": 1, "id": id}
-            headers = getHeaders(user)
-            url = url_join(API_ROOT, "/api/generic/",
-                           entityClass.__entityName__)
-            response = requestService.get(url, headers=headers, params=params)
-            return entityClass(json.loads(response.content), user)
+
+        identifier = 'guid' if getattr(
+            entityClass, "__hasGuid__", None) else 'id'
+
+        params = {"is_deleted": isDeleted, "get_single": 1, identifier: id}
+
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/",
+                       entityClass.__entityName__)
+        response = requestService.get(url, headers=headers, params=params)
+        return entityClass(json.loads(response.content), user)
 
     def getEntities(self, user, entityClass, count, filterParams={}):
         countParameter = min(count, 50) if count is not None else None
@@ -40,8 +44,9 @@ class EntityRepository:
 
         params = {**searchParams, **filterParams}
 
-        headers = getHeaders(user)
-        url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/",
+                       entityClass.__entityName__)
         response = requestService.get(url, params=params, headers=headers)
         resp = json.loads(response.content)
         items = resp["items"]
@@ -55,8 +60,9 @@ class EntityRepository:
         return listToClass(items, entityClass, user)
 
     def newEntity(self, user, entityClass, fields):
-        headers = getHeaders(user)
-        url = url_join(API_ROOT, "/api/generic/", entityClass.__entityName__)
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/",
+                       entityClass.__entityName__)
         fields = dict(
             filter(lambda field: field[1] is not None, fields.items()))
 
@@ -68,9 +74,22 @@ class EntityRepository:
         response = requestService.post(url, headers=headers, json=fields)
         return entityClass(json.loads(response.content), user)
 
-    def newEntities(self, user, entityClass, items):
+    def linkEntities(self, user, entity1, entity2):
         headers = getHeaders(user)
-        url = url_join(API_ROOT, "/api/generic/",
+        url = url_join(
+            configService.getHost(),
+            "api/generic/",
+            entity1.__entityName__,
+            str(entity1.id),
+            entity2.__entityName__,
+            str(entity2.id),
+        )
+        response = requestService.put(url, headers=headers)
+        return json.loads(response.content)
+
+    def newEntities(self, user, entityClass, items):
+        headers = getHeaders(user=user)
+        url = url_join(configService.getHost(), "/api/generic/",
                        entityClass.__entityName__, "batch")
         response = requestService.post(
             url, headers=headers, json={"items": items, "group_id": user.activeWorkspace})
@@ -81,11 +100,14 @@ class EntityRepository:
         # Filter the 'fields' dictionary by removing {'fields': None}
         # to preserve the existing data in the 'fields', otherwise
         # the 'fields' will be overwritten to 'None'.
+        identifier = entity.guid if getattr(
+            entity, "__hasGuid__", None) and hasattr(entity, 'guid') else entity.id
+
         newFields = dict(
             filter(lambda field: field[1] is not None, fields.items()))
         headers = getHeaders(entity.__user__)
-        url = url_join(API_ROOT, "/api/generic/",
-                       entity.__entityName__, str(entity.id))
+        url = url_join(configService.getHost(), "/api/generic/",
+                       entity.__entityName__, str(identifier))
         response = requestService.put(url, json=newFields, headers=headers)
         entity.__init__(json.loads(response.content), entity.__user__)
         return entity

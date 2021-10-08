@@ -3,7 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 import json
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import url_join, handleKeyword, getHeaders
 from labstep.entities.tag.model import Tag
 from labstep.service.request import requestService
@@ -109,7 +109,7 @@ class TagRepository:
 
         headers = getHeaders(entity.__user__)
         url = url_join(
-            API_ROOT,
+            configService.getHost(),
             "api/generic/",
             entityName,
             str(entity.id),
@@ -176,7 +176,7 @@ class TagRepository:
 
     def deleteTag(self, tag):
         headers = getHeaders(tag.__user__)
-        url = url_join(API_ROOT, "/api/generic/", Tag.__entityName__, str(tag.id))
+        url = url_join(configService.getHost(), "/api/generic/", Tag.__entityName__, str(tag.id))
         requestService.delete(url, headers=headers)
         return None
 

@@ -12,7 +12,7 @@ class ResourceItemRepository:
         return entityRepository.getEntity(user, ResourceItem, id=resourceItem_id)
 
     def getResourceItems(
-        self, user, resource_id, count=100, search_query=None, extraParams={}
+        self, user, resource_id=None, count=100, search_query=None, extraParams={}
     ):
         params = {
             "search_query": search_query,

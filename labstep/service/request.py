@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 # Author: Thomas Bullier <thomas@labstep.com>
 # TODO Implement routing name
-# Example: url = url_join(API_ROOT, "api/generic/share-link/email")
+# Example: url = url_join(configService.getHost(), "api/generic/share-link/email")
 
+import os
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -22,7 +23,8 @@ class TimeoutHTTPAdapter(HTTPAdapter):
 
     def send(self, request, **kwargs):
         timeout = kwargs.get("timeout")
-        #kwargs['verify'] = False
+        if ("DISABLE_SSL_VERIFY" in os.environ.keys() and os.environ["DISABLE_SSL_VERIFY"] == "1"):
+            kwargs['verify'] = False
         if timeout is None:
             kwargs["timeout"] = self.timeout
         return super().send(request, **kwargs)

@@ -6,7 +6,7 @@ import json
 from labstep.entities.collection.model import Collection
 from labstep.service.request import requestService
 from labstep.service.helpers import url_join, getHeaders
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.generic.entity.repository import entityRepository
 
 class CollectionRepository:
@@ -38,7 +38,7 @@ class CollectionRepository:
 
         headers = getHeaders(entity.__user__)
         url = url_join(
-            API_ROOT,
+            configService.getHost(),
             "api/generic/",
             entityName,
             str(entity.id),
@@ -53,7 +53,7 @@ class CollectionRepository:
 
         headers = getHeaders(entity.__user__)
         url = url_join(
-            API_ROOT,
+            configService.getHost(),
             "api/generic/",
             entityName,
             str(entity.id),

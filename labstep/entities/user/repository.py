@@ -5,14 +5,14 @@
 import json
 import urllib.parse
 from labstep.entities.user.model import User
-from labstep.service.config import API_ROOT
+from labstep.service.config import configService
 from labstep.service.helpers import url_join
 from labstep.service.request import requestService
 
 
 class UserRepository:
     def getUser(self, username, apikey):
-        url = url_join(API_ROOT, f"api/generic/user/{username}")
+        url = url_join(configService.getHost(), f"api/generic/user/{username}")
         response = requestService.get(url, headers={"apikey": apikey})
         user = json.loads(response.content)
         return User(user)
@@ -26,7 +26,7 @@ class UserRepository:
         share_link_token=None,
         extraParams={},
     ):
-        url = url_join(API_ROOT, "public-api/user")
+        url = url_join(configService.getHost(), "public-api/user")
         params = {
             "first_name": first_name,
             "last_name": last_name,
@@ -43,7 +43,7 @@ class UserRepository:
         return User(json.loads(response.content))
 
     def authenticate(self, username, apikey):
-        url = url_join(API_ROOT, "api/generic/user/info")
+        url = url_join(configService.getHost(), "api/generic/user/info")
         response = requestService.get(url, headers={"apikey": apikey})
         user = json.loads(response.content)
         user["api_key"] = apikey
@@ -51,13 +51,13 @@ class UserRepository:
 
     def login(self, username, password):
         params = {"username": username, "password": password}
-        url = url_join(API_ROOT, "/public-api/user/login")
+        url = url_join(configService.getHost(), "/public-api/user/login")
         response = requestService.post(url=url, json=params, headers={})
         return User(json.loads(response.content))
 
     def impersonate(self, username, apikey):
         user = self.getUser(username, apikey)
-        url = url_join(API_ROOT, "api/generic/token/impersonate")
+        url = url_join(configService.getHost(), "api/generic/token/impersonate")
         response = requestService.post(
             url, json={'guid': user.guid}, headers={"apikey": apikey})
         token = json.loads(response.content)['uuid']

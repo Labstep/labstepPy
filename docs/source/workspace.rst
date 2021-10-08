@@ -3,14 +3,12 @@ Workspace
 
 .. autoclass:: labstep.entities.workspace.model.Workspace
    :members:
-   :undoc-members:
    
 
 
-Member
+Workspace Member
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.entities.member.model.Member
+.. autoclass:: labstep.entities.workspaceMember.model.WorkspaceMember
    :members:
-   :undoc-members:
    

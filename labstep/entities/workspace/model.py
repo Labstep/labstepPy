@@ -4,7 +4,7 @@
 
 from labstep.entities.autoshare.model import Autoshare
 from labstep.generic.entity.model import Entity
-from labstep.entities.member.model import Member
+from labstep.entities.workspaceMember.model import WorkspaceMember
 from labstep.entities.sharelink.model import Sharelink
 from labstep.service.helpers import getTime
 
@@ -362,6 +362,31 @@ class Workspace(Entity):
             self.__user__, count, type, search_query, extraParams=extraParams
         )
 
+    def addMember(self, user_id):
+        """
+        Add a new member to the workspace.
+
+        Note: can only be used to add users from within the same Organization.
+
+        Parameters
+        ----------
+        user_id (int)
+            The id of the user to add as a member
+
+        Returns
+        -------
+        :class:`~labstep.entities.workspaceMember.model.WorkspaceMember`
+            An object representing the member of the workspace and their permissions within the workspace.
+
+        Example
+        -------
+        ::
+
+            newMember = workspace.addMember(user_id=123)
+        """
+        from labstep.entities.workspaceMember.repository import workspaceMemberRepository
+        return workspaceMemberRepository.addMember(self.__user__, workspace_id=self.id, user_id=user_id)
+
     def getMembers(self, count=100, search_query=None, extraParams={}):
         """
         Retrieve a list of the members of the workspace.
@@ -369,14 +394,14 @@ class Workspace(Entity):
         Parameters
         ----------
         count (int)
-            The number of Members to retrieve.
+            The number of members to retrieve.
 
         search_query (str)
             Search for members by name.
 
         Returns
         -------
-        List[:class:`~labstep.entities.member.model.Member`]
+        List[:class:`~labstep.entities.workspaceMember.model.WorkspaceMember`]
             A list of the members of the workspace and their permissions.
 
         Example
@@ -385,12 +410,8 @@ class Workspace(Entity):
 
             members = workspace.getMembers(search_query='john')
         """
-        from labstep.generic.entity.repository import entityRepository
-
-        params = {"group_id": self.id,
-                  "search_query_user": search_query, **extraParams}
-
-        return entityRepository.getEntities(self.__user__, Member, count, params)
+        from labstep.entities.workspaceMember.repository import workspaceMemberRepository
+        return workspaceMemberRepository.getMembers(self.__user__, workspace_id=self.id, search_query=search_query, extraParams=extraParams)
 
     def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
         """
@@ -563,7 +584,7 @@ class Workspace(Entity):
         """
         Sets this workspace as the default workspace for the active user.
         """
-        member = Member(self.logged_user_user_group, self.__user__)
+        member = WorkspaceMember(self.logged_user_user_group, self.__user__)
         from labstep.generic.entity.repository import entityRepository
 
         return entityRepository.editEntity(member, {"is_home": True})

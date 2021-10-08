@@ -1,145 +1,79 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
-
-from fixtures import (user, protocol, tableData, testString,
-                      proseMirrorState, protocolCollection)
-
-entity = protocol()
-material = entity.getMaterials()[0]
-result = material.edit(name='New Sample Name')
+import pytest
+from fixtures import (
+    workspace,
+    protocol,
+    tableData,
+    testString,
+    proseMirrorState,
+    protocolCollection,
+    loadFixtures
+)
+from shared import sharedTests
 
 
 class TestProtocol:
-    def test_edit(self):
-        result = entity.edit('Pytest Edited')
-        assert result.name == 'Pytest Edited',\
-            'FAILED TO EDIT PROTOCOL'
 
-    def test_delete(self):
-        entityToDelete = user.newProtocol(testString)
-        result = entityToDelete.delete()
-        assert result.deleted_at is not None,\
-            'FAILED TO DELETE PROTOCOL'
+    @pytest.fixture
+    def entity(self):
+        return protocol()
 
-    def test_addComment(self):
-        result = entity.addComment(testString, './tests/data/sample.txt')
-        assert result is not None,\
-            'FAILED TO ADD COMMENT AND FILE'
+    @pytest.fixture
+    def collection(self):
+        return protocolCollection()
 
-    def test_getComments(self):
-        result = entity.getComments()
-        assert result[0].id is not None,\
-            'FAILED TO GET COMMENTS'
+    @pytest.fixture
+    def workspaceToShare(self):
+        return workspace()
 
-    def test_addTag(self):
-        result = entity.addTag(testString)
-        assert result is not None,\
-            'FAILED TO ADD TAG'
+    def setup_method(self):
+        loadFixtures('Python\\\\Protocol')
 
-    def test_getTags(self):
-        result = entity.getTags()
-        assert result[0].id is not None,\
-            'FAILED TO GET TAGS'
+    def test_edit(self, entity):
+        result = entity.edit(name=testString, body=proseMirrorState)
+        assert result.getBody() == proseMirrorState \
+            and result.name == testString
 
-    def test_addSteps(self):
-        result = entity.addSteps(2)
-        assert len(result) == 2
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
 
-    def test_getSteps(self):
-        result = entity.getSteps()
-        assert result[0].id is not None,\
-            'FAILED TO GET STEPS'
+    def test_commenting(self, entity):
+        assert sharedTests.commenting(entity)
 
-    def test_addMaterial(self):
-        result = entity.addMaterial(name=testString, amount='2.0', units='ml')
-        assert result is not None,\
-            'FAILED TO ADD MATERIAL'
+    def test_tagging(self, entity):
+        assert sharedTests.tagging(entity)
 
-    def test_getMaterials(self):
-        result = entity.getMaterials()
-        assert result[0].id is not None,\
-            'FAILED TO GET MATERIALS'
+    def test_sharelink(self, entity):
+        assert sharedTests.sharelink(entity)
 
-    def test_editMaterial(self):
-        material = entity.getMaterials()[0]
-        result = material.edit(name='New Sample Name')
-        assert result.name == 'New Sample Name',\
-            'FAILED TO EDIT MATERIAL'
+    def test_sharing(self, entity, workspaceToShare):
+        assert sharedTests.sharing(entity, workspaceToShare)
 
-    def test_addTimer(self):
-        result = entity.addTimer(name=testString, minutes=20, seconds=30)
-        assert result is not None,\
-            'FAILED TO ADD TIMER'
+    def test_steps(self, entity):
+        assert sharedTests.steps(entity)
 
-    def test_getTimers(self):
-        result = entity.getTimers()
-        assert result[0].id is not None,\
-            'FAILED TO GET TIMERS'
+    def test_materials(self, entity):
+        assert sharedTests.materials(entity)
 
-    def test_editTimer(self):
-        timer = entity.getTimers()[0]
-        result = timer.edit(minutes=17)
-        assert result.minutes == 17,\
-            'FAILED TO EDIT TIMER'
+    def test_timers(self, entity):
+        assert sharedTests.timers(entity)
 
-    def test_addTable(self):
-        result = entity.addTable(name=testString, data=tableData)
-        assert result is not None,\
-            'FAILED TO ADD TABLE'
+    def test_tables(self, entity):
+        assert sharedTests.tables(entity)
 
-    def test_getTables(self):
-        result = entity.getTables()
-        assert result[0].id is not None,\
-            'FAILED TO GET TABLES'
+    def test_dataFields(self, entity):
+        assert sharedTests.dataFields(entity)
 
-    def test_editTable(self):
-        table = entity.getTables()[0]
-        result = table.edit(name=testString)
-        assert result.name == testString,\
-            'FAILED TO EDIT TABLE'
+    def test_files(self, entity):
+        assert sharedTests.files(entity)
 
-    def test_getDataElements(self):
-        dataElements = entity.getDataElements()
-        assert len(dataElements) == 0
+    def test_collections(self, entity, collection):
+        assert sharedTests.collections(entity, collection)
 
-    def test_addDataElement(self):
-        entity.addDataElement(fieldType="default", fieldName="test")
-        newEntity = user.getProtocol(entity.id)
-        dataElements = newEntity.getDataElements()
-        assert len(dataElements) == 1
-
-    def test_edit_body(self):
-        result = entity.edit(name='updated', body=proseMirrorState)
-        assert result.getBody() == proseMirrorState,\
-            'FAILED TO EDIT PROTOCOL STATE'
-
-    def test_new_version(self):
+    def test_new_version(self, entity):
         oldId = entity.last_version['id']
         result = entity.newVersion()
         assert result.id == entity.id \
-            and result.last_version['id'] != oldId,\
-            'FAILED TO EDIT PROTOCOL'
-
-    def test_getSharelink(self):
-        sharelink = entity.getSharelink()
-        assert sharelink is not None
-
-    def test_addToCollection(self):
-        collection = protocolCollection()
-        entity.addToCollection(collection.id)
-        result = entity.getCollections()
-        assert result[0].id == collection.id
-
-    def test_removeFromCollection(self):
-        collection = protocolCollection()
-        entity = protocol()
-        entity.addToCollection(collection.id)
-        entity.removeFromCollection(collection.id)
-        result = entity.getCollections()
-        assert len(result) == 0
-
-    def test_addFile(self):
-        file = entity.addFile('./tests/data/sample.txt')
-        files = entity.getFiles()
-        assert files[0].id == file.id
+            and result.last_version['id'] != oldId

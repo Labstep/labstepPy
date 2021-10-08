@@ -1,88 +1,82 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
-
-from fixtures import user, resource, testString
-
-# Make new entity
-entity = resource()
+import pytest
+from fixtures import workspace, resource, resourceCategory, authUser, testString, loadFixtures
+from shared import sharedTests
 
 
 class TestResource:
-    def test_edit(self):
-        result = entity.edit('Pytest Edited')
-        assert result.name == 'Pytest Edited', \
-            'FAILED TO EDIT RESOURCE'
+    @pytest.fixture
+    def entity(self):
+        return resource()
 
-    def test_delete(self):
-        entityToDelete = user.newResource('testDelete')
-        result = entityToDelete.delete()
-        assert result.deleted_at is not None, \
-            'FAILED TO DELETE RESOURCE'
+    @pytest.fixture
+    def category(self):
+        return resourceCategory()
 
-    def test_addComment(self):
-        result = entity.addComment(testString, './tests/data/sample.txt')
-        assert result is not None, \
-            'FAILED TO ADD COMMENT AND FILE'
+    @pytest.fixture
+    def workspaceToShare(self):
+        return workspace()
 
-    def test_getComments(self):
-        result = entity.getComments()
-        assert result[0].id is not None, \
-            'FAILED TO GET COMMENTS'
+    def setup_method(self):
+        loadFixtures('Python\\\\Resource')
 
-    def test_addTag(self):
-        result = entity.addTag(testString)
-        assert result is not None, \
-            'FAILED TO ADD TAG'
+    def test_edit(self, entity):
+        assert sharedTests.edit(entity)
 
-    def test_getTags(self):
-        result = entity.getTags()
-        assert result[0].id is not None, \
-            'FAILED TO GET TAGS'
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
 
-    def test_addMetadata(self):
-        result = entity.addMetadata(fieldName=testString, value=testString)
-        assert result.label == testString, \
-            'FAILED TO ADD METADATA'
+    def test_commenting(self, entity):
+        assert sharedTests.commenting(entity)
 
-    def test_getMetadata(self):
-        result = entity.getMetadata()
-        assert result[0].id is not None, \
-            'FAILED TO GET METADATA'
+    def test_metadata(self, entity):
+        assert sharedTests.metadata(entity)
 
-    def test_setResourceCategory(self):
-        my_resourceCategory = user.newResourceCategory('Test')
-        entity.setResourceCategory(my_resourceCategory.id)
-        resourceCategory = entity.getResourceCategory()
-        assert resourceCategory is not None, \
-            'FAILED TO SET RESOURCE CATEGORY'
+    def test_tagging(self, entity):
+        assert sharedTests.tagging(entity)
 
-    def test_newOrderRequest(self):
+    def test_sharelink(self, entity):
+        assert sharedTests.sharelink(entity)
+
+    def test_sharing(self, entity, workspaceToShare):
+        assert sharedTests.sharing(entity, workspaceToShare)
+
+    def test_setResourceCategory(self, entity, category):
+        entity.setResourceCategory(category.id)
+        resourceCategoryFromGet = entity.getResourceCategory()
+        assert resourceCategoryFromGet.id == category.id
+
+    def test_newOrderRequest(self, entity):
         result = entity.newOrderRequest()
-        assert result.status, \
-            'FAILED TO MAKE NEW ORDER REQUEST'
+        assert result.status
 
-    def test_newItem(self):
+    def test_getData(self, entity):
+        user = authUser()
+        exp = user.newExperiment('Test')
+        data = exp.addDataField('Test', value='test')
+        material = exp.addMaterial(resource_id=entity.id)
+        data.linkToMaterial(material)
+        result = entity.getData()
+        assert result[0].id == data.id
+
+    def test_newItem(self, entity):
         result = entity.newItem(name=testString)
-        assert result.id, \
-            'FAILED TO MAKE NEW ITEM'
+        assert result.id
 
-    def test_getItems(self):
+    def test_getItems(self, entity):
+        item = entity.newItem()
         result = entity.getItems()
-        assert result[0].id, \
-            'FAILED TO GET ITEMS'
+        assert result[0].id == item.id
 
-    def test_enableItemTemplate(self):
+    def test_enableItemTemplate(self, entity):
         entity.enableCustomItemTemplate()
         itemTemplate = entity.getItemTemplate()
         assert itemTemplate.deleted_at is None
 
-    def test_disableItemTemplate(self):
+    def test_disableItemTemplate(self, entity):
         entity.enableCustomItemTemplate()
         entity.disableCustomItemTemplate()
         itemTemplate = entity.getItemTemplate()
         assert itemTemplate.deleted_at is not None
-
-    def test_getSharelink(self):
-        sharelink = entity.getSharelink()
-        assert sharelink is not None

@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
+import pytest
+from fixtures import tag, loadFixtures
 
-from fixtures import user, newString
+from shared import sharedTests
 
 
 class TestTag:
-    def test_edit(self):
-        entity = user.newTag(newString(), 'experiment_workflow')
-        newName = newString()
-        result = entity.edit(newName)
-        result.delete()
-        assert result.name == newName, \
-            'FAILED TO EDIT TAG NAME'
+    @pytest.fixture
+    def entity(self):
+        return tag()
 
-    def test_delete(self):
-        entityToDelete = user.newTag(newString(), 'experiment_workflow')
-        result = entityToDelete.delete()
-        assert result is None, \
-            'FAILED TO DELETE TAG'
+    def setup_method(self):
+        loadFixtures('Python')
+
+    def test_edit(self, entity):
+        assert sharedTests.edit(entity)
+
+    def test_delete(self, entity):
+        assert entity.delete() is None

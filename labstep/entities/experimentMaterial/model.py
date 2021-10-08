@@ -12,7 +12,7 @@ class ExperimentMaterial(Entity):
         super().__init__(data, user)
         self.amount = self.value
 
-    def edit(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None):
+    def edit(self, name=None, amount=None, units=None, resource_id=None, resource_item_id=None, extraParams={}):
         """
         Edit an existing Experiment Material.
 
@@ -49,4 +49,5 @@ class ExperimentMaterial(Entity):
                                                                    amount=amount,
                                                                    units=units,
                                                                    resource_id=resource_id,
-                                                                   resource_item_id=resource_item_id)
+                                                                   resource_item_id=resource_item_id,
+                                                                   extraParams=extraParams)

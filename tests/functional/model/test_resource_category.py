@@ -2,68 +2,46 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 # pylama:ignore=E501
-
-from fixtures import user, resourceCategory, testString
-
-entity = resourceCategory()
+import pytest
+from fixtures import resourceCategory, workspace, loadFixtures
+from shared import sharedTests
 
 
 class TestResourceCategory:
-    def test_edit(self):
-        result = entity.edit('Pytest Edited')
-        assert result.name == 'Pytest Edited', \
-            'FAILED TO EDIT RESOURCE CATEGORY'
 
-    def test_delete(self):
-        entityToDelete = user.newResourceCategory('testDelete')
-        result = entityToDelete.delete()
-        assert result.deleted_at is not None, \
-            'FAILED TO DELETE RESOURCE CATEGORY'
+    @pytest.fixture
+    def entity(self):
+        return resourceCategory()
 
-    def test_addComment(self):
-        result = entity.addComment(
-            testString, './tests/data/sample.txt')
-        assert result is not None, \
-            'FAILED TO ADD COMMENT AND FILE'
+    @pytest.fixture
+    def workspaceToShare(self):
+        return workspace()
 
-    def test_getComments(self):
-        result = entity.getComments()
-        assert result[0].id is not None, \
-            'FAILED TO GET COMMENTS'
+    def setup_method(self):
+        loadFixtures('Python\\\\ResourceCategory')
 
-    def test_addTag(self):
-        result = entity.addTag(testString)
-        assert result is not None, \
-            'FAILED TO ADD TAG'
+    def test_edit(self, entity):
+        assert sharedTests.edit(entity)
 
-    def test_getTags(self):
-        result = entity.getTags()
-        assert result[0].id is not None, \
-            'FAILED TO GET TAGS'
+    def test_delete(self, entity):
+        assert sharedTests.delete(entity)
 
-    def test_addMetadata(self):
-        new_resource_category = user.newResourceCategory(testString)
-        result = new_resource_category.getResourceTemplate().addMetadata(fieldName=testString,
-                                                                         value=testString)
-        assert result.label == testString, \
-            'FAILED TO ADD METADATA'
+    def test_commenting(self, entity):
+        assert sharedTests.commenting(entity)
 
-    def test_getMetadata(self):
-        result = entity.getResourceTemplate().getMetadata()
-        assert result[0].id is not None, \
-            'FAILED TO GET METADATA'
+    def test_metadata(self, entity):
+        assert sharedTests.metadata(entity.getResourceTemplate())
 
-    def test_enableItemTemplate(self):
+    def test_sharelink(self, entity):
+        assert sharedTests.sharelink(entity)
+
+    def test_sharing(self, entity, workspaceToShare):
+        assert sharedTests.sharing(entity, workspaceToShare)
+
+    def test_itemTemplate(self, entity):
         entity.enableItemTemplate()
-        itemTemplate = entity.getItemTemplate()
-        assert itemTemplate.deleted_at is None
-
-    def test_disableItemTemplate(self):
-        entity.enableItemTemplate()
+        enabledItemTemplate = entity.getItemTemplate()
         entity.disableItemTemplate()
-        itemTemplate = entity.getItemTemplate()
-        assert itemTemplate.deleted_at is not None
-
-    def test_getSharelink(self):
-        sharelink = entity.getSharelink()
-        assert sharelink is not None
+        disabledItemTemplate = entity.getItemTemplate()
+        assert enabledItemTemplate.deleted_at is None \
+            and disabledItemTemplate.deleted_at is not None
