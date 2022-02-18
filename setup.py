@@ -18,6 +18,6 @@ setup(name='labstep',
       license='MIT',
       packages=find_namespace_packages(include=['labstep', 'labstep.*']),
       install_requires=['requests', 'python-dotenv',
-                        'beautifulsoup4', 'Deprecated', 'pathvalidate'],
+                        'beautifulsoup4', 'Deprecated', 'pathvalidate', 'pandas'],
       tests_require=["pytest"],
       zip_safe=False)

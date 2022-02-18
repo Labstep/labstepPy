@@ -3,6 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.generic.entity.model import Entity
+from labstep.constants import UNSPECIFIED
 
 
 class ResourceTemplate(Entity):
@@ -12,11 +13,11 @@ class ResourceTemplate(Entity):
         self,
         fieldName,
         fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        value=UNSPECIFIED,
+        date=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -54,7 +55,7 @@ class ResourceTemplate(Entity):
             metadata = my_resource_category.addMetadata("Refractive Index",
                                                         value="1.73")
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.addMetadataTo(
             self,
@@ -85,6 +86,6 @@ class ResourceTemplate(Entity):
             metadatas = entity.getMetadata()
             metadatas[0].attributes()
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.getMetadata(self)

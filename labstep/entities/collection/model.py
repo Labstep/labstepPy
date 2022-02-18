@@ -4,6 +4,7 @@
 
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
 class Collection(Entity):
@@ -23,7 +24,7 @@ class Collection(Entity):
     __entityName__ = "folder"
     __hasParentGroup__ = True
 
-    def edit(self, name=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, extraParams={}):
         """
         Edit the name of an existing Collection.
 
@@ -48,7 +49,7 @@ class Collection(Entity):
             # Select the collection by using python index.
             collections[1].edit(name='A New Collection Name')
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.editCollection(self, name, extraParams=extraParams)
 
@@ -67,3 +68,35 @@ class Collection(Entity):
             An object representing the collection to delete.
         """
         return self.edit(extraParams={"deleted_at": getTime()})
+
+    def getSubCollections(self):
+        """
+        Get a list of the sub-collections within the collection.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.collection.model.Collection`]
+            A list of sub-collections
+
+        """
+        import labstep.entities.collection.repository as collectionRepository
+        return collectionRepository.getCollections(self.__user__, extraParams={'outer_folder_id': self.id})
+
+    def addSubCollections(self, names):
+        """
+        Add a sub-collection sub-collections to the collection.
+
+        Parameters
+        ----------
+        name (List[str])
+            List of names of sub-collections name of the new sub-collection.
+
+        Returns
+        -------
+        :class:`~labstep.entities.collection.model.Collection`
+            An object representing the collection created.
+        """
+        import labstep.entities.collection.repository as collectionRepository
+        types = {"experiment_workflow": "experiment",
+                 "protocol_collection": "protocol"}
+        return collectionRepository.newCollections(self.__user__, names=names, type=types[self.type], extraParams={'outer_folder_id': self.id})

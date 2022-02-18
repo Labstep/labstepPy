@@ -3,83 +3,47 @@
 # Author: Barney Walker <barney@labstep.com>
 
 import json
-from labstep.service.helpers import listToClass, url_join, getHeaders
+from labstep.service.helpers import url_join, getHeaders
 from labstep.service.config import configService
 from labstep.service.request import requestService
 from labstep.entities.permission.model import Permission
+from labstep.generic.entity.repository import getEntities, newEntity, editEntity, deleteEntity
 
 
-class PermissionRepository:
-    def newPermission(self, entity, workspace_id, permission):
-        entityName = entity.__entityName__
+def newPermission(entity, workspace_guid, permission):
+    entityName = entity.__entityName__.replace("-", "_")
 
-        headers = getHeaders(entity.__user__)
-        url = url_join(configService.getHost(), "api/generic/", "acl")
-
-        params = {
-            "id": entity.id,
-            "entity_class": entityName.replace("-", "_"),
-            "action": "grant",
-            "group_id": workspace_id,
-            "permission": permission,
-        }
-        requestService.post(url, headers=headers, json=params)
-        return entity
-
-    def editPermission(self, entity, workspace_id, permission):
-        entityName = entity.__entityName__
-
-        headers = getHeaders(entity.__user__)
-        url = url_join(configService.getHost(), "api/generic/", "acl")
-
-        params = {
-            "id": entity.id,
-            "entity_class": entityName.replace("-", "_"),
-            "action": "set",
-            "group_id": workspace_id,
-            "group_owner_id": workspace_id,
-            "permission": permission,
-        }
-        requestService.post(url, headers=headers, json=params)
-        return entity
-
-    def revokePermission(self, entity, workspace_id):
-        entityName = entity.__entityName__
-
-        headers = getHeaders(entity.__user__)
-        url = url_join(configService.getHost(), "api/generic/", "acl")
-
-        params = {
-            "id": entity.id,
-            "entity_class": entityName.replace("-", "_"),
-            "action": "revoke",
-            "group_id": workspace_id,
-        }
-        requestService.post(url, headers=headers, json=params)
-        return entity
-
-    def getPermissions(self, entity):
-        entityName = entity.__entityName__
-        headers = getHeaders(entity.__user__)
-        url = url_join(
-            configService.getHost(),
-            "api/generic/",
-            "acl",
-            entityName.replace("-", "_"),
-            str(entity.id),
-        )
-        response = requestService.get(url, headers=headers)
-        resp = json.loads(response.content)
-        return listToClass(resp["group_permissions"], Permission, entity)
-
-    def transferOwnership(self, entity, workspace_id):
-        entityName = entity.__entityName__
-        headers = getHeaders(entity.__user__)
-        url = url_join(
-            configService.getHost(), "api/generic/", entityName, str(entity.id), "transfer-ownership"
-        )
-        params = {"group_id": workspace_id}
-        requestService.post(url, headers=headers, json=params)
+    params = {
+        f'{entityName}_guid': entity.guid,
+        "group_guid": workspace_guid,
+        "type": permission,
+    }
+    return newEntity(entity.__user__, Permission, params)
 
 
-permissionRepository = PermissionRepository()
+def editPermission(permission, type):
+    return editEntity(permission, {'type': type})
+
+
+def revokePermission(permission):
+    return deleteEntity(permission)
+
+
+def getPermissions(entity, count=10):
+    entityName = entity.__entityName__.replace("-", "_")
+
+    params = {
+        f'{entityName}_id': entity.id
+    }
+
+    return getEntities(entity.__user__, Permission, count, params)
+
+
+def transferOwnership(entity, workspace_id):
+    entityName = entity.__entityName__
+    headers = getHeaders(entity.__user__)
+    url = url_join(
+        configService.getHost(), "api/generic/", entityName, str(entity.id), "transfer-ownership"
+    )
+    params = {"group_id": workspace_id}
+    requestService.post(url, headers=headers, json=params)

@@ -14,7 +14,7 @@ from labstep.service.helpers import (
 
 
 class HTMLExportService:
-    def getHTML(self, entity):
+    def getHTML(self, entity, withImages=False):
         """
         Gets HTML summary of experiments / protocols.
 
@@ -27,7 +27,7 @@ class HTMLExportService:
             "query_parameters": {
                 "id": entity.id
             },
-            "type": "html"
+            "type": "html_file" if withImages else "html"
         }
 
         url = url_join(configService.getHost(), 'api/generic', 'entity-export')

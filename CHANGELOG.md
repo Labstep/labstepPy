@@ -4,6 +4,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project (tries to) adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.12.0 2022-02-18
+
+- `ExperimentMaterial` class renamed to `ExperimentInventoryField`
+- `ProtocolMaterial` class renamed to `ProtocolInventoryField`
+- `Experiment.addMaterials` deprecated in favour or `Experiment.addInventoryField`
+- `Protocol.addMaterials` deprecated in favour or `Experiment.addInventoryField`
+## 3.11.1 2022-02-06
+
+- Experiment children serialization backwards compatibility
+
+## 3.11.0 2022-01-07
+## Added
+- Custom export methods 
+## Fixed
+- Thread is none bug
+
+## 3.10.0 2021-12-09
+
+## Added
+- `Collection.getSubCollections` method
+- `Collection.addSubCollections` method
+
+## 3.9.0 2021-12-08
+## Added
+-`Experiment.lock` method
+-`Experiment.unlock` method
+-`Experiment.complete` method
+- htmlToPDF service
+-`Experiment.getExperimentLinks` method
+-`Experiment.addExperimentLink` method
+-`ExperimentLink` model
+
+## Fixed
+- getEntities capped out at 100000
+- `Experiment.getEntry` from list of experiments.
+## Changed
+- Passing parameters as `None` will now set those fields to `NULL`
+
+## 3.8.0 2021-11-19
+
+## Added
+-`Workspace.getResourceItems` method
+-`Metadata.getValue` method
+-`Metadata.setValue` method
+
+## Changed
+-`getComments` no longer does API call if comment count is zero
+-`getComments` updates entity if thread not found.
+-`getMetadata` no longer does API call if metadata already on entity.
+## 3.7.0 2021-11-15
+
+## Added
+-`ExperimentTable.getDataFrame` method
+-`ProtocolTable.getDataFrame` method
+
+## Changed
+- Generic Entity Class inheritance structure updated
+## 3.6.0 - 2021-10-28
+
+## Added
+-`ExperimentProtocol.getExperiment` method
+-`ExperimentDataField.getValue` method
+-`ExperimentDataField.setValue` method
+- `EntityList` class
+  -  Entities in a list can now be accessed by name / label via `get` method
+
+## Changed
+-`User.newFile` filepath no longer required param
 ## 3.5.0 - 2021-10-08
 
 ## Added

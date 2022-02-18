@@ -19,6 +19,6 @@ class DeviceData(Entity):
 
             deviceData.delete()
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         return entityRepository.editEntity(self, fields={"deleted_at": getTime()})

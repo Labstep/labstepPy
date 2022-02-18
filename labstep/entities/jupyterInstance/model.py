@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Thomas Bullier <thomas@labstep.com>
 
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.generic.entity.model import Entity
 from labstep.service.helpers import getTime
 
 
-class JupyterInstance(PrimaryEntity):
+class JupyterInstance(Entity):
     """
     Represents an JupyterInstance on Labstep.
     """
@@ -33,7 +33,7 @@ class JupyterInstance(PrimaryEntity):
             my_jupyterInstance = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
             my_jupyterInstance.start()
         """
-        from labstep.entities.jupyterInstance.repository import jupyterInstanceRepository
+        import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
 
         return jupyterInstanceRepository.editJupyterInstance(
             self, startedAt=getTime()
@@ -58,8 +58,35 @@ class JupyterInstance(PrimaryEntity):
             my_jupyterInstance = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
             my_jupyterInstance.end()
         """
-        from labstep.entities.jupyterInstance.repository import jupyterInstanceRepository
+        import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
 
         return jupyterInstanceRepository.editJupyterInstance(
             self, endedAt=getTime()
+        )
+
+    def edit(self, data=None, extraParams={}):
+        """
+        Edit an existing JupyterInstance.
+
+        Parameters
+        ----------
+        data (str)
+            JupyterNotebook ipyb JSON data.
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterInstance.model.JupyterInstance`
+            An object representing the edited JupyterInstance.
+
+        Example
+        -------
+        ::
+
+            my_jupyterInstance = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
+            my_jupyterInstance.edit(data='{test: 42}')
+        """
+        import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
+
+        return jupyterInstanceRepository.editJupyterInstance(
+            self, data=data
         )

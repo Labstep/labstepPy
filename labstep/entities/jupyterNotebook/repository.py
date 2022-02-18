@@ -3,29 +3,30 @@
 # Author: Thomas Bullier <thomas@labstep.com>
 
 from labstep.entities.jupyterNotebook.model import JupyterNotebook
-from labstep.generic.entity.repository import entityRepository
+import labstep.generic.entity.repository as entityRepository
+from labstep.constants import UNSPECIFIED
 
 
-class JupyterNotebookRepository:
-    def getJupyterNotebook(self, user, guid):
-        return entityRepository.getEntity(user, JupyterNotebook, id=guid)
-
-    def editJupyterNotebook(
-        self,
-        jupyterNotebook,
-        name=None,
-        status=None,
-        data=None,
-        extraParams={},
-    ):
-        params = {
-            "name": name,
-            "status": status,
-            "data": data,
-            **extraParams,
-        }
-
-        return entityRepository.editEntity(jupyterNotebook, params)
+def newJupyterNotebook(user, name=UNSPECIFIED, data=UNSPECIFIED):
+    return entityRepository.newEntity(user, JupyterNotebook, {"name": name, "data": data})
 
 
-jupyterNotebookRepository = JupyterNotebookRepository()
+def getJupyterNotebook(user, guid):
+    return entityRepository.getEntity(user, JupyterNotebook, id=guid)
+
+
+def editJupyterNotebook(
+    jupyterNotebook,
+    name=UNSPECIFIED,
+    status=UNSPECIFIED,
+    data=UNSPECIFIED,
+    extraParams={},
+):
+    params = {
+        "name": name,
+        "status": status,
+        "data": data,
+        **extraParams,
+    }
+
+    return entityRepository.editEntity(jupyterNotebook, params)

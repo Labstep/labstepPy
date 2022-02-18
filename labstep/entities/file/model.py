@@ -4,6 +4,7 @@
 
 import os
 from labstep.generic.entity.model import Entity
+from labstep.constants import UNSPECIFIED
 
 
 class File(Entity):
@@ -21,11 +22,11 @@ class File(Entity):
             file = entities[0]
             data = file.getData()
         """
-        from labstep.entities.file.repository import fileRepository
+        import labstep.entities.file.repository as fileRepository
 
         return fileRepository.downloadFile(self.__user__, self.id)
 
-    def save(self, folder=None, name=None):
+    def save(self, folder=UNSPECIFIED, name=UNSPECIFIED):
         """
         Save a Labstep file to the local filesystem.
 
@@ -53,10 +54,10 @@ class File(Entity):
             print('Warning: Files from External Cloud Providers cannot be downloaded')
             return
 
-        if name is None:
+        if name is UNSPECIFIED:
             name = self.name
 
-        if folder is not None:
+        if folder is not UNSPECIFIED:
             filepath = os.path.join(folder, name)
         else:
             filepath = name
@@ -80,6 +81,6 @@ class File(Entity):
             file = user.getFile(17000)
             file.export('/my_folder')
         """
-        from labstep.entities.file.repository import fileRepository
+        import labstep.entities.file.repository as fileRepository
 
         return fileRepository.exportFile(self, path)

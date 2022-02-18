@@ -3,12 +3,14 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.generic.entity.model import Entity
+from labstep.constants import UNSPECIFIED
 
 
 class ExperimentTimer(Entity):
     __entityName__ = "experiment-timer"
+    __hasGuid__ = True
 
-    def edit(self, hours=None, minutes=None, seconds=None):
+    def edit(self, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):
         """
         Edit an existing Experiment Timer.
 
@@ -35,15 +37,15 @@ class ExperimentTimer(Entity):
             exp_protocol_timers = exp_protocol.getTimers()
             exp_protocol_timers[0].edit(minutes=1, seconds=7)
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         fields = {}
 
-        if hours is not None:
+        if hours is not UNSPECIFIED:
             fields["hours"] = hours
-        if minutes is not None:
+        if minutes is not UNSPECIFIED:
             fields["minutes"] = minutes
-        if seconds is not None:
+        if seconds is not UNSPECIFIED:
             fields["seconds"] = seconds
 
         return entityRepository.editEntity(self, fields)

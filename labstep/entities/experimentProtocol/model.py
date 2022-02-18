@@ -2,25 +2,22 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 from deprecated import deprecated
-from labstep.entities.experimentMaterial.repository import experimentMaterialRepository
-from labstep.entities.file.repository import fileRepository
 from labstep.entities.file.model import File
 from labstep.generic.entity.model import Entity
-from labstep.service.helpers import (
-    listToClass,
-)
+from labstep.generic.entityList.model import EntityList
 from labstep.entities.experimentStep.model import ExperimentStep
 from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentTimer.model import ExperimentTimer
+import labstep.entities.file.repository as fileRepository
+import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
+from labstep.constants import UNSPECIFIED
 
 
 class ExperimentProtocol(Entity):
     __entityName__ = "experiment"
 
-    __isLegacy__ = True
-
     def edit(
-        self, name=None, body=None, started_at=None, ended_at=None, extraParams={}
+        self, name=UNSPECIFIED, body=UNSPECIFIED, started_at=UNSPECIFIED, ended_at=UNSPECIFIED, extraParams={}
     ):
         """
         Edit an existing ExperimentProtocol.
@@ -52,7 +49,7 @@ class ExperimentProtocol(Entity):
             protocols[0].edit(name='A New Experiment Name',
                                started_at='2018-06-06 12:05')
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         fields = {
             "name": name,
@@ -62,6 +59,15 @@ class ExperimentProtocol(Entity):
             **extraParams,
         }
         return entityRepository.editEntity(self, fields)
+
+    def getExperiment(self):
+
+        from labstep.entities.experiment.repository import getExperiment
+
+        if hasattr(self, 'experiment_workflow') is False:
+            self.update()
+
+        return getExperiment(self.__user__, self.experiment_workflow['id'])
 
     def getBody(self):
         """
@@ -78,14 +84,14 @@ class ExperimentProtocol(Entity):
         self.update()
         return getattr(self, "state", None)
 
-    def getMaterials(self, count=100, extraParams={}):
+    def getInventoryFields(self, count=100, extraParams={}):
         """
-        Returns a list of the materials in a Protocol within an Experiment.
+        Returns a list of the inventory fields in a Protocol within an Experiment.
 
         Returns
         -------
-        List[:class:`~labstep.entities.experimentMaterial.model.ExperimentMaterial`]
-            List of the materials in an Experiment's Protocol.
+        List[:class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`]
+            List of the inventory fields in an Experiment's Protocol.
 
         Example
         -------
@@ -93,28 +99,29 @@ class ExperimentProtocol(Entity):
 
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
-            exp_protocol_materials = exp_protocol.getMaterials()
-            exp_protocol_materials[0].attributes()
+            exp_protocol_inventory_fields = exp_protocol.getInventoryFields()
+            exp_protocol_inventory_fields[0].attributes()
         """
-        return experimentMaterialRepository.getExperimentMaterials(self.__user__,
-                                                                   experiment_id=self.id, count=count, extraParams=extraParams)
 
-    def addMaterial(
+        return experimentInventoryFieldRepository.getExperimentInventoryFields(self.__user__,
+                                                                               experiment_id=self.id, count=count, extraParams=extraParams)
+
+    def addInventoryField(
         self,
-        name=None,
-        amount=None,
-        units=None,
-        resource_id=None,
-        resource_item_id=None,
+        name=UNSPECIFIED,
+        amount=UNSPECIFIED,
+        units=UNSPECIFIED,
+        resource_id=UNSPECIFIED,
+        resource_item_id=UNSPECIFIED,
         extraParams={},
     ):
         """
-        Add a new material to the ExperimentProtocol.
+        Add a new inventory field to the ExperimentProtocol.
 
         Parameters
         ----------
         name (str)
-            The name of the material to add.
+            The name of the inventory field to add.
         amount (str)
             The amount used.
         units (str)
@@ -127,8 +134,8 @@ class ExperimentProtocol(Entity):
 
         Returns
         -------
-        :class:`~labstep.entities.experimentMaterial.model.ExperimentMaterial`
-            The newly added material entity.
+        :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`
+            The newly added inventory field entity.
 
         Example
         -------
@@ -136,17 +143,17 @@ class ExperimentProtocol(Entity):
 
             experiment = user.getExperiment(17000)
             resource = user.getResources(search_query='Sample A')[0]
-            experiment.addMaterial(name='Sample A', amount='2', units='ml',
+            experiment.addInventoryField(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        return experimentMaterialRepository.newExperimentMaterial(self.__user__,
-                                                                  experiment_id=self.id,
-                                                                  name=name,
-                                                                  amount=amount,
-                                                                  units=units,
-                                                                  resource_id=resource_id,
-                                                                  resource_item_id=resource_item_id,
-                                                                  extraParams=extraParams)
+        return experimentInventoryFieldRepository.newExperimentInventoryField(self.__user__,
+                                                                              experiment_id=self.id,
+                                                                              name=name,
+                                                                              amount=amount,
+                                                                              units=units,
+                                                                              resource_id=resource_id,
+                                                                              resource_item_id=resource_item_id,
+                                                                              extraParams=extraParams)
 
     def addSteps(self, N):
         """
@@ -165,12 +172,12 @@ class ExperimentProtocol(Entity):
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_steps = exp_protocol.addSteps(5)
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         steps = [{"experiment_id": self.id}] * N
         return entityRepository.newEntities(self.__user__, ExperimentStep, steps)
 
-    def addTable(self, name=None, data=None):
+    def addTable(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
         Add a new table to a Protocol within an Experiment.
 
@@ -212,7 +219,7 @@ class ExperimentProtocol(Entity):
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol.addTable(name='Calibration', data=data)
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         params = {"experiment_id": self.id, "name": name, "data": data}
         return entityRepository.newEntity(self.__user__, ExperimentTable, params)
@@ -236,10 +243,13 @@ class ExperimentProtocol(Entity):
             exp_protocol_steps[0].attributes()
         """
         self.update()
-        steps = self.experiment_steps
-        return listToClass(steps, ExperimentStep, self.__user__)
+        if hasattr(self, 'experiment_steps'):
+            steps = self.experiment_steps
+        else:
+            steps = self.protocol_steps
+        return EntityList(steps, ExperimentStep, self.__user__)
 
-    def addTimer(self, name=None, hours=None, minutes=None, seconds=None):
+    def addTimer(self, name=UNSPECIFIED, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):
         """
         Add a new timer to a Protocol within an Experiment.
 
@@ -267,7 +277,7 @@ class ExperimentProtocol(Entity):
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol.addTimer(name='Refluxing', hours='4', minutes='30')
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         params = {
             "experiment_id": self.id,
@@ -297,8 +307,11 @@ class ExperimentProtocol(Entity):
             exp_protocol_tables[0].attributes()
         """
         self.update()
-        tables = self.experiment_tables
-        return listToClass(tables, ExperimentTable, self.__user__)
+        if hasattr(self, 'experiment_tables'):
+            tables = self.experiment_tables
+        else:
+            tables = self.protocol_tables
+        return EntityList(tables, ExperimentTable, self.__user__)
 
     def getTimers(self):
         """
@@ -319,8 +332,11 @@ class ExperimentProtocol(Entity):
             exp_protocol_timers[0].attributes()
         """
         self.update()
-        timers = self.experiment_timers
-        return listToClass(timers, ExperimentTimer, self.__user__)
+        if hasattr(self, 'experiment_timers'):
+            timers = self.experiment_timers
+        else:
+            timers = self.protocol_timers
+        return EntityList(timers, ExperimentTimer, self.__user__)
 
     def getDataFields(self):
         """
@@ -340,7 +356,7 @@ class ExperimentProtocol(Entity):
             exp_protocol = experiment.getProtocols()[0]
             metadata = exp_protocol.getDataFields()
         """
-        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.getDataFields(self)
 
@@ -348,11 +364,11 @@ class ExperimentProtocol(Entity):
         self,
         fieldName,
         fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        value=UNSPECIFIED,
+        date=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -392,7 +408,7 @@ class ExperimentProtocol(Entity):
                 "Refractive Index", value="1.73"
             )
         """
-        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.addDataFieldTo(
             self,
@@ -406,7 +422,7 @@ class ExperimentProtocol(Entity):
             extraParams=extraParams,
         )
 
-    def addFile(self, filepath=None, rawData=None):
+    def addFile(self, filepath=UNSPECIFIED, rawData=UNSPECIFIED):
         """
         Add a file to an Experiment Protocol.
 
@@ -452,18 +468,24 @@ class ExperimentProtocol(Entity):
         """
         self.update()
         files = self.files
-        return listToClass(files, File, self.__user__)
+        return EntityList(files, File, self.__user__)
 
-    def export(self, rootPath, folderName=None):
-        from labstep.entities.experimentProtocol.repository import experimentProtocolRepository
+    def export(self, rootPath, folderName=UNSPECIFIED):
+        import labstep.entities.experimentProtocol.repository as experimentProtocolRepository
         return experimentProtocolRepository.exportExperimentProtocol(self, rootPath, folderName=folderName)
 
     @deprecated(version='3.3.2', reason="You should use experimentProtocol.addDataField instead")
     def addDataElement(self, *args, **kwargs):
-
         return self.addDataField(*args, **kwargs)
 
     @deprecated(version='3.3.2', reason="You should use experimentProtocol.getDataFields instead")
     def getDataElements(self):
-
         return self.getDataFields()
+
+    @deprecated(version='3.12.0', reason="You should use getInventoryFields instead")
+    def getMaterials(self, *args, **kwargs):
+        return self.getInventoryFields(*args, **kwargs)
+
+    @deprecated(version='3.12.0', reason="You should use addInventoryField instead")
+    def addMaterial(self, *args, **kwargs):
+        return self.addInventoryField(*args, **kwargs)

@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from labstep.generic.entity.model import Entity
-from labstep.generic.entity.repository import entityRepository
+from deprecated import deprecated
+from labstep.generic.entityWithComments.model import EntityWithComments
+import labstep.generic.entity.repository as entityRepository
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
-class ExperimentDataField(Entity):
+class ExperimentDataField(EntityWithComments):
     """
     Represents a single data field attached to a Labstep Experiment.
 
@@ -22,8 +24,9 @@ class ExperimentDataField(Entity):
     """
 
     __entityName__ = "metadata"
+    __searchKey__ = 'label'
 
-    def edit(self, fieldName=None, value=None, extraParams={}):
+    def edit(self, fieldName=UNSPECIFIED, value=UNSPECIFIED, extraParams={}):
         """
         Edit the value of an existing data field.
 
@@ -45,7 +48,7 @@ class ExperimentDataField(Entity):
 
             data.edit(value='2.50')
         """
-        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.editDataField(
             self, fieldName, value, extraParams=extraParams
@@ -61,54 +64,121 @@ class ExperimentDataField(Entity):
 
             data.delete()
         """
-        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.editDataField(
             self, extraParams={"deleted_at": getTime()}
         )
 
-    def linkToMaterial(self, material):
+    def linkToInventoryField(self, inventoryField):
         """
-        Link a data field to a material.
+        Link a data field to an inventory field.
 
         Parameters
         ----------
-        material
-            The :class:`~labstep.entities.experimentMaterial.model.ExperimentMaterial` to link the data field to.
+        inventoryField
+            The :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField` to link the data field to.
 
         Example
         -------
         ::
 
-            material = experiment.addMaterial('Sample')
+            inventoryField = experiment.addInventoryField('Sample')
             data = experiment.addDataField('Concentration')
-            data.linkToMaterial(material)
+            data.linkToInventoryField(inventoryField)
         """
-        return entityRepository.linkEntities(self.__user__, self, material)
+        return entityRepository.linkEntities(self.__user__, self, inventoryField)
 
-    def getLinkedMaterials(self):
+    def getLinkedInventoryFields(self):
         """
-        Returns the materials linked to this data field..
+        Returns the inventory fields linked to this data field..
 
         Returns
         ----------
-        List[:class:`~labstep.entities.experimentMaterial.model.ExperimentMaterial`]
-            The material link the data field to.
+        List[:class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`]
+            The inventory field link the data field to.
 
         Example
         -------
         ::
 
-            material = experiment.addMaterial('Sample')
+            inventoryField = experiment.addInventoryField('Sample')
             data = experiment.addDataField('Concentration')
-            data.linkToMaterial(material)
+            data.linkToInventoryField(inventoryField)
         """
-        from labstep.entities.experimentMaterial.repository import experimentMaterialRepository
+        import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
 
         if self.experiment_id is not None:
 
-            return experimentMaterialRepository.getExperimentMaterials(
+            return experimentInventoryFieldRepository.getExperimentInventoryFields(
                 user=self.__user__,
                 experiment_id=self.experiment_id,
                 extraParams={'metadata_id': self.id}
             )
+
+    def getValue(self):
+        """
+        Returns the value of the data field.
+
+        Returns
+        ----------
+        Return type depends on the data type of the data field
+
+        Example
+        -------
+        ::
+
+            dataField = experiment.getDataFields()[0]
+            value = dataField.getValue()
+        """
+
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
+
+        return experimentDataFieldRepository.getDataFieldValue(self)
+
+    def setValue(self, value):
+        """
+        Sets the value of the data field.
+
+        Parameters
+        ----------
+        value 
+            The value to set, depends on the type of the data field. 
+
+        Returns
+        ----------
+        Return type depends on the data type of the data field
+
+        Example
+        -------
+        ::
+
+            dataFields = experiment.getDataFields()
+            textField = dataFields.get('My text field')
+            textField.setValue('Some String')
+
+            numericField = dataFields.get('My numeric field')
+            numericField.setValue(56534)
+
+            dateField = dataFields.get('My date field')
+            dateField.setValue('2021-10-28')
+
+            singleOptionsField = dataFields.get('My single options field')
+            singleOptionsField.setValue('Option 1')
+
+            multiOptionsField = dataFields.get('My multi options field')
+            multiOptionsField.setValue(['Option 1','Option 2'])
+
+            fileField = dataFields.get('My file field')
+            file = user.newFile('/path/to/file')
+            fileField.setValue(file)
+
+        """
+
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
+
+        return experimentDataFieldRepository.setDataFieldValue(self, value)
+
+    @deprecated(version='3.12.0', reason="You should use linkToInventoryField instead")
+    def linkToMaterial(self, *args, **kwargs):
+        return self.linkToInventoryField(*args, **kwargs)

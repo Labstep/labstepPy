@@ -4,6 +4,7 @@
 
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
 class ResourceItem(Entity):
@@ -24,11 +25,11 @@ class ResourceItem(Entity):
 
     def edit(
         self,
-        name=None,
-        availability=None,
-        quantity_amount=None,
-        quantity_unit=None,
-        resource_location_id=None,
+        name=UNSPECIFIED,
+        availability=UNSPECIFIED,
+        quantity_amount=UNSPECIFIED,
+        quantity_unit=UNSPECIFIED,
+        resource_location_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -60,7 +61,7 @@ class ResourceItem(Entity):
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.edit(name='A New ResourceItem Name')
         """
-        from labstep.entities.resourceItem.repository import resourceItemRepository
+        import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.editResourceItem(
             self,
@@ -83,11 +84,11 @@ class ResourceItem(Entity):
             my_resource_item = user.getResourceItem(17000)
             my_resource_item.delete()
         """
-        from labstep.entities.resourceItem.repository import resourceItemRepository
+        import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.editResourceItem(self, deleted_at=getTime())
 
-    def addComment(self, body, filepath=None, extraParams={}):
+    def addComment(self, body, filepath=UNSPECIFIED, extraParams={}):
         """
         Add a comment and/or file to a Labstep ResourceItem.
 
@@ -112,7 +113,7 @@ class ResourceItem(Entity):
             my_resource_item.addComment(body='I am commenting!',
                                         filepath='pwd/file_to_upload.dat')
         """
-        from labstep.entities.comment.repository import commentRepository
+        import labstep.entities.comment.repository as commentRepository
 
         return commentRepository.addCommentWithFile(
             self, body, filepath, extraParams=extraParams
@@ -136,7 +137,7 @@ class ResourceItem(Entity):
             comments = item.getComments()
             comments[0].attributes()
         """
-        from labstep.entities.comment.repository import commentRepository
+        import labstep.entities.comment.repository as commentRepository
 
         return commentRepository.getComments(self, count, extraParams=extraParams)
 
@@ -144,11 +145,11 @@ class ResourceItem(Entity):
         self,
         fieldName,
         fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        value=UNSPECIFIED,
+        date=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -186,7 +187,7 @@ class ResourceItem(Entity):
             metadata = my_resource_item.addMetadata("Refractive Index",
                                                     value="1.73")
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.addMetadataTo(
             self,
@@ -218,7 +219,7 @@ class ResourceItem(Entity):
             metadata = my_resource_item.getMetadata()
             metadatas[0].attributes()
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.getMetadata(self)
 
@@ -238,6 +239,6 @@ class ResourceItem(Entity):
             my_resource = user.getResource(17000)
             my_resource.getData()
         """
-        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.getDataFields(self)
