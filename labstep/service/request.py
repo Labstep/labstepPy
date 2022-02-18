@@ -8,7 +8,7 @@ import os
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from labstep.service.helpers import handleError
+from labstep.service.helpers import boolToString, filterUnspecified, handleError
 
 DEFAULT_TIMEOUT = 60  # seconds
 
@@ -44,28 +44,22 @@ http.mount("https://", adapter)
 http.mount("http://", adapter)
 
 
-def encode_boolean_values(kv):
-    """ convert bool values to 'true'/'false' strings for json compat """
-    def enc(x): return x if not isinstance(
-        x, bool) else 'true' if x else 'false'
-
-    return None if kv is None else {k: enc(v) for k, v in kv.items()}
-
-
 class RequestService:
     def get(self, url, headers, params=None):
+
         response = http.get(url, headers=headers,
-                            params=encode_boolean_values(params))
+                            params=boolToString(
+                                filterUnspecified(params)))
         return response
 
     def post(self, url, headers, json=None, files=None, data=None):
         response = http.post(
-            url, headers=headers, json=json, files=files, data=data
+            url, headers=headers, json=filterUnspecified(json), files=files, data=data
         )
         return response
 
     def put(self, url, headers, json=None):
-        response = http.put(url, headers=headers, json=json)
+        response = http.put(url, headers=headers, json=filterUnspecified(json))
         return response
 
     def delete(self, url, headers, json=None):

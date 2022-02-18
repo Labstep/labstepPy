@@ -4,21 +4,19 @@
 
 import labstep
 import os
-from labstep.entities.experimentProtocol.repository import experimentProtocolRepository
-
-class Jupyter:
-    def getExperiment(self):
-        """
-        Get Experiment based on Jupyter environment variables.
-
-        """
-        if ('LABSTEP_API_KEY' not in os.environ.keys() or 'LABSTEP_JUPYTER_EXPERIMENT_GUID' not in os.environ.keys()):
-            raise Exception("Not in jupyter")
-
-        user = labstep.authenticate()
-        experimentGuid = os.environ['LABSTEP_JUPYTER_EXPERIMENT_GUID']
-
-        return experimentProtocolRepository.getExperimentProtocolByGuid(user, experimentGuid)
+import labstep.generic.entity.repository as entityRepository
+from labstep.entities.experimentProtocol.model import ExperimentProtocol
 
 
-jupyter = Jupyter()
+def getParent():
+    """
+    Get Parent based on Jupyter environment variables.
+
+    """
+    if ('LABSTEP_API_KEY' not in os.environ.keys() or 'LABSTEP_JUPYTER_EXPERIMENT_GUID' not in os.environ.keys()):
+        raise Exception("Not in jupyter")
+
+    user = labstep.authenticate()
+    experimentGuid = os.environ['LABSTEP_JUPYTER_EXPERIMENT_GUID']
+
+    return entityRepository.getEntity(user, ExperimentProtocol, experimentGuid, useGuid=True)

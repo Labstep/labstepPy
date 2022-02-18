@@ -13,10 +13,10 @@ Experiment Protocol
    :members:
    
 
-Experiment Material
+Experiment Inventory Field
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.entities.experimentMaterial.model.ExperimentMaterial
+.. autoclass:: labstep.entities.experimentInventoryField.model.ExperimentInventoryField
    :members:
    
 Experiment Data Field

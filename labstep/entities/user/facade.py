@@ -3,11 +3,12 @@
 # Author: Barney Walker <barney@labstep.com>
 
 import os
-from labstep.entities.user.repository import userRepository
+import labstep.entities.user.repository as userRepository
+from labstep.constants import UNSPECIFIED
 
 
 def newUser(
-    first_name, last_name, email, password, share_link_token=None, extraParams={}
+    first_name, last_name, email, password, share_link_token=UNSPECIFIED, extraParams={}
 ):
     """
     TODO
@@ -17,7 +18,7 @@ def newUser(
     )
 
 
-def authenticate(username=None, apikey=None):
+def authenticate(username=UNSPECIFIED, apikey=UNSPECIFIED):
     """
     Returns an authenticated Labstep User object to allow
     you to interact with the Labstep API.
@@ -42,7 +43,7 @@ def authenticate(username=None, apikey=None):
 
         user = labstep.authenticate('myaccount@labstep.com', 'MY_API_KEY')
     """
-    if (apikey is None):
+    if (apikey is UNSPECIFIED):
         apikey = os.environ['LABSTEP_API_KEY']
 
     return userRepository.authenticate(username, apikey)

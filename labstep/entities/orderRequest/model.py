@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.generic.entityPrimary.model import EntityPrimary
+from labstep.generic.entityWithMetadata.model import EntityWithMetadata
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
-class OrderRequest(PrimaryEntity):
+class OrderRequest(EntityPrimary, EntityWithMetadata):
     """
     Represents an Order Request on Labstep.
 
@@ -24,11 +26,11 @@ class OrderRequest(PrimaryEntity):
 
     def edit(
         self,
-        status=None,
-        resource_id=None,
-        quantity=None,
-        price=None,
-        currency=None,
+        status=UNSPECIFIED,
+        resource_id=UNSPECIFIED,
+        quantity=UNSPECIFIED,
+        price=UNSPECIFIED,
+        currency=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -63,7 +65,7 @@ class OrderRequest(PrimaryEntity):
             my_orderRequest.edit(status="back_ordered", quantity=3,
                                  price=50, currency="GBP")
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.editOrderRequest(
             self,
@@ -86,7 +88,7 @@ class OrderRequest(PrimaryEntity):
             my_orderRequest = user.getOrderRequest(17000)
             my_orderRequest.delete()
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.editOrderRequest(self, deleted_at=getTime())
 
@@ -107,84 +109,3 @@ class OrderRequest(PrimaryEntity):
             my_orderRequest.getResource()
         """
         return self.__user__.getResource(self.resource["id"])
-
-    def addMetadata(
-        self,
-        fieldName,
-        fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
-        extraParams={},
-    ):
-        """
-        Add Metadata to an Order Request.
-
-        Parameters
-        ----------
-        fieldName (str)
-            The name of the field.
-        fieldType (str)
-            The Metadata field type. Options are: "default", "date",
-            "numeric", or "file". The "default" type is "Text".
-        value (str)
-            The value accompanying the fieldName entry.
-        date (str)
-            The date accompanying the fieldName entry. Must be
-            in the format of "YYYY-MM-DD HH:MM".
-        number (float)
-            The numeric value.
-        unit (str)
-            The unit accompanying the number entry.
-        filepath (str)
-            Local path to the file to upload for type 'file'
-
-        Returns
-        -------
-        :class:`~labstep.entities.metadata.model.Metadata`
-            An object representing the new Labstep Metadata.
-
-        Example
-        -------
-        ::
-
-            my_resource_category = user.getResourceCategory(17000)
-            metadata = my_resource_category.addMetadata("Refractive Index",
-                                               value="1.73")
-        """
-        from labstep.entities.metadata.repository import metadataRepository
-
-        return metadataRepository.addMetadataTo(
-            self,
-            fieldName,
-            fieldType,
-            value,
-            date,
-            number,
-            unit,
-            filepath=filepath,
-            extraParams=extraParams,
-        )
-
-    def getMetadata(self):
-        """
-        Retrieve the Metadata of a Labstep OrderRequest.
-
-        Returns
-        -------
-        :class:`~labstep.entities.metadata.model.Metadata`
-            An array of Metadata objects for the OrderRequest.
-
-        Example
-        -------
-        ::
-
-            my_order_request = user.getOrderRequest(17000)
-            metadatas = my_order_request.getMetadata()
-            metadatas[0].attributes()
-        """
-        from labstep.entities.metadata.repository import metadataRepository
-
-        return metadataRepository.getMetadata(self)

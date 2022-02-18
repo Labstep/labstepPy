@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
-
+import pandas
 from datetime import datetime
 from time import gmtime, strftime
-from labstep.constants.version import VERSION
+from labstep.constants import VERSION, UNSPECIFIED
 
 
 def url_join(*args):
@@ -57,52 +57,50 @@ def getTime():
     return timestamp
 
 
-def createdAtFrom(created_at_from):
+def formatDate(date, time=True):
+    if date is None:
+        return None
+
+    if date is UNSPECIFIED:
+        return UNSPECIFIED
+
+    format = '%Y-%m-%d %H:%M:%S' if time else '%Y-%m-%d'
+
+    return datetime.strptime(date, '%Y-%m-%dT%H:%M:%S+00:00').strftime(format)
+
+
+def handleDate(date):
     """
     Returns
     -------
-        The datetime for 'created_at_from' in json serializable format.
+        The datetime for in json serializable format.
     """
-    if created_at_from is None:
+    if date is None:
         return None
-    else:
-        timezone = getTime()[-6:]
-        created_at_from = created_at_from + "T00:00:00" + timezone
-        return created_at_from
 
+    if date is UNSPECIFIED:
+        return UNSPECIFIED
 
-def createdAtTo(created_at_to):
-    """
-    Returns
-    -------
-        The datetime for 'created_at_to' in json serializable format.
-    """
-    if created_at_to is None:
-        return None
-    else:
-        timezone = getTime()[-6:]
-        created_at_to = created_at_to + "T23:59:59" + timezone
-        return created_at_to
+    for fmt in ('%Y-%m-%d', '%Y-%m-%d %H:%M', '%Y-%m-%d %H:%M:%S'):
+        try:
+            return datetime.strptime(date, fmt).strftime('%Y-%m-%dT%H:%M:%S+00:00')
+        except ValueError:
+            pass
+    raise ValueError(
+        'Please Specify date in format: YY-MM-DD or YY-MM-DD HH:MM:SS')
 
-
-def handleDate(datetime):
-    """
-    Returns
-    -------
-        The datetime in json serializable format.
-    """
-    if datetime is None:
-        return None
-    else:
-        timezone = getTime()[-6:]
-        datetime = datetime.replace(" ", "T") + ":00" + timezone
-        return datetime
 
 def handleString(string):
     """
     Casts to string or returns None
     """
-    return str(string) if string else None
+    if string is None:
+        return None
+    if string is UNSPECIFIED:
+        return UNSPECIFIED
+
+    return str(string)
+
 
 def handleKeyword(string):
     """
@@ -113,6 +111,9 @@ def handleKeyword(string):
     """
     if string is None:
         return None
+    if string is UNSPECIFIED:
+        return UNSPECIFIED
+
     else:
         return string.lower().replace(" ", "_")
 
@@ -129,15 +130,6 @@ def update(entity, newData):
     return entity
 
 
-def listToClass(items, entityClass, user):
-    """
-    Returns
-    -------
-    return list(map(lambda x: entityClass(x, user), items))
-    """
-    return list(map(lambda x: entityClass(x, user), items))
-
-
 def getHeaders(user=None):
     if user is None:
         return {
@@ -148,3 +140,44 @@ def getHeaders(user=None):
             "apikey": user.api_key,
             "User-Agent": f"Python SDK {VERSION}"
         }
+
+
+def boolToString(kv):
+    """ convert bool values to 'true'/'false' strings for json compat """
+    def enc(x): return x if not isinstance(
+        x, bool) else 'true' if x else 'false'
+
+    return None if kv is None else {k: enc(v) for k, v in kv.items()}
+
+
+def filterUnspecified(obj):
+    return None if obj is None else {k: v for (k, v) in obj.items() if v is not UNSPECIFIED}
+
+
+def getKeyValues(obj):
+    return obj.items() if isinstance(obj, dict) else enumerate(obj)
+
+
+def getCellValue(cell):
+    if 'value' not in cell:
+        return None
+    if isinstance(cell['value'], str):
+        return str(cell['value']).strip()
+
+    return cell['value']
+
+
+def dataTableToDataFrame(dataTable):
+
+    values = {
+        str(rowKey): {
+            str(columnKey): getCellValue(cell)
+            for (columnKey, cell) in getKeyValues(row)
+        } for (rowKey, row) in getKeyValues(dataTable)
+    }
+
+    header = values.pop('0')
+
+    df = pandas.DataFrame(values).T.rename(columns=header)
+
+    return df

@@ -3,11 +3,13 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.service.helpers import getTime
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.generic.entityPrimary.model import EntityPrimary
+from labstep.generic.entityWithMetadata.model import EntityWithMetadata
 from labstep.entities.resourceItem.model import ResourceItem
+from labstep.constants import UNSPECIFIED
 
 
-class Resource(PrimaryEntity):
+class Resource(EntityPrimary, EntityWithMetadata):
     """
     Represents a Resource on Labstep.
 
@@ -23,7 +25,7 @@ class Resource(PrimaryEntity):
 
     __entityName__ = "resource"
 
-    def edit(self, name=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, extraParams={}):
         """
         Edit an existing Resource.
 
@@ -44,7 +46,7 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             my_resource.edit(name='A New Resource Name')
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         return resourceRepository.editResource(self, name, extraParams=extraParams)
 
@@ -59,90 +61,9 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             my_resource.delete()
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         return resourceRepository.editResource(self, deleted_at=getTime())
-
-    def addMetadata(
-        self,
-        fieldName,
-        fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
-        extraParams={},
-    ):
-        """
-        Add Metadata to a Resource.
-
-        Parameters
-        ----------
-        fieldName (str)
-            The name of the field.
-        fieldType (str)
-            The Metadata field type. Options are: "default", "date",
-            "numeric", or "file". The "default" type is "Text".
-        value (str)
-            The value accompanying the fieldName entry.
-        date (str)
-            The date accompanying the fieldName entry. Must be
-            in the format of "YYYY-MM-DD HH:MM".
-        number (float)
-            The numeric value.
-        unit (str)
-            The unit accompanying the number entry.
-        filepath (str)
-            Local path to the file to upload for type 'file'
-
-        Returns
-        -------
-        :class:`~labstep.entities.metadata.model.Metadata`
-            An object representing the new Labstep Metadata.
-
-        Example
-        -------
-        ::
-
-            resource = user.getResource(17000)
-            metadata = resource.addMetadata("Refractive Index",
-                                               value="1.73")
-        """
-        from labstep.entities.metadata.repository import metadataRepository
-
-        return metadataRepository.addMetadataTo(
-            self,
-            fieldName=fieldName,
-            fieldType=fieldType,
-            value=value,
-            date=date,
-            number=number,
-            unit=unit,
-            filepath=filepath,
-            extraParams=extraParams,
-        )
-
-    def getMetadata(self):
-        """
-        Retrieve the Metadata of a Labstep Resource.
-
-        Returns
-        -------
-        :class:`~labstep.entities.metadata.model.Metadata`
-            An array of Metadata objects for the Resource.
-
-        Example
-        -------
-        ::
-
-            my_resource = user.getResource(17000)
-            metadatas = my_resource.getMetadata()
-            metadatas[0].attributes()
-        """
-        from labstep.entities.metadata.repository import metadataRepository
-
-        return metadataRepository.getMetadata(self)
 
     def getResourceCategory(self):
         """
@@ -163,7 +84,7 @@ class Resource(PrimaryEntity):
             # Get the Resource Category of the resource
             resourceCategory = resource.getResourceCategory()
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         return resourceCategoryRepository.getResourceCategory(
             self.__user__, self.template["id"]
@@ -195,7 +116,7 @@ class Resource(PrimaryEntity):
             # Set the Resource Category
             my_resource = my_resource.setResourceCategory(resource_category.id)
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         return resourceRepository.editResource(
             self, resource_category_id=resource_category_id, extraParams=extraParams
@@ -222,7 +143,7 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             order_request = my_resource.newOrderRequest(quantity=2)
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.newOrderRequest(
             self.__user__,
@@ -231,7 +152,7 @@ class Resource(PrimaryEntity):
             extraParams=extraParams,
         )
 
-    def getItems(self, count=100, search_query=None, extraParams={}):
+    def getItems(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Returns the items of this Resource.
 
@@ -256,7 +177,7 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             items = my_resource.getItems()
         """
-        from labstep.entities.resourceItem.repository import resourceItemRepository
+        import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.getResourceItems(
             self.__user__,
@@ -268,11 +189,11 @@ class Resource(PrimaryEntity):
 
     def newItem(
         self,
-        name=None,
+        name=UNSPECIFIED,
         availability="available",
-        quantity_amount=None,
-        quantity_unit=None,
-        resource_location_id=None,
+        quantity_amount=UNSPECIFIED,
+        quantity_unit=UNSPECIFIED,
+        resource_location_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -304,7 +225,7 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             item = my_resource.newItem(name='Test Item')
         """
-        from labstep.entities.resourceItem.repository import resourceItemRepository
+        import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.newResourceItem(
             self.__user__,
@@ -401,6 +322,6 @@ class Resource(PrimaryEntity):
             my_resource = user.getResource(17000)
             my_resource.getData()
         """
-        from labstep.entities.experimentDataField.repository import experimentDataFieldRepository
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.getDataFields(self)

@@ -3,6 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.generic.entity.model import Entity
+from labstep.constants import UNSPECIFIED
 
 
 class Tag(Entity):
@@ -22,7 +23,7 @@ class Tag(Entity):
     __entityName__ = "tag"
     __hasParentGroup__ = True
 
-    def edit(self, name=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, extraParams={}):
         """
         Edit the name of an existing Tag.
 
@@ -47,7 +48,7 @@ class Tag(Entity):
             # Select the tag by using python index.
             tags[1].edit(name='A New Tag Name')
         """
-        from labstep.entities.tag.repository import tagRepository
+        import labstep.entities.tag.repository as tagRepository
 
         return tagRepository.editTag(self, name, extraParams=extraParams)
 
@@ -65,6 +66,6 @@ class Tag(Entity):
         tag
             An object representing the tag to delete.
         """
-        from labstep.entities.tag.repository import tagRepository
+        import labstep.entities.tag.repository as tagRepository
 
         return tagRepository.deleteTag(self)

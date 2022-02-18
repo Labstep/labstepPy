@@ -6,5 +6,5 @@
 """Labstep Python SDK"""
 
 from .entities.user.facade import login, authenticate, impersonate
-from .service.jupyter import jupyter
+from .service import jupyter
 from .service.ping import ping

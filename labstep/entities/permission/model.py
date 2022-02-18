@@ -2,30 +2,36 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
+from labstep.generic.entity.model import Entity
 
-class Permission:
-    def __init__(self, data, entity):
-        self.entity = entity
-        self.workspace = data["entity"]
-        self.permission = data["permission"]
 
-    def set(self, permission):
+class Permission(Entity):
+    __entityName__ = 'permission'
+    __hasGuid__ = True
+    __unSearchable__ = True
+
+    def __init__(self, data, user):
+        super().__init__(data, user)
+        self.workspace = data["group"]
+        delattr(self, 'group')
+
+    def set(self, type):
         """
         Modify this sharing permission.
 
         Parameters
         ----------
-        permission (str)
+        type (str)
             The level of permission to grant. Can be 'view' or 'edit'
 
         Returns
         -------
         None
         """
-        from labstep.entities.permission.repository import permissionRepository
+        import labstep.entities.permission.repository as permissionRepository
 
         permissionRepository.editPermission(
-            self.entity, self.workspace["id"], permission
+            self, type
         )
 
     def revoke(self):
@@ -40,6 +46,6 @@ class Permission:
         -------
         None
         """
-        from labstep.entities.permission.repository import permissionRepository
+        import labstep.entities.permission.repository as permissionRepository
 
-        permissionRepository.revokePermission(self.entity, self.workspace["id"])
+        permissionRepository.revokePermission(self)

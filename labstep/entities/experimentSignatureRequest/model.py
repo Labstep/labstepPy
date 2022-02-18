@@ -18,7 +18,7 @@ class ExperimentSignatureRequest(Entity):
         :class:`~labstep.entities.experimentSignatureRequest.model.ExperimentSignatureRequest`
             An object representing the revoked signature.
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         fields = {"deleted_at": getTime()}
         return entityRepository.editEntity(self, fields)

@@ -5,29 +5,27 @@
 from labstep.service.config import configService
 from labstep.service.helpers import getHeaders, url_join
 from labstep.entities.organization.model import Organization
-from labstep.generic.entity.repository import entityRepository
+import labstep.generic.entity.repository as entityRepository
 from labstep.service.request import requestService
 
 
-class OrganizationRepository:
-    def getOrganization(self, user, id, extraParams={}):
-        return entityRepository.getEntity(user, Organization, id, extraParams)
-
-    def editOrganization(self, organization, name, extraParams={}):
-        params = {
-            "name": name,
-            **extraParams,
-        }
-        return entityRepository.editEntity(organization, params)
-
-    def newOrganization(self, user, name, extraParams={}):
-
-        params = {
-            "name": name,
-            **extraParams,
-        }
-
-        return entityRepository.newEntity(user, Organization, params)
+def getOrganization(user, id, extraParams={}):
+    return entityRepository.getEntity(user, Organization, id, extraParams)
 
 
-organizationRepository = OrganizationRepository()
+def editOrganization(organization, name, extraParams={}):
+    params = {
+        "name": name,
+        **extraParams,
+    }
+    return entityRepository.editEntity(organization, params)
+
+
+def newOrganization(user, name, extraParams={}):
+
+    params = {
+        "name": name,
+        **extraParams,
+    }
+
+    return entityRepository.newEntity(user, Organization, params)

@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from labstep.entities.organizationUser.repository import organizationUserRepository
+import labstep.entities.organizationUser.repository as organizationUserRepository
 from labstep.generic.entity.model import Entity
-from labstep.generic.entity.repository import entityRepository
-from labstep.entities.workspace.repository import workspaceRepository
-from labstep.entities.invitation.repository import invitationRepository
+import labstep.generic.entity.repository as entityRepository
+import labstep.entities.workspace.repository as workspaceRepository
+import labstep.entities.invitation.repository as invitationRepository
+from labstep.constants import UNSPECIFIED
 
 
 class Organization(Entity):
@@ -32,11 +33,11 @@ class Organization(Entity):
 
             my_organization.edit(name='My new organization.')
         """
-        from labstep.entities.organization.repository import organizationRepository
+        import labstep.entities.organization.repository as organizationRepository
 
         return organizationRepository.editOrganization(self.__user__, name, extraParams=extraParams)
 
-    def inviteUsers(self, emails, workspace_id=None):
+    def inviteUsers(self, emails, workspace_id=UNSPECIFIED):
         """
         Invite users to your organization.
 
@@ -61,7 +62,7 @@ class Organization(Entity):
                                                    organization_id=self.id,
                                                    workspace_id=workspace_id)
 
-    def getWorkspaces(self, count=100, search_query=None):
+    def getWorkspaces(self, count=100, search_query=UNSPECIFIED):
         """
         Get the workspaces in your Organization
 

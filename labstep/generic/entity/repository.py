@@ -5,143 +5,163 @@
 import json
 from pathlib import Path
 from pathvalidate import sanitize_filepath
+from labstep.entities.export.model import Export
+from labstep.generic.entityList.model import EntityList
 from labstep.service.config import configService
 from labstep.service.helpers import (
-    listToClass,
+    filterUnspecified,
     url_join,
     getHeaders,
 )
 from labstep.service.request import requestService
 from labstep.config.export import entityNameInFolderName
+from labstep.constants import UNSPECIFIED
 
 
-class EntityRepository:
-    def getLegacyEntity(self, user, entityClass, id):
-        headers = getHeaders(user=user)
-        url = url_join(configService.getHost(), "/api/generic/",
-                       entityClass.__entityName__, str(id))
-        response = requestService.get(url, headers=headers)
-        return entityClass(json.loads(response.content), user)
+def getLegacyEntity(user, entityClass, id):
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__, str(id))
+    response = requestService.get(url, headers=headers)
+    return entityClass(json.loads(response.content), user)
 
-    def getEntity(self, user, entityClass, id, isDeleted="both"):
-        if getattr(entityClass, "__isLegacy__", None):
-            return self.getLegacyEntity(user, entityClass, id)
 
-        identifier = 'guid' if getattr(
-            entityClass, "__hasGuid__", None) else 'id'
+def getEntity(user, entityClass, id, isDeleted="both", useGuid=False):
+    if getattr(entityClass, "__isLegacy__", None):
+        return getLegacyEntity(user, entityClass, id)
 
-        params = {"is_deleted": isDeleted, "get_single": 1, identifier: id}
+    identifier = 'guid' if getattr(
+        entityClass, "__hasGuid__", None) or useGuid else 'id'
 
-        headers = getHeaders(user=user)
-        url = url_join(configService.getHost(), "/api/generic/",
-                       entityClass.__entityName__)
-        response = requestService.get(url, headers=headers, params=params)
-        return entityClass(json.loads(response.content), user)
+    params = {"is_deleted": isDeleted, "get_single": 1, identifier: id}
 
-    def getEntities(self, user, entityClass, count, filterParams={}):
-        countParameter = min(count, 50) if count is not None else None
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__)
+    response = requestService.get(url, headers=headers, params=params)
+    return entityClass(json.loads(response.content), user)
+
+
+def getEntities(user, entityClass, count, filterParams={}):
+    countParameter = min(
+        count, 50) if count is not UNSPECIFIED else UNSPECIFIED
+
+    if getattr(entityClass, "__unSearchable__", None):
+        searchParams = {"cursor": -1, "count": countParameter}
+    else:
         searchParams = {"search": 1, "cursor": -1, "count": countParameter}
 
-        params = {**searchParams, **filterParams}
+    params = {**searchParams, **filterParams}
 
-        headers = getHeaders(user=user)
-        url = url_join(configService.getHost(), "/api/generic/",
-                       entityClass.__entityName__)
-        response = requestService.get(url, params=params, headers=headers)
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__)
+    response = requestService.get(url, params=params, headers=headers)
+    resp = json.loads(response.content)
+    items = resp["items"]
+
+    while resp["next_cursor"] != '-1':
+        if count is not UNSPECIFIED:
+            remainingItems = count - len(items)
+            params["count"] = min(remainingItems, 50)
+            if remainingItems <= 0:
+                break
+
+        params["cursor"] = resp["next_cursor"]
+        response = requestService.get(url, headers=headers, params=params)
         resp = json.loads(response.content)
-        items = resp["items"]
-        expectedResults = min(
-            resp["total"], count) if count is not None else resp["total"]
-        while len(items) < expectedResults:
-            params["cursor"] = resp["next_cursor"]
-            response = requestService.get(url, headers=headers, params=params)
-            resp = json.loads(response.content)
-            items.extend(resp["items"])
-        return listToClass(items, entityClass, user)
+        items.extend(resp["items"])
 
-    def newEntity(self, user, entityClass, fields):
-        headers = getHeaders(user=user)
-        url = url_join(configService.getHost(), "/api/generic/",
-                       entityClass.__entityName__)
-        fields = dict(
-            filter(lambda field: field[1] is not None, fields.items()))
+    return EntityList(items, entityClass, user)
 
-        if "group_id" not in fields and getattr(
-            entityClass, "__hasParentGroup__", False
-        ):
-            fields["group_id"] = user.activeWorkspace
 
-        response = requestService.post(url, headers=headers, json=fields)
-        return entityClass(json.loads(response.content), user)
+def newEntity(user, entityClass, fields):
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__)
 
-    def linkEntities(self, user, entity1, entity2):
-        headers = getHeaders(user)
-        url = url_join(
-            configService.getHost(),
-            "api/generic/",
-            entity1.__entityName__,
-            str(entity1.id),
-            entity2.__entityName__,
-            str(entity2.id),
-        )
-        response = requestService.put(url, headers=headers)
-        return json.loads(response.content)
+    if "group_id" not in fields and getattr(
+        entityClass, "__hasParentGroup__", False
+    ):
+        fields["group_id"] = user.activeWorkspace
 
-    def newEntities(self, user, entityClass, items):
-        headers = getHeaders(user=user)
-        url = url_join(configService.getHost(), "/api/generic/",
-                       entityClass.__entityName__, "batch")
-        response = requestService.post(
-            url, headers=headers, json={"items": items, "group_id": user.activeWorkspace})
-        entities = json.loads(response.content)
-        return list(map(lambda entity: entityClass(entity, user), entities))
+    response = requestService.post(url, headers=headers, json=fields)
+    return entityClass(json.loads(response.content), user)
 
-    def editEntity(self, entity, fields):
-        # Filter the 'fields' dictionary by removing {'fields': None}
-        # to preserve the existing data in the 'fields', otherwise
-        # the 'fields' will be overwritten to 'None'.
-        identifier = entity.guid if getattr(
-            entity, "__hasGuid__", None) and hasattr(entity, 'guid') else entity.id
 
-        newFields = dict(
-            filter(lambda field: field[1] is not None, fields.items()))
-        headers = getHeaders(entity.__user__)
-        url = url_join(configService.getHost(), "/api/generic/",
-                       entity.__entityName__, str(identifier))
-        response = requestService.put(url, json=newFields, headers=headers)
-        entity.__init__(json.loads(response.content), entity.__user__)
-        return entity
+def linkEntities(user, entity1, entity2):
+    headers = getHeaders(user)
+    url = url_join(
+        configService.getHost(),
+        "api/generic/",
+        entity1.__entityName__,
+        str(entity1.id),
+        entity2.__entityName__,
+        str(entity2.id),
+    )
+    response = requestService.put(url, headers=headers)
+    return json.loads(response.content)
 
-    def exportEntity(self, entity, rootPath, folderName=None):
 
-        from labstep.entities.file.model import File
+def newEntities(user, entityClass, items):
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__, "batch")
+    response = requestService.post(
+        url, headers=headers, json={"items": items, "group_id": user.activeWorkspace})
+    entities = json.loads(response.content)
+    return EntityList(entities, entityClass, user)
 
-        if folderName is None:
-            if entityNameInFolderName:
-                folderName = f'{entity.id} - {entity.name}' if hasattr(
-                    entity, 'name') else f'{entity.id}'
-            else:
-                folderName = str(entity.id)
 
-        entityDir = Path(rootPath).joinpath(sanitize_filepath(folderName))
-        entityDir.mkdir(parents=True, exist_ok=True)
-        infoFile = entityDir.joinpath('entity.json')
+def editEntity(entity, fields):
+    identifier = entity.guid if getattr(
+        entity, "__hasGuid__", None) and hasattr(entity, 'guid') else entity.id
 
-        with open(infoFile, 'w') as out:
-            json.dump(entity.__data__, out, indent=2)
+    headers = getHeaders(entity.__user__)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entity.__entityName__, str(identifier))
+    response = requestService.put(url, json=fields, headers=headers)
+    entity.__init__(json.loads(response.content), entity.__user__)
+    return entity
 
-        if hasattr(entity, 'file') and entity.file is not None:
-            lsFile = File(entity.file, entity.__user__)
+
+def deleteEntity(entity):
+    identifier = entity.guid if getattr(
+        entity, "__hasGuid__", None) and hasattr(entity, 'guid') else entity.id
+
+    headers = getHeaders(entity.__user__)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entity.__entityName__, str(identifier))
+    return requestService.delete(url, headers=headers)
+
+
+def exportEntity(entity, rootPath, folderName=UNSPECIFIED):
+
+    from labstep.entities.file.model import File
+
+    if folderName is UNSPECIFIED:
+        if entityNameInFolderName:
+            folderName = f'{entity.id} - {entity.name}' if hasattr(
+                entity, 'name') else f'{entity.id}'
+        else:
+            folderName = str(entity.id)
+
+    entityDir = Path(rootPath).joinpath(sanitize_filepath(folderName))
+    entityDir.mkdir(parents=True, exist_ok=True)
+    infoFile = entityDir.joinpath('entity.json')
+
+    with open(infoFile, 'w') as out:
+        json.dump(entity.__data__, out, indent=2)
+
+    if hasattr(entity, 'file') and entity.file is not None:
+        lsFile = File(entity.file, entity.__user__)
+        fileDir = entityDir.joinpath('files')
+        lsFile.export(fileDir)
+
+    if hasattr(entity, 'files') and entity.files is not None:
+        for file in entity.files:
+            lsFile = File(file, entity.__user__)
             fileDir = entityDir.joinpath('files')
             lsFile.export(fileDir)
 
-        if hasattr(entity, 'files') and entity.files is not None:
-            for file in entity.files:
-                lsFile = File(file, entity.__user__)
-                fileDir = entityDir.joinpath('files')
-                lsFile.export(fileDir)
-
-        return entityDir
-
-
-entityRepository = EntityRepository()
+    return entityDir

@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.generic.entityWithSharing.model import EntityWithSharing
 from labstep.service.helpers import getTime
 from labstep.entities.resourceTemplate.model import ResourceTemplate
 from labstep.entities.resourceItem.model import ResourceItem
+from labstep.constants import UNSPECIFIED
 
 
-class ResourceCategory(PrimaryEntity):
+class ResourceCategory(EntityWithSharing):
     """
     Represents a Resource Category on Labstep.
 
@@ -24,7 +25,7 @@ class ResourceCategory(PrimaryEntity):
 
     __entityName__ = "resource"
 
-    def edit(self, name=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, extraParams={}):
         """
         Edit an existing ResourceCategory.
 
@@ -45,7 +46,7 @@ class ResourceCategory(PrimaryEntity):
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.edit(name='A New ResourceCategory Name')
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         return resourceCategoryRepository.editResourceCategory(
             self, name, extraParams=extraParams
@@ -62,7 +63,7 @@ class ResourceCategory(PrimaryEntity):
             my_resource_category = user.getResourceCategory(17000)
             my_resource_category.delete()
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         return resourceCategoryRepository.editResourceCategory(
             self, deleted_at=getTime()
@@ -125,7 +126,7 @@ class ResourceCategory(PrimaryEntity):
         """
         self.update()
         if self.resource_item_template is None:
-            from labstep.entities.resourceItem.repository import resourceItemRepository
+            import labstep.entities.resourceItem.repository as resourceItemRepository
 
             resourceItemRepository.newResourceItem(
                 self.__user__, self.id, extraParams={"is_template": 1}

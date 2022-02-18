@@ -6,10 +6,10 @@ Protocol
    :inherited-members:
    
 
-Protocol Material
+Protocol Inventory Field
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.entities.protocolMaterial.model.ProtocolMaterial
+.. autoclass:: labstep.entities.protocolInventoryField.model.ProtocolInventoryField
    :members:
    
 Protocol Data Field

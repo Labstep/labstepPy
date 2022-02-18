@@ -3,6 +3,7 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.generic.entity.model import Entity
+from labstep.constants import UNSPECIFIED
 
 
 class Autoshare(Entity):
@@ -15,9 +16,9 @@ class Autoshare(Entity):
 
     def edit(
         self,
-        experiment_sharing=None,
-        protocol_sharing=None,
-        resource_sharing=None,
+        experiment_sharing=UNSPECIFIED,
+        protocol_sharing=UNSPECIFIED,
+        resource_sharing=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -56,9 +57,9 @@ class Autoshare(Entity):
             # Edit the sharelink
             sharelink.edit(type='view')
         """
-        from labstep.generic.entity.repository import entityRepository
+        from labstep.generic.entity.repository import editEntity
 
-        options = {True: "edit", False: "none", None: None}
+        options = {True: "edit", False: "none", UNSPECIFIED: UNSPECIFIED}
 
         fields = {
             "experiment_workflow": options[experiment_sharing],
@@ -66,4 +67,4 @@ class Autoshare(Entity):
             "resource": options[resource_sharing],
             **extraParams,
         }
-        return entityRepository.editEntity(self, fields=fields)
+        return editEntity(self, fields=fields)
