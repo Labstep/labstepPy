@@ -80,3 +80,76 @@ class TestResource:
         entity.disableCustomItemTemplate()
         itemTemplate = entity.getItemTemplate()
         assert itemTemplate.deleted_at is not None
+
+    def test_chemicalMetadata(self, entity):
+        entity.addChemicalMetadata(
+            structure='C1=CC=CC=C1',
+            iupac_name="benzene",
+            cas="71-43-2",
+            density="0.879 at 68 °F (USCG, 1999)",
+            inchi="InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H",
+            molecular_formula="C6H6",
+            molecular_weight="78.11",
+            smiles='C1=CC=CC=C1',
+            safety={
+                "precautionary": {
+                    "General": [],
+                    "Prevention": [
+                        "P281"
+                    ],
+                    "Response": [
+
+                        "P370+P378"
+                    ],
+                    "Storage": [
+
+                        "P405"
+                    ],
+                    "Disposal": [
+                        "P501"
+                    ]
+                },
+                "ghs_hazard_statements": [
+                    "H372"
+                ],
+                "pictograms": [
+                    "GHS02",
+                    "GHS07",
+                    "GHS08"
+                ]
+            })
+        chemicalMetadata = entity.getChemicalMetadata()
+        assert chemicalMetadata['Structure'] == 'C1=CC=CC=C1'
+        assert chemicalMetadata['IUPACName'] == 'benzene'
+        assert chemicalMetadata['CAS'] == "71-43-2"
+        assert chemicalMetadata['InChI'] == "InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H"
+        assert chemicalMetadata['MolecularFormula'] == "C6H6"
+        assert chemicalMetadata['MolecularWeight'] == "78.11"
+        assert chemicalMetadata['SMILES'] == 'C1=CC=CC=C1'
+        assert chemicalMetadata['Safety'] == {
+            "precautionary": {
+                "General": [],
+                "Prevention": [
+                    "P281"
+                ],
+                "Response": [
+
+                    "P370+P378"
+                ],
+                "Storage": [
+
+                    "P405"
+                ],
+                "Disposal": [
+                    "P501"
+                ]
+            },
+            "ghs_hazard_statements": [
+                "H372"
+            ],
+            "pictograms": [
+                "GHS02",
+                "GHS07",
+                "GHS08"
+            ]
+        }

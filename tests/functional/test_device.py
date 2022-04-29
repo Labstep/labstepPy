@@ -32,7 +32,7 @@ class TestDevice:
         data = entity.addData(
             'Test', 'file', filepath='./tests/data/sample.txt')
         assert data.name == 'Test' \
-            and data.file is not None, \
+            and data.files is not None, \
             'FAILED TO CREATE DATA'
 
     def test_addDataText(self, entity):

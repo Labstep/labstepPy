@@ -4,6 +4,7 @@
 
 import os
 from dotenv import load_dotenv
+from labstep.constants import VERSION
 
 load_dotenv()
 
@@ -12,6 +13,8 @@ class ConfigService:
     host = 'https://api.labstep.com'
 
     def __init__(self):
+
+        self.userAgent = f"Python SDK {VERSION}"
         envApiUrl = os.getenv("LABSTEP_API_URL")
 
         if envApiUrl is not None:
@@ -24,6 +27,12 @@ class ConfigService:
 
     def getHost(self):
         return self.host
+
+    def setUserAgent(self, userAgent):
+        self.userAgent = userAgent
+
+    def getUserAgent(self):
+        return self.userAgent
 
 
 configService = ConfigService()

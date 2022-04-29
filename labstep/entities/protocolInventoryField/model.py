@@ -8,6 +8,7 @@ from labstep.constants import UNSPECIFIED
 
 class ProtocolInventoryField(Entity):
     __entityName__ = "protocol-value"
+    __hasGuid__ = True
 
     def __init__(self, data, user):
         super().__init__(data, user)

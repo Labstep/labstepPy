@@ -48,15 +48,7 @@ class TestExperimentDataField:
                                  'date': "2021-10-20T16:09:00+01:00"})
         dateTimeValue = entity.setValue("2021-10-28 18:09").getValue()
         entity.edit(extraParams={'type': 'options',
-                                 'options': {
-                                     "values": {
-                                         "A": False,
-                                         "B": True,
-                                         "C": False
-                                     },
-                                     "is_allow_add": False,
-                                     "is_allow_multiple": False
-                                 }})
+                                 'options': None})
         singleOptions = entity.setValue('A').getValue()
         entity.edit(extraParams={'type': 'options',
                                  'options': {

@@ -1,1 +1,2 @@
 entityNameInFolderName = True
+includePDF = False

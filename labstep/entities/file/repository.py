@@ -28,7 +28,7 @@ def newFile(user, filepath=UNSPECIFIED, rawData=UNSPECIFIED, extraParams={}):
 
 
 def getFile(user, fileId):
-    return entityRepository.getEntity(user, File, fileId, isDeleted=UNSPECIFIED)
+    return entityRepository.getEntity(user, File, fileId)
 
 
 def getFileDownloadLink(user, fileId):
