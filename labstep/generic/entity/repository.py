@@ -120,6 +120,7 @@ def editEntity(entity, fields):
     headers = getHeaders(entity.__user__)
     url = url_join(configService.getHost(), "/api/generic/",
                    entity.__entityName__, str(identifier))
+    print('fields',fields)
     response = requestService.put(url, json=fields, headers=headers)
     entity.__init__(json.loads(response.content), entity.__user__)
     return entity
@@ -140,9 +141,10 @@ def exportEntity(entity, rootPath, folderName=UNSPECIFIED):
     from labstep.entities.file.model import File
 
     if folderName is UNSPECIFIED:
-        if entityNameInFolderName:
-            folderName = f'{entity.id} - {entity.name}' if hasattr(
-                entity, 'name') else f'{entity.id}'
+        if entityNameInFolderName and hasattr(
+                entity, 'name'):
+            santitisedName = entity.name.replace('/', ' ').replace('\\', ' ')
+            folderName = f"{entity.id} - {santitisedName}"
         else:
             folderName = str(entity.id)
 

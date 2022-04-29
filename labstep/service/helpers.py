@@ -4,7 +4,8 @@
 import pandas
 from datetime import datetime
 from time import gmtime, strftime
-from labstep.constants import VERSION, UNSPECIFIED
+from labstep.constants import UNSPECIFIED
+from labstep.service.config import configService
 
 
 def url_join(*args):
@@ -133,12 +134,12 @@ def update(entity, newData):
 def getHeaders(user=None):
     if user is None:
         return {
-            "User-Agent": f"Python SDK {VERSION}"
+            "User-Agent": configService.getUserAgent()
         }
     else:
         return {
             "apikey": user.api_key,
-            "User-Agent": f"Python SDK {VERSION}"
+            "User-Agent": configService.getUserAgent()
         }
 
 

@@ -12,6 +12,13 @@ def exportExperimentProtocol(experimentProtocol, rootPath, folderName):
     expDir = entityRepository.exportEntity(
         experimentProtocol, rootPath, folderName=folderName)
 
+    # save steps
+    stepsDir = expDir.joinpath('steps')
+    steps = experimentProtocol.getSteps()
+
+    for step in steps:
+        step.export(stepsDir)
+
     # save inventory fields
     inventoryFieldsDir = expDir.joinpath('inventory')
     inventoryFields = experimentProtocol.getInventoryFields()
@@ -19,7 +26,7 @@ def exportExperimentProtocol(experimentProtocol, rootPath, folderName):
     for inventoryField in inventoryFields:
         inventoryField.export(inventoryFieldsDir)
 
-    # save data
+    # save data fields
     dataDir = expDir.joinpath('data')
     data = experimentProtocol.getDataFields()
 

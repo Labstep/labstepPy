@@ -79,6 +79,7 @@ own specific purposes.
    source/device.rst
    source/dataField.rst
    source/metadata.rst
+   source/chemistry.rst
    source/comment.rst
    source/tag.rst
    source/file.rst

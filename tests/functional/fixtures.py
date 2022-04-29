@@ -208,6 +208,13 @@ def device():
     return user.newDevice(newString())
 
 
+def chemicalReaction():
+    user = authUser()
+    experiment = user.newExperiment('Test')
+    experiment_protocol = experiment.addProtocol(protocol())
+    return experiment_protocol.addChemicalReaction()
+
+
 def metadata():
     user = authUser()
     resourceWithMetadata = user.newResource(testString)

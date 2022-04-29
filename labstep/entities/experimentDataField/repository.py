@@ -24,12 +24,12 @@ def getDataFields(entity, count=1000, extraParams={}):
 
     elif isinstance(entity, Resource):
         params = {
-            "experiment_value_resource_id": entity.id,
+            "protocol_value_resource_id": entity.id,
             "has_value": True
         }
     elif isinstance(entity, ResourceItem):
         params = {
-            "experiment_value_resource_item_id": entity.id,
+            "protocol_value_resource_item_id": entity.id,
             "has_value": True
         }
 
@@ -134,6 +134,13 @@ def setDataFieldValue(dataField, value):
             value = [str(value)]
 
         options = dataField.options
+
+        if options is None:
+            options = {
+                'is_allow_multiple': False,
+                'is_allow_add': True,
+                'values': {}
+            }
 
         if options['values'] is None:
             options['values'] = {}

@@ -8,7 +8,9 @@ from labstep.service.helpers import (
 from labstep.entities.experiment.model import Experiment, ExperimentProtocol
 import labstep.generic.entity.repository as entityRepository
 from labstep.service.htmlExport import htmlExportService
+from labstep.service.htmlToPDF import htmlToPDF
 from labstep.constants import UNSPECIFIED
+from labstep.config.export import includePDF
 
 
 def getExperiment(user, experiment_id):
@@ -106,8 +108,14 @@ def exportExperiment(experiment, root_path):
         note.export(notesDir)
 
     # get html
-    html = htmlExportService.getHTML(experiment)
+    html = htmlExportService.getHTML(experiment, withImages=True)
     html_with_paths = htmlExportService.insertFilepaths(expDir, html)
 
     with open(expDir.joinpath('entity.html'), 'w', encoding="utf-8") as out:
         out.write(html_with_paths)
+
+    # get pdf
+    if includePDF:
+        pdf = htmlToPDF(experiment.__user__, html)
+        with open(expDir.joinpath('entity.pdf'), 'wb') as out:
+            out.write(pdf)

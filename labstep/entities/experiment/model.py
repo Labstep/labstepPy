@@ -208,6 +208,35 @@ class Experiment(EntityPrimary):
             {"is_root": 0, "experiment_workflow_id": self.id},
         )
 
+    def addChemicalReaction(
+        self,
+        data=UNSPECIFIED,
+        extraParams={},
+    ):
+        """
+        Add Chemical Reaction to a Labstep Experiment.
+
+        Parameters
+        ----------
+        data (str)
+            The data of the reaction in RXN format
+
+        Returns
+        -------
+        :class:`~labstep.entities.chemicalReaction.model.ChemicalReaction`
+            An object representing the new Chemical Reaction
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            chemicalReaction = experiment.addChemicalReaction(data='RXN 233')
+        """
+        return self.root_experiment.addChemicalReaction(
+            extraParams={"data": data, **extraParams},
+        )
+
     def addDataField(
         self,
         fieldName,
@@ -284,6 +313,24 @@ class Experiment(EntityPrimary):
             dataFields = exp_protocol.getDataFields()
         """
         return self.root_experiment.getDataFields()
+
+    def getChemicalReactions(self):
+        """
+        Returns a list of the chemical reactions in a Protocol within an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.chemicalReaction.model.ChemicalReaction`]
+            List of the chemical reactions in an Experiment's Protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_chemical_reactions = experiment.getChemicalReactions()
+        """
+        return self.root_experiment.getChemicalReactions()
 
     def getSignatures(self):
         """
@@ -566,7 +613,7 @@ class Experiment(EntityPrimary):
         if hasattr(self, 'thread_ids') is False:
             self.update()
 
-        return commentRepository.getComments(self, count, extraParams={'parent_thread_id': self.thread_ids})
+        return commentRepository.getComments(self, count, extraParams={'parent_thread_id[]': self.thread_ids})
 
     def getFiles(self):
         """

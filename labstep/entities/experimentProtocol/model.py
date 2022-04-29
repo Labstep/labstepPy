@@ -6,10 +6,12 @@ from labstep.entities.file.model import File
 from labstep.generic.entity.model import Entity
 from labstep.generic.entityList.model import EntityList
 from labstep.entities.experimentStep.model import ExperimentStep
+from labstep.entities.chemicalReaction.model import ChemicalReaction
 from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentTimer.model import ExperimentTimer
 import labstep.entities.file.repository as fileRepository
 import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
+import labstep.entities.chemicalReaction.repository as chemicalReactionRepository
 from labstep.constants import UNSPECIFIED
 
 
@@ -155,6 +157,30 @@ class ExperimentProtocol(Entity):
                                                                               resource_item_id=resource_item_id,
                                                                               extraParams=extraParams)
 
+    def addChemicalReaction(
+        self,
+        extraParams={},
+    ):
+        """
+        Add a new chemical reaction to the ExperimentProtocol.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        :class:`~labstep.entities.chemicalReaction.model.ChemicalReaction`
+            The newly added chemical reaction
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.addChemicalReaction()
+        """
+        return chemicalReactionRepository.newChemicalReaction(self.__user__, self.id, extraParams=extraParams)
+
     def addSteps(self, N):
         """
         Add steps to a Protocol within an Experiment
@@ -248,6 +274,26 @@ class ExperimentProtocol(Entity):
         else:
             steps = self.protocol_steps
         return EntityList(steps, ExperimentStep, self.__user__)
+
+    def getChemicalReactions(self):
+        """
+        Returns a list of the chemical reactions in a Protocol within an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.chemicalReaction.model.ChemicalReaction`]
+            List of the chemical reactions in an Experiment's Protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_chemical_reactions = exp_protocol.getChemicalReactions()
+        """
+        self.update()
+        return EntityList(self.molecules, ChemicalReaction, self.__user__)
 
     def addTimer(self, name=UNSPECIFIED, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):
         """

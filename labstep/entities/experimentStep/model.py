@@ -45,3 +45,7 @@ class ExperimentStep(EntityWithComments):
             exp_protocol_steps[2].complete()
         """
         return self.edit(completed_at=getTime())
+
+    def export(self, rootPath):
+        import labstep.entities.experimentStep.repository as experimentStepRepository
+        return experimentStepRepository.exportExperimentStep(self, rootPath)
