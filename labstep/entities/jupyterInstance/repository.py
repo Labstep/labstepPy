@@ -3,25 +3,24 @@
 # Author: Thomas Bullier <thomas@labstep.com>
 
 from labstep.entities.jupyterInstance.model import JupyterInstance
-from labstep.generic.entity.repository import entityRepository
+import labstep.generic.entity.repository as entityRepository
+from labstep.constants import UNSPECIFIED
 
 
-class JupyterInstanceRepository:
-    def getJupyterInstance(self, user, guid):
-        return entityRepository.getEntity(user, JupyterInstance, id=guid)
-
-    def editJupyterInstance(
-        self,
-        jupyterInstance,
-        startedAt=None,
-        endedAt=None
-    ):
-        params = {
-            "started_at": startedAt,
-            "ended_at": endedAt,
-        }
-
-        return entityRepository.editEntity(jupyterInstance, params)
+def getJupyterInstance(user, guid):
+    return entityRepository.getEntity(user, JupyterInstance, id=guid)
 
 
-jupyterInstanceRepository = JupyterInstanceRepository()
+def editJupyterInstance(
+    jupyterInstance,
+    data=UNSPECIFIED,
+    startedAt=UNSPECIFIED,
+    endedAt=UNSPECIFIED
+):
+    params = {
+        "data": data,
+        "started_at": startedAt,
+        "ended_at": endedAt,
+    }
+
+    return entityRepository.editEntity(jupyterInstance, params)

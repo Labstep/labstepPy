@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 
+from deprecated import deprecated
 from labstep.generic.entity.model import Entity
-from labstep.generic.entity.repository import entityRepository
+import labstep.generic.entity.repository as entityRepository
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
 class ProtocolDataField(Entity):
@@ -22,8 +24,9 @@ class ProtocolDataField(Entity):
     """
 
     __entityName__ = "metadata"
+    __searchKey__ = "label"
 
-    def edit(self, fieldName=None, value=None, extraParams={}):
+    def edit(self, fieldName=UNSPECIFIED, value=UNSPECIFIED, extraParams={}):
         """
         Edit the value of an existing data field.
 
@@ -45,7 +48,7 @@ class ProtocolDataField(Entity):
 
             data.edit(value='2.50')
         """
-        from labstep.entities.protocolDataField.repository import protocolDataFieldRepository
+        import labstep.entities.protocolDataField.repository as protocolDataFieldRepository
 
         return protocolDataFieldRepository.editDataField(
             self, fieldName, value, extraParams=extraParams
@@ -61,54 +64,54 @@ class ProtocolDataField(Entity):
 
             data.delete()
         """
-        from labstep.entities.protocolDataField.repository import protocolDataFieldRepository
+        import labstep.entities.protocolDataField.repository as protocolDataFieldRepository
 
         return protocolDataFieldRepository.editDataField(
             self, extraParams={"deleted_at": getTime()}
         )
 
-    def linkToMaterial(self, material):
+    def linkToInventoryField(self, inventoryField):
         """
-        Link a data field to a material.
+        Link a data field to an inventory field.
 
         Parameters
         ----------
-        material :class:`~labstep.entities.protocolMaterial.model.ProtocolMaterial`
-            The material to link the data field to.
+        inventoryField :class:`~labstep.entities.protocolInventoryField.model.ProtocolInventoryField`
+            The inventory field to link the data field to.
 
         Example
         -------
         ::
 
-            material = protocol.addMaterial('Sample')
+            inventoryField = protocol.addinventoryField('Sample')
             data = protocol.addDataField('Concentration')
-            data.linkToMaterial(material)
+            data.linkToInventoryField(inventoryfield)
         """
-        return entityRepository.linkEntities(self.__user__, self, material)
+        return entityRepository.linkEntities(self.__user__, self, inventoryField)
 
-    def getLinkedMaterials(self):
+    def getLinkedInventoryFields(self):
         """
-        Returns the materials linked to this data field..
-
-        Parameters
-        ----------
-        List[:class:`~labstep.entities.protocolMaterial.model.ProtocolMaterial`]
-            The material link the data field to.
+        Returns the inventory fields linked to this data field.
 
         Example
         -------
         ::
 
-            material = protocol.addMaterial('Sample')
+            inventoryField = protocol.addInventoryField('Sample')
             data = protocol.addDataField('Concentration')
-            data.linkToMaterial(material)
+            data.linkToInventoryField(inventoryField)
+            data.getLinkedInventoryFields()
         """
-        from labstep.entities.protocolMaterial.repository import protocolMaterialRepository
+        import labstep.entities.protocolInventoryField.repository as protocolInventoryFieldRepository
 
         if self.protocol_id is not None:
 
-            return protocolMaterialRepository.getProtocolMaterials(
+            return protocolInventoryFieldRepository.getProtocolInventoryFields(
                 user=self.__user__,
                 protocol_id=self.protocol_id,
                 extraParams={'metadata_id': self.id}
             )
+
+    @deprecated(version='3.12.0', reason="You should use linkToInventoryField instead")
+    def linkToMaterial(self, *args, **kwargs):
+        return self.linkToInventoryField(*args, **kwargs)

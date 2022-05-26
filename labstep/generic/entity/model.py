@@ -3,9 +3,9 @@
 # Author: Barney Walker <barney@labstep.com>
 
 import inspect
-import json
 import pprint
 from labstep.service.helpers import update
+from labstep.constants import UNSPECIFIED
 
 
 class Entity:
@@ -25,18 +25,21 @@ class Entity:
         pp = pprint.PrettyPrinter(indent=1)
         return pp.pformat(entity_attributes)
 
+    def __getitem__(self, key):
+        return getattr(self, key, None)
+
     def update(self):
         """
         Fetches the most up-to-date version of the entity from Labstep.
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         data = entityRepository.getEntity(
             self.__user__, type(self), self.id).__data__
         self.__init__(data, self.__user__)
         return self
 
-    def export(self, rootPath, folderName=None):
+    def export(self, rootPath, folderName=UNSPECIFIED):
         """
         Export the entity to the directory specified. 
 
@@ -52,5 +55,5 @@ class Entity:
             experiment = user.getExperiment(17000)
             experiment.export('/my_folder')
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
         return entityRepository.exportEntity(self, rootPath, folderName=folderName)

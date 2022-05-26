@@ -6,6 +6,7 @@ import requests
 from labstep.generic.entity.model import Entity
 from labstep.service.config import configService
 from labstep.service.helpers import url_join, handleError, getHeaders
+from labstep.constants import UNSPECIFIED
 
 
 class Sharelink(Entity):
@@ -16,7 +17,7 @@ class Sharelink(Entity):
     __entityName__ = "share-link"
     __isLegacy__ = True
 
-    def edit(self, permission=None, extraParams={}):
+    def edit(self, permission=UNSPECIFIED, extraParams={}):
         """
         Edit a sharelink.
 
@@ -44,7 +45,7 @@ class Sharelink(Entity):
             # Edit the sharelink
             sharelink.edit(type='view')
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         fields = {
             "type": permission,
@@ -52,7 +53,7 @@ class Sharelink(Entity):
         }
         return entityRepository.editEntity(self, fields=fields)
 
-    def sendEmails(self, emails, message=None):
+    def sendEmails(self, emails, message=UNSPECIFIED):
         """
         Send sharelinks to collaborators via email.
 

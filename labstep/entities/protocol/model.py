@@ -3,22 +3,21 @@
 # Author: Barney Walker <barney@labstep.com>
 from deprecated import deprecated
 from labstep.entities.protocolDataField.model import ProtocolDataField
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.generic.entityPrimary.model import EntityPrimary
 from labstep.entities.protocolStep.model import ProtocolStep
 from labstep.entities.protocolTable.model import ProtocolTable
 from labstep.entities.protocolTimer.model import ProtocolTimer
 from labstep.entities.protocolVersion.model import ProtocolVersion
-from labstep.entities.protocolMaterial.model import ProtocolMaterial
-from labstep.entities.protocolMaterial.repository import protocolMaterialRepository
-from labstep.service.helpers import (
-    listToClass,
-    getTime,
-)
+from labstep.entities.protocolInventoryField.model import ProtocolInventoryField
+import labstep.entities.protocolInventoryField.repository as protocolInventoryFieldRepository
+from labstep.generic.entityList.model import EntityList
 from labstep.entities.file.model import File
-from labstep.entities.file.repository import fileRepository
+import labstep.entities.file.repository as fileRepository
+from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
-class Protocol(PrimaryEntity):
+class Protocol(EntityPrimary):
     """
     Represents a Protocol on Labstep.
 
@@ -33,8 +32,9 @@ class Protocol(PrimaryEntity):
     """
 
     __entityName__ = "protocol-collection"
+    __searchKey__ = 'label'
 
-    def edit(self, name=None, body=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, body=UNSPECIFIED, extraParams={}):
         """
         Edit an existing Protocol.
 
@@ -57,7 +57,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.edit(name='A New Protocol Name')
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.editProtocol(
             self, name=name, body=body, extraParams=extraParams
@@ -74,7 +74,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             my_protocol.delete()
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.editProtocol(self, deleted_at=getTime())
 
@@ -89,7 +89,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.getProtocol(17000)
             new_version = my_protocol.newVersion()
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         entityRepository.newEntity(
             self.__user__, ProtocolVersion, {"collection_id": self.id}
@@ -149,7 +149,7 @@ class Protocol(PrimaryEntity):
             my_protocol = user.newProtocol('My API Protocol')
             my_protocol.addSteps(5)
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         steps = [{"protocol_id": self.last_version["id"]}] * N
         return entityRepository.newEntities(self.__user__, ProtocolStep, steps)
@@ -175,7 +175,7 @@ class Protocol(PrimaryEntity):
         if "protocol_steps" not in self.last_version:
             return []
         steps = self.last_version["protocol_steps"]
-        return listToClass(steps, ProtocolStep, self.__user__)
+        return EntityList(steps, ProtocolStep, self.__user__)
 
     def getDataFields(self):
         """
@@ -199,22 +199,20 @@ class Protocol(PrimaryEntity):
             return []
 
         def addId(field):
-            field.protocol_id = self.id
+            field['protocol_id'] = self.id
             return field
 
-        return list(map(addId, listToClass(
-            self.last_version["metadata_thread"]["metadatas"], ProtocolDataField, self.__user__
-        )))
+        return EntityList(map(addId, self.last_version["metadata_thread"]["metadatas"]), ProtocolDataField, self.__user__)
 
     def addDataField(
         self,
         fieldName,
         fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        value=UNSPECIFIED,
+        date=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -250,7 +248,7 @@ class Protocol(PrimaryEntity):
             dataField = protocol.addDataField("Refractive Index",
                                                value="1.73")
         """
-        from labstep.entities.protocolDataField.repository import protocolDataFieldRepository
+        import labstep.entities.protocolDataField.repository as protocolDataFieldRepository
 
         return protocolDataFieldRepository.addDataFieldTo(
             ProtocolVersion(self.last_version, self.__user__),
@@ -264,16 +262,16 @@ class Protocol(PrimaryEntity):
             extraParams=extraParams,
         )
 
-    def addMaterial(
-        self, name=None, amount=None, units=None, resource_id=None, extraParams={}
+    def addInventoryField(
+        self, name=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, resource_id=UNSPECIFIED, extraParams={}
     ):
         """
-        Add a new material to the Protocol.
+        Add a new inventory field to the Protocol.
 
         Parameters
         ----------
         name (str)
-            The name of the material to add.
+            The name of the inventory field to add.
         amount (str)
             The amount required by the protocol.
         units (str)
@@ -284,8 +282,8 @@ class Protocol(PrimaryEntity):
 
         Returns
         -------
-        :class:`~labstep.entities.protocolMaterial.model.ProtocolMaterial`
-            The newly added material entity.
+        :class:`~labstep.entities.protocolInventoryField.model.ProtocolInventoryField`
+            The newly added inventory field entity.
 
         Example
         -------
@@ -293,40 +291,40 @@ class Protocol(PrimaryEntity):
 
             protocol = user.getProtocol(17000)
             resource = user.getResources(search_query='Sample A')[0]
-            protocol.addMaterial(name='Sample A', amount='2', units='ml',
+            protocol.addInventoryField(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        return protocolMaterialRepository.newProtocolMaterial(self.__user__,
-                                                              protocol_id=self.last_version["id"],
-                                                              resource_id=resource_id, name=name,
-                                                              amount=amount,
-                                                              units=units,
-                                                              extraParams=extraParams)
+        return protocolInventoryFieldRepository.newProtocolInventoryField(self.__user__,
+                                                                          protocol_id=self.last_version["id"],
+                                                                          resource_id=resource_id, name=name,
+                                                                          amount=amount,
+                                                                          units=units,
+                                                                          extraParams=extraParams)
 
-    def getMaterials(self, count=100, extraParams={}):
+    def getInventoryFields(self, count=100, extraParams={}):
         """
-        Returns a list of the materials in a Protocol.
+        Returns a list of the inventory fields in a Protocol.
 
         Returns
         -------
-        List[:class:`~labstep.entities.protocolMaterial.model.ProtocolMaterial`]
-            List of the materials in a Protocol.
+        List[:class:`~labstep.entities.protocolInventoryField.model.ProtocolInventoryField`]
+            List of the inventory fields in a Protocol.
 
         Example
         -------
         ::
 
             protocol = user.getProtocol(17000)
-            protocol_materials = protocol.getMaterials()
-            protocol_materials[0].attributes()
+            protocol_inventoryFields = protocol.getInventoryFields()
+            protocol_inventory_fields[0]
         """
         self.update()
         if "protocol_values" not in self.last_version:
             return []
-        materials = self.last_version["protocol_values"]
-        return listToClass(materials, ProtocolMaterial, self.__user__)
+        inventoryFields = self.last_version["protocol_values"]
+        return EntityList(inventoryFields, ProtocolInventoryField, self.__user__)
 
-    def addTimer(self, name=None, hours=None, minutes=None, seconds=None):
+    def addTimer(self, name=UNSPECIFIED, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):
         """
         Add a new timer to the Protocol.
 
@@ -353,7 +351,7 @@ class Protocol(PrimaryEntity):
             protocol = user.getProtocol(17000)
             protocol.addTimer(name='Refluxing', hours='4', minutes='30')
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         params = {
             "protocol_id": self.last_version["id"],
@@ -386,9 +384,9 @@ class Protocol(PrimaryEntity):
             return []
 
         timers = self.last_version["protocol_timers"]
-        return listToClass(timers, ProtocolTimer, self.__user__)
+        return EntityList(timers, ProtocolTimer, self.__user__)
 
-    def addTable(self, name=None, data=None):
+    def addTable(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
         Add a new table to the Protocol.
 
@@ -429,7 +427,7 @@ class Protocol(PrimaryEntity):
             protocol = user.getProtocol(17000)
             protocol.addTable(name='Calibration', data=data)
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         params = {
             "protocol_id": self.last_version["id"], "name": name, "data": data}
@@ -457,7 +455,7 @@ class Protocol(PrimaryEntity):
             return []
 
         tables = self.last_version["protocol_tables"]
-        return listToClass(tables, ProtocolTable, self.__user__)
+        return EntityList(tables, ProtocolTable, self.__user__)
 
     def addToCollection(self, collection_id):
         """
@@ -472,7 +470,7 @@ class Protocol(PrimaryEntity):
         -------
         None
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.addToCollection(self, collection_id=collection_id)
 
@@ -480,7 +478,7 @@ class Protocol(PrimaryEntity):
         """
         Returns the list of collections the protocol is in.
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.getAttachedCollections(self)
 
@@ -494,11 +492,11 @@ class Protocol(PrimaryEntity):
             The id of the collection to remove from
 
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.removeFromCollection(self, collection_id)
 
-    def addFile(self, filepath=None, rawData=None):
+    def addFile(self, filepath=UNSPECIFIED, rawData=UNSPECIFIED):
         """
         Add a file to a Protocol.
 
@@ -546,7 +544,7 @@ class Protocol(PrimaryEntity):
             return []
 
         files = self.last_version['files']
-        return listToClass(files, File, self.__user__)
+        return EntityList(files, File, self.__user__)
 
     def export(self, path):
         """
@@ -564,14 +562,22 @@ class Protocol(PrimaryEntity):
             experiment = user.getProtocol(17000)
             experiment.export('/my_folder')
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.exportProtocol(self, path)
 
-    @ deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
+    @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):
         return self.addDataField(*args, **kwargs)
 
-    @ deprecated(version='3.3.2', reason="You should use experiment.getDataFields instead")
+    @deprecated(version='3.3.2', reason="You should use experiment.getDataFields instead")
     def getDataElements(self):
         return self.getDataFields()
+
+    @deprecated(version='3.12.0', reason="You should use getInventoryFields instead")
+    def getMaterials(self, *args, **kwargs):
+        return self.getInventoryFields(*args, **kwargs)
+
+    @deprecated(version='3.12.0', reason="You should use addInventoryField instead")
+    def addMaterial(self, *args, **kwargs):
+        return self.addInventoryField(*args, **kwargs)

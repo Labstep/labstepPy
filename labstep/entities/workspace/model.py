@@ -7,6 +7,7 @@ from labstep.generic.entity.model import Entity
 from labstep.entities.workspaceMember.model import WorkspaceMember
 from labstep.entities.sharelink.model import Sharelink
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
 class Workspace(Entity):
@@ -25,7 +26,7 @@ class Workspace(Entity):
 
     __entityName__ = "group"
 
-    def edit(self, name=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, extraParams={}):
         """
         Edit an existing Workspace.
 
@@ -46,7 +47,7 @@ class Workspace(Entity):
             my_workspace = user.getWorkspace(17000)
             my_workspace.edit(name='A New Workspace Name')
         """
-        from labstep.entities.workspace.repository import workspaceRepository
+        import labstep.entities.workspace.repository as workspaceRepository
 
         return workspaceRepository.editWorkspace(self, name, extraParams=extraParams)
 
@@ -61,7 +62,7 @@ class Workspace(Entity):
             my_workspace = user.getWorkspace(17000)
             my_workspace.delete()
         """
-        from labstep.entities.workspace.repository import workspaceRepository
+        import labstep.entities.workspace.repository as workspaceRepository
 
         return workspaceRepository.editWorkspace(self, deleted_at=getTime())
 
@@ -69,11 +70,11 @@ class Workspace(Entity):
     def getExperiments(
         self,
         count=100,
-        search_query=None,
-        created_at_from=None,
-        created_at_to=None,
-        tag_id=None,
-        collection_id=None,
+        search_query=UNSPECIFIED,
+        created_at_from=UNSPECIFIED,
+        created_at_to=UNSPECIFIED,
+        tag_id=UNSPECIFIED,
+        collection_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -111,7 +112,7 @@ class Workspace(Entity):
                                               created_at_to='2019-01-31',
                                               tag_id=800)
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -129,11 +130,11 @@ class Workspace(Entity):
     def getProtocols(
         self,
         count=100,
-        search_query=None,
-        created_at_from=None,
-        created_at_to=None,
-        tag_id=None,
-        collection_id=None,
+        search_query=UNSPECIFIED,
+        created_at_from=UNSPECIFIED,
+        created_at_to=UNSPECIFIED,
+        tag_id=UNSPECIFIED,
+        collection_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -171,7 +172,7 @@ class Workspace(Entity):
                                             created_at_to='2019-01-31',
                                             tag_id=800)
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -186,7 +187,7 @@ class Workspace(Entity):
             extraParams=extraParams,
         )
 
-    def getResources(self, count=100, search_query=None, tag_id=None, extraParams={}):
+    def getResources(self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Resources within this specific Workspace,
         which can be filtered using the parameters:
@@ -212,7 +213,7 @@ class Workspace(Entity):
             entity = workspace.getResources(search_query='bacteria',
                                             tag_id=800)
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -221,7 +222,7 @@ class Workspace(Entity):
         )
 
     def getResourceCategorys(
-        self, count=100, search_query=None, tag_id=None, extraParams={}
+        self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of Resource Categories within this specific Workspace,
@@ -248,7 +249,7 @@ class Workspace(Entity):
             entity = workspace.getResourceCategorys(search_query='properties',
                                                     tag_id=800)
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -256,7 +257,7 @@ class Workspace(Entity):
             self.__user__, count, search_query, tag_id, extraParams=extraParams
         )
 
-    def getResourceLocations(self, count=100, search_query=None, extraParams={}):
+    def getResourceLocations(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Resource Locations within this specific Workspace,
         which can be filtered using the parameters:
@@ -280,7 +281,7 @@ class Workspace(Entity):
             entity = workspace.getResourceLocations(search_query='properties',
                                                     tag_id=800)
         """
-        from labstep.entities.resourceLocation.repository import resourceLocationRepository
+        import labstep.entities.resourceLocation.repository as resourceLocationRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -288,8 +289,37 @@ class Workspace(Entity):
             self.__user__, count, search_query, extraParams=extraParams
         )
 
+    def getResourceItems(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of ResourceItems in a workspace on Labstep.
+
+        Parameters
+        ----------
+        count (int)
+            The number of ResourceItems to retrieve.
+        search_query (str)
+            Search for ResourceItems with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.resourceItem.model.ResourceItem`]
+            A list of ResourceItem objects.
+
+        Example
+        -------
+        ::
+
+            entity = user.getResourceItems(search_query='batch #5')
+        """
+        import labstep.entities.resourceItem.repository as resourceItemRepository
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return resourceItemRepository.getResourceItems(
+            self.__user__, count=count, search_query=search_query, extraParams=extraParams
+        )
+
     def getOrderRequests(
-        self, count=100, name=None, status=None, tag_id=None, extraParams={}
+        self, count=100, name=UNSPECIFIED, status=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of Order Requests within this specific Workspace,
@@ -314,7 +344,7 @@ class Workspace(Entity):
 
             entity = workspace.getOrderRequests(name='polymerase')
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -327,7 +357,7 @@ class Workspace(Entity):
             extraParams=extraParams,
         )
 
-    def getTags(self, count=1000, search_query=None, type=None, extraParams={}):
+    def getTags(self, count=1000, search_query=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Tags within this specific Workspace,
         which can be filtered using the parameters:
@@ -354,7 +384,7 @@ class Workspace(Entity):
 
             entity = workspace.getTags(search_query='bacteria')
         """
-        from labstep.entities.tag.repository import tagRepository
+        import labstep.entities.tag.repository as tagRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -384,10 +414,10 @@ class Workspace(Entity):
 
             newMember = workspace.addMember(user_id=123)
         """
-        from labstep.entities.workspaceMember.repository import workspaceMemberRepository
+        import labstep.entities.workspaceMember.repository as workspaceMemberRepository
         return workspaceMemberRepository.addMember(self.__user__, workspace_id=self.id, user_id=user_id)
 
-    def getMembers(self, count=100, search_query=None, extraParams={}):
+    def getMembers(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of the members of the workspace.
 
@@ -410,10 +440,10 @@ class Workspace(Entity):
 
             members = workspace.getMembers(search_query='john')
         """
-        from labstep.entities.workspaceMember.repository import workspaceMemberRepository
+        import labstep.entities.workspaceMember.repository as workspaceMemberRepository
         return workspaceMemberRepository.getMembers(self.__user__, workspace_id=self.id, search_query=search_query, extraParams=extraParams)
 
-    def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
+    def getFiles(self, count=100, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Files in the Workspace on Labstep,
         which can be filtered using the parameters:
@@ -440,7 +470,7 @@ class Workspace(Entity):
 
             files = workspace.getFiles(search_query='bacteria')
         """
-        from labstep.entities.file.repository import fileRepository
+        import labstep.entities.file.repository as fileRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -448,7 +478,7 @@ class Workspace(Entity):
             self.__user__, count, search_query, file_type, extraParams=extraParams
         )
 
-    def getDevices(self, count=100, search_query=None, extraParams={}):
+    def getDevices(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Devices within this specific Workspace,
         which can be filtered using the parameters:
@@ -471,7 +501,7 @@ class Workspace(Entity):
 
             devices = workspace.getDevices(search_query='microscope')
         """
-        from labstep.entities.device.repository import deviceRepository
+        import labstep.entities.device.repository as deviceRepository
 
         extraParams = {"group_id": self.id, **extraParams}
 
@@ -515,11 +545,11 @@ class Workspace(Entity):
 
         """
 
-        from labstep.entities.sharelink.repository import shareLinkRepository
+        import labstep.entities.sharelink.repository as shareLinkRepository
         return shareLinkRepository.getSharelink(self)
 
     def getCollections(
-        self, count=1000, search_query=None, type="experiment", extraParams={}
+        self, count=1000, search_query=UNSPECIFIED, type="experiment", extraParams={}
     ):
         """
         Retrieve a list of Collections within this specific Workspace,
@@ -547,7 +577,7 @@ class Workspace(Entity):
             entity = workspace.getCollections(search_query='bacteria')
         """
         extraParams = {"group_id": self.id, **extraParams}
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.getCollections(
             self.__user__, count, type, search_query, extraParams=extraParams
@@ -573,7 +603,7 @@ class Workspace(Entity):
         collection
             An object representing the new Labstep Collection.
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.newCollection(
             self.__user__, name=name, type=type, extraParams={
@@ -585,12 +615,12 @@ class Workspace(Entity):
         Sets this workspace as the default workspace for the active user.
         """
         member = WorkspaceMember(self.logged_user_user_group, self.__user__)
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         return entityRepository.editEntity(member, {"is_home": True})
 
     def setAutosharing(
-        self, experiment_sharing=None, protocol_sharing=None, resource_sharing=None
+        self, experiment_sharing=UNSPECIFIED, protocol_sharing=UNSPECIFIED, resource_sharing=UNSPECIFIED
     ):
         """
         Parameters
@@ -624,7 +654,7 @@ class Workspace(Entity):
         self.update()
 
         if self.security_policy is None:
-            from labstep.generic.entity.repository import entityRepository
+            import labstep.generic.entity.repository as entityRepository
 
             policy = entityRepository.newEntity(
                 self.__user__,

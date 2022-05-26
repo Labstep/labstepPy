@@ -4,7 +4,7 @@
 
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import handleDate, getTime
-
+from labstep.constants import UNSPECIFIED
 
 TYPE_DEFAULT = "default"
 TYPE_NUMERIC = "numeric"
@@ -69,8 +69,9 @@ class Metadata(Entity):
     """
 
     __entityName__ = "metadata"
+    __searchKey__ = "label"
 
-    def edit(self, fieldName=None, value=None, extraParams={}):
+    def edit(self, fieldName=UNSPECIFIED, value=UNSPECIFIED, extraParams={}):
         """
         Edit the value of an existing Metadata.
 
@@ -92,7 +93,7 @@ class Metadata(Entity):
 
             metadata.edit(value='2.50')
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.editMetadata(
             self, fieldName, value, extraParams=extraParams
@@ -108,8 +109,70 @@ class Metadata(Entity):
 
             metadata.delete()
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.editMetadata(
             self, extraParams={"deleted_at": getTime()}
         )
+
+    def getValue(self):
+        """
+        Returns the value of the metadata field.
+
+        Returns
+        ----------
+        Return type depends on the type of the metadata field
+
+        Example
+        -------
+        ::
+
+            metadataField = resource.getMetadata()[0]
+            value = dataField.getValue()
+        """
+
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
+
+        return experimentDataFieldRepository.getDataFieldValue(self)
+
+    def setValue(self, value):
+        """
+        Sets the value of the metadata field.
+
+        Parameters
+        ----------
+        value
+            The value to set, depends on the type of the metadata field.
+
+        Returns
+        ----------
+        Return type depends on the type of the metadata field
+
+        Example
+        -------
+        ::
+
+            metadataFields = experiment.getMetadata()
+            textField = metadataFields.get('My text field')
+            textField.setValue('Some String')
+
+            numericField = metadataFields.get('My numeric field')
+            numericField.setValue(56534)
+
+            dateField = metadataFields.get('My date field')
+            dateField.setValue('2021-10-28')
+
+            singleOptionsField = metadataFields.get('My single options field')
+            singleOptionsField.setValue('Option 1')
+
+            multiOptionsField = metadataFields.get('My multi options field')
+            multiOptionsField.setValue(['Option 1','Option 2'])
+
+            fileField = metadataFields.get('My file field')
+            file = user.newFile('/path/to/file')
+            fileField.setValue(file)
+        """
+
+        import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
+
+        return experimentDataFieldRepository.setDataFieldValue(self, value)

@@ -7,6 +7,7 @@ from labstep.generic.entity.model import Entity
 from labstep.service.config import configService
 from labstep.service.helpers import url_join, getHeaders
 from labstep.service.request import requestService
+from labstep.constants import UNSPECIFIED
 
 
 class User(Entity):
@@ -24,8 +25,8 @@ class User(Entity):
     """
     __entityName__ = "user"
 
-    def __init__(self, user, adminUser=None):
-        self.__user__ = adminUser if adminUser is not None else self
+    def __init__(self, user, adminUser=UNSPECIFIED):
+        self.__user__ = adminUser if adminUser is not UNSPECIFIED else self
         if 'group' not in user or user["group"] is None:
             print(
                 """Warning: No default workspace.
@@ -84,7 +85,7 @@ class User(Entity):
 
             entity = user.getExperiment(17000)
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.getExperiment(self, experiment_id)
 
@@ -108,7 +109,7 @@ class User(Entity):
 
             entity = user.getProtocol(17000)
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.getProtocol(self, protocol_id)
 
@@ -132,7 +133,7 @@ class User(Entity):
 
             entity = user.getResource(17000)
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         return resourceRepository.getResource(self, resource_id)
 
@@ -156,7 +157,7 @@ class User(Entity):
 
             entity = user.getResourceItem(17000)
         """
-        from labstep.entities.resourceItem.repository import resourceItemRepository
+        import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.getResourceItem(self, resource_item_id)
 
@@ -180,7 +181,7 @@ class User(Entity):
 
             entity = user.getResourceCategory(17000)
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         return resourceCategoryRepository.getResourceCategory(
             self, resource_category_id
@@ -206,7 +207,7 @@ class User(Entity):
 
             entity = user.getResourceLocation(17000)
         """
-        from labstep.entities.resourceLocation.repository import resourceLocationRepository
+        import labstep.entities.resourceLocation.repository as resourceLocationRepository
 
         return resourceLocationRepository.getResourceLocation(
             self, resource_location_id
@@ -232,7 +233,7 @@ class User(Entity):
 
             entity = user.getOrderRequest(17000)
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.getOrderRequest(self, order_request_id)
 
@@ -256,7 +257,7 @@ class User(Entity):
 
             entity = user.getWorkspace(17000)
         """
-        from labstep.entities.workspace.repository import workspaceRepository
+        import labstep.entities.workspace.repository as workspaceRepository
 
         return workspaceRepository.getWorkspace(self, workspace_id)
 
@@ -275,7 +276,7 @@ class User(Entity):
 
             organization = user.getOrganization()
         """
-        from labstep.entities.organization.repository import organizationRepository
+        import labstep.entities.organization.repository as organizationRepository
 
         if len(self.user_organizations) > 0:
 
@@ -303,7 +304,7 @@ class User(Entity):
 
             entity = user.getFile(17000)
         """
-        from labstep.entities.file.repository import fileRepository
+        import labstep.entities.file.repository as fileRepository
 
         return fileRepository.getFile(self, file_id)
 
@@ -327,7 +328,7 @@ class User(Entity):
 
             entity = user.getDevice(17000)
         """
-        from labstep.entities.device.repository import deviceRepository
+        import labstep.entities.device.repository as deviceRepository
 
         return deviceRepository.getDevice(self, device_id)
 
@@ -336,11 +337,11 @@ class User(Entity):
     def getExperiments(
         self,
         count=100,
-        search_query=None,
-        created_at_from=None,
-        created_at_to=None,
-        tag_id=None,
-        collection_id=None,
+        search_query=UNSPECIFIED,
+        created_at_from=UNSPECIFIED,
+        created_at_to=UNSPECIFIED,
+        tag_id=UNSPECIFIED,
+        collection_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -379,7 +380,7 @@ class User(Entity):
                                          created_at_to='2019-01-31',
                                          tag_id=800)
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.getExperiments(
             self,
@@ -395,11 +396,11 @@ class User(Entity):
     def getProtocols(
         self,
         count=100,
-        search_query=None,
-        created_at_from=None,
-        created_at_to=None,
-        tag_id=None,
-        collection_id=None,
+        search_query=UNSPECIFIED,
+        created_at_from=UNSPECIFIED,
+        created_at_to=UNSPECIFIED,
+        tag_id=UNSPECIFIED,
+        collection_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -438,7 +439,7 @@ class User(Entity):
                                        created_at_to='2019-01-31',
                                        tag_id=800)
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.getProtocols(
             self,
@@ -451,7 +452,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getResources(self, count=100, search_query=None, tag_id=None, extraParams={}):
+    def getResources(self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Resources
         across all Workspaces on Labstep,
@@ -478,7 +479,7 @@ class User(Entity):
             entity = user.getResources(search_query='bacteria',
                                        tag_id=800)
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         return resourceRepository.getResources(
             self,
@@ -489,7 +490,7 @@ class User(Entity):
         )
 
     def getResourceCategorys(
-        self, count=100, search_query=None, tag_id=None, extraParams={}
+        self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of a User's Resource Categorys
@@ -517,7 +518,7 @@ class User(Entity):
             entity = user.getResourceCategorys(search_query='properties',
                                                tag_id=800)
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         return resourceCategoryRepository.getResourceCategorys(
             self,
@@ -527,7 +528,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getResourceLocations(self, count=100, search_query=None, extraParams={}):
+    def getResourceLocations(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a user's ResourceLocations on Labstep,
         which can be filtered using the parameters:
@@ -550,13 +551,13 @@ class User(Entity):
 
             entity = user.getResourceLocations(search_query='fridge')
         """
-        from labstep.entities.resourceLocation.repository import resourceLocationRepository
+        import labstep.entities.resourceLocation.repository as resourceLocationRepository
 
         return resourceLocationRepository.getResourceLocations(
             self, count=count, search_query=search_query, extraParams=extraParams
         )
 
-    def getResourceItems(self, count=100, search_query=None, extraParams={}):
+    def getResourceItems(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a user's ResourceItems on Labstep,
         which can be filtered using the parameters:
@@ -579,14 +580,14 @@ class User(Entity):
 
             entity = user.getResourceItems(search_query='batch #5')
         """
-        from labstep.entities.resourceItem.repository import resourceItemRepository
+        import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.getResourceItems(
             self, count=count, search_query=search_query, extraParams=extraParams
         )
 
     def getOrderRequests(
-        self, count=100, search_query=None, status=None, tag_id=None, extraParams={}
+        self, count=100, search_query=UNSPECIFIED, status=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
@@ -616,7 +617,7 @@ class User(Entity):
 
             entity = user.getOrderRequests(name='polymerase')
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.getOrderRequests(
             self,
@@ -627,7 +628,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getTags(self, count=1000, search_query=None, type=None, extraParams={}):
+    def getTags(self, count=1000, search_query=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Tags
         across all Workspaces on Labstep,
@@ -655,7 +656,7 @@ class User(Entity):
 
             entity = user.getTags(search_query='bacteria')
         """
-        from labstep.entities.tag.repository import tagRepository
+        import labstep.entities.tag.repository as tagRepository
 
         return tagRepository.getTags(
             self,
@@ -665,7 +666,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getWorkspaces(self, count=100, search_query=None, extraParams={}):
+    def getWorkspaces(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a user's Workspaces on Labstep,
         which can be filtered using the parameters:
@@ -689,17 +690,17 @@ class User(Entity):
 
             entity = user.getWorkspaces(name='bacteria')
         """
-        from labstep.entities.workspace.repository import workspaceRepository
+        import labstep.entities.workspace.repository as workspaceRepository
 
         return workspaceRepository.getWorkspaces(
             self, count=count, search_query=search_query, extraParams=extraParams
         )
 
     @deprecated(version='3.0.3', reason="You should use workspace.getFiles instead")
-    def getFiles(self, count=100, search_query=None, file_type=None, extraParams={}):
+    def getFiles(self, count=100, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}):
         return []
 
-    def getDevices(self, count=100, search_query=None, extraParams={}):
+    def getDevices(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Devices
         across all Workspaces on Labstep,
@@ -723,7 +724,7 @@ class User(Entity):
 
             entity = user.getDevices(search_query='microscope')
         """
-        from labstep.entities.device.repository import deviceRepository
+        import labstep.entities.device.repository as deviceRepository
 
         return deviceRepository.getDevices(
             self, count=count, search_query=search_query, extraParams=extraParams
@@ -731,7 +732,7 @@ class User(Entity):
 
     # newEntity()
 
-    def newExperiment(self, name, entry=None, extraParams={}):
+    def newExperiment(self, name, entry=UNSPECIFIED, extraParams={}):
         """
         Create a new Labstep Experiment.
 
@@ -753,7 +754,7 @@ class User(Entity):
 
             entity = user.newExperiment(name='The Synthesis of Aspirin')
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.newExperiment(
             self, name, entry=entry, extraParams=extraParams
@@ -779,11 +780,11 @@ class User(Entity):
 
             entity = user.newProtocol(name='Synthesising Aspirin')
         """
-        from labstep.entities.protocol.repository import protocolRepository
+        import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.newProtocol(self, name, extraParams=extraParams)
 
-    def newResource(self, name, resource_category_id=None, extraParams={}):
+    def newResource(self, name, resource_category_id=UNSPECIFIED, extraParams={}):
         """
         Create a new Labstep Resource.
 
@@ -806,7 +807,7 @@ class User(Entity):
 
             entity = user.newResource(name='salicylic acid')
         """
-        from labstep.entities.resource.repository import resourceRepository
+        import labstep.entities.resource.repository as resourceRepository
 
         return resourceRepository.newResource(self, name, resource_category_id=resource_category_id, extraParams=extraParams)
 
@@ -830,13 +831,13 @@ class User(Entity):
 
             entity = user.newResourceCategory(name='Chemical')
         """
-        from labstep.entities.resourceCategory.repository import resourceCategoryRepository
+        import labstep.entities.resourceCategory.repository as resourceCategoryRepository
 
         return resourceCategoryRepository.newResourceCategory(
             self, name, extraParams=extraParams
         )
 
-    def newResourceLocation(self, name, outer_location_id=None, extraParams={}):
+    def newResourceLocation(self, name, outer_location_id=UNSPECIFIED, extraParams={}):
         """
         Create a new Labstep ResourceLocation.
 
@@ -863,7 +864,7 @@ class User(Entity):
 
             entity = user.newResourceLocation(name='Fridge A')
         """
-        from labstep.entities.resourceLocation.repository import resourceLocationRepository
+        import labstep.entities.resourceLocation.repository as resourceLocationRepository
 
         return resourceLocationRepository.newResourceLocation(
             self, name, outer_location_id=outer_location_id, extraParams=extraParams
@@ -893,7 +894,7 @@ class User(Entity):
             my_resource = user.getResource(17000)
             entity = user.newOrderRequest(my_resource.id, quantity=2)
         """
-        from labstep.entities.orderRequest.repository import orderRequestRepository
+        import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.newOrderRequest(
             self, resource_id=resource_id, quantity=quantity, extraParams=extraParams
@@ -923,7 +924,7 @@ class User(Entity):
 
             entity = user.newTag(name='Aspirin')
         """
-        from labstep.entities.tag.repository import tagRepository
+        import labstep.entities.tag.repository as tagRepository
 
         return tagRepository.newTag(self, name, type=type, extraParams=extraParams)
 
@@ -947,11 +948,11 @@ class User(Entity):
 
             entity = user.newWorkspace(name='Aspirin Project')
         """
-        from labstep.entities.workspace.repository import workspaceRepository
+        import labstep.entities.workspace.repository as workspaceRepository
 
         return workspaceRepository.newWorkspace(self, name, extraParams=extraParams)
 
-    def newFile(self, filepath, rawData=None, extraParams={}):
+    def newFile(self, filepath=UNSPECIFIED, rawData=UNSPECIFIED, extraParams={}):
         """
         Upload a file to the Labstep entity Data.
 
@@ -966,22 +967,22 @@ class User(Entity):
 
             entity = user.newFile('./structure_of_aspirin.png')
         """
-        from labstep.entities.file.repository import fileRepository
+        import labstep.entities.file.repository as fileRepository
 
         return fileRepository.newFile(self, filepath, rawData=rawData, extraParams=extraParams)
 
-    def newCollection(self, name, type="experiment"):
+    def newCollection(self, name, type="experiment", extraParams={}):
         """
         Create a new Collection for Experiments (or Protocols)
 
         Parameters
         ----------
         type (str)
-            The filepath to the file to attach.
+            The type of collection to create ("experiment" or "protocol")
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
-        return collectionRepository.newCollection(self, name=name, type=type)
+        return collectionRepository.newCollection(self, name=name, type=type, extraParams=extraParams)
 
     def newDevice(self, name, extraParams={}):
         """
@@ -1003,7 +1004,7 @@ class User(Entity):
 
             entity = user.newDevice(name='Microscope A')
         """
-        from labstep.entities.device.repository import deviceRepository
+        import labstep.entities.device.repository as deviceRepository
 
         return deviceRepository.newDevice(self, name, extraParams)
 
@@ -1047,7 +1048,7 @@ class User(Entity):
 
             entity = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
         """
-        from labstep.entities.jupyterInstance.repository import jupyterInstanceRepository
+        import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
 
         return jupyterInstanceRepository.getJupyterInstance(self, jupyterInstanceGuid)
 
@@ -1071,6 +1072,6 @@ class User(Entity):
 
             entity = user.getJupyterNotebook("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
         """
-        from labstep.entities.jupyterNotebook.repository import jupyterNotebookRepository
+        import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
         return jupyterNotebookRepository.getJupyterNotebook(self, jupyterNotebookGuid)

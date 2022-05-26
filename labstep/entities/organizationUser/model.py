@@ -20,7 +20,7 @@ class OrganizationUser(Entity):
             users = my_organization.getUsers()
             user[0].setAdmin()
         """
-        from labstep.entities.organizationUser.repository import organizationUserRepository
+        import labstep.entities.organizationUser.repository as organizationUserRepository
 
         return organizationUserRepository.promoteUser(self)
 
@@ -36,7 +36,7 @@ class OrganizationUser(Entity):
             users = my_organization.getUsers()
             user[0].revokeAdmin()
         """
-        from labstep.entities.organizationUser.repository import organizationUserRepository
+        import labstep.entities.organizationUser.repository as organizationUserRepository
 
         return organizationUserRepository.demoteUser(self)
 
@@ -52,6 +52,6 @@ class OrganizationUser(Entity):
             users = my_organization.getUsers()
             user[0].disable()
         """
-        from labstep.entities.organizationUser.repository import organizationUserRepository
+        import labstep.entities.organizationUser.repository as organizationUserRepository
 
         return organizationUserRepository.disableUser(self)

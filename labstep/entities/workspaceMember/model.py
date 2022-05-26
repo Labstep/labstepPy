@@ -24,5 +24,5 @@ class WorkspaceMember(Entity):
         """
         Remove this member from the workspace (requires owner permission)
         """
-        from labstep.entities.workspaceMember.repository import workspaceMemberRepository
+        import labstep.entities.workspaceMember.repository as workspaceMemberRepository
         return workspaceMemberRepository.removeMember(self)

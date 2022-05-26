@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 from deprecated import deprecated
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.entities.experimentLink.repository import newExperimentLink
+from labstep.generic.entityPrimary.model import EntityPrimary
+from labstep.generic.entityList.model import EntityList
 from labstep.entities.experimentProtocol.model import ExperimentProtocol
-from labstep.entities.experimentMaterial.model import ExperimentMaterial
-from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentSignature.model import ExperimentSignature
-from labstep.service.helpers import getTime, listToClass
+from labstep.service.helpers import getTime, handleDate
+from labstep.constants import UNSPECIFIED
 
 
-class Experiment(PrimaryEntity):
+class Experiment(EntityPrimary):
     """
     Represents an Experiment on Labstep.
 
@@ -32,7 +33,7 @@ class Experiment(PrimaryEntity):
             self.root_experiment = ExperimentProtocol(
                 data['root_experiment'], user)
 
-    def edit(self, name=None, entry=None, started_at=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, entry=UNSPECIFIED, started_at=UNSPECIFIED, extraParams={}):
         """
         Edit an existing Experiment.
 
@@ -59,7 +60,7 @@ class Experiment(PrimaryEntity):
             my_experiment.edit(name='A New Experiment Name',
                                started_at='2018-06-06 12:05')
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.editExperiment(
             self, name=name, entry=entry, started_at=started_at, extraParams=extraParams
@@ -76,9 +77,59 @@ class Experiment(PrimaryEntity):
             my_experiment = user.getExperiment(17000)
             my_experiment.delete()
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.editExperiment(self, deleted_at=getTime())
+
+    def lock(self):
+        """
+        Lock an Experiment. Once locked, only owners can unlock.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            my_experiment.lock()
+        """
+        import labstep.entities.experiment.repository as experimentRepository
+        return experimentRepository.editExperiment(self, extraParams={'locked_at': getTime()})
+
+    def unlock(self):
+        """
+        Unlock a locked Experiment. Can only be done with owner permission.
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            my_experiment.lock()
+            my_experiment.unlock()
+        """
+        import labstep.entities.experiment.repository as experimentRepository
+        return experimentRepository.editExperiment(self, extraParams={'locked_at': None})
+
+    def complete(self, date=UNSPECIFIED):
+        """
+        Marks an experiment as complete.
+
+        Parameters
+        ----------
+        date (str)
+            Optionally specify a particular datetime it was completed.
+            Date format 'YYYY-MM-DD HH:MM:SS'
+
+        Example
+        -------
+        ::
+
+            my_experiment = user.getExperiment(17000)
+            my_experiment.complete()
+        """
+        import labstep.entities.experiment.repository as experimentRepository
+        return experimentRepository.editExperiment(self,
+                                                   extraParams={'ended_at': handleDate(date) if date is not UNSPECIFIED else getTime()})
 
     def getEntry(self):
         """
@@ -91,7 +142,10 @@ class Experiment(PrimaryEntity):
             my_experiment = user.getExperiment(17000)
             print(my_experiment.getEntry())
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
+
+        if hasattr(self, 'root_experiment') is False:
+            self.update()
 
         return entityRepository.getEntity(
             self.__user__, ExperimentProtocol, self.root_experiment.id
@@ -124,7 +178,7 @@ class Experiment(PrimaryEntity):
             # Attach the Protocol to the Experiment
             my_experiment.addProtocol(my_protocol)
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.addProtocolToExperiment(self, protocol)
 
@@ -145,7 +199,7 @@ class Experiment(PrimaryEntity):
             protocols = entity.getProtocols()
             protocols[0].attributes()
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         return entityRepository.getEntities(
             self.__user__,
@@ -154,15 +208,44 @@ class Experiment(PrimaryEntity):
             {"is_root": 0, "experiment_workflow_id": self.id},
         )
 
+    def addChemicalReaction(
+        self,
+        data=UNSPECIFIED,
+        extraParams={},
+    ):
+        """
+        Add Chemical Reaction to a Labstep Experiment.
+
+        Parameters
+        ----------
+        data (str)
+            The data of the reaction in RXN format
+
+        Returns
+        -------
+        :class:`~labstep.entities.chemicalReaction.model.ChemicalReaction`
+            An object representing the new Chemical Reaction
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            chemicalReaction = experiment.addChemicalReaction(data='RXN 233')
+        """
+        return self.root_experiment.addChemicalReaction(
+            extraParams={"data": data, **extraParams},
+        )
+
     def addDataField(
         self,
         fieldName,
         fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        value=UNSPECIFIED,
+        date=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -231,6 +314,24 @@ class Experiment(PrimaryEntity):
         """
         return self.root_experiment.getDataFields()
 
+    def getChemicalReactions(self):
+        """
+        Returns a list of the chemical reactions in a Protocol within an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.chemicalReaction.model.ChemicalReaction`]
+            List of the chemical reactions in an Experiment's Protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_chemical_reactions = experiment.getChemicalReactions()
+        """
+        return self.root_experiment.getChemicalReactions()
+
     def getSignatures(self):
         """
         Retrieve a list of signatures added to the experiment
@@ -241,9 +342,9 @@ class Experiment(PrimaryEntity):
             List of the signatures added to the Experiment
         """
         exp = self.__user__.getExperiment(self.id)
-        return listToClass(exp.signatures, ExperimentSignature, self.__user__)
+        return EntityList(exp.signatures, ExperimentSignature, self.__user__)
 
-    def addSignature(self, statement=None, lock=False):
+    def addSignature(self, statement=UNSPECIFIED, lock=False):
         """
         Add a signature to experiment
 
@@ -259,7 +360,7 @@ class Experiment(PrimaryEntity):
         :class:`~labstep.entities.experimentSignature.model.ExperimentSignature`
             The signature that has been added
         """
-        from labstep.generic.entity.repository import entityRepository
+        import labstep.generic.entity.repository as entityRepository
 
         params = {
             "statement": statement,
@@ -276,11 +377,11 @@ class Experiment(PrimaryEntity):
         -------
         List[:class:`~labstep.entities.experimentSignatureRequest.model.ExperimentSignatureRequest`]
         """
-        from labstep.entities.experimentSignatureRequest.repository import experimentSignatureRequestRepository
+        import labstep.entities.experimentSignatureRequest.repository as experimentSignatureRequestRepository
 
         return experimentSignatureRequestRepository.getExperimentSignatureRequests(self.__user__, self.id)
 
-    def requestSignature(self, user_id, message=None):
+    def requestSignature(self, user_id, message=UNSPECIFIED):
         """
         Request a signature from another user in the workspace
 
@@ -294,45 +395,45 @@ class Experiment(PrimaryEntity):
             Optional message to include in signature request email
 
         """
-        from labstep.entities.experimentSignatureRequest.repository import experimentSignatureRequestRepository
+        import labstep.entities.experimentSignatureRequest.repository as experimentSignatureRequestRepository
 
         return experimentSignatureRequestRepository.newExperimentSignatureRequest(self.__user__, self.id, user_id=user_id, message=message)
 
-    def getMaterials(self):
+    def getInventoryFields(self):
         """
-        Returns a list of the materials in the Experiment.
+        Returns a list of the inventory fields in the Experiment.
 
         Returns
         -------
-        List[:class:`~labstep.entities.experimentMaterial.model.ExperimentMaterial`]
-            List of the materials in an Experiment.
+        List[:class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`]
+            List of the inventory fields in an Experiment.
 
         Example
         -------
         ::
 
             experiment = user.getExperiment(17000)
-            exp_materials = experiment.getMaterials()
-            print(exp_materials[0])
+            exp_inventory_fields = experiment.getInventoryFields()
+            print(exp_inventory_fields[0])
         """
-        return self.root_experiment.getMaterials()
+        return self.root_experiment.getInventoryFields()
 
-    def addMaterial(
+    def addInventoryField(
         self,
-        name=None,
-        amount=None,
-        units=None,
-        resource_id=None,
-        resource_item_id=None,
+        name=UNSPECIFIED,
+        amount=UNSPECIFIED,
+        units=UNSPECIFIED,
+        resource_id=UNSPECIFIED,
+        resource_item_id=UNSPECIFIED,
         extraParams={},
     ):
         """
-        Add a new material to the Experiment.
+        Add a new inventory field to the Experiment.
 
         Parameters
         ----------
         name (str)
-            The name of the material to add.
+            The name of the inventory field to add.
         amount (str)
             The amount used.
         units (str)
@@ -345,8 +446,8 @@ class Experiment(PrimaryEntity):
 
         Returns
         -------
-        :class:`~labstep.entities.experimentMaterial.model.ExperimentMaterial`
-            The newly added material entity.
+        :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`
+            The newly added inventory field entity.
 
         Example
         -------
@@ -354,15 +455,15 @@ class Experiment(PrimaryEntity):
 
             experiment = user.getExperiment(17000)
             resource = user.getResources(search_query='Sample A')[0]
-            experiment.addMaterial(name='Sample A', amount='2', units='ml',
+            experiment.addInventoryField(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        return self.root_experiment.addMaterial(name=name,
-                                                resource_id=resource_id,
-                                                resource_item_id=resource_item_id,
-                                                amount=amount,
-                                                units=units,
-                                                extraParams=extraParams)
+        return self.root_experiment.addInventoryField(name=name,
+                                                      resource_id=resource_id,
+                                                      resource_item_id=resource_item_id,
+                                                      amount=amount,
+                                                      units=units,
+                                                      extraParams=extraParams)
 
     def addToCollection(self, collection_id):
         """
@@ -377,7 +478,7 @@ class Experiment(PrimaryEntity):
         -------
         None
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.addToCollection(self, collection_id=collection_id)
 
@@ -385,7 +486,7 @@ class Experiment(PrimaryEntity):
         """
         Returns the list of collections the protocol is in.
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.getAttachedCollections(self)
 
@@ -399,7 +500,7 @@ class Experiment(PrimaryEntity):
             The id of the collection to remove from
 
         """
-        from labstep.entities.collection.repository import collectionRepository
+        import labstep.entities.collection.repository as collectionRepository
 
         return collectionRepository.removeFromCollection(self, collection_id)
 
@@ -421,7 +522,7 @@ class Experiment(PrimaryEntity):
         """
         return self.root_experiment.getTables()
 
-    def addTable(self, name=None, data=None):
+    def addTable(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
         Add a new table to an Experiment.
 
@@ -464,7 +565,7 @@ class Experiment(PrimaryEntity):
         """
         return self.root_experiment.addTable(name=name, data=data)
 
-    def addFile(self, filepath=None, rawData=None):
+    def addFile(self, filepath=UNSPECIFIED, rawData=UNSPECIFIED):
         """
         Add a file to an experiment entry.
         (Only use for files to be embedded in the body of the entry)
@@ -490,6 +591,30 @@ class Experiment(PrimaryEntity):
         """
         return self.root_experiment.addFile(filepath, rawData)
 
+    def getComments(self, count=100):
+        """
+        Retrieve the Comments attached to this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.comment.model.Comment`]
+            List of the comments attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperiment(17000)
+            comments = entity.getComments()
+            comments[0].attributes()
+        """
+        import labstep.entities.comment.repository as commentRepository
+
+        if hasattr(self, 'thread_ids') is False:
+            self.update()
+
+        return commentRepository.getComments(self, count, extraParams={'parent_thread_id[]': self.thread_ids})
+
     def getFiles(self):
         """
         Returns a list of the files in a experiment entry.
@@ -509,6 +634,33 @@ class Experiment(PrimaryEntity):
         """
         return self.root_experiment.getFiles()
 
+    def addExperimentLink(self, experiment_id):
+        """
+        Link this experiment to a previous experiment.
+        """
+        return newExperimentLink(self.__user__, src_experiment_id=self.id, dest_experiment_id=experiment_id)
+
+    def getExperimentLinks(self, direction='forward'):
+        """
+        Returns a list of experiments that the current experiment references (direction = "forward")
+        or a list of experiments that reference the current experiment (direction = "backwards")
+
+        Returns
+        -------
+        List[:class:`~labstep.experimentLink.ExperimentLink`]
+            List of linked experiments.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experimentLinks = experiment.getExperimentLinks(direction="backwards")
+        """
+        import labstep.entities.experimentLink.repository as experimentLinkRepository
+
+        return experimentLinkRepository.getExperimentLinks(self.__user__, self.id, direction=direction)
+
     def export(self, path):
         """
         Export the experiment to the directory specified. 
@@ -525,7 +677,7 @@ class Experiment(PrimaryEntity):
             experiment = user.getExperiment(17000)
             experiment.export('/my_folder')
         """
-        from labstep.entities.experiment.repository import experimentRepository
+        import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.exportExperiment(self, path)
 
@@ -536,3 +688,11 @@ class Experiment(PrimaryEntity):
     @deprecated(version='3.3.2', reason="You should use experiment.getDataFields instead")
     def getDataElements(self):
         return self.getDataFields()
+
+    @deprecated(version='3.12.0', reason="You should use getInventoryFields instead")
+    def getMaterials(self, *args, **kwargs):
+        return self.getInventoryFields(*args, **kwargs)
+
+    @deprecated(version='3.12.0', reason="You should use addInventoryField instead")
+    def addMaterial(self, *args, **kwargs):
+        return self.addInventoryField(*args, **kwargs)

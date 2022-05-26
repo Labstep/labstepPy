@@ -3,8 +3,11 @@
 # Author: Barney Walker <barney@labstep.com>
 
 from labstep.entities.deviceData.model import DeviceData
-from labstep.generic.shareableEntity.model import ShareableEntity
+from labstep.generic.entityWithMetadata.model import EntityWithMetadata
+from labstep.generic.entityWithSharing.model import EntityWithSharing
+from labstep.generic.entityWithComments.model import EntityWithComments
 from labstep.service.helpers import getTime
+from labstep.constants import UNSPECIFIED
 
 
 TYPE_DEFAULT = "default"
@@ -31,7 +34,7 @@ ALLOWED_FIELDS = {
 }
 
 
-class Device(ShareableEntity):
+class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments):
     """
     Represents a Device on Labstep.
 
@@ -47,7 +50,7 @@ class Device(ShareableEntity):
 
     __entityName__ = "device"
 
-    def edit(self, name=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, extraParams={}):
         """
         Edit an existing Device.
 
@@ -68,7 +71,7 @@ class Device(ShareableEntity):
             my_device = user.getDevice(17000)
             my_device.edit(name='A New Device Name')
         """
-        from labstep.entities.device.repository import deviceRepository
+        import labstep.entities.device.repository as deviceRepository
 
         return deviceRepository.editDevice(self, name, extraParams=extraParams)
 
@@ -83,7 +86,7 @@ class Device(ShareableEntity):
             my_device = user.getDevice(17000)
             my_device.delete()
         """
-        from labstep.entities.device.repository import deviceRepository
+        import labstep.entities.device.repository as deviceRepository
 
         return deviceRepository.editDevice(self, deleted_at=getTime())
 
@@ -91,11 +94,11 @@ class Device(ShareableEntity):
         self,
         fieldName,
         fieldType="default",
-        value=None,
-        date=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        value=UNSPECIFIED,
+        date=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -133,7 +136,7 @@ class Device(ShareableEntity):
             metadata = device.addMetadata("Refractive Index",
                                                value="1.73")
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.addMetadataTo(
             self,
@@ -164,11 +167,11 @@ class Device(ShareableEntity):
             metadatas = my_device.getMetadata()
             metadatas[0].attributes()
         """
-        from labstep.entities.metadata.repository import metadataRepository
+        import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.getMetadata(self)
 
-    def getData(self, count=100, search_query=None, extraParams={}):
+    def getData(self, count=100, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of the data sent by an device.
 
@@ -186,20 +189,20 @@ class Device(ShareableEntity):
         DeviceData
             A list of DeviceData objects.
         """
-        from labstep.generic.entity.repository import entityRepository
+        from labstep.generic.entity.repository import getEntities
 
         params = {"search_query": search_query,
                   "device_id": self.id, **extraParams}
-        return entityRepository.getEntities(self.__user__, DeviceData, count, params)
+        return getEntities(self.__user__, DeviceData, count, params)
 
     def addData(
         self,
         fieldName,
         fieldType="text",
-        text=None,
-        number=None,
-        unit=None,
-        filepath=None,
+        text=UNSPECIFIED,
+        number=UNSPECIFIED,
+        unit=UNSPECIFIED,
+        filepath=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -234,22 +237,22 @@ class Device(ShareableEntity):
             data = device.addData("Temperature","numeric",
                                                number=173, unit='K')
         """
-        from labstep.generic.entity.repository import entityRepository
-        from labstep.entities.file.repository import fileRepository
+        from labstep.generic.entity.repository import newEntity
+        from labstep.entities.file.repository import newFile
 
         if fieldType not in FIELD_TYPES:
             msg = "Not a supported data type '{}'".format(fieldType)
             raise ValueError(msg)
 
-        if filepath is not None:
-            file_id = fileRepository.newFile(self.__user__, filepath).id
+        if filepath is not UNSPECIFIED:
+            file_id = newFile(self.__user__, filepath).id
         else:
-            file_id = None
+            file_id = UNSPECIFIED
 
         allowedFieldsForType = set(ALLOWED_FIELDS[FIELD_TYPES[fieldType]])
         fields = {"value": text, "number": number,
                   "unit": unit, "file_id": file_id}
-        fields = {k: v for k, v in fields.items() if v}
+        fields = {k: v for k, v in fields.items() if v is not UNSPECIFIED}
         fields = set(fields.keys())
         violations = fields - allowedFieldsForType
         if violations:
@@ -269,4 +272,4 @@ class Device(ShareableEntity):
             **extraParams,
         }
 
-        return entityRepository.newEntity(self.__user__, DeviceData, params)
+        return newEntity(self.__user__, DeviceData, params)

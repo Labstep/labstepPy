@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Thomas Bullier <thomas@labstep.com>
 
-from labstep.generic.primaryEntity.model import PrimaryEntity
+from labstep.generic.entity.model import Entity
+from labstep.constants import UNSPECIFIED
 
 
-class JupyterNotebook(PrimaryEntity):
+class JupyterNotebook(Entity):
     """
     Represents an JupyterNotebook on Labstep.
     """
@@ -13,7 +14,7 @@ class JupyterNotebook(PrimaryEntity):
     __entityName__ = "jupyter-notebook"
     __hasGuid__ = True
 
-    def edit(self, name=None, status=None, data=None, extraParams={}):
+    def edit(self, name=UNSPECIFIED, status=UNSPECIFIED, data=UNSPECIFIED, extraParams={}):
         """
         Edit an existing JupyterNotebook.
 
@@ -38,7 +39,7 @@ class JupyterNotebook(PrimaryEntity):
             my_jupyterNotebook = user.getJupyterNotebook("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
             my_jupyterNotebook.edit(data='{test: 42}')
         """
-        from labstep.entities.jupyterNotebook.repository import jupyterNotebookRepository
+        import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
         return jupyterNotebookRepository.editJupyterNotebook(
             self, name=name, status=status, data=data, extraParams=extraParams
