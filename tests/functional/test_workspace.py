@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 import labstep
 from .fixtures import authUser, workspace, testString, loadFixtures
@@ -92,17 +92,9 @@ class TestWorkspace:
         result = entity.getCollections()
         assert len(result) >= 0
 
-    def test_autoSharing(self, entity):
-        result = entity.setAutosharing(
-            experiment_sharing=False,
-            protocol_sharing=False,
-            resource_sharing=False
-        )
-
-        result = entity.setAutosharing(
-            experiment_sharing=True,
-            protocol_sharing=True,
-            resource_sharing=True
-        )
-
-        assert result is not None
+    def test_getDeviceCategorys(self, entity, user):
+        user.setWorkspace(entity.id)
+        workspace = user.getWorkspace (entity.id)
+        device_category = user.newDeviceCategory(testString)
+        result = workspace.getDeviceCategorys()
+        assert result[0].id ==device_category.id

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import json
 from labstep.service.helpers import url_join, getHeaders
@@ -8,6 +8,7 @@ from labstep.service.config import configService
 from labstep.service.request import requestService
 from labstep.entities.permission.model import Permission
 from labstep.generic.entity.repository import getEntities, newEntity, editEntity, deleteEntity
+from labstep.constants import UNSPECIFIED
 
 
 def newPermission(entity, workspace_guid, permission):
@@ -29,7 +30,7 @@ def revokePermission(permission):
     return deleteEntity(permission)
 
 
-def getPermissions(entity, count=10):
+def getPermissions(entity, count=UNSPECIFIED):
     entityName = entity.__entityName__.replace("-", "_")
 
     params = {

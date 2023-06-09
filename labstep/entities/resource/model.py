@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.service.helpers import getTime
 from labstep.generic.entityPrimary.model import EntityPrimary
@@ -152,7 +152,7 @@ class Resource(EntityPrimary, EntityWithMetadata):
             extraParams=extraParams,
         )
 
-    def getItems(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getItems(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Returns the items of this Resource.
 
@@ -193,7 +193,7 @@ class Resource(EntityPrimary, EntityWithMetadata):
         availability="available",
         quantity_amount=UNSPECIFIED,
         quantity_unit=UNSPECIFIED,
-        resource_location_id=UNSPECIFIED,
+        resource_location_guid=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -210,8 +210,8 @@ class Resource(EntityPrimary, EntityWithMetadata):
             The quantity of the ResourceItem.
         quantity_unit (str)
             The unit of the quantity.
-        resource_location_id (int)
-            The id of the ResourceLocation of the ResourceItem.
+        resource_location_guid (str)
+            The guid of the ResourceLocation of the ResourceItem.
 
         Returns
         -------
@@ -234,7 +234,7 @@ class Resource(EntityPrimary, EntityWithMetadata):
             availability=availability,
             quantity_amount=quantity_amount,
             quantity_unit=quantity_unit,
-            resource_location_id=resource_location_id,
+            resource_location_guid=resource_location_guid,
             extraParams=extraParams,
         )
 

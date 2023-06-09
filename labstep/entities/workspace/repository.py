@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.workspace.model import Workspace
 import labstep.generic.entity.repository as entityRepository
@@ -11,7 +11,7 @@ def getWorkspace(user, workspace_id):
     return entityRepository.getEntity(user, Workspace, id=workspace_id)
 
 
-def getWorkspaces(user, count=100, search_query=UNSPECIFIED, extraParams={}):
+def getWorkspaces(user, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
     params = {"name": search_query, **extraParams}
     return entityRepository.getEntities(user, Workspace, count, params)
 

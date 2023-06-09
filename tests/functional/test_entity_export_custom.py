@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import authUser, workspace, loadFixtures
 from labstep.entities.export.repository import getExports, newExport
@@ -19,7 +19,7 @@ class TestEntityExportCustom:
         loadFixtures('Python\\\\EntityExportCustom')
 
     def test_custom_export(self, user, testWorkspace):
-        file = user.newFile('./tests/data/sample.txt')
+        file = user.newFile(__file__)
 
         exportFromCreate = newExport(
             user,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entity.model import Entity
 from labstep.constants import UNSPECIFIED
@@ -39,7 +39,7 @@ class EntityWithComments(Entity):
             self, body=body, filepath=filepath, extraParams=extraParams
         )
 
-    def getComments(self, count=100):
+    def getComments(self, count=UNSPECIFIED):
         """
         Retrieve the Comments attached to this Labstep Entity.
 

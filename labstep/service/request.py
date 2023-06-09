@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Thomas Bullier <thomas@labstep.com>
+# Author: Labstep <dev@labstep.com>
 # TODO Implement routing name
 # Example: url = url_join(configService.getHost(), "api/generic/share-link/email")
 

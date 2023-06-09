@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.resourceCategory.model import ResourceCategory
 import labstep.generic.entity.repository as entityRepository
@@ -28,7 +28,7 @@ def getResourceCategory(user, resourceCategory_id):
 
 
 def getResourceCategorys(
-        user, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+        user, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
 ):
     """
     Retrieve a list of a user's ResourceCategorys on Labstep,

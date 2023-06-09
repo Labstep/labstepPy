@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.workspaceMember.model import WorkspaceMember
 import labstep.generic.entity.repository as entityRepository
@@ -10,7 +10,7 @@ from labstep.service.request import requestService
 from labstep.constants import UNSPECIFIED
 
 
-def getMembers(user, workspace_id, count=100, search_query=UNSPECIFIED, extraParams={}):
+def getMembers(user, workspace_id, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
 
     params = {"group_id": workspace_id,
               "search_query_user": search_query, **extraParams}

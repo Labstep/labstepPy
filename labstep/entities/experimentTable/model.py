@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import dataTableToDataFrame
@@ -8,7 +8,7 @@ from labstep.constants import UNSPECIFIED
 
 
 class ExperimentTable(Entity):
-    __entityName__ = "experiment-table"
+    __entityName__ = "protocol-table"
     __hasGuid__ = True
 
     def edit(self, name=UNSPECIFIED, data=UNSPECIFIED):

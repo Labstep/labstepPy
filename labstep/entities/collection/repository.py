@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import json
 from labstep.entities.collection.model import Collection
@@ -12,7 +12,7 @@ from labstep.constants import UNSPECIFIED
 
 
 def getCollections(
-    user, count=1000, type=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}
+    user, count=UNSPECIFIED, type=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}
 ):
     types = {
         "experiment": "experiment_workflow",
@@ -25,7 +25,7 @@ def getCollections(
     return getEntities(user, Collection, count, params)
 
 
-def getAttachedCollections(entity, count=100):
+def getAttachedCollections(entity, count=UNSPECIFIED):
     key = entity.__entityName__.replace("-", "_") + "_id"
     filterParams = {key: entity.id,
                     "group_id": entity.__user__.activeWorkspace}
@@ -37,7 +37,7 @@ def getAttachedCollections(entity, count=100):
 def newCollection(user, name, type, extraParams={}):
     types = {"experiment": "experiment_workflow",
              "protocol": "protocol_collection"}
-    params = {"name": name, "type": types[type], **extraParams}
+    params = {"name": name, "type": types[type], "group_id": user.activeWorkspace, **extraParams}
     return newEntity(user, Collection, params)
 
 

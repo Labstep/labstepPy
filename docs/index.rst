@@ -77,7 +77,6 @@ own specific purposes.
    source/resource.rst
    source/orderRequest.rst
    source/device.rst
-   source/dataField.rst
    source/metadata.rst
    source/chemistry.rst
    source/comment.rst

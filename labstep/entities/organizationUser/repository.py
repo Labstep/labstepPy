@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.service.helpers import getTime
 from labstep.entities.organizationUser.model import OrganizationUser
 import labstep.generic.entity.repository as entityRepository
 from labstep.entities.user.model import User
+from labstep.constants import UNSPECIFIED
 
 
-def getOrganizationUsers(organization, count=100, extraParams={}):
+def getOrganizationUsers(organization, count=UNSPECIFIED, extraParams={}):
 
     params = {
         'organization_id': organization.id,

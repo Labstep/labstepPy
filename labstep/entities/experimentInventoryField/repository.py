@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.experimentInventoryField.model import ExperimentInventoryField
 import labstep.generic.entity.repository as entityRepository
@@ -13,7 +13,7 @@ def getExperimentInventoryField(user, experiment_inventoryfield_id):
     )
 
 
-def getExperimentInventoryFields(user, experiment_id, count=100, extraParams={}):
+def getExperimentInventoryFields(user, experiment_id, count=UNSPECIFIED, extraParams={}):
     params = {
         'experiment_id': experiment_id,
         **extraParams

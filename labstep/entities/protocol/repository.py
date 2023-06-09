@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.service.helpers import (
     handleDate,
@@ -10,6 +10,8 @@ from labstep.entities.protocolVersion.model import ProtocolVersion
 import labstep.generic.entity.repository as entityRepository
 from labstep.service.htmlExport import htmlExportService
 from labstep.constants import UNSPECIFIED
+from labstep.config.export import includePDF
+from labstep.service.htmlToPDF import htmlToPDF
 
 
 def getProtocol(user, protocol_id):
@@ -19,7 +21,7 @@ def getProtocol(user, protocol_id):
 def getProtocols(
 
     user,
-    count=100,
+    count=UNSPECIFIED,
     search_query=UNSPECIFIED,
     created_at_from=UNSPECIFIED,
     created_at_to=UNSPECIFIED,
@@ -49,10 +51,7 @@ def editProtocol(
     params = {"name": name, "deleted_at": deleted_at, **extraParams}
 
     if body is not UNSPECIFIED:
-        entityRepository.editEntity(
-            ProtocolVersion(protocol.last_version, protocol.__user__),
-            {"state": body},
-        )
+        entityRepository.editEntity(protocol.last_version, {"state": body})
         protocol.update()
 
     return entityRepository.editEntity(protocol, params)
@@ -64,30 +63,12 @@ def exportProtocol(protocol, root_path):
 
     expDir = entityRepository.exportEntity(protocol, root_path)
 
+    # export latest version
+    protocol.last_version.export(expDir)
+
     # export notes
     notesDir = expDir.joinpath('notes')
-    notes = protocol.getComments(count=1000)
+    notes = protocol.getComments(count=UNSPECIFIED)
 
     for note in notes:
         note.export(notesDir)
-
-    # save inventory fields
-    inventoryFieldsDir = expDir.joinpath('inventory')
-    inventoryFields = protocol.getInventoryFields()
-
-    for inventoryField in inventoryFields:
-        inventoryField.export(inventoryFieldsDir)
-
-    # save data
-    dataDir = expDir.joinpath('data')
-    data = protocol.getDataFields()
-
-    for dat in data:
-        dat.export(dataDir)
-
-    # get html
-    html = htmlExportService.getHTML(protocol)
-    html_with_paths = htmlExportService.insertFilepaths(expDir, html)
-
-    with open(expDir.joinpath('entity.html'), 'w') as out:
-        out.write(html_with_paths)

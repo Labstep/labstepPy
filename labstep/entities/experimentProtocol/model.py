@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 from deprecated import deprecated
 from labstep.entities.file.model import File
 from labstep.generic.entity.model import Entity
 from labstep.generic.entityList.model import EntityList
 from labstep.entities.experimentStep.model import ExperimentStep
+from labstep.entities.jupyterNotebook.model import JupyterNotebook
 from labstep.entities.chemicalReaction.model import ChemicalReaction
 from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentTimer.model import ExperimentTimer
@@ -17,6 +18,7 @@ from labstep.constants import UNSPECIFIED
 
 class ExperimentProtocol(Entity):
     __entityName__ = "experiment"
+    __unSearchable__ = True
 
     def edit(
         self, name=UNSPECIFIED, body=UNSPECIFIED, started_at=UNSPECIFIED, ended_at=UNSPECIFIED, extraParams={}
@@ -86,7 +88,7 @@ class ExperimentProtocol(Entity):
         self.update()
         return getattr(self, "state", None)
 
-    def getInventoryFields(self, count=100, extraParams={}):
+    def getInventoryFields(self, count=UNSPECIFIED, extraParams={}):
         """
         Returns a list of the inventory fields in a Protocol within an Experiment.
 
@@ -519,6 +521,54 @@ class ExperimentProtocol(Entity):
     def export(self, rootPath, folderName=UNSPECIFIED):
         import labstep.entities.experimentProtocol.repository as experimentProtocolRepository
         return experimentProtocolRepository.exportExperimentProtocol(self, rootPath, folderName=folderName)
+
+    def getJupyterNotebooks(self, count=UNSPECIFIED):
+        """
+        Retrieve the Jupyter Notebooks attached to this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`]
+            List of the Jupyter Notebooks attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperiment(17000)
+            jupyter_notebooks = entity.getJupyterNotebooks()
+            print(jupyter_notebooks[0])
+        """
+        self.update()
+
+        return EntityList(self.jupyter_notebooks, JupyterNotebook, self.__user__)
+
+    def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
+        """
+        Add a Jupyter Notebook to an experiment entry.
+
+        Parameters
+        ----------
+        name (str)
+            Name of Jupyter Notebook
+        data (JSON)
+            JSON Jupyter Notebook structure
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.addJupyterNotebook()
+        """
+        import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
+
+        return jupyterNotebookRepository.newJupyterNotebook(self.__user__, name, data, extraParams={'experiment_id': self.id})
 
     @deprecated(version='3.3.2', reason="You should use experimentProtocol.addDataField instead")
     def addDataElement(self, *args, **kwargs):

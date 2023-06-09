@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Onoufrios Malikkides <onoufrios@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.chemical.model import Chemical
 import labstep.generic.entity.repository as entityRepository
@@ -11,7 +11,7 @@ def getChemical(user, guid):
     return entityRepository.getEntity(user, Chemical, id=guid)
 
 
-def getChemicals(user, molecule_guid, count=100, extraParams={}):
+def getChemicals(user, molecule_guid, count=UNSPECIFIED, extraParams={}):
     params = {
         "molecule_guid": molecule_guid,
         "search": None,

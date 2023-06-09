@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 
 import labstep
@@ -22,6 +22,7 @@ from labstep.entities.collection.model import Collection
 from labstep.entities.metadata.model import Metadata
 from labstep.entities.jupyterNotebook.repository import newJupyterNotebook
 from labstep.entities.user.repository import newUser
+from labstep.entities.sequence.repository import newSequence
 
 
 load_dotenv(override=True)
@@ -34,9 +35,15 @@ SYMFONY_CONSOLE_PATH = os.getenv("LABSTEP_SYMFONY_CONSOLE_PATH")
 def loadFixtures(name):
     if 'api' in LABSTEP_API_URL:
         return
-    print(f'\nLoading Fixtures {name}')
 
-    command = f'php {SYMFONY_CONSOLE_PATH} labstep:load-fixtures {name} --force'
+    if ('LABSTEP_DEBUG' in os.environ.keys()):
+        print(f'\nLoading Fixtures {name}')
+
+    command = f'php {SYMFONY_CONSOLE_PATH} labstep:load-fixtures {name} --force -e prod'
+
+    if ('LABSTEP_DEBUG' in os.environ.keys()):
+        print(f'\nCommand: {command}')
+
     popen = subprocess.Popen(
         command,
         shell=True,
@@ -45,12 +52,19 @@ def loadFixtures(name):
     )
     retval = popen.wait()
     stdoutValue, stderrValue = popen.communicate()
+
+    if ('LABSTEP_DEBUG' in os.environ.keys()):
+        print(f'\nOutput: {stdoutValue}')
+        print(f'\nErr: {stderrValue}')
+
     assert retval == 0
     assert stderrValue is None
     assert 'Database ready' in stdoutValue.decode('utf-8')
-    print('\nFixtures loaded')
 
-    command = f'php {SYMFONY_CONSOLE_PATH} fos:elastica:populate --env=prod'
+    if ('LABSTEP_DEBUG' in os.environ.keys()):
+        print('\nFixtures loaded')
+
+    command = f'php {SYMFONY_CONSOLE_PATH} fos:elastica:populate -e prod'
     popen = subprocess.Popen(
         command,
         shell=True,
@@ -60,7 +74,9 @@ def loadFixtures(name):
     retval = popen.wait()
     stdoutValue, stderrValue = popen.communicate()
     assert stderrValue is None
-    print('\nES populated\n')
+
+    if ('LABSTEP_DEBUG' in os.environ.keys()):
+        print('\nES populated\n')
 
 
 def authUser():
@@ -138,7 +154,7 @@ def collaborator(token):
         first_name='Team',
         last_name='Labstep',
         email=f'{uniqueString}@labstep.com',
-        password='testpass',
+        password='gehwuigGHEUWIG123478!@$%£^@',
         share_link_token=token)
 
 
@@ -221,6 +237,12 @@ def metadata():
     return resourceWithMetadata.addMetadata(testString)
 
 
+def metadataDate():
+    user = authUser()
+    resourceWithMetadata = user.newResource(testString)
+    return resourceWithMetadata.addMetadata(testString, fieldType='date')
+
+
 def experimentDataField():
     user = authUser()
     exp = user.newExperiment(testString)
@@ -255,3 +277,26 @@ def jupyterInstance():
     user = authUser()
     jupyterInstance = user.getJupyterInstance('guid-test')
     return jupyterInstance
+
+
+def sequence():
+    user = authUser()
+    resource = user.newResource(testString)
+    metadata = resource.addMetadata(testString)
+    return newSequence(user, metadata.id)
+
+
+def experiment_jupyterNotebook():
+    user = authUser()
+    exp = user.newExperiment(testString)
+    return exp.addJupyterNotebook('Test')
+
+
+def protocol_jupyterNotebook():
+    user = authUser()
+    prot = user.newProtocol(testString)
+    return prot.addJupyterNotebook('Test')
+
+def deviceCategory():
+    user = authUser()
+    return user.newDeviceCategory(testString)

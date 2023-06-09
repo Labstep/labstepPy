@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from deprecated import deprecated
 from labstep.generic.entity.model import Entity
@@ -187,14 +187,14 @@ class User(Entity):
             self, resource_category_id
         )
 
-    def getResourceLocation(self, resource_location_id):
+    def getResourceLocation(self, resource_location_guid):
         """
         Retrieve a specific Labstep ResourceLocation.
 
         Parameters
         ----------
-        resource_location_id (int)
-            The id of the ResourceLocation to retrieve.
+        resource_location_guid (guid)
+            The guid of the ResourceLocation to retrieve.
 
         Returns
         -------
@@ -210,7 +210,7 @@ class User(Entity):
         import labstep.entities.resourceLocation.repository as resourceLocationRepository
 
         return resourceLocationRepository.getResourceLocation(
-            self, resource_location_id
+            self, resource_location_guid
         )
 
     def getOrderRequest(self, order_request_id):
@@ -336,7 +336,7 @@ class User(Entity):
 
     def getExperiments(
         self,
-        count=100,
+        count=UNSPECIFIED,
         search_query=UNSPECIFIED,
         created_at_from=UNSPECIFIED,
         created_at_to=UNSPECIFIED,
@@ -395,7 +395,7 @@ class User(Entity):
 
     def getProtocols(
         self,
-        count=100,
+        count=UNSPECIFIED,
         search_query=UNSPECIFIED,
         created_at_from=UNSPECIFIED,
         created_at_to=UNSPECIFIED,
@@ -452,7 +452,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getResources(self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
+    def getResources(self, count=UNSPECIFIED, search_query=UNSPECIFIED, resource_category_id=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Resources
         across all Workspaces on Labstep,
@@ -464,6 +464,8 @@ class User(Entity):
             The number of Resources to retrieve.
         search_query (str)
             Search for Resources with this 'name'.
+        resource_category_id (int)
+            Search for Resources in a particular category.
         tag_id (int)
             The id of a tag to filter by.
 
@@ -477,6 +479,7 @@ class User(Entity):
         ::
 
             entity = user.getResources(search_query='bacteria',
+                                       resource_category_id=123,
                                        tag_id=800)
         """
         import labstep.entities.resource.repository as resourceRepository
@@ -486,11 +489,12 @@ class User(Entity):
             count=count,
             search_query=search_query,
             tag_id=tag_id,
+            resource_category_id=resource_category_id,
             extraParams=extraParams,
         )
 
     def getResourceCategorys(
-        self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+        self, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of a User's Resource Categorys
@@ -528,7 +532,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getResourceLocations(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getResourceLocations(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a user's ResourceLocations on Labstep,
         which can be filtered using the parameters:
@@ -557,7 +561,7 @@ class User(Entity):
             self, count=count, search_query=search_query, extraParams=extraParams
         )
 
-    def getResourceItems(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getResourceItems(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a user's ResourceItems on Labstep,
         which can be filtered using the parameters:
@@ -587,7 +591,7 @@ class User(Entity):
         )
 
     def getOrderRequests(
-        self, count=100, search_query=UNSPECIFIED, status=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+        self, count=UNSPECIFIED, search_query=UNSPECIFIED, status=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of a user's OrderRequests on Labstep,
@@ -628,7 +632,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getTags(self, count=1000, search_query=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
+    def getTags(self, count=UNSPECIFIED, search_query=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Tags
         across all Workspaces on Labstep,
@@ -666,7 +670,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getWorkspaces(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getWorkspaces(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a user's Workspaces on Labstep,
         which can be filtered using the parameters:
@@ -697,10 +701,10 @@ class User(Entity):
         )
 
     @deprecated(version='3.0.3', reason="You should use workspace.getFiles instead")
-    def getFiles(self, count=100, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}):
+    def getFiles(self, count=UNSPECIFIED, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}):
         return []
 
-    def getDevices(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getDevices(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Devices
         across all Workspaces on Labstep,
@@ -837,7 +841,7 @@ class User(Entity):
             self, name, extraParams=extraParams
         )
 
-    def newResourceLocation(self, name, outer_location_id=UNSPECIFIED, extraParams={}):
+    def newResourceLocation(self, name, outer_location_guid=UNSPECIFIED, extraParams={}):
         """
         Create a new Labstep ResourceLocation.
 
@@ -846,8 +850,8 @@ class User(Entity):
         name (str)
             Give your ResourceLocation a name.
 
-        outer_location_id (int)
-            The id of existing location to create the location within
+        outer_location_guid (str)
+            The guid of existing location to create the location within
 
         extraParams (dict)
             (Advanced) Dictionary of extra parameters to pass in the
@@ -867,7 +871,7 @@ class User(Entity):
         import labstep.entities.resourceLocation.repository as resourceLocationRepository
 
         return resourceLocationRepository.newResourceLocation(
-            self, name, outer_location_id=outer_location_id, extraParams=extraParams
+            self, name, outer_location_guid=outer_location_guid, extraParams=extraParams
         )
 
     def newOrderRequest(self, resource_id, quantity=1, extraParams={}):
@@ -984,7 +988,7 @@ class User(Entity):
 
         return collectionRepository.newCollection(self, name=name, type=type, extraParams=extraParams)
 
-    def newDevice(self, name, extraParams={}):
+    def newDevice(self, name, extraParams={}, device_category_id=UNSPECIFIED):
         """
         Create a new Labstep Device.
 
@@ -992,6 +996,9 @@ class User(Entity):
         ----------
         name (str)
             Give your Device a name.
+
+        device_category_id (int)
+            The ID of a device category.
 
         Returns
         -------
@@ -1006,7 +1013,7 @@ class User(Entity):
         """
         import labstep.entities.device.repository as deviceRepository
 
-        return deviceRepository.newDevice(self, name, extraParams)
+        return deviceRepository.newDevice(self, name, extraParams, device_category_id=device_category_id)
 
     def acceptSharelink(self, token):
         """
@@ -1075,3 +1082,94 @@ class User(Entity):
         import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
         return jupyterNotebookRepository.getJupyterNotebook(self, jupyterNotebookGuid)
+    
+    def newDeviceCategory(self, name, extraParams={}):
+        """
+        Create a new Labstep DeviceCategory.
+
+        Parameters
+        ----------
+        name (str)
+            Give your DeviceCategory a name.
+
+        Returns
+        -------
+        :class:`~labstep.entities.resourceCategory.model.DeviceCategory`
+            An object representing the new Labstep DeviceCategory.
+
+        Example
+        -------
+        ::
+
+            entity = user.newDeviceCategory(name='Printer')
+        """
+        import labstep.entities.deviceCategory.repository as deviceCategoryRepository
+
+        return deviceCategoryRepository.newDeviceCategory(
+            self, name, extraParams=extraParams
+        )
+    
+    def getDeviceCategorys(
+        self, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+    ):
+        """
+        Retrieve a list of a User's Device Categorys
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of ResourceCategorys to retrieve.
+        search_query (str)
+            Search for ResourceCategorys with this 'name'.
+        tag_id (int)
+            The id of a tag to filter by.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.resourceCategory.model.DeviceCategory`]
+            A list of Labstep DeviceCategorys.
+
+        Example
+        -------
+        ::
+
+            entity = user.getDeviceCategorys(search_query='properties',
+                                               tag_id=800)
+        """
+        import labstep.entities.deviceCategory.repository as deviceCategoryRepository
+
+        return deviceCategoryRepository.getDeviceCategorys(
+            self,
+            count=count,
+            search_query=search_query,
+            tag_id=tag_id,
+            extraParams=extraParams,
+        )
+    
+    def getDeviceCategory(self, device_category_id):
+        """
+        Retrieve a specific Labstep DeviceCategory.
+
+        Parameters
+        ----------
+        device_category_id (int)
+            The id of the DeviceCategory to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.deviceCategory.model.DeviceCategory`
+            An object representing a DeviceCategory on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getDeviceCategory(17000)
+        """
+        import labstep.entities.deviceCategory.repository as deviceCategoryRepository
+
+        return deviceCategoryRepository.getDeviceCategory(
+            self, device_category_id
+        )

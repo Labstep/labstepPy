@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entityWithSharing.model import EntityWithSharing
 from labstep.service.helpers import getTime
@@ -100,6 +100,10 @@ class ResourceCategory(EntityWithSharing):
             itemTemplate.addMetadata('Vendor')
         """
         self.update()
+
+        if self.resource_item_template is None:
+            return None
+
         return ResourceItem(self.resource_item_template, self.__user__)
 
     def enableItemTemplate(self):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import labstep.entities.organizationUser.repository as organizationUserRepository
 from labstep.generic.entity.model import Entity
@@ -62,7 +62,7 @@ class Organization(Entity):
                                                    organization_id=self.id,
                                                    workspace_id=workspace_id)
 
-    def getWorkspaces(self, count=100, search_query=UNSPECIFIED):
+    def getWorkspaces(self, count=UNSPECIFIED, search_query=UNSPECIFIED):
         """
         Get the workspaces in your Organization
 
@@ -90,7 +90,7 @@ class Organization(Entity):
                                                  search_query=search_query,
                                                  extraParams={'organization_id': self.id})
 
-    def getUsers(self, count=100, extraParams={}):
+    def getUsers(self, count=UNSPECIFIED, extraParams={}):
         """
         Get the users in your Organization.
 

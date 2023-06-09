@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.user.model import User
 import labstep
@@ -19,7 +19,7 @@ class TestUser:
 
     @pytest.fixture
     def user(self):
-        return labstep.login(LABSTEP_API_USERNAME, LABSTEP_API_PASSWORD)
+        return labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
 
     @pytest.fixture
     def otherWorkspace(self):
@@ -29,7 +29,7 @@ class TestUser:
         loadFixtures('Python\\\\User')
 
     def test_login(self):
-        loginUser = labstep.login(LABSTEP_API_USERNAME, LABSTEP_API_PASSWORD)
+        loginUser = labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
         assert loginUser.id is not None
 
     def test_authenticate(self):
@@ -61,7 +61,7 @@ class TestUser:
 
     def test_getResourceLocation(self, user):
         entity = user.newResourceLocation(testString)
-        result = user.getResourceLocation(entity.id)
+        result = user.getResourceLocation(entity.guid)
         assert result.name == testString
 
     def test_getResourceCategory(self, user):
@@ -81,7 +81,7 @@ class TestUser:
         assert result.name == testString
 
     def test_getFile(self, user):
-        entity = user.newFile('./tests/data/sample.txt')
+        entity = user.newFile(os.path.abspath(__file__))
         result = user.getFile(entity.id)
         assert result.id == entity.id
 
@@ -176,7 +176,7 @@ class TestUser:
         assert result.name == testString
 
     def test_newFile(self, user):
-        result = user.newFile('./tests/data/sample.txt')
+        result = user.newFile(os.path.abspath(__file__))
         assert result is not None
 
     def test_acceptShareLink(self, user):
@@ -184,3 +184,7 @@ class TestUser:
         newWorkspace = workspace()
         sharelink = newWorkspace.getSharelink()
         result = user.acceptSharelink(sharelink.token)
+
+    def test_newDeviceCategory(self, user):
+        result = user.newDeviceCategory(testString)
+        assert result.name == testString

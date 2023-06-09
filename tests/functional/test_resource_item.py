@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 import pytest
-from .fixtures import resourceItem, loadFixtures, authUser
+from .fixtures import resourceItem, loadFixtures, authUser, resourceLocation
 from .shared import sharedTests
 
 
@@ -11,6 +11,10 @@ class TestResourceItem:
     @pytest.fixture
     def entity(self):
         return resourceItem()
+
+    @pytest.fixture
+    def location(self):
+        return resourceLocation()
 
     def setup_method(self):
         loadFixtures('Python\\\\ResourceItem')
@@ -33,3 +37,13 @@ class TestResourceItem:
         data.linkToInventoryField(inventoryField)
         result = entity.getData()
         assert result[0].id == data.id
+
+    def test_setLocation(self, entity, location):
+
+        entity.setLocation(location['guid'], position=[5, 10])
+
+        loc = entity.getLocation()
+
+        assert loc['resource_location']['guid'] == location['guid']
+        assert loc['position'] == [5, 10]
+        assert loc['size'] == [1, 1]

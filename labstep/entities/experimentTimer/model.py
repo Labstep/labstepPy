@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entity.model import Entity
 from labstep.constants import UNSPECIFIED
 
 
 class ExperimentTimer(Entity):
-    __entityName__ = "experiment-timer"
+    __entityName__ = "protocol-timer"
     __hasGuid__ = True
 
     def edit(self, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):

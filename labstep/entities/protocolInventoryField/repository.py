@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.protocolInventoryField.model import ProtocolInventoryField
 import labstep.generic.entity.repository as entityRepository
@@ -13,7 +13,7 @@ def getProtocolInventoryField(user, protocol_inventory_field_id):
     )
 
 
-def getProtocolInventoryFields(user, protocol_id, count=100, extraParams={}):
+def getProtocolInventoryFields(user, protocol_id, count=UNSPECIFIED, extraParams={}):
     params = {
         'protocol_id': protocol_id,
         **extraParams

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pandas
 from datetime import datetime
 from time import gmtime, strftime
@@ -47,15 +47,10 @@ def getTime():
     Returns
     -------
     timestamp
-        The datetime at .now() in json serializable format.
+        The datetime NOW in GMT in json serializable format.
     """
-    timezone = strftime("%z", gmtime())
-    tz_hour = timezone[:3]
-    tz_minute = timezone[3:]
-    timestamp = datetime.now().strftime(
-        "%Y-%m-%d" + "T" + "%H:%M:%S" + "{}:{}".format(tz_hour, tz_minute)
-    )
-    return timestamp
+    return strftime(
+        "%Y-%m-%d" + "T" + "%H:%M:%S" + "+00:00", gmtime())
 
 
 def formatDate(date, time=True):
@@ -182,3 +177,47 @@ def dataTableToDataFrame(dataTable):
     df = pandas.DataFrame(values).T.rename(columns=header)
 
     return df
+
+
+def dataFrameToDataTable(df):
+
+    headers = {'0': {str(colInd): {'value': colName}
+                     for colInd, colName in enumerate(df.columns)}}
+
+    dataTable = {
+        str(rowInd): {str(colInd): {'value': row[colName]} for colInd, colName in enumerate(df.columns)} for rowInd, row in df.iterrows()
+    }
+
+    data = {"rowCount": int(df.index[-1]) + 1, "columnCount": len(
+        df.columns), "colHeaderData": {}, "data": {"dataTable": {**headers, **dataTable}}}
+
+    return data
+
+
+def linearToCartesianCoordinates(position, number_of_columns):
+
+    mod = position % number_of_columns
+    floor = position // number_of_columns
+
+    y = floor if mod != 0 else floor - 1
+    x = mod - 1 if mod != 0 else number_of_columns
+
+    return [x, y]
+
+
+def alphanumericToCartesianCoordinates(position):
+    from re import match as rematch
+
+    position = position.lower()
+
+    m = rematch('([a-z]+)([0-9]+)', position)
+
+    if m is None:
+        print('Invalid position: {}'.format(position))
+    else:
+        row = 0
+        for ch in m.group(1):
+            row += ord(ch) - 96
+        col = int(m.group(2))
+
+    return [col, row]

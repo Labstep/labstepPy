@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import os
 from labstep.generic.entity.model import Entity
@@ -9,6 +9,7 @@ from labstep.constants import UNSPECIFIED
 
 class File(Entity):
     __entityName__ = "file"
+    __unSearchable__ = True
 
     def getData(self):
         """

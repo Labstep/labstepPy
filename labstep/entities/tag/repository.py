@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import json
 from labstep.service.config import configService
@@ -11,7 +11,7 @@ import labstep.generic.entity.repository as entityRepository
 from labstep.constants import UNSPECIFIED
 
 
-def getTags(user, count=1000, type=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
+def getTags(user, count=UNSPECIFIED, type=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
     """
     Retrieve a list of the user's tags.
 
@@ -44,7 +44,7 @@ def getTags(user, count=1000, type=UNSPECIFIED, search_query=UNSPECIFIED, extraP
     return entityRepository.getEntities(user, Tag, count, params)
 
 
-def getAttachedTags(entity, count=100):
+def getAttachedTags(entity, count=UNSPECIFIED):
     """
     Retrieve the Tags attached to a Labstep Entity.
 

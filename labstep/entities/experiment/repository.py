@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.service.helpers import (
     handleDate,
@@ -20,7 +20,7 @@ def getExperiment(user, experiment_id):
 def getExperiments(
 
     user,
-    count=100,
+    count=UNSPECIFIED,
     search_query=UNSPECIFIED,
     created_at_from=UNSPECIFIED,
     created_at_to=UNSPECIFIED,
@@ -95,27 +95,27 @@ def exportExperiment(experiment, root_path):
 
     # export protocols
     protocolsDir = expDir.joinpath('protocols')
-    protocols = experiment.getProtocols(count=100)
+    protocols = experiment.getProtocols(count=UNSPECIFIED)
 
     for protocol in protocols:
         protocol.export(protocolsDir)
 
     # export notes
     notesDir = expDir.joinpath('notes')
-    notes = experiment.getComments(count=1000)
+    notes = experiment.getComments(count=UNSPECIFIED)
 
     for note in notes:
         note.export(notesDir)
 
     # get html
-    html = htmlExportService.getHTML(experiment, withImages=True)
+    html = htmlExportService.getHTML(experiment, withImages=includePDF)
     html_with_paths = htmlExportService.insertFilepaths(expDir, html)
 
-    with open(expDir.joinpath('entity.html'), 'w', encoding="utf-8") as out:
+    with open(expDir.joinpath(f'{expDir.name}.html'), 'w', encoding="utf-8") as out:
         out.write(html_with_paths)
 
     # get pdf
     if includePDF:
         pdf = htmlToPDF(experiment.__user__, html)
-        with open(expDir.joinpath('entity.pdf'), 'wb') as out:
+        with open(expDir.joinpath(f'{expDir.name}.pdf'), 'wb') as out:
             out.write(pdf)

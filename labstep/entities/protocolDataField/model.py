@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from deprecated import deprecated
 from labstep.generic.entity.model import Entity
@@ -111,6 +111,51 @@ class ProtocolDataField(Entity):
                 protocol_id=self.protocol_id,
                 extraParams={'metadata_id': self.id}
             )
+
+    def getNotificationAlert(self):
+        """
+        Retrieve the Notification Alert of a date type metadata field.
+
+        Returns
+        -------
+        :class:`~labstep.entities.notificationAlert.model.notificationAlert`
+            An object representing the notification alert of a
+            metadata field of type Date or Date / Time.
+
+        Example
+        -------
+        ::
+            protocol = user.getProtocol(49574)
+            dataField = protocol.getDataFields()[0]
+            notification_alert = dataField.getNotificationAlert()
+        """
+        from labstep.entities.notificationAlert.model import NotificationAlert
+
+        if self.notification_alert is None:
+            return None
+
+        return NotificationAlert(self.notification_alert, self.__user__)
+
+    def setNotificationAlert(self, message, minutes_before):
+        """
+        Set the Notification Alert of a date type metadata field.
+
+        Returns
+        -------
+        :class:`~labstep.entities.notificationAlert.model.notificationAlert`
+            An object representing the notification alert of a
+            metadata field of type Date or Date / Time.
+
+        Example
+        -------
+        ::
+            protocol = user.getProtocol(49574)
+            dataField = protocol.getDataFields()[0]
+            dataField.setNotificationAlert(message='Overdue', minutes_before=0)
+        """
+        from labstep.entities.notificationAlert.repository import setNotificationAlert
+
+        return setNotificationAlert(self, message=message, minutes_before=minutes_before)
 
     @deprecated(version='3.12.0', reason="You should use linkToInventoryField instead")
     def linkToMaterial(self, *args, **kwargs):

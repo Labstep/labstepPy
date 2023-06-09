@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import handleDate, getTime
@@ -176,3 +176,48 @@ class Metadata(Entity):
         import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.setDataFieldValue(self, value)
+
+    def getNotificationAlert(self):
+        """
+        Retrieve the Notification Alert of a date type metadata field.
+
+        Returns
+        -------
+        :class:`~labstep.entities.notificationAlert.model.notificationAlert`
+            An object representing the notification alert of a
+            metadata field of type Date or Date / Time.
+
+        Example
+        -------
+        ::
+            resource_item = user.getResourceItem(17000)
+            expiry_date = resource_item.getMetadata().get('Expiry Date')
+            notification_alert = expiry_date.getNotificationAlert()
+        """
+        from labstep.entities.notificationAlert.model import NotificationAlert
+
+        if self.notification_alert is None:
+            return None
+
+        return NotificationAlert(self.notification_alert, self.__user__)
+
+    def setNotificationAlert(self, message, minutes_before):
+        """
+        Set the Notification Alert of a date type metadata field.
+
+        Returns
+        -------
+        :class:`~labstep.entities.notificationAlert.model.notificationAlert`
+            An object representing the notification alert of a
+            metadata field of type Date or Date / Time.
+
+        Example
+        -------
+        ::
+            resource_item = user.getResourceItem(17000)
+            expiry_date = resource_item.getMetadata().get('Expiry Date')
+            expiry_date.setNotificationAlert(message='This item is expired', minutes_before=0)
+        """
+        from labstep.entities.notificationAlert.repository import setNotificationAlert
+
+        return setNotificationAlert(self, message=message, minutes_before=minutes_before)
