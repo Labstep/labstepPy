@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.autoshare.model import Autoshare
 from labstep.generic.entity.model import Entity
@@ -69,7 +69,7 @@ class Workspace(Entity):
     # getMany()
     def getExperiments(
         self,
-        count=100,
+        count=UNSPECIFIED,
         search_query=UNSPECIFIED,
         created_at_from=UNSPECIFIED,
         created_at_to=UNSPECIFIED,
@@ -129,7 +129,7 @@ class Workspace(Entity):
 
     def getProtocols(
         self,
-        count=100,
+        count=UNSPECIFIED,
         search_query=UNSPECIFIED,
         created_at_from=UNSPECIFIED,
         created_at_to=UNSPECIFIED,
@@ -187,7 +187,7 @@ class Workspace(Entity):
             extraParams=extraParams,
         )
 
-    def getResources(self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
+    def getResources(self, count=UNSPECIFIED, search_query=UNSPECIFIED, resource_category_id=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Resources within this specific Workspace,
         which can be filtered using the parameters:
@@ -198,6 +198,8 @@ class Workspace(Entity):
             The number of Resources to retrieve.
         search_query (str)
             Search for Resources with this 'name'.
+        resource_category_id (int)
+            Search for Resources in a particular category.
         tag_id (int)
             The id of a tag to filter by.
 
@@ -218,11 +220,11 @@ class Workspace(Entity):
         extraParams = {"group_id": self.id, **extraParams}
 
         return resourceRepository.getResources(
-            self.__user__, count, search_query, tag_id, extraParams=extraParams
+            self.__user__, count=count, search_query=search_query, resource_category_id=resource_category_id, tag_id=tag_id, extraParams=extraParams
         )
 
     def getResourceCategorys(
-        self, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+        self, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of Resource Categories within this specific Workspace,
@@ -257,7 +259,7 @@ class Workspace(Entity):
             self.__user__, count, search_query, tag_id, extraParams=extraParams
         )
 
-    def getResourceLocations(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getResourceLocations(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Resource Locations within this specific Workspace,
         which can be filtered using the parameters:
@@ -289,7 +291,7 @@ class Workspace(Entity):
             self.__user__, count, search_query, extraParams=extraParams
         )
 
-    def getResourceItems(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getResourceItems(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of ResourceItems in a workspace on Labstep.
 
@@ -319,7 +321,7 @@ class Workspace(Entity):
         )
 
     def getOrderRequests(
-        self, count=100, name=UNSPECIFIED, status=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+        self, count=UNSPECIFIED, name=UNSPECIFIED, status=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
         Retrieve a list of Order Requests within this specific Workspace,
@@ -357,7 +359,7 @@ class Workspace(Entity):
             extraParams=extraParams,
         )
 
-    def getTags(self, count=1000, search_query=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
+    def getTags(self, count=UNSPECIFIED, search_query=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Tags within this specific Workspace,
         which can be filtered using the parameters:
@@ -417,7 +419,7 @@ class Workspace(Entity):
         import labstep.entities.workspaceMember.repository as workspaceMemberRepository
         return workspaceMemberRepository.addMember(self.__user__, workspace_id=self.id, user_id=user_id)
 
-    def getMembers(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getMembers(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of the members of the workspace.
 
@@ -443,7 +445,7 @@ class Workspace(Entity):
         import labstep.entities.workspaceMember.repository as workspaceMemberRepository
         return workspaceMemberRepository.getMembers(self.__user__, workspace_id=self.id, search_query=search_query, extraParams=extraParams)
 
-    def getFiles(self, count=100, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}):
+    def getFiles(self, count=UNSPECIFIED, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Files in the Workspace on Labstep,
         which can be filtered using the parameters:
@@ -478,7 +480,7 @@ class Workspace(Entity):
             self.__user__, count, search_query, file_type, extraParams=extraParams
         )
 
-    def getDevices(self, count=100, search_query=UNSPECIFIED, extraParams={}):
+    def getDevices(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of Devices within this specific Workspace,
         which can be filtered using the parameters:
@@ -549,7 +551,7 @@ class Workspace(Entity):
         return shareLinkRepository.getSharelink(self)
 
     def getCollections(
-        self, count=1000, search_query=UNSPECIFIED, type="experiment", extraParams={}
+        self, count=UNSPECIFIED, search_query=UNSPECIFIED, type="experiment", extraParams={}
     ):
         """
         Retrieve a list of Collections within this specific Workspace,
@@ -619,53 +621,45 @@ class Workspace(Entity):
 
         return entityRepository.editEntity(member, {"is_home": True})
 
-    def setAutosharing(
-        self, experiment_sharing=UNSPECIFIED, protocol_sharing=UNSPECIFIED, resource_sharing=UNSPECIFIED
+    
+    def getDeviceCategorys(
+        self, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
         """
+        Retrieve a list of a User's Device Categorys
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
         Parameters
         ----------
-        experiment_sharing (str)
-            Automatically share experiments
-            you create and own with this workspace. Set to True or False
-
-        protocol_sharing (str)
-            Automatically share protocols
-            you create and own with this workspace. Set to True or False
-
-        resource_sharing (str)
-            Automatically share resources
-            you create and own with this workspace. Set to True or False
+        count (int)
+            The number of ResourceCategorys to retrieve.
+        search_query (str)
+            Search for ResourceCategorys with this 'name'.
+        tag_id (int)
+            The id of a tag to filter by.
 
         Returns
         -------
-        :class:`~labstep.entities.autoshare.model.Autoshare`
-            An object representing the Autosharing policy.
+        List[:class:`~labstep.entities.resourceCategory.model.DeviceCategory`]
+            A list of Labstep DeviceCategorys.
 
         Example
         -------
         ::
 
-            # Get an workspace
-            workspace = user.getWorkspaces(123)
-
-            workspace.setAutosharing(experiment_sharing='view')
+            entity = user.getDeviceCategorys(search_query='properties',
+                                               tag_id=800)
         """
-        self.update()
+        import labstep.entities.deviceCategory.repository as deviceCategoryRepository
 
-        if self.security_policy is None:
-            import labstep.generic.entity.repository as entityRepository
+        extraParams = {"group_id": self.id, **extraParams}
 
-            policy = entityRepository.newEntity(
-                self.__user__,
-                Autoshare,
-                {"user_group_id": self.logged_user_user_group["id"]},
-            )
-        else:
-            policy = Autoshare(self.security_policy, self.__user__)
-
-        return policy.edit(
-            experiment_sharing=experiment_sharing,
-            protocol_sharing=protocol_sharing,
-            resource_sharing=resource_sharing,
+        return deviceCategoryRepository.getDeviceCategorys(
+            self.__user__,
+            count=count,
+            search_query=search_query,
+            tag_id=tag_id,
+            extraParams=extraParams,
         )
+    

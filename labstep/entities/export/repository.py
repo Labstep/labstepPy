@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.export.model import Export
 import labstep.generic.entity.repository as entityRepository
@@ -11,7 +11,7 @@ def getExport(user, export_id):
     return entityRepository.getEntity(user, Export, id=export_id)
 
 
-def getExports(user, count=100, type=UNSPECIFIED, extraParams={}):
+def getExports(user, count=UNSPECIFIED, type=UNSPECIFIED, extraParams={}):
     params = {"type": type, **extraParams}
     return entityRepository.getEntities(user, Export, count, params)
 

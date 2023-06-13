@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entity.model import Entity
 from labstep.constants import UNSPECIFIED
@@ -106,6 +106,9 @@ class ChemicalReaction(Entity):
 
         if 'Safety' not in finalProperties:
             finalProperties['Safety'] = {}
+
+        if (equivalents):
+            equivalents = str(equivalents)
 
         params = {
             "type": type,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.comment.model import Comment
 from labstep.generic.entity.repository import getEntities, newEntity, editEntity, exportEntity
@@ -9,7 +9,7 @@ from labstep.service.helpers import handleString
 from labstep.constants import UNSPECIFIED
 
 
-def getComments(entity, count=100, extraParams={}):
+def getComments(entity, count=UNSPECIFIED, extraParams={}):
 
     if hasattr(entity, 'thread') is False:
         entity.update()
@@ -68,7 +68,7 @@ def exportComment(comment, rootPath):
 
     # export comment
     nestedCommentsDir = commentDir.joinpath('comments')
-    nestedComments = comment.getComments(count=1000)
+    nestedComments = comment.getComments()
 
     for nestedComment in nestedComments:
         nestedComment.export(

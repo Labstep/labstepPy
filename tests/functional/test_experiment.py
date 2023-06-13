@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import (
     experiment,
@@ -135,3 +135,6 @@ class TestExperiment:
             and backlinks[0].guid == link.guid \
             and source.id == entity.id \
             and target.id == otherExperiment.id
+
+    def test_jupyter_notebooks(self, entity):
+        assert sharedTests.jupyterNotebooks(entity)

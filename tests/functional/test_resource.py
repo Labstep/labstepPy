@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import workspace, resource, resourceCategory, authUser, testString, loadFixtures
 from .shared import sharedTests
@@ -55,9 +55,11 @@ class TestResource:
     def test_getData(self, entity):
         user = authUser()
         exp = user.newExperiment('Test')
-        data = exp.addDataField('Test', value='test')
-        inventoryField = exp.addInventoryField(resource_id=entity.id)
-        data.linkToInventoryField(inventoryField)
+        item = entity.newItem()
+        data = exp.addDataField('Test', value='test',
+                                extraParams={'is_output': True})
+        exp.addInventoryField(resource_item_id=item.id)
+
         result = entity.getData()
         assert result[0].id == data.id
 

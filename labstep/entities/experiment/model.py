@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 from deprecated import deprecated
 from labstep.entities.experimentLink.repository import newExperimentLink
 from labstep.generic.entityPrimary.model import EntityPrimary
@@ -182,7 +182,7 @@ class Experiment(EntityPrimary):
 
         return experimentRepository.addProtocolToExperiment(self, protocol)
 
-    def getProtocols(self, count=100):
+    def getProtocols(self, count=UNSPECIFIED):
         """
         Retrieve the Protocols attached to this Labstep Experiment.
 
@@ -591,7 +591,7 @@ class Experiment(EntityPrimary):
         """
         return self.root_experiment.addFile(filepath, rawData)
 
-    def getComments(self, count=100):
+    def getComments(self, count=UNSPECIFIED):
         """
         Retrieve the Comments attached to this Labstep Entity.
 
@@ -680,6 +680,51 @@ class Experiment(EntityPrimary):
         import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.exportExperiment(self, path)
+
+    def getJupyterNotebooks(self, count=UNSPECIFIED):
+        """
+        Retrieve the Jupyter Notebooks attached to this Labstep Entity.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`]
+            List of the Jupyter Notebooks attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperiment(17000)
+            jupyter_notebooks = entity.getJupyterNotebooks()
+            print(jupyter_notebooks[0])
+        """
+        return self.root_experiment.getJupyterNotebooks(count=count)
+
+    def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
+        """
+        Add a Jupyter Notebook to an experiment entry.
+
+        Parameters
+        ----------
+        name (str)
+            Name of Jupyter Notebook
+        data (JSON)
+            JSON Jupyter Notebook structure
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.addJupyterNotebook()
+        """
+
+        return self.root_experiment.addJupyterNotebook(name, data)
 
     @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):

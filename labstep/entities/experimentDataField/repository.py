@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
+import json
 import labstep.entities.file.repository as fileRepository
 import labstep.generic.entity.repository as entityRepository
 from labstep.generic.entityList.model import EntityList
@@ -11,12 +12,16 @@ from labstep.entities.experimentProtocol.model import ExperimentProtocol
 from labstep.entities.resource.model import Resource
 from labstep.entities.resourceItem.model import ResourceItem
 from labstep.entities.file.model import File
+from labstep.entities.deviceData.model import DeviceData
 from labstep.constants import UNSPECIFIED
 
 
-def getDataFields(entity, count=1000, extraParams={}):
+def getDataFields(entity, count=UNSPECIFIED, extraParams={}):
 
     params = {}
+
+    if hasattr(entity, 'metadata_thread') is False:
+        entity.update()
 
     if isinstance(entity, ExperimentProtocol):
         params = {
@@ -24,12 +29,12 @@ def getDataFields(entity, count=1000, extraParams={}):
 
     elif isinstance(entity, Resource):
         params = {
-            "protocol_value_resource_id": entity.id,
+            "multiplexing_resource_id": entity.id,
             "has_value": True
         }
     elif isinstance(entity, ResourceItem):
         params = {
-            "protocol_value_resource_item_id": entity.id,
+            "multiplexing_resource_item_id": entity.id,
             "has_value": True
         }
 
@@ -51,10 +56,14 @@ def addDataFieldTo(
     filepath=UNSPECIFIED,
     extraParams={},
 ):
+
     if filepath is not UNSPECIFIED:
         fileId = fileRepository.newFile(entity.__user__, filepath).id
     else:
         fileId = UNSPECIFIED
+
+    if hasattr(entity, 'metadata_thread') is False:
+        entity.update()
 
     params = {
         "metadata_thread_id": entity.metadata_thread["id"],
@@ -81,6 +90,9 @@ def editDataField(dataField, fieldName=UNSPECIFIED, value=UNSPECIFIED, extraPara
 
 
 def getDataFieldValue(dataField):
+
+    if dataField.device_data is not None:
+        dataField = DeviceData(dataField.device_data, dataField.__user__)
 
     if dataField.type == 'default':
         return dataField.value
@@ -113,6 +125,9 @@ def getDataFieldValue(dataField):
             return File(dataField.files[0], dataField.__user__)
         else:
             return EntityList(dataField.files, File, dataField.__user__)
+
+    if dataField.type == 'sequence':
+        return json.loads(dataField.sequence['data'])
 
     return None
 

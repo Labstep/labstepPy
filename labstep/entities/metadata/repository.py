@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import labstep.entities.file.repository as fileRepository
 import labstep.generic.entity.repository as entityRepository
@@ -10,7 +10,7 @@ from labstep.entities.metadata.model import Metadata, FIELDS, ALLOWED_FIELDS
 from labstep.constants import UNSPECIFIED
 
 
-def getMetadata(entity, count=1000, extraParams={}):
+def getMetadata(entity, count=UNSPECIFIED, extraParams={}):
     if hasattr(entity, 'metadata_thread') is False:
         entity.update()
     if 'metadatas' in entity.metadata_thread:
@@ -34,6 +34,9 @@ def addMetadataTo(
     filepath=UNSPECIFIED,
     extraParams={},
 ):
+    if hasattr(entity, 'metadata_thread') is False:
+        entity.update()
+
     if filepath is not UNSPECIFIED:
         fileId = fileRepository.newFile(entity.__user__, filepath).id
     else:

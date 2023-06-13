@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.service.helpers import handleKeyword
 from labstep.entities.orderRequest.model import OrderRequest
@@ -14,7 +14,7 @@ def getOrderRequest(user, orderRequest_id):
 
 def getOrderRequests(
     user,
-    count=100,
+    count=UNSPECIFIED,
     search_query=UNSPECIFIED,
     tag_id=UNSPECIFIED,
     status=UNSPECIFIED,

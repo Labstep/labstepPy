@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entityPrimary.model import EntityPrimary
 from labstep.generic.entityWithMetadata.model import EntityWithMetadata

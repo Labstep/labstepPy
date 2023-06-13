@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.deviceData.model import DeviceData
 from labstep.generic.entityWithMetadata.model import EntityWithMetadata
@@ -273,3 +273,60 @@ class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments):
         }
 
         return newEntity(self.__user__, DeviceData, params)
+    
+    def setDeviceCategory(self, device_category_id, extraParams={}):
+        """
+        Sets the Category for the Device
+
+        Parameters
+        ----------
+        device_category_id (int)
+            The id of :class:`~labstep.entities.deviceCategory.model.DeviceCategory`
+            to set for
+            the device.
+
+        Returns
+        -------
+        :class:`~labstep.entities.device.model.Device`
+            An object representing the Device on Labstep.
+
+        Example
+        -------
+        ::
+
+            # Get a DeviceCategory
+            device_category = user.getDeviceCategory(170)
+
+            # Set the Device Category
+            my_device = my_resource.setDeviceCategory(device_category.id)
+        """
+        import labstep.entities.device.repository as deviceRepository
+
+        return deviceRepository.editDevice(
+            self, device_category_id=device_category_id, extraParams=extraParams
+        )
+    
+    def getDeviceCategory(self):
+        """
+        Get the DeviceCategory of the Device.
+
+        Returns
+        -------
+        :class:`~labstep.entities.deviceCategory.model.DeviceCategory`
+            An object representing the Device Category on Labstep.
+
+        Example
+        -------
+        ::
+
+            # Get a Device
+            device = user.getDevice(170)
+
+            # Get the Device Category of the resource
+            deviceCategory = device.getDeviceCategory()
+        """
+        import labstep.entities.deviceCategory.repository as deviceCategoryRepository
+
+        return deviceCategoryRepository.getDeviceCategory(
+            self.__user__, self.template["id"]
+        )

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import experimentDataField, experimentInventoryField, loadFixtures, authUser
+from .fixtures import experimentDataField, experimentInventoryField, device, loadFixtures, authUser
 from .shared import sharedTests
 
 
@@ -15,6 +15,10 @@ class TestExperimentDataField:
     @pytest.fixture
     def inventoryField(self):
         return experimentInventoryField()
+
+    @pytest.fixture
+    def device(self):
+        return device()
 
     def setup_method(self):
         loadFixtures('Python\\\\Metadata')
@@ -34,6 +38,17 @@ class TestExperimentDataField:
         data.linkToInventoryField(inventoryField)
         linkedInventoryFields = data.getLinkedInventoryFields()
         assert linkedInventoryFields[0].id == inventoryField.id
+
+    def test_device_data(self, entity, device):
+        deviceData = device.addData(fieldName='Numeric Test',
+                                    fieldType='numeric',
+                                    number=10,
+                                    unit='K')
+
+        entity.edit(extraParams={'type': 'numeric',
+                    'device_data_id': deviceData.id})
+
+        assert entity.getValue() == float(10)
 
     def test_get_set_value(self, entity):
         entity.edit(extraParams={'type': 'default', 'value': 'Test'})
@@ -61,7 +76,7 @@ class TestExperimentDataField:
                                      "is_allow_multiple": True
                                  }})
         multiOptions = entity.setValue(['B', 'C']).getValue()
-        file = entity.__user__.newFile('./tests/data/sample.txt')
+        file = entity.__user__.newFile(__file__)
         entity.edit(extraParams={'type': 'file'})
         fileValue = entity.setValue(file).getValue()
         assert defaultValue == 'New' \

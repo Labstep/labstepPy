@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.entities.resource.model import Resource
 import labstep.generic.entity.repository as entityRepository
@@ -12,9 +12,10 @@ def getResource(user, resource_id):
 
 
 def getResources(
-    user, count=100, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
+    user, count=UNSPECIFIED, search_query=UNSPECIFIED, resource_category_id=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
 ):
     params = {"search_query": search_query,
+              "template_id": resource_category_id,
               "tag_id": tag_id, **extraParams}
     return entityRepository.getEntities(user, Resource, count, params)
 

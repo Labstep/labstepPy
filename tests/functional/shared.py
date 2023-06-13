@@ -12,7 +12,7 @@ class SharedTests:
 
     def commenting(self, entity):
         commentFromAdd = entity.addComment(
-            testString, './tests/data/sample.txt')
+            testString, __file__)
         commentFromGet = entity.getComments()[0]
         return commentFromAdd.id == commentFromGet.id
 
@@ -53,7 +53,7 @@ class SharedTests:
             and len(collectionsAfterRemoving) == 0
 
     def files(self, entity):
-        file = entity.addFile('./tests/data/sample.txt')
+        file = entity.addFile(__file__)
         files = entity.getFiles()
         return files[-1].id == file.id
 
@@ -93,6 +93,13 @@ class SharedTests:
         dataField = dataFromGet.get(testString)
         return dataField.id == dataFromAdd.id \
             and dataField.label == testString
+
+    def jupyterNotebooks(self, entity):
+        jupyter_notebook = entity.addJupyterNotebook(name="test")
+        jupyter_notebooks = entity.getJupyterNotebooks()
+        jupyter_notebook_entity = jupyter_notebooks.get("test")
+        return jupyter_notebook_entity.id == jupyter_notebook.id \
+            and jupyter_notebook_entity.name == "test"
 
 
 sharedTests = SharedTests()

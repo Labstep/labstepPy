@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import protocolDataField, experimentInventoryField, loadFixtures, authUser
 from .shared import sharedTests

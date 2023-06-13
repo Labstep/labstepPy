@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import labstep.entities.file.repository as fileRepository
 import labstep.generic.entity.repository as entityRepository
@@ -10,8 +10,10 @@ from labstep.entities.protocolVersion.model import ProtocolVersion
 from labstep.constants import UNSPECIFIED
 
 
-def getDataFields(entity, count=1000, extraParams={}):
-
+def getDataFields(entity, count=UNSPECIFIED, extraParams={}):
+    if hasattr(entity, 'metadata_thread') is False:
+        entity.update()
+        
     if isinstance(entity, ProtocolVersion):
         params = {
             "metadata_thread_id": entity.metadata_thread["id"]}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import json
 from labstep.service.config import configService
@@ -46,10 +46,10 @@ def downloadFile(user, fileId):
 
 
 def getFiles(
-    user, count=100, search_query=UNSPECIFIED, file_type=UNSPECIFIED, extraParams={}
+    user, count=UNSPECIFIED, search_query=UNSPECIFIED, extension=UNSPECIFIED, extraParams={}
 ):
     params = {"search_query": search_query,
-              "filetype": file_type, **extraParams}
+              "extension": extension, **extraParams}
     return entityRepository.getEntities(user, File, count, params)
 
 

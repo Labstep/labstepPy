@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import json
 from pathlib import Path
@@ -26,20 +26,48 @@ def getLegacyEntity(user, entityClass, id):
     return entityClass(json.loads(response.content), user)
 
 
-def getEntity(user, entityClass, id, isDeleted="both", useGuid=False):
+def getEntity(user, entityClass, id, isDeleted="both", useGuid=False, extraParams={}):
     if getattr(entityClass, "__isLegacy__", None):
         return getLegacyEntity(user, entityClass, id)
 
     identifier = 'guid' if getattr(
         entityClass, "__hasGuid__", None) or useGuid else 'id'
 
-    params = {"is_deleted": isDeleted, "get_single": 1, identifier: id}
+    params = {"is_deleted": isDeleted,
+              "get_single": 1, identifier: id, **extraParams}
 
     headers = getHeaders(user=user)
     url = url_join(configService.getHost(), "/api/generic/",
                    entityClass.__entityName__)
     response = requestService.get(url, headers=headers, params=params)
     return entityClass(json.loads(response.content), user)
+
+
+def filterEntities(user, entityClass, filter, count=UNSPECIFIED, pageSize=50):
+    page = 1
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__, "filter")
+    print(f'Fetching page {page}')
+    response = requestService.post(
+        url, headers=headers, json={"filter": filter, "page": page, "skip_total": 1, "count": pageSize, "group_id": user.activeWorkspace})
+
+    content = json.loads(response.content)
+    entities = content['items']
+    entityCount = len(content['items'])
+
+    while (entityCount == pageSize):
+        if count is not UNSPECIFIED and entityCount >= count:
+            break
+        page = page + 1
+        print(f'Fetching page {page}')
+        response = requestService.post(
+            url, headers=headers, json={"filter": filter, "page": page, "count": pageSize, "skip_total": 1, "group_id": user.activeWorkspace})
+        content = json.loads(response.content)
+        entities.extend(content['items'])
+        entityCount = len(content['items'])
+
+    return EntityList(entities, entityClass, user)
 
 
 def getEntities(user, entityClass, count, filterParams={}):
@@ -120,7 +148,6 @@ def editEntity(entity, fields):
     headers = getHeaders(entity.__user__)
     url = url_join(configService.getHost(), "/api/generic/",
                    entity.__entityName__, str(identifier))
-    print('fields',fields)
     response = requestService.put(url, json=fields, headers=headers)
     entity.__init__(json.loads(response.content), entity.__user__)
     return entity
@@ -142,15 +169,18 @@ def exportEntity(entity, rootPath, folderName=UNSPECIFIED):
 
     if folderName is UNSPECIFIED:
         if entityNameInFolderName and hasattr(
-                entity, 'name'):
-            santitisedName = entity.name.replace('/', ' ').replace('\\', ' ')
+                entity, 'name') and entity.name is not None:
+            santitisedName = sanitize_filepath(
+                entity.name.replace('/', ' ').replace('\\', ' '))[:50].strip()
             folderName = f"{entity.id} - {santitisedName}"
+            if len(folderName) > 255:
+                folderName = str(entity.id)
         else:
             folderName = str(entity.id)
 
     entityDir = Path(rootPath).joinpath(sanitize_filepath(folderName))
     entityDir.mkdir(parents=True, exist_ok=True)
-    infoFile = entityDir.joinpath('entity.json')
+    infoFile = entityDir.joinpath(f'{folderName}.json')
 
     with open(infoFile, 'w') as out:
         json.dump(entity.__data__, out, indent=2)

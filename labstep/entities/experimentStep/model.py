@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entityWithComments.model import EntityWithComments
 from labstep.service.helpers import getTime
@@ -8,7 +8,7 @@ from labstep.constants import UNSPECIFIED
 
 
 class ExperimentStep(EntityWithComments):
-    __entityName__ = "experiment-step"
+    __entityName__ = "protocol-step"
 
     def edit(self, completed_at=UNSPECIFIED):
         """

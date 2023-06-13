@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Thomas Bullier <thomas@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import loadFixtures, authUser, jupyterNotebook
 from .shared import sharedTests
@@ -31,4 +31,4 @@ class TestJupyterNotebook:
     def test_edit_data(self, entity):
         newData = {"test": 43}
         result = entity.edit(data=newData)
-        return result.data == newData
+        assert result.data == newData

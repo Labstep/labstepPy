@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import experimentProtocol, proseMirrorState, resource, loadFixtures
 
@@ -29,7 +29,7 @@ class TestExperimentProtocol:
         entity.addSteps(2)
         steps = entity.getSteps()
         result = steps[0].complete()
-        return result.ended_at is not None and len(steps) >= 2
+        assert result.ended_at is not None and len(steps) >= 2
 
     def test_inventory_fields(self, entity):
         assert sharedTests.inventoryFields(entity)
@@ -45,3 +45,6 @@ class TestExperimentProtocol:
 
     def test_files(self, entity):
         assert sharedTests.files(entity)
+
+    def test_jupyter_notebooks(self, entity):
+        assert sharedTests.jupyterNotebooks(entity)

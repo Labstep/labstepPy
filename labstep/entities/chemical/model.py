@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Onoufrios Malikkides <onoufrios@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 from labstep.service.helpers import getTime
 from labstep.constants import UNSPECIFIED
@@ -50,6 +50,8 @@ class Chemical(Entity):
             properties.Density = density
         if (molecular_weight):
             properties.MolecularWeight = molecular_weight
+        if (equivalents):
+            equivalents = str(equivalents)
 
         params = {
             "equivalence": equivalents,

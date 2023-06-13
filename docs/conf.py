@@ -22,8 +22,8 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'labstepPy'
-copyright = '2019, Barney Walker'
-author = 'Barney Walker'
+copyright = '2022, Labstep'
+author = 'Labstep'
 
 # The full version, including alpha/beta/rc tags
 release = '2.0.0'

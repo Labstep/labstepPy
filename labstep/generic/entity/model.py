@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 
 import inspect
 import pprint
@@ -33,9 +33,12 @@ class Entity:
         Fetches the most up-to-date version of the entity from Labstep.
         """
         import labstep.generic.entity.repository as entityRepository
+        identifier = 'guid' if getattr(
+            type(self), "__hasGuid__", None) else 'id'
 
         data = entityRepository.getEntity(
-            self.__user__, type(self), self.id).__data__
+            self.__user__, type(self), self[identifier]).__data__
+
         self.__init__(data, self.__user__)
         return self
 

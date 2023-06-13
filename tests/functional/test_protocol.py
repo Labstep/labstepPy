@@ -1,6 +1,6 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: Barney Walker <barney@labstep.com>
+# Author: Labstep <dev@labstep.com>
 import pytest
 from .fixtures import (
     workspace,
@@ -77,3 +77,6 @@ class TestProtocol:
         result = entity.newVersion()
         assert result.id == entity.id \
             and result.last_version['id'] != oldId
+    
+    def test_jupyter_notebooks(self, entity):
+        assert sharedTests.jupyterNotebooks(entity)
