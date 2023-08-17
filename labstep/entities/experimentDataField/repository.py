@@ -29,14 +29,41 @@ def getDataFields(entity, count=UNSPECIFIED, extraParams={}):
 
     elif isinstance(entity, Resource):
         params = {
-            "multiplexing_resource_id": entity.id,
+            "multiplexing_input_resource_id": entity.id,
             "has_value": True
         }
+        dataWhenInput = entityRepository.getEntities(
+            entity.__user__, ExperimentDataField, count=count, filterParams={
+                **params, **extraParams})
+
+        params = {
+            "multiplexing_output_resource_id": entity.id,
+            "has_value": True
+        }
+        dataWhenOutput = entityRepository.getEntities(
+            entity.__user__, ExperimentDataField, count=count, filterParams={
+                **params, **extraParams})
+
+        return dataWhenInput + dataWhenOutput
+
     elif isinstance(entity, ResourceItem):
         params = {
-            "multiplexing_resource_item_id": entity.id,
+            "multiplexing_input_resource_item_id": entity.id,
             "has_value": True
         }
+        dataWhenInput = entityRepository.getEntities(
+            entity.__user__, ExperimentDataField, count=count, filterParams={
+                **params, **extraParams})
+
+        params = {
+            "multiplexing_output_resource_item_id": entity.id,
+            "has_value": True
+        }
+        dataWhenOutput = entityRepository.getEntities(
+            entity.__user__, ExperimentDataField, count=count, filterParams={
+                **params, **extraParams})
+
+        return dataWhenInput + dataWhenOutput
 
     return entityRepository.getEntities(
         entity.__user__, ExperimentDataField, count=count, filterParams={
@@ -80,10 +107,11 @@ def addDataFieldTo(
     return entityRepository.newEntity(entity.__user__, ExperimentDataField, params)
 
 
-def editDataField(dataField, fieldName=UNSPECIFIED, value=UNSPECIFIED, extraParams={}):
+def editDataField(dataField, fieldName=UNSPECIFIED, value=UNSPECIFIED, is_variable=UNSPECIFIED, extraParams={}):
     params = {
         "label": handleString(fieldName),
         "value": handleString(value),
+        "is_variable": is_variable,
         **extraParams
     }
     return entityRepository.editEntity(dataField, params)

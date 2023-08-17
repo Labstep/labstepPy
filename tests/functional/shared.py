@@ -1,4 +1,4 @@
-from .fixtures import testString, tableData
+from .fixtures import testString, tableData, authUser
 
 
 class SharedTests:
@@ -100,6 +100,28 @@ class SharedTests:
         jupyter_notebook_entity = jupyter_notebooks.get("test")
         return jupyter_notebook_entity.id == jupyter_notebook.id \
             and jupyter_notebook_entity.name == "test"
+    
+    def conditions(self,entity):
+        user = authUser()
+        test_resource = user.newResource(name='Test')
+        output_data_field = entity.addDataField('Test',extraParams={'is_variable':True, 'is_output':True})
+        output_inventory_field = entity.addInventoryField('Test',
+                                                          resource_id=test_resource.id,
+                                                          extraParams={'is_variable':True, 'is_output':True})
+        
+        
+        condition = entity.addConditions(1)
+        condition_entity = condition[0]
+
+        condition_from_get = entity.getConditions()[0]
+        
+        input_data_field_from_get = condition_entity.getDataFields()
+        input_inventory_field_from_get = condition_entity.getInventoryFields()
+        
+        
+        return condition_entity.guid == condition_from_get.guid \
+            and condition_entity.guid == input_data_field_from_get[0].protocol_condition_guid \
+            and condition_entity.guid == input_inventory_field_from_get[0].protocol_condition_guid 
 
 
 sharedTests = SharedTests()

@@ -18,12 +18,10 @@ class TestJupyterNotebook:
     def setup_method(self):
         loadFixtures('Python\\\\JupyterNotebook')
 
-    def test_get(self, loggedUser):
-        guid = 'guid-test'
+    def test_get(self, loggedUser, entity):
+        guid = entity.guid
         jupyterNotebook = loggedUser.getJupyterNotebook(guid)
         assert guid == jupyterNotebook.guid
-        assert 'Capsule' == jupyterNotebook.name
-        assert {'test': 42} == jupyterNotebook.data
 
     def test_edit_name(self, entity):
         assert sharedTests.edit(entity)

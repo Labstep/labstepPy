@@ -13,7 +13,7 @@ from labstep.constants import UNSPECIFIED
 def getMembers(user, workspace_id, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
 
     params = {"group_id": workspace_id,
-              "search_query_user": search_query, **extraParams}
+              "search_query": search_query, **extraParams}
 
     return entityRepository.getEntities(user, WorkspaceMember, count, params)
 

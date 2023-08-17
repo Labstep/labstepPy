@@ -18,6 +18,16 @@ from labstep.config.export import entityNameInFolderName
 from labstep.constants import UNSPECIFIED
 
 
+def getEntityProperty(entity, attribute, entityClass=None):
+    if attribute not in entity.__data__:
+        entity.update()
+
+    if entityClass is not None and entity.__data__[attribute] is not None:
+        return entityClass(entity.__data__[attribute], entity.__user__)
+
+    return entity.__data__[attribute]
+
+
 def getLegacyEntity(user, entityClass, id):
     headers = getHeaders(user=user)
     url = url_join(configService.getHost(), "/api/generic/",

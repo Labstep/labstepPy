@@ -25,18 +25,18 @@ class User(Entity):
     """
     __entityName__ = "user"
 
-    def __init__(self, user, adminUser=UNSPECIFIED):
+    def __init__(self, data, adminUser=UNSPECIFIED):
+        super().__init__(data, self)
         self.__user__ = adminUser if adminUser is not UNSPECIFIED else self
-        if 'group' not in user or user["group"] is None:
+
+        if 'group' not in data or data["group"] is None:
             print(
                 """Warning: No default workspace.
             Please set a workspace to continue."""
             )
             self.activeWorkspace = None
         else:
-            self.activeWorkspace = user["group"]["id"]
-        for key in user:
-            setattr(self, key, user[key])
+            self.activeWorkspace = data["group"]["id"]
 
     def setWorkspace(self, workspace_id: int):
         """
@@ -1082,7 +1082,7 @@ class User(Entity):
         import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
         return jupyterNotebookRepository.getJupyterNotebook(self, jupyterNotebookGuid)
-    
+
     def newDeviceCategory(self, name, extraParams={}):
         """
         Create a new Labstep DeviceCategory.
@@ -1108,7 +1108,7 @@ class User(Entity):
         return deviceCategoryRepository.newDeviceCategory(
             self, name, extraParams=extraParams
         )
-    
+
     def getDeviceCategorys(
         self, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
@@ -1147,7 +1147,7 @@ class User(Entity):
             tag_id=tag_id,
             extraParams=extraParams,
         )
-    
+
     def getDeviceCategory(self, device_category_id):
         """
         Retrieve a specific Labstep DeviceCategory.

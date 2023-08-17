@@ -64,20 +64,6 @@ def loadFixtures(name):
     if ('LABSTEP_DEBUG' in os.environ.keys()):
         print('\nFixtures loaded')
 
-    command = f'php {SYMFONY_CONSOLE_PATH} fos:elastica:populate -e prod'
-    popen = subprocess.Popen(
-        command,
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT
-    )
-    retval = popen.wait()
-    stdoutValue, stderrValue = popen.communicate()
-    assert stderrValue is None
-
-    if ('LABSTEP_DEBUG' in os.environ.keys()):
-        print('\nES populated\n')
-
 
 def authUser():
     return labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
@@ -268,14 +254,17 @@ def tag():
 
 def jupyterNotebook():
     user = authUser()
-    jupyterNotebook = user.getJupyterNotebook('guid-test')
-    #jupyterNotebook = newJupyterNotebook(user, 'Test Notebook')
+    exp = user.newExperiment(testString)
+
+    jupyterNotebook = newJupyterNotebook(user, 'Test Notebook', extraParams={
+                                         'experiment_id': exp.root_experiment.id})
     return jupyterNotebook
 
 
 def jupyterInstance():
     user = authUser()
-    jupyterInstance = user.getJupyterInstance('guid-test')
+    jupyterInstance = user.getJupyterInstance(
+        'd4b88c0b-37e8-4c84-8ce6-49a5661cd646')
     return jupyterInstance
 
 
@@ -296,6 +285,16 @@ def protocol_jupyterNotebook():
     user = authUser()
     prot = user.newProtocol(testString)
     return prot.addJupyterNotebook('Test')
+
+def experiment_protocol_conditions():
+    user = authUser()
+    exp = user.newExperiment(testString)
+    return  exp.addConditions(1)
+
+def protocol_protocol_conditions():
+    user = authUser()
+    prot = user.newProtocol(testString)
+    return  prot.addConditions(1)
 
 def deviceCategory():
     user = authUser()

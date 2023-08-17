@@ -487,7 +487,6 @@ class ProtocolVersion(EntityWithComments):
             print(jupyter_notebooks[0])
         """
         self.update()
-
         return EntityList(self.jupyter_notebooks, JupyterNotebook, self.__user__)
 
     def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
@@ -536,3 +535,41 @@ class ProtocolVersion(EntityWithComments):
         import labstep.entities.protocolVersion.repository as protocolVersionRepository
 
         return protocolVersionRepository.exportProtocolVersion(self, path)
+
+    def addConditions(self, number_of_conditions):
+        """
+        Add conditions to the protocol
+        Parameters
+        ----------
+        number_of_conditions (int)
+            The number of conditions to add
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions added to the protocol.
+        Example
+        -------
+        ::
+            protocol = user.getProtocol(17000)
+            conditions = protocol.addConditions(5)
+        """
+        from labstep.entities.protocolCondition.repository import addProtocolConditions
+
+        return addProtocolConditions(self, number_of_conditions)
+
+    def getConditions(self):
+        """
+        Retrieve a list of the different conditions associated with this protocol.
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions associated with the protocol.
+        Example
+        -------
+        ::
+            protocol = user.getProtocol(17000)
+            conditions = protocol.getConditions()
+        """
+        from labstep.entities.protocolCondition.repository import getProtocolConditions
+
+        return getProtocolConditions(self)

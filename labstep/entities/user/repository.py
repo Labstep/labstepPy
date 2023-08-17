@@ -51,6 +51,8 @@ def authenticate(username, apikey):
 
 
 def login(username, password):
+    raise Exception(
+        'Login via password has been deprecated. Please use labstep.authenticate with an API key instead.')
     params = {"username": username, "password": password}
     url = url_join(configService.getHost(), "/public-api/user/login")
     response = requestService.post(url=url, json=params, headers={})

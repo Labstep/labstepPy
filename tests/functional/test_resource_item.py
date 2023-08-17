@@ -47,3 +47,13 @@ class TestResourceItem:
         assert loc['resource_location']['guid'] == location['guid']
         assert loc['position'] == [5, 10]
         assert loc['size'] == [1, 1]
+
+    def test_edit_quantity_params(self, entity):
+        
+        entity.edit(amount=100,unit = 'L')
+        
+        assert entity.amount == '100.0' and entity.unit == 'L'
+
+        entity.edit(quantity_amount=None,quantity_unit = None)
+        
+        assert entity.amount == None and entity.unit == None

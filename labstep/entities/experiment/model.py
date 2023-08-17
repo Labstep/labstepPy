@@ -5,6 +5,7 @@ from deprecated import deprecated
 from labstep.entities.experimentLink.repository import newExperimentLink
 from labstep.generic.entityPrimary.model import EntityPrimary
 from labstep.generic.entityList.model import EntityList
+from labstep.generic.entity.repository import getEntityProperty
 from labstep.entities.experimentProtocol.model import ExperimentProtocol
 from labstep.entities.experimentSignature.model import ExperimentSignature
 from labstep.service.helpers import getTime, handleDate
@@ -27,11 +28,9 @@ class Experiment(EntityPrimary):
 
     __entityName__ = "experiment-workflow"
 
-    def __init__(self, data, user):
-        super().__init__(data, user)
-        if "root_experiment" in data:
-            self.root_experiment = ExperimentProtocol(
-                data['root_experiment'], user)
+    @property
+    def root_experiment(self):
+        return getEntityProperty(self, 'root_experiment', ExperimentProtocol)
 
     def edit(self, name=UNSPECIFIED, entry=UNSPECIFIED, started_at=UNSPECIFIED, extraParams={}):
         """
@@ -142,14 +141,7 @@ class Experiment(EntityPrimary):
             my_experiment = user.getExperiment(17000)
             print(my_experiment.getEntry())
         """
-        import labstep.generic.entity.repository as entityRepository
-
-        if hasattr(self, 'root_experiment') is False:
-            self.update()
-
-        return entityRepository.getEntity(
-            self.__user__, ExperimentProtocol, self.root_experiment.id
-        ).state
+        return self.root_experiment.getBody()
 
     def addProtocol(self, protocol):
         """
@@ -341,8 +333,8 @@ class Experiment(EntityPrimary):
         List[:class:`~labstep.entities.experimentSignature.model.ExperimentSignature`]
             List of the signatures added to the Experiment
         """
-        exp = self.__user__.getExperiment(self.id)
-        return EntityList(exp.signatures, ExperimentSignature, self.__user__)
+        self.update()
+        return EntityList(self.signatures, ExperimentSignature, self.__user__)
 
     def addSignature(self, statement=UNSPECIFIED, lock=False):
         """
@@ -610,9 +602,6 @@ class Experiment(EntityPrimary):
         """
         import labstep.entities.comment.repository as commentRepository
 
-        if hasattr(self, 'thread_ids') is False:
-            self.update()
-
         return commentRepository.getComments(self, count, extraParams={'parent_thread_id[]': self.thread_ids})
 
     def getFiles(self):
@@ -725,6 +714,40 @@ class Experiment(EntityPrimary):
         """
 
         return self.root_experiment.addJupyterNotebook(name, data)
+
+    def addConditions(self, number_of_conditions):
+        """
+        Add conditions to the experiment
+        Parameters
+        ----------
+        number_of_conditions (int)
+            The number of conditions to add
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions added to the experiment.
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            conditions = experiment.addConditions(5)
+        """
+        return self.root_experiment.addConditions(number_of_conditions)
+
+    def getConditions(self):
+        """
+        Retrieve a list of the different conditions associated with this experiment protocol.
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions associated with the experiment protocol.
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            conditions = experiment.getConditions()
+        """
+        return self.root_experiment.getConditions()
 
     @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):

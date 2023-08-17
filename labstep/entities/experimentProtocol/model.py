@@ -10,6 +10,7 @@ from labstep.entities.jupyterNotebook.model import JupyterNotebook
 from labstep.entities.chemicalReaction.model import ChemicalReaction
 from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentTimer.model import ExperimentTimer
+from labstep.entities.experimentInventoryField.model import ExperimentInventoryField
 import labstep.entities.file.repository as fileRepository
 import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
 import labstep.entities.chemicalReaction.repository as chemicalReactionRepository
@@ -68,9 +69,6 @@ class ExperimentProtocol(Entity):
 
         from labstep.entities.experiment.repository import getExperiment
 
-        if hasattr(self, 'experiment_workflow') is False:
-            self.update()
-
         return getExperiment(self.__user__, self.experiment_workflow['id'])
 
     def getBody(self):
@@ -86,7 +84,7 @@ class ExperimentProtocol(Entity):
             protocols[0].getBody()
         """
         self.update()
-        return getattr(self, "state", None)
+        return self.state
 
     def getInventoryFields(self, count=UNSPECIFIED, extraParams={}):
         """
@@ -106,9 +104,10 @@ class ExperimentProtocol(Entity):
             exp_protocol_inventory_fields = exp_protocol.getInventoryFields()
             exp_protocol_inventory_fields[0].attributes()
         """
+        self.update()
+        return EntityList(self.protocol_values, ExperimentInventoryField, self.__user__)
 
-        return experimentInventoryFieldRepository.getExperimentInventoryFields(self.__user__,
-                                                                               experiment_id=self.id, count=count, extraParams=extraParams)
+        # return experimentInventoryFieldRepository.getExperimentInventoryFields(self.__user__,experiment_id=self.id, count=count, extraParams=extraParams)
 
     def addInventoryField(
         self,
@@ -512,11 +511,10 @@ class ExperimentProtocol(Entity):
 
             experiment = user.getExperiment(17000)
             experiment_protocol = experiment.getProtocols()[0]
-            filess = experiment_protocol.getFiles()
+            files = experiment_protocol.getFiles()
         """
         self.update()
-        files = self.files
-        return EntityList(files, File, self.__user__)
+        return EntityList(self.files, File, self.__user__)
 
     def export(self, rootPath, folderName=UNSPECIFIED):
         import labstep.entities.experimentProtocol.repository as experimentProtocolRepository
@@ -540,7 +538,6 @@ class ExperimentProtocol(Entity):
             print(jupyter_notebooks[0])
         """
         self.update()
-
         return EntityList(self.jupyter_notebooks, JupyterNotebook, self.__user__)
 
     def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
@@ -569,6 +566,46 @@ class ExperimentProtocol(Entity):
         import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
         return jupyterNotebookRepository.newJupyterNotebook(self.__user__, name, data, extraParams={'experiment_id': self.id})
+
+    def addConditions(self, number_of_conditions):
+        """
+        Add conditions to the experiment protocol
+        Parameters
+        ----------
+        number_of_conditions (int)
+            The number of conditions to add
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions added to the experiment.
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            protocol = experiment.getProtocols()[0]
+            conditions = protocol.addConditions(5)
+        """
+        from labstep.entities.experimentCondition.repository import addExperimentConditions
+
+        return addExperimentConditions(self, number_of_conditions)
+
+    def getConditions(self):
+        """
+        Retrieve a list of the different conditions associated with this experiment protocol.
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions associated with the experiment protocol.
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            protocol = experiment.getProtocols()[0]
+            conditions = protocol.getConditions()
+        """
+        from labstep.entities.experimentCondition.repository import getExperimentConditions
+
+        return getExperimentConditions(self)
 
     @deprecated(version='3.3.2', reason="You should use experimentProtocol.addDataField instead")
     def addDataElement(self, *args, **kwargs):

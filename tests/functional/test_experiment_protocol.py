@@ -48,3 +48,6 @@ class TestExperimentProtocol:
 
     def test_jupyter_notebooks(self, entity):
         assert sharedTests.jupyterNotebooks(entity)
+
+    def test_experiment_protocol_conditions(self, entity):
+        assert sharedTests.conditions(entity)
