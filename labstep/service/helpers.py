@@ -122,7 +122,10 @@ def update(entity, newData):
     """
     entity.__data__ = newData
     for key in newData:
-        setattr(entity, key, newData[key])
+        try:
+            setattr(entity, key, newData[key])
+        except:
+            pass
     return entity
 
 

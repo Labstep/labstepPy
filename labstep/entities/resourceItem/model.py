@@ -28,10 +28,11 @@ class ResourceItem(Entity):
         self,
         name=UNSPECIFIED,
         availability=UNSPECIFIED,
-        quantity_amount=UNSPECIFIED,
-        quantity_unit=UNSPECIFIED,
+        amount=UNSPECIFIED,
+        unit=UNSPECIFIED,
         resource_location_guid=UNSPECIFIED,
         extraParams={},
+        **kwargs
     ):
         """
         Edit an existing ResourceItem.
@@ -43,9 +44,9 @@ class ResourceItem(Entity):
         availability (str)
             The availability of the ResourceItem. Options are:
             "available" and "unavailable".
-        quantity_amount (float)
+        amount (float)
             The quantity of the ResourceItem.
-        quantity_unit (str)
+        unit (str)
             The unit of the quantity.
         resource_location_guid (str)
             The guid of the :class:`~labstep.entities.resourceLocation.model.ResourceLocation` of the ResourceItem.
@@ -64,12 +65,18 @@ class ResourceItem(Entity):
         """
         import labstep.entities.resourceItem.repository as resourceItemRepository
 
+        if 'quantity_amount' in kwargs:
+            amount = kwargs['quantity_amount']
+
+        if 'quantity_unit' in kwargs:
+            unit = kwargs['quantity_unit']
+
         return resourceItemRepository.editResourceItem(
             self,
             name=name,
             availability=availability,
-            quantity_amount=quantity_amount,
-            quantity_unit=quantity_unit,
+            amount=amount,
+            unit=unit,
             resource_location_guid=resource_location_guid,
             extraParams=extraParams,
         )

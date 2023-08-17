@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project (tries to) adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.22.0] - 2023.08.03
+### Added
+- `ProtocolCondition` model and repository.
+- `ExperimentCondition` model and repository.
+- `addConditions` and `getConditions` methods added to `ProtocolVersion`,`Protocol`, `ExperimentProtocol` and `Experiment`  models.
+
+### Changed
+- `quantity_unit` and `quantity_amount` parameters in `ResourceItem` are now `unit` and `amount`, respectively. `quantity_unit` and `quantity_amount` can still be used.
+
+### Fixed
+- `getInventoryFields` crashing for Experiments if fetched in a list
+
+## [3.21.3] - 2023.06.21
+### Deprecated
+- `labstep.login` method. Use `labstep.authenticate` instead
+
+## [3.21.2] - 2023.06.19
+
+### Fixed
+- `getData` methods
+
 ## [3.21.1] - 2023.05.30
 
 ### Added

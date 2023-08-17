@@ -4,23 +4,21 @@
 
 import inspect
 import pprint
-from labstep.service.helpers import update
+from labstep.service.helpers import getTime, update
 from labstep.constants import UNSPECIFIED
 
 
 class Entity:
 
     def __init__(self, data, user):
-        self.__user__ = user
-        self.__data__ = data
         self.id = None
+        self.__user__ = user
         update(self, data)
 
     def __repr__(self):
-        all_attributes = inspect.getmembers(
-            self, lambda a: not (inspect.isroutine(a)))
+        all_attributes = self.__dict__
         entity_attributes = {
-            k: v for k, v in all_attributes if not (k.startswith("__"))
+            k: v for k, v in all_attributes.items() if not (k.startswith("__"))
         }
         pp = pprint.PrettyPrinter(indent=1)
         return pp.pformat(entity_attributes)
@@ -60,3 +58,17 @@ class Entity:
         """
         import labstep.generic.entity.repository as entityRepository
         return entityRepository.exportEntity(self, rootPath, folderName=folderName)
+
+    def delete(self):
+        """
+        Deletes the Labstep Entity (can be restored). 
+
+        Example
+        -------
+        ::
+            experiment = user.getExperiment(17000)
+            experiment.delete()
+        """
+        from labstep.generic.entity.repository import editEntity
+
+        return editEntity(self, {"deleted_at": getTime()})

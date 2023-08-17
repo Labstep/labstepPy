@@ -26,7 +26,7 @@ class ExperimentDataField(EntityWithComments):
     __entityName__ = "metadata"
     __searchKey__ = 'label'
 
-    def edit(self, fieldName=UNSPECIFIED, value=UNSPECIFIED, extraParams={}):
+    def edit(self, fieldName=UNSPECIFIED, value=UNSPECIFIED, is_variable=UNSPECIFIED, extraParams={}):
         """
         Edit the value of an existing data field.
 
@@ -36,6 +36,8 @@ class ExperimentDataField(EntityWithComments):
             The new name of the field.
         value (str)
             The new value of the data.
+        is_variable (boolean)
+            Whether or not the field is a variable
 
         Returns
         -------
@@ -51,7 +53,7 @@ class ExperimentDataField(EntityWithComments):
         import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
         return experimentDataFieldRepository.editDataField(
-            self, fieldName, value, extraParams=extraParams
+            self, fieldName=fieldName, value=value, is_variable=is_variable, extraParams=extraParams
         )
 
     def delete(self):

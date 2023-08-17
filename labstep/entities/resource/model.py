@@ -191,10 +191,11 @@ class Resource(EntityPrimary, EntityWithMetadata):
         self,
         name=UNSPECIFIED,
         availability="available",
-        quantity_amount=UNSPECIFIED,
-        quantity_unit=UNSPECIFIED,
+        amount=UNSPECIFIED,
+        unit=UNSPECIFIED,
         resource_location_guid=UNSPECIFIED,
         extraParams={},
+        **kwargs
     ):
         """
         Create a new Labstep ResourceItem.
@@ -206,9 +207,9 @@ class Resource(EntityPrimary, EntityWithMetadata):
         availability (str)
             The status of the ResourceItem. Options are:
             "available" and "unavailable".
-        quantity_amount (float)
+        amount (float)
             The quantity of the ResourceItem.
-        quantity_unit (str)
+        unit (str)
             The unit of the quantity.
         resource_location_guid (str)
             The guid of the ResourceLocation of the ResourceItem.
@@ -227,13 +228,19 @@ class Resource(EntityPrimary, EntityWithMetadata):
         """
         import labstep.entities.resourceItem.repository as resourceItemRepository
 
+        if 'quantity_amount' in kwargs:
+            amount = kwargs['quantity_amount']
+
+        if 'quantity_unit' in kwargs:
+            unit = kwargs['quantity_unit']
+
         return resourceItemRepository.newResourceItem(
             self.__user__,
             name=name,
             resource_id=self.id,
             availability=availability,
-            quantity_amount=quantity_amount,
-            quantity_unit=quantity_unit,
+            amount=amount,
+            unit=unit,
             resource_location_guid=resource_location_guid,
             extraParams=extraParams,
         )
@@ -284,6 +291,7 @@ class Resource(EntityPrimary, EntityWithMetadata):
             itemTemplate.addMetadata('Expiry Date')
 
         """
+        self.update()
         if self.resource_item_template is None:
             self.newItem(extraParams={"is_template": 1})
         else:
@@ -448,9 +456,7 @@ class Resource(EntityPrimary, EntityWithMetadata):
             my_resource = user.getResource(17000)
             my_resource.getChemicalMetadata()
         '''
-
         self.update()
-
         metadata = self.molecule['pubchem']['reactants'][0]
 
         metadata['Structure'] = self.molecule['data']

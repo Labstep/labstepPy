@@ -28,8 +28,8 @@ def newResourceItem(
     resource_id,
     name=UNSPECIFIED,
     availability=UNSPECIFIED,
-    quantity_amount=UNSPECIFIED,
-    quantity_unit=UNSPECIFIED,
+    amount=UNSPECIFIED,
+    unit=UNSPECIFIED,
     resource_location_guid=UNSPECIFIED,
     extraParams={},
 ):
@@ -38,8 +38,8 @@ def newResourceItem(
         "resource_location_guid": resource_location_guid,
         "name": name,
         "status": handleKeyword(availability),
-        "quantity_amount": quantity_amount,
-        "quantity_unit": quantity_unit,
+        "amount": amount,
+        "unit": unit,
         **extraParams,
     }
 
@@ -50,8 +50,8 @@ def editResourceItem(
     resourceItem,
     name=UNSPECIFIED,
     availability=UNSPECIFIED,
-    quantity_amount=UNSPECIFIED,
-    quantity_unit=UNSPECIFIED,
+    amount=UNSPECIFIED,
+    unit=UNSPECIFIED,
     resource_location_guid=UNSPECIFIED,
     deleted_at=UNSPECIFIED,
     extraParams={},
@@ -60,12 +60,15 @@ def editResourceItem(
         "name": name,
         "status": handleKeyword(availability),
         "resource_location_guid": resource_location_guid,
-        "quantity_unit": quantity_unit,
+        "unit": unit,
         "deleted_at": deleted_at,
         **extraParams,
     }
 
-    if quantity_amount is not UNSPECIFIED:
-        params["quantity_amount"] = float(quantity_amount)
+    if amount is not UNSPECIFIED:
+        if amount != None:
+            params["amount"] = str(float(amount))
+        else:
+            params["amount"] = amount
 
     return entityRepository.editEntity(resourceItem, params)

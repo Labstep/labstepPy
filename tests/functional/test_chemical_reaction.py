@@ -30,9 +30,9 @@ class TestChemicalReaction:
         user = authUser()
         chemicalReaction = chemicalReactionRepository.getChemicalReaction(
             user, 'molecule')
-        assert chemicalReaction['limiting_chemical']['guid'] == 'chemical1'
-        chemicalReaction.setLimitingChemical('chemical2')
-        assert chemicalReaction['limiting_chemical']['guid'] == 'chemical2'
+        assert chemicalReaction['limiting_chemical']['guid'] == '8439ae3d-4502-4f10-a7c9-822b082b2259'
+        chemicalReaction.setLimitingChemical('1e493da7-01db-4795-a5c4-e68d824dfcf3')
+        assert chemicalReaction['limiting_chemical']['guid'] == '1e493da7-01db-4795-a5c4-e68d824dfcf3'
 
     def test_demoForDavid(self, entity):
         import labstep.entities.resourceItem.repository as resourceItemRepository

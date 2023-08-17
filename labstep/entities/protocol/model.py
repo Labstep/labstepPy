@@ -99,7 +99,7 @@ class Protocol(EntityPrimary):
         import labstep.generic.entity.repository as entityRepository
 
         entityRepository.newEntity(
-            self.__user__, ProtocolVersion, {"collection_id": self.id}
+            self.__user__, ProtocolVersion, {"protocol_collection_id": self.id}
         )
         return self.update()
 
@@ -558,6 +558,43 @@ class Protocol(EntityPrimary):
             protocol.addJupyterNotebook()
         """
         return self.last_version.addJupyterNotebook(name=name, data=data)
+    
+
+    def addConditions(self, number_of_conditions):
+        """
+        Add conditions to the protocol
+        Parameters
+        ----------
+        number_of_conditions (int)
+            The number of conditions to add
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions added to the protocol.
+        Example
+        -------
+        ::
+            protocol = user.getProtocol(17000)
+            conditions = protocol.addConditions(5)
+        """
+
+        return self.last_version.addConditions(number_of_conditions)
+
+    def getConditions(self):
+        """
+        Retrieve a list of the different conditions associated with this protocol.
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
+            A list of the protocol conditions associated with the protocol.
+        Example
+        -------
+        ::
+            protocol = user.getProtocol(17000)
+            conditions = protocol.getConditions()
+        """
+
+        return self.last_version.getConditions()
 
     @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):
