@@ -23,6 +23,7 @@ class ProtocolCondition(Entity):
         Example
         -------
         ::
+
             protocol = user.getProtocol(17000)
             condition = protocol.getConditions()[0]
             dataFields = condition.getDataFields()
@@ -42,6 +43,7 @@ class ProtocolCondition(Entity):
         Example
         -------
         ::
+        
             protocol = user.getProtocol(17000)
             condition = protocol.getConditions()[0]
             inventoryFields = condition.getInventoryFields()

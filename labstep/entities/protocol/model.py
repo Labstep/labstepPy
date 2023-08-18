@@ -574,6 +574,7 @@ class Protocol(EntityPrimary):
         Example
         -------
         ::
+        
             protocol = user.getProtocol(17000)
             conditions = protocol.addConditions(5)
         """
@@ -590,6 +591,7 @@ class Protocol(EntityPrimary):
         Example
         -------
         ::
+
             protocol = user.getProtocol(17000)
             conditions = protocol.getConditions()
         """

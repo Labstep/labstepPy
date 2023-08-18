@@ -729,6 +729,7 @@ class Experiment(EntityPrimary):
         Example
         -------
         ::
+
             experiment = user.getExperiment(17000)
             conditions = experiment.addConditions(5)
         """
@@ -744,6 +745,7 @@ class Experiment(EntityPrimary):
         Example
         -------
         ::
+        
             experiment = user.getExperiment(17000)
             conditions = experiment.getConditions()
         """
