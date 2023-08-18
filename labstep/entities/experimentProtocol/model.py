@@ -581,6 +581,7 @@ class ExperimentProtocol(Entity):
         Example
         -------
         ::
+        
             experiment = user.getExperiment(17000)
             protocol = experiment.getProtocols()[0]
             conditions = protocol.addConditions(5)
@@ -599,6 +600,7 @@ class ExperimentProtocol(Entity):
         Example
         -------
         ::
+
             experiment = user.getExperiment(17000)
             protocol = experiment.getProtocols()[0]
             conditions = protocol.getConditions()

@@ -550,6 +550,7 @@ class ProtocolVersion(EntityWithComments):
         Example
         -------
         ::
+        
             protocol = user.getProtocol(17000)
             conditions = protocol.addConditions(5)
         """
@@ -567,6 +568,7 @@ class ProtocolVersion(EntityWithComments):
         Example
         -------
         ::
+
             protocol = user.getProtocol(17000)
             conditions = protocol.getConditions()
         """

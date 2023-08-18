@@ -24,6 +24,7 @@ class ExperimentCondition(Entity):
         Example
         -------
         ::
+
             experiment = user.getExperiment(17000)
             condition = experiment.getConditions()[0]
             dataFields = condition.getDataFields()
@@ -43,6 +44,7 @@ class ExperimentCondition(Entity):
         Example
         -------
         ::
+        
             experiment = user.getExperiment(17000)
             condition = experiment.getConditions()[0]
             inventoryFields = condition.getInventoryFields()
