@@ -9,4 +9,5 @@ build:
 python:
   install:
     - method: pip
+    - requirements: "requirements.txt"
       path: .
