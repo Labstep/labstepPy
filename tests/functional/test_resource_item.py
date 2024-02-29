@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 import pytest
-from .fixtures import resourceItem, loadFixtures, authUser, resourceLocation
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
@@ -10,14 +10,14 @@ class TestResourceItem:
 
     @pytest.fixture
     def entity(self):
-        return resourceItem()
+        return fixtures.resourceItem()
 
     @pytest.fixture
     def location(self):
-        return resourceLocation()
+        return fixtures.resourceLocation()
 
     def setup_method(self):
-        loadFixtures('Python\\\\ResourceItem')
+        fixtures.loadFixtures('Python\\\\ResourceItem')
 
     def test_delete(self, entity):
         assert sharedTests.delete(entity)
@@ -29,7 +29,7 @@ class TestResourceItem:
         assert sharedTests.metadata(entity)
 
     def test_getData(self, entity):
-        user = authUser()
+        user = fixtures.defaultUser()
         exp = user.newExperiment('Test')
         data = exp.addDataField('Test', value='test')
         inventoryField = exp.addInventoryField(
@@ -49,11 +49,14 @@ class TestResourceItem:
         assert loc['size'] == [1, 1]
 
     def test_edit_quantity_params(self, entity):
-        
-        entity.edit(amount=100,unit = 'L')
-        
+
+        entity.edit(amount=100, unit='L')
+
         assert entity.amount == '100.0' and entity.unit == 'L'
 
-        entity.edit(quantity_amount=None,quantity_unit = None)
-        
+        entity.edit(quantity_amount=None, quantity_unit=None)
+
         assert entity.amount == None and entity.unit == None
+
+    def test_assign(self, entity):
+        assert sharedTests.assign(entity)

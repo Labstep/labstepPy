@@ -2,21 +2,21 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import authUser, workspace, loadFixtures
+from .fixtures import fixtures
 from labstep.entities.export.repository import getExports, newExport
 
 
 class TestEntityExportCustom:
     @pytest.fixture
     def testWorkspace(self):
-        return workspace()
+        return fixtures.workspace()
 
     @pytest.fixture
     def user(self):
-        return authUser()
+        return fixtures.defaultUser()
 
     def setup_method(self):
-        loadFixtures('Python\\\\EntityExportCustom')
+        fixtures.loadFixtures('Python\\\\EntityExportCustom')
 
     def test_custom_export(self, user, testWorkspace):
         file = user.newFile(__file__)

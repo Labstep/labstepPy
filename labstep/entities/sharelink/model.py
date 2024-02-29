@@ -5,7 +5,7 @@
 import requests
 from labstep.generic.entity.model import Entity
 from labstep.service.config import configService
-from labstep.service.helpers import url_join, handleError, getHeaders
+from labstep.service.helpers import url_join, getHeaders
 from labstep.constants import UNSPECIFIED
 
 
@@ -77,4 +77,3 @@ class Sharelink(Entity):
         url = url_join(configService.getHost(), "api/generic/share-link/email")
         fields = {"emails": emails, "message": message, "id": self.id}
         r = requests.post(url, json=fields, headers=headers)
-        handleError(r)

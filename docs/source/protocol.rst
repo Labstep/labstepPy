@@ -37,4 +37,10 @@ Protocol Timer
 
 .. autoclass:: labstep.entities.protocolTimer.model.ProtocolTimer
    :members:
+
+Protocol Condition
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: labstep.entities.protocolCondition.model.ProtocolCondition
+   :members:
    

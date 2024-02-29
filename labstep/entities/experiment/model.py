@@ -602,7 +602,7 @@ class Experiment(EntityPrimary):
         """
         import labstep.entities.comment.repository as commentRepository
 
-        return commentRepository.getComments(self, count, extraParams={'parent_thread_id[]': self.thread_ids})
+        return commentRepository.getComments(self, count, extraParams={'parent_thread_id': UNSPECIFIED, 'experiment_workflow_id': self.id})
 
     def getFiles(self):
         """
@@ -745,7 +745,7 @@ class Experiment(EntityPrimary):
         Example
         -------
         ::
-        
+
             experiment = user.getExperiment(17000)
             conditions = experiment.getConditions()
         """

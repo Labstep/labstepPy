@@ -6,36 +6,21 @@ from labstep.entities.user.model import User
 import labstep
 import pytest
 import os
-from dotenv import load_dotenv
-from .fixtures import workspace, testString, loadFixtures, newString
-
-load_dotenv()
-LABSTEP_API_USERNAME = os.getenv("LABSTEP_API_USERNAME")
-LABSTEP_API_APIKEY = os.getenv("LABSTEP_API_APIKEY")
-LABSTEP_API_PASSWORD = os.getenv("LABSTEP_API_PASSWORD")
+from .fixtures import fixtures, testString, newString
 
 
 class TestUser:
 
     @pytest.fixture
     def user(self):
-        return labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
+        return fixtures.defaultUser()
 
     @pytest.fixture
     def otherWorkspace(self):
-        return workspace()
+        return fixtures.workspace()
 
     def setup_method(self):
-        loadFixtures('Python\\\\User')
-
-    def test_login(self):
-        loginUser = labstep.authenticate(LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
-        assert loginUser.id is not None
-
-    def test_authenticate(self):
-        authUser = labstep.authenticate(
-            LABSTEP_API_USERNAME, LABSTEP_API_APIKEY)
-        assert authUser.id is not None
+        fixtures.loadFixtures('Python\\\\User')
 
     def test_setWorkspace(self, user, otherWorkspace):
         user.setWorkspace(otherWorkspace.id)
@@ -85,6 +70,11 @@ class TestUser:
         result = user.getFile(entity.id)
         assert result.id == entity.id
 
+    def test_getPurchaseOrder(self, user):
+        entity = user.newPurchaseOrder()
+        result = user.getPurchaseOrder(entity.id)
+        assert result.id == entity.id
+
     # getMany()
     def test_getExperiments(self, user):
         user.newExperiment(testString)
@@ -130,7 +120,7 @@ class TestUser:
         assert result[0].id
 
     def test_getTags(self, user):
-        user.newTag(newString(), type='experiment_workflow')
+        user.newTag(fixtures.newString(), type='experiment_workflow')
         result = user.getTags(count=10)
         assert result[0].id
 
@@ -139,7 +129,21 @@ class TestUser:
         result = user.getWorkspaces(count=10)
         assert result[0].id
 
+    def test_getPurchaseOrders(self, user):
+        purchase_order_open = user.newPurchaseOrder(status='open')
+        purchase_order_pending = user.newPurchaseOrder(status='pending')
+        purchase_order_completed = user.newPurchaseOrder(status='completed')
+
+        result_open = user.getPurchaseOrders(status='open')
+        result_pending = user.getPurchaseOrders(status='pending')
+        result_completed = user.getPurchaseOrders(status='completed')
+
+        assert purchase_order_open.id == result_open[0]['id'] and \
+            purchase_order_pending.id == result_pending[0]['id'] and \
+            purchase_order_completed.id == result_completed[0]['id']
+
     # newEntity()
+
     def test_newExperiment(self, user):
         result = user.newExperiment(testString)
         assert result.name == testString
@@ -181,10 +185,19 @@ class TestUser:
 
     def test_acceptShareLink(self, user):
         # FIXME should be a workspace the user isn't already in!
-        newWorkspace = workspace()
+        newWorkspace = fixtures.workspace()
         sharelink = newWorkspace.getSharelink()
         result = user.acceptSharelink(sharelink.token)
 
     def test_newDeviceCategory(self, user):
         result = user.newDeviceCategory(testString)
+        assert result.name == testString
+
+    def test_newAPIKey(self, user):
+        from labstep.service.helpers import getTime
+        result = user.newAPIKey(testString, expires_at=getTime())
+        assert result.name == testString
+
+    def test_newPurchaseOrder(self, user):
+        result = user.newPurchaseOrder(testString)
         assert result.name == testString

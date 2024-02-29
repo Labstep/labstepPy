@@ -8,9 +8,32 @@ import os
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from labstep.service.helpers import boolToString, filterUnspecified, handleError
+from labstep.service.helpers import boolToString, filterUnspecified
 
 DEFAULT_TIMEOUT = 60  # seconds
+
+
+class RequestException(requests.exceptions.RequestException):
+    def __init__(self, status_code, message):
+        super().__init__(f"Request Error {status_code}: {message}")
+        self.status_code = status_code
+        self.message = message
+
+
+def handleError(response, *args, **kwargs):
+    """
+    Returns
+    -------
+        The error code and error message if the
+        status code of the request is not 200.
+    """
+    if response.status_code != 200:
+        print(
+            """Get the latest version of the SDK by running:
+        pip install labstep --upgrade"""
+        )
+        raise RequestException(response.status_code, response.content)
+    return
 
 
 class TimeoutHTTPAdapter(HTTPAdapter):

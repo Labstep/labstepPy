@@ -3,7 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 import json
 import pytest
-from .fixtures import metadata, authUser, resource, testString, loadFixtures
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
@@ -11,10 +11,10 @@ class TestMetadata:
 
     @pytest.fixture
     def entity(self):
-        return metadata()
+        return fixtures.metadata()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Metadata')
+        fixtures.loadFixtures('Python\\\\Metadata')
 
     def test_edit(self, entity):
         result = entity.edit(fieldName='Pytest Edited')
@@ -24,11 +24,11 @@ class TestMetadata:
         assert sharedTests.delete(entity)
 
     def test__get_value(self):
-        user = authUser()
+        user = fixtures.defaultUser()
         new_resource = user.newResource('Sequence')
         result = new_resource.addMetadata(fieldName='seq', fieldType='sequence', extraParams={
             'sequence': {
-            'data': json.dumps({"circular":"true", "sequence": 'ATG'}),
-            'name': 'start codon'
+                'data': json.dumps({"circular": "true", "sequence": 'ATG'}),
+                'name': 'start codon'
             }})
         assert result.getValue()['sequence'] == 'ATG'

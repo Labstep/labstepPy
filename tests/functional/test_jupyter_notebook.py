@@ -2,21 +2,21 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import loadFixtures, authUser, jupyterNotebook
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
 class TestJupyterNotebook:
     @pytest.fixture
     def loggedUser(self):
-        return authUser()
+        return fixtures.defaultUser()
 
     @pytest.fixture
     def entity(self):
-        return jupyterNotebook()
+        return fixtures.jupyterNotebook()
 
     def setup_method(self):
-        loadFixtures('Python\\\\JupyterNotebook')
+        fixtures.loadFixtures('Python\\\\JupyterNotebook')
 
     def test_get(self, loggedUser, entity):
         guid = entity.guid

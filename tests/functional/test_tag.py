@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import tag, loadFixtures
+from .fixtures import fixtures
 
 from .shared import sharedTests
 
@@ -10,10 +10,10 @@ from .shared import sharedTests
 class TestTag:
     @pytest.fixture
     def entity(self):
-        return tag()
+        return fixtures.tag()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_edit(self, entity):
         assert sharedTests.edit(entity)

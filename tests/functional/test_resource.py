@@ -2,25 +2,25 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import workspace, resource, resourceCategory, authUser, testString, loadFixtures
+from .fixtures import fixtures, testString
 from .shared import sharedTests
 
 
 class TestResource:
     @pytest.fixture
     def entity(self):
-        return resource()
+        return fixtures.resource()
 
     @pytest.fixture
     def category(self):
-        return resourceCategory()
+        return fixtures.resourceCategory()
 
     @pytest.fixture
     def workspaceToShare(self):
-        return workspace()
+        return fixtures.workspace()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Resource')
+        fixtures.loadFixtures('Python\\\\Resource')
 
     def test_edit(self, entity):
         assert sharedTests.edit(entity)
@@ -53,7 +53,7 @@ class TestResource:
         assert result.status
 
     def test_getData(self, entity):
-        user = authUser()
+        user = fixtures.defaultUser()
         exp = user.newExperiment('Test')
         item = entity.newItem()
         data = exp.addDataField('Test', value='test',
@@ -155,3 +155,6 @@ class TestResource:
                 "GHS08"
             ]
         }
+
+    def test_assign(self, entity):
+        assert sharedTests.assign(entity)

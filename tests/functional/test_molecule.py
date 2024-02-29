@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import loadFixtures
+from .fixtures import fixtures
 from labstep.entities.molecule.repository import newMolecule
 from .shared import sharedTests
 

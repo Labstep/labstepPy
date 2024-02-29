@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import experimentProtocol, proseMirrorState, resource, loadFixtures
+from .fixtures import fixtures, proseMirrorState
 
 from .shared import sharedTests
 
@@ -10,10 +10,10 @@ from .shared import sharedTests
 class TestExperimentProtocol:
     @pytest.fixture
     def entity(self):
-        return experimentProtocol()
+        return fixtures.experimentProtocol()
 
     def setup_method(self):
-        loadFixtures('Python\\\\ExperimentProtocol')
+        fixtures.loadFixtures('Python\\\\ExperimentProtocol')
 
     def test_edit(self, entity):
         entity.edit(name='Edit Test', body=proseMirrorState)

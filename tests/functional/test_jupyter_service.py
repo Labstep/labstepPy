@@ -4,12 +4,12 @@
 import labstep
 import os
 import pytest
-from .fixtures import loadFixtures
+from .fixtures import fixtures
 
 
 class TestJupyter:
     def setup_method(self):
-        loadFixtures('Python\\\\Jupyter')
+        fixtures.loadFixtures('Python\\\\Jupyter')
 
     def test_not_in_jupyter(self):
         with pytest.raises(Exception):

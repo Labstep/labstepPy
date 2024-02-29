@@ -56,3 +56,9 @@ Experiment Signature Request
 
 .. autoclass:: labstep.entities.experimentSignatureRequest.model.ExperimentSignatureRequest
    :members:
+
+Experiment Condition
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: labstep.entities.experimentCondition.model.ExperimentCondition
+   :members:

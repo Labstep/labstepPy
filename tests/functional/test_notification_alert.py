@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import loadFixtures
-from .fixtures import metadataDate
+from .fixtures import fixtures
+from .fixtures import fixtures
 
 
 class TestNotificationAlert:
     @pytest.fixture
     def metadata(self):
-        return metadataDate()
+        return fixtures.metadataDate()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Metadata')
+        fixtures.loadFixtures('Python\\\\Metadata')
 
     def test_edit(self, metadata):
 

@@ -3,13 +3,14 @@
 # Author: Labstep <dev@labstep.com>
 
 from labstep.generic.entityWithSharing.model import EntityWithSharing
+from labstep.generic.entityWithAssign.model import EntityWithAssign
 from labstep.service.helpers import getTime
 from labstep.entities.resourceTemplate.model import ResourceTemplate
 from labstep.entities.resourceItem.model import ResourceItem
 from labstep.constants import UNSPECIFIED
 
 
-class ResourceCategory(EntityWithSharing):
+class ResourceCategory(EntityWithSharing, EntityWithAssign):
     """
     Represents a Resource Category on Labstep.
 
@@ -24,6 +25,7 @@ class ResourceCategory(EntityWithSharing):
     """
 
     __entityName__ = "resource"
+    __isTemplate__ = True
 
     def edit(self, name=UNSPECIFIED, extraParams={}):
         """

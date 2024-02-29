@@ -3,7 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 from labstep.entities.sequence.model import Sequence
 import pytest
-from .fixtures import sequence, loadFixtures
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
@@ -11,10 +11,10 @@ class TestSequence:
 
     @pytest.fixture
     def entity(self):
-        return sequence()
+        return fixtures.sequence()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_edit(self, entity):
 
