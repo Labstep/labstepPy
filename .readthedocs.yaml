@@ -4,8 +4,7 @@ build:
 
   os: ubuntu-22.04
 
-  tools:
-    python:
-      install:
-        - method: pip
-          path: .
+python:
+  install:
+    - method: pip
+      path: .
