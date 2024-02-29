@@ -30,8 +30,11 @@ def getOrderRequests(
     return entityRepository.getEntities(user, OrderRequest, count, params)
 
 
-def newOrderRequest(user, resource_id=UNSPECIFIED, quantity=1, extraParams={}):
-    params = {"resource_id": resource_id, "quantity": quantity, **extraParams}
+def newOrderRequest(user, resource_id=UNSPECIFIED, purchase_order_id=UNSPECIFIED, quantity=1, extraParams={}):
+    params = {"resource_id": resource_id,
+              'purchase_order_id':purchase_order_id,
+              "quantity": quantity, 
+              **extraParams}
     return entityRepository.newEntity(user, OrderRequest, params)
 
 

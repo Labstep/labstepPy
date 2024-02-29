@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import experimentDataField, experimentInventoryField, device, loadFixtures, authUser
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
@@ -10,18 +10,18 @@ class TestExperimentDataField:
 
     @pytest.fixture
     def entity(self):
-        return experimentDataField()
+        return fixtures.experimentDataField()
 
     @pytest.fixture
     def inventoryField(self):
-        return experimentInventoryField()
+        return fixtures.experimentInventoryField()
 
     @pytest.fixture
     def device(self):
-        return device()
+        return fixtures.device()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Metadata')
+        fixtures.loadFixtures('Python\\\\Metadata')
 
     def test_edit(self, entity):
         result = entity.edit(fieldName='Pytest Edited')
@@ -31,7 +31,7 @@ class TestExperimentDataField:
         assert sharedTests.delete(entity)
 
     def test_link_to_inventory_field(self):
-        user = authUser()
+        user = fixtures.defaultUser()
         exp = user.newExperiment('Test')
         data = exp.addDataField('Test')
         inventoryField = exp.addInventoryField('Test')

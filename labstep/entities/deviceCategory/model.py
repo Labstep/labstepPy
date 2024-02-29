@@ -22,6 +22,7 @@ class DeviceCategory(EntityWithSharing):
     """
 
     __entityName__ = "device"
+    __isTemplate__ = True
 
     def edit(self, name=UNSPECIFIED, extraParams={}):
         """

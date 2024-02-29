@@ -2,16 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import (
-    experiment,
-    protocol,
-    resource,
-    workspace,
-    collaborator,
-    proseMirrorState,
-    experimentCollection,
-    loadFixtures
-)
+from .fixtures import fixtures, proseMirrorState
+
 
 from .shared import sharedTests
 
@@ -19,29 +11,29 @@ from .shared import sharedTests
 class TestExperiment:
     @pytest.fixture
     def entity(self):
-        return experiment()
+        return fixtures.experiment()
 
     @pytest.fixture
     def protocolToAdd(self):
-        return protocol()
+        return fixtures.protocol()
 
     @pytest.fixture
     def resourceToAdd(self):
-        return resource()
+        return fixtures.resource()
 
     @pytest.fixture
     def workspaceToShare(self):
-        return workspace()
+        return fixtures.workspace()
 
     @pytest.fixture
     def collection(self):
-        return experimentCollection()
+        return fixtures.experimentCollection()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Experiment')
+        fixtures.loadFixtures('Python')
 
     def test_edit(self):
-        entity = experiment()
+        entity = fixtures.experiment()
         entity.edit('Pytest Edited', entry=proseMirrorState)
         entity.update()
         assert entity.name == 'Pytest Edited' and \
@@ -107,7 +99,7 @@ class TestExperiment:
 
 
     def test_signatures(self, entity):
-        sig = entity.addSignature('test', lock=True)
+        sig = entity.addSignature('test')
         sigs = entity.getSignatures()
         sig.revoke()
         assert sig.id == sigs[0].id \
@@ -116,7 +108,7 @@ class TestExperiment:
 
     def test_signatureRequests(self, entity, workspaceToShare):
         sharelink = workspaceToShare.getSharelink()
-        otherUser = collaborator(sharelink.token)
+        otherUser = fixtures.new_user(token=sharelink.token)
         request = entity.requestSignature(otherUser.id, message='test')
         requests = entity.getSignatureRequests()
         request.cancel()
@@ -125,7 +117,7 @@ class TestExperiment:
             and request.deleted_at is not None
 
     def test_experimentLinks(self, entity):
-        otherExperiment = experiment()
+        otherExperiment = fixtures.experiment()
         link = entity.addExperimentLink(otherExperiment.id)
         links = entity.getExperimentLinks()
         backlinks = otherExperiment.getExperimentLinks(direction='backwards')
@@ -141,3 +133,6 @@ class TestExperiment:
 
     def test_experiment_conditions(self, entity):
         assert sharedTests.conditions(entity)
+
+    def test_assign(self, entity):
+        assert sharedTests.assign(entity)

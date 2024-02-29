@@ -2,15 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import (
-    workspace,
-    protocol,
-    tableData,
-    testString,
-    proseMirrorState,
-    protocolCollection,
-    loadFixtures
-)
+from .fixtures import fixtures, testString, proseMirrorState
 from .shared import sharedTests
 
 
@@ -18,18 +10,18 @@ class TestProtocol:
 
     @pytest.fixture
     def entity(self):
-        return protocol()
+        return fixtures.protocol()
 
     @pytest.fixture
     def collection(self):
-        return protocolCollection()
+        return fixtures.protocolCollection()
 
     @pytest.fixture
     def workspaceToShare(self):
-        return workspace()
+        return fixtures.workspace()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Protocol')
+        fixtures.loadFixtures('Python\\\\Protocol')
 
     def test_edit(self, entity):
         result = entity.edit(name=testString, body=proseMirrorState)
@@ -77,10 +69,12 @@ class TestProtocol:
         result = entity.newVersion()
         assert result.id == entity.id \
             and result.last_version['id'] != oldId
-    
+
     def test_jupyter_notebooks(self, entity):
         assert sharedTests.jupyterNotebooks(entity)
 
     def test_protocol_conditions(self, entity):
         assert sharedTests.conditions(entity)
-        
+
+    def test_assign(self, entity):
+        assert sharedTests.assign(entity)

@@ -2,18 +2,9 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 from deprecated import deprecated
-from ..jupyterNotebook.model import JupyterNotebook
-from labstep.entities.protocolDataField.model import ProtocolDataField
+from labstep.generic.entity.repository import getEntityProperty
 from labstep.generic.entityPrimary.model import EntityPrimary
-from labstep.entities.protocolStep.model import ProtocolStep
-from labstep.entities.protocolTable.model import ProtocolTable
-from labstep.entities.protocolTimer.model import ProtocolTimer
 from labstep.entities.protocolVersion.model import ProtocolVersion
-from labstep.entities.protocolInventoryField.model import ProtocolInventoryField
-import labstep.entities.protocolInventoryField.repository as protocolInventoryFieldRepository
-from labstep.generic.entityList.model import EntityList
-from labstep.entities.file.model import File
-import labstep.entities.file.repository as fileRepository
 from labstep.service.helpers import getTime
 from labstep.constants import UNSPECIFIED
 
@@ -35,11 +26,9 @@ class Protocol(EntityPrimary):
     __entityName__ = "protocol-collection"
     __searchKey__ = 'label'
 
-    def __init__(self, data, user):
-        super().__init__(data, user)
-        if "last_version" in data:
-            self.last_version = ProtocolVersion(
-                data['last_version'], user)
+    @property
+    def last_version(self):
+        return getEntityProperty(self, 'last_version', ProtocolVersion)
 
     def edit(self, name=UNSPECIFIED, body=UNSPECIFIED, extraParams={}):
         """
@@ -558,7 +547,6 @@ class Protocol(EntityPrimary):
             protocol.addJupyterNotebook()
         """
         return self.last_version.addJupyterNotebook(name=name, data=data)
-    
 
     def addConditions(self, number_of_conditions):
         """
@@ -574,7 +562,7 @@ class Protocol(EntityPrimary):
         Example
         -------
         ::
-        
+
             protocol = user.getProtocol(17000)
             conditions = protocol.addConditions(5)
         """

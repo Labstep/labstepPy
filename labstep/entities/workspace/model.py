@@ -3,14 +3,14 @@
 # Author: Labstep <dev@labstep.com>
 
 from labstep.entities.autoshare.model import Autoshare
-from labstep.generic.entity.model import Entity
+from labstep.generic.entityWithComments.model import EntityWithComments
 from labstep.entities.workspaceMember.model import WorkspaceMember
 from labstep.entities.sharelink.model import Sharelink
 from labstep.service.helpers import getTime
 from labstep.constants import UNSPECIFIED
 
 
-class Workspace(Entity):
+class Workspace(EntityWithComments):
     """
     Represents a Labstep Workspace.
 
@@ -394,7 +394,37 @@ class Workspace(Entity):
             self.__user__, count, type, search_query, extraParams=extraParams
         )
 
-    def addMember(self, user_id):
+    def newTag(self, name, type='experiment', extraParams={}):
+        """
+        Create a new tag within this specific Workspace.
+
+        Parameters
+        ----------
+        name (int)
+            The number of Tags to retrieve.
+        type (str)
+            Options are:
+            'experiment', 'protocol',
+            'resource', 'order_request'.
+
+        Returns
+        -------
+        :class:`~labstep.entities.tag.model.Tag`
+            An object representing a Labstep Tag.
+
+        Example
+        -------
+        ::
+
+            tag = workspace.newTag('bacteria')
+        """
+        import labstep.entities.tag.repository as tagRepository
+
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return tagRepository.newTag(self.__user__, name=name, type=type, extraParams=extraParams)
+
+    def addMember(self, user_id, workspace_role_name=UNSPECIFIED):
         """
         Add a new member to the workspace.
 
@@ -404,6 +434,9 @@ class Workspace(Entity):
         ----------
         user_id (int)
             The id of the user to add as a member
+
+        workspace_role_name (str)
+            Name of the workspace role to assign to this member (defaults to 'editor')
 
         Returns
         -------
@@ -417,7 +450,7 @@ class Workspace(Entity):
             newMember = workspace.addMember(user_id=123)
         """
         import labstep.entities.workspaceMember.repository as workspaceMemberRepository
-        return workspaceMemberRepository.addMember(self.__user__, workspace_id=self.id, user_id=user_id)
+        return workspaceMemberRepository.addMember(self.__user__, workspace_id=self.id, user_id=user_id, workspace_role_name=workspace_role_name)
 
     def getMembers(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
@@ -621,7 +654,6 @@ class Workspace(Entity):
 
         return entityRepository.editEntity(member, {"is_home": True})
 
-    
     def getDeviceCategorys(
         self, count=UNSPECIFIED, search_query=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}
     ):
@@ -662,4 +694,84 @@ class Workspace(Entity):
             tag_id=tag_id,
             extraParams=extraParams,
         )
-    
+
+    def getJupyterNotebook(self, guid):
+        """
+        Retrieve an specific Jupyter Notebook attached to this Labstep Entity.
+
+        Parameters
+        ----------
+        guid (str)
+            The GUID of the Jupyter Notebook to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`]
+            List of the Jupyter Notebooks attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getWorkspace(17000)
+            jupyter_notebooks = entity.getJupyterNotebooks()
+            print(jupyter_notebooks[0])
+        """
+        self.update()
+        import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
+
+        return jupyterNotebookRepository.getJupyterNotebook(self.__user__, guid)
+
+    def getJupyterNotebooks(self, count=UNSPECIFIED):
+        """
+        Retrieve the Jupyter Notebooks attached to this Labstep Entity.
+
+        Parameters
+        ----------
+        count (int)
+            The number of ResourceCategorys to retrieve.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`]
+            List of the Jupyter Notebooks attached.
+
+        Example
+        -------
+        ::
+
+            entity = user.getWorkspace(17000)
+            jupyter_notebooks = entity.getJupyterNotebooks()
+            print(jupyter_notebooks[0])
+        """
+        self.update()
+        import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
+
+        return jupyterNotebookRepository.getJupyterNotebooks(self.__user__, count, extraParams={'group_id': self.id})
+
+    def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
+        """
+        Add a Jupyter Notebook to a workspace.
+
+        Parameters
+        ----------
+        name (str)
+            Name of Jupyter Notebook
+        data (JSON)
+            JSON Jupyter Notebook structure
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterNotebook.model.JupyterNotebook`
+            The newly added file entity.
+
+        Example
+        -------
+        ::
+
+            workspace = user.getWorkspace(17000)
+            workspace.addJupyterNotebook()
+        """
+        import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
+
+        return jupyterNotebookRepository.newJupyterNotebook(self.__user__, name, data, extraParams={'group_id': self.id})

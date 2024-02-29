@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
-from .fixtures import authUser, loadFixtures
+from .fixtures import fixtures
 from labstep.entities.entityImport.repository import newEntityImport, getEntityImport
 from labstep.entities.device.model import Device
 
 
 class TestEntityImport:
     def setup_method(self):
-        loadFixtures('Python\\\\EntityImport')
+        fixtures.loadFixtures('Python\\\\EntityImport')
 
     def test_get_entity_import(self):
-        user = authUser()
+        user = fixtures.defaultUser()
         entityImportGuid = 'entity-import-guid'
         entityImport = getEntityImport(user, guid=entityImportGuid)
         assert entityImport['guid'] == entityImportGuid
 
     def test_new(self):
-        user = authUser()
+        user = fixtures.defaultUser()
         data = {
             "settings": {
                 "modes": {
@@ -57,7 +57,7 @@ class TestEntityImport:
         assert entityImport['device_template']['guid'] == templateGuid
 
     def test_edit_name(self):
-        user = authUser()
+        user = fixtures.defaultUser()
         entityImportGuid = 'entity-import-guid'
         entityImport = getEntityImport(user, guid=entityImportGuid)
         assert entityImport['guid'] == entityImportGuid

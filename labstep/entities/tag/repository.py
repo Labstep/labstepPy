@@ -65,7 +65,7 @@ def getAttachedTags(entity, count=UNSPECIFIED):
     )
 
 
-def newTag(user, name, type, extraParams={}):
+def newTag(user, name, type='experiment', extraParams={}):
     """
     Create a new Tag.
 
@@ -78,7 +78,7 @@ def newTag(user, name, type, extraParams={}):
         Name of the new Tag.
     type (str)
             Return only tags of a certain type. Options are:
-            'experiment_workflow', 'protocol_collection',
+            'experiment', 'protocol',
             'resource', 'order_request'.
 
     Returns
@@ -86,6 +86,13 @@ def newTag(user, name, type, extraParams={}):
     tag
         An object representing the new Labstep Tag.
     """
+
+    if type == 'experiment':
+        type = 'experiment_workflow'
+
+    if type == 'protocol':
+        type = 'protocol_collection'
+
     params = {"name": name, "type": handleKeyword(type), **extraParams}
     return entityRepository.newEntity(user, Tag, params)
 

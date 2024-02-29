@@ -13,6 +13,7 @@ class JupyterNotebook(Entity):
 
     __entityName__ = "jupyter-notebook"
     __hasGuid__ = True
+    __unSearchable__=True
 
     def edit(self, name=UNSPECIFIED, status=UNSPECIFIED, data=UNSPECIFIED, extraParams={}):
         """
@@ -43,4 +44,106 @@ class JupyterNotebook(Entity):
 
         return jupyterNotebookRepository.editJupyterNotebook(
             self, name=name, status=status, data=data, extraParams=extraParams
+        )
+
+    def run(self):
+        """
+        Executes the JupyterNotebook
+
+        """
+        from labstep.entities.jupyterNotebook.repository import runJupyterNotebook
+
+        return runJupyterNotebook(self)
+
+    def newJupyterSchedule(self, frequency, extraParams={}):
+        """
+        Schedule the Jupyter Notebook to run on a regular basis.
+
+        Parameters
+        ----------
+        frequency (str)
+            Frequency values can be 'hourly' | 'daily' | 'weekly'.
+
+            If frequency is set to hourly, the Jupyter Notebook script will run every hour starting at the time
+            Jupyter Notebook Schedule was created.
+
+            If frequency is set to daily, the Jupyter Notebook script will run everyday at midnight.
+
+            If frequency is set to weekly, the Jupyter Notebook script will run every monday at midnight.
+
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterSchedule.model.JupyterSchedule`
+            An object representing the new Labstep JupyterSchedule.
+
+        Example
+        -------
+        ::
+
+            my_jupyter_notebook = user.getJupyterNotebook(17000)
+            my_jupyter_shedule = my_jupyter_notebook.newJupyterSchedule(frequency='weekly')
+
+        """
+        import labstep.entities.jupyterSchedule.repository as JupyterScheduleRepository
+
+        return JupyterScheduleRepository.newJupyterNotebookSchedule(self.__user__, self.guid, frequency=frequency, extraParams=extraParams)
+
+    def getJupyterSchedules(
+        self, count=UNSPECIFIED,  extraParams={}
+    ):
+        """
+        Retrieve a list of a JupyterNotebook's JupyterSchedules
+
+        Parameters
+        ----------
+        count (int)
+            The number of entities to return.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.jupyterSchedule.model.JupyterSchedule`]
+            A list of JupyterSchedules.
+
+        Example
+        -------
+        ::
+
+            my_jupyter_notebook = user.getJupyterNotebook(17000)
+            my_jupyter_shedules = my_jupyter_notebook.getJupyterSchedules()
+        """
+        import labstep.entities.jupyterSchedule.repository as JupyterScheduleRepository
+
+        return JupyterScheduleRepository.getJupyterSchedules(
+            self.__user__,
+            jupyter_notebook_guid=self.guid,
+            count=count,
+            extraParams=extraParams,
+        )
+
+    def getJupyterSchedule(self, jupyter_schedule_guid):
+        """
+        Retrieve a specific JupyterSchedule entity.
+
+        Parameters
+        ----------
+        jupyter_schedule_guid (str)
+            The guid of the Jupyter Schedule entity to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.jupyterSchedule.model.JupyterSchedule`
+            An object representing a Jupyter Schedule on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_jupyter_notebook = user.getJupyterNotebook(17000)
+            my_jupyter_shedules = my_jupyter_notebook.getJupyterSchedule(120000)
+        """
+        import labstep.entities.jupyterSchedule.repository as JupyterScheduleRepository
+
+        return JupyterScheduleRepository.getJupyterSchedule(
+            self.__user__, jupyter_schedule_guid
         )

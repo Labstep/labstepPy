@@ -123,6 +123,9 @@ def newEntity(user, entityClass, fields):
     ):
         fields["group_id"] = user.activeWorkspace
 
+    if hasattr(entityClass, '__isTemplate__'):
+        fields["is_template"] = 1
+
     response = requestService.post(url, headers=headers, json=fields)
     return entityClass(json.loads(response.content), user)
 

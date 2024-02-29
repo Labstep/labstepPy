@@ -3,12 +3,15 @@
 # Author: Labstep <dev@labstep.com>
 
 from labstep.entities.resourceLocation.repository import getResourceLocation
+from labstep.generic.entityWithAssign.model import EntityWithAssign
+from labstep.generic.entityWithComments.model import EntityWithComments
+from labstep.generic.entityWithMetadata.model import EntityWithMetadata
 from labstep.generic.entity.model import Entity
 from labstep.service.helpers import getTime
 from labstep.constants import UNSPECIFIED
 
 
-class ResourceItem(Entity):
+class ResourceItem(EntityWithMetadata, EntityWithComments, EntityWithAssign):
     """
     Represents a Resource Item on Labstep.
 
@@ -95,141 +98,6 @@ class ResourceItem(Entity):
         import labstep.entities.resourceItem.repository as resourceItemRepository
 
         return resourceItemRepository.editResourceItem(self, deleted_at=getTime())
-
-    def addComment(self, body, filepath=UNSPECIFIED, extraParams={}):
-        """
-        Add a comment and/or file to a Labstep ResourceItem.
-
-        Parameters
-        ----------
-        body (str)
-            The body of the comment.
-        filepath (str)
-            A Labstep File entity to attach to the comment,
-            including the filepath.
-
-        Returns
-        -------
-        :class:`~labstep.entities.comment.model.Comment`
-            The comment added.
-
-        Example
-        -------
-        ::
-
-            my_resource_item = user.getResourceItem(17000)
-            my_resource_item.addComment(body='I am commenting!',
-                                        filepath='pwd/file_to_upload.dat')
-        """
-        import labstep.entities.comment.repository as commentRepository
-
-        return commentRepository.addCommentWithFile(
-            self, body, filepath, extraParams=extraParams
-        )
-
-    def getComments(self, count=UNSPECIFIED, extraParams={}):
-        """
-        Retrieve the Comments attached to this Labstep Entity.
-
-        Returns
-        -------
-        List[:class:`~labstep.entities.comment.model.Comment`]
-            List of the comments attached.
-
-        Example
-        -------
-        ::
-
-            entity = user.getResource(17000)
-            item = entity.getItems()[1]
-            comments = item.getComments()
-            comments[0].attributes()
-        """
-        import labstep.entities.comment.repository as commentRepository
-
-        return commentRepository.getComments(self, count, extraParams=extraParams)
-
-    def addMetadata(
-        self,
-        fieldName,
-        fieldType="default",
-        value=UNSPECIFIED,
-        date=UNSPECIFIED,
-        number=UNSPECIFIED,
-        unit=UNSPECIFIED,
-        filepath=UNSPECIFIED,
-        extraParams={},
-    ):
-        """
-        Add Metadata to a ResourceItem.
-
-        Parameters
-        ----------
-        fieldName (str)
-            The name of the field.
-        fieldType (str)
-            The Metadata field type. Options are: "default", "date",
-            "numeric", or "file". The "default" type is "Text".
-        value (str)
-            The value accompanying the fieldName entry.
-        date (str)
-            The date accompanying the fieldName entry. Must be
-            in the format of "YYYY-MM-DD HH:MM".
-        number (float)
-            The numeric value.
-        unit (str)
-            The unit accompanying the number entry.
-        filepath (str)
-            Local path to the file to upload for type 'file'
-
-        Returns
-        -------
-        :class:`~labstep.entities.metadata.model.Metadata`
-            An object representing the new Labstep Metadata.
-
-        Example
-        -------
-        ::
-
-            my_resource_item = user.getResourceItem(17000)
-            metadata = my_resource_item.addMetadata("Refractive Index",
-                                                    value="1.73")
-        """
-        import labstep.entities.metadata.repository as metadataRepository
-
-        return metadataRepository.addMetadataTo(
-            self,
-            fieldName,
-            fieldType=fieldType,
-            value=value,
-            date=date,
-            number=number,
-            unit=unit,
-            filepath=filepath,
-            extraParams=extraParams,
-        )
-
-    def getMetadata(self):
-        """
-        Retrieve the Metadata of a Labstep ResourceItem.
-
-        Returns
-        -------
-        List[:class:`~labstep.entities.resource.model.ResourceItem`]
-            An array of Metadata objects for the ResourceItem.
-
-        Example
-        -------
-        ::
-
-            my_resource = user.getResource(17000)
-            my_resource_item = my_resource.getResourceItem(17000)
-            metadata = my_resource_item.getMetadata()
-            metadatas[0].attributes()
-        """
-        import labstep.entities.metadata.repository as metadataRepository
-
-        return metadataRepository.getMetadata(self)
 
     def getData(self):
         """

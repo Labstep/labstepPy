@@ -1,4 +1,17 @@
-from .fixtures import testString, tableData, authUser
+from .fixtures import fixtures, testString, tableData
+from labstep.service.request import RequestException
+from labstep.generic.entity.repository import newEntity
+from labstep.entities.protocol.model import Protocol
+from labstep.entities.experiment.model import Experiment
+from labstep.entities.tag.model import Tag
+from labstep.entities.device.model import Device
+from labstep.entities.resource.model import Resource
+from labstep.entities.workspace.model import Workspace
+from labstep.entities.resourceCategory.model import ResourceCategory
+from labstep.entities.resourceItem.model import ResourceItem
+from labstep.entities.resourceLocation.model import ResourceLocation
+from labstep.entities.orderRequest.model import OrderRequest
+from labstep.entities.collection.model import Collection
 
 
 class SharedTests:
@@ -100,28 +113,368 @@ class SharedTests:
         jupyter_notebook_entity = jupyter_notebooks.get("test")
         return jupyter_notebook_entity.id == jupyter_notebook.id \
             and jupyter_notebook_entity.name == "test"
-    
-    def conditions(self,entity):
-        user = authUser()
+
+    def conditions(self, entity):
+        user = fixtures.defaultUser()
         test_resource = user.newResource(name='Test')
-        output_data_field = entity.addDataField('Test',extraParams={'is_variable':True, 'is_output':True})
+        output_data_field = entity.addDataField(
+            'Test', extraParams={'is_variable': True, 'is_output': True})
         output_inventory_field = entity.addInventoryField('Test',
                                                           resource_id=test_resource.id,
-                                                          extraParams={'is_variable':True, 'is_output':True})
-        
-        
+                                                          extraParams={'is_variable': True, 'is_output': True})
+
         condition = entity.addConditions(1)
         condition_entity = condition[0]
 
         condition_from_get = entity.getConditions()[0]
-        
+
         input_data_field_from_get = condition_entity.getDataFields()
         input_inventory_field_from_get = condition_entity.getInventoryFields()
-        
-        
+
         return condition_entity.guid == condition_from_get.guid \
             and condition_entity.guid == input_data_field_from_get[0].protocol_condition_guid \
-            and condition_entity.guid == input_inventory_field_from_get[0].protocol_condition_guid 
+            and condition_entity.guid == input_inventory_field_from_get[0].protocol_condition_guid
+
+    def assign(self, entity):
+        user = entity.__user__
+        workspace = user.getWorkspace(entity['owner']['id'])
+        # add second_user to workspace
+        sharelink = workspace.getSharelink()
+        second_user = fixtures.new_user(sharelink.token)
+
+        collab = entity.assign(second_user.id)
+        collabs_from_get = entity.getCollaborators()
+        return collab.id == collabs_from_get[0].id
 
 
 sharedTests = SharedTests()
+
+
+class HelperMethods:
+    def doesSystemAllowAction(self, action):
+        try:
+            action()
+            return True
+        except RequestException as e:
+            # Check if the status code is 403 (Forbidden)
+            if e.status_code == 403:
+                return e.message
+            else:
+                raise Exception(e)
+
+    def newWorkspaceRole(self, org, roleName, defaultPermission='none'):
+        workspace_role = org.newWorkspaceRole(
+            f'{roleName}-{defaultPermission}')
+        workspace_role.setPermission(Experiment, 'create', defaultPermission)
+        workspace_role.setPermission(Experiment, 'edit', defaultPermission)
+        workspace_role.setPermission(Experiment, 'assign', defaultPermission)
+        workspace_role.setPermission(Experiment, 'delete', defaultPermission)
+        workspace_role.setPermission(Experiment, 'share', defaultPermission)
+        workspace_role.setPermission(Experiment, 'lock', defaultPermission)
+        workspace_role.setPermission(Experiment, 'unlock', defaultPermission)
+        workspace_role.setPermission(Experiment, 'comment', defaultPermission)
+        workspace_role.setPermission(Experiment, 'sign', defaultPermission)
+        workspace_role.setPermission(
+            Experiment, 'tag:add_remove', defaultPermission)
+        workspace_role.setPermission(
+            Experiment, 'folder:add_remove', defaultPermission)
+
+        workspace_role.setPermission(Protocol, 'create', defaultPermission)
+        workspace_role.setPermission(Protocol, 'edit', defaultPermission)
+        workspace_role.setPermission(Protocol, 'assign', defaultPermission)
+        workspace_role.setPermission(Protocol, 'delete', defaultPermission)
+        workspace_role.setPermission(Protocol, 'share', defaultPermission)
+        workspace_role.setPermission(Protocol, 'comment', defaultPermission)
+        workspace_role.setPermission(
+            Protocol, 'tag:add_remove', defaultPermission)
+        workspace_role.setPermission(
+            Protocol, 'folder:add_remove', defaultPermission)
+
+        workspace_role.setPermission(Resource, 'create', defaultPermission)
+        workspace_role.setPermission(Resource, 'edit', defaultPermission)
+        workspace_role.setPermission(Resource, 'assign', defaultPermission)
+        workspace_role.setPermission(Resource, 'delete', defaultPermission)
+        workspace_role.setPermission(Resource, 'share', defaultPermission)
+        workspace_role.setPermission(Resource, 'comment', defaultPermission)
+        workspace_role.setPermission(
+            Resource, 'resource_item:create', defaultPermission)
+        workspace_role.setPermission(
+            Resource, 'tag:add_remove', defaultPermission)
+
+        workspace_role.setPermission(
+            ResourceCategory, 'create', defaultPermission)
+        workspace_role.setPermission(
+            ResourceCategory, 'edit', defaultPermission)
+        workspace_role.setPermission(
+            ResourceCategory, 'assign', defaultPermission)
+        workspace_role.setPermission(
+            ResourceCategory, 'delete', defaultPermission)
+        workspace_role.setPermission(
+            ResourceCategory, 'comment', defaultPermission)
+
+        workspace_role.setPermission(ResourceItem, 'edit', defaultPermission)
+        workspace_role.setPermission(ResourceItem, 'assign', defaultPermission)
+        workspace_role.setPermission(ResourceItem, 'delete', defaultPermission)
+        workspace_role.setPermission(
+            ResourceItem, 'comment', defaultPermission)
+
+        workspace_role.setPermission(
+            ResourceLocation, 'create', defaultPermission)
+        workspace_role.setPermission(
+            ResourceLocation, 'edit', defaultPermission)
+        workspace_role.setPermission(
+            ResourceLocation, 'assign', defaultPermission)
+        workspace_role.setPermission(
+            ResourceLocation, 'delete', defaultPermission)
+        workspace_role.setPermission(
+            ResourceLocation, 'comment', defaultPermission)
+
+        workspace_role.setPermission(OrderRequest, 'create', defaultPermission)
+        workspace_role.setPermission(OrderRequest, 'edit', defaultPermission)
+        workspace_role.setPermission(OrderRequest, 'assign', defaultPermission)
+        workspace_role.setPermission(OrderRequest, 'delete', defaultPermission)
+        workspace_role.setPermission(OrderRequest, 'share', defaultPermission)
+        workspace_role.setPermission(
+            OrderRequest, 'comment', defaultPermission)
+
+        workspace_role.setPermission(Device, 'create', defaultPermission)
+        workspace_role.setPermission(Device, 'edit', defaultPermission)
+        workspace_role.setPermission(Device, 'assign', defaultPermission)
+        workspace_role.setPermission(Device, 'delete', defaultPermission)
+        workspace_role.setPermission(Device, 'share', defaultPermission)
+        workspace_role.setPermission(Device, 'comment', defaultPermission)
+        workspace_role.setPermission(Device, 'send_data', defaultPermission)
+        workspace_role.setPermission(
+            Device, 'create_bookings', defaultPermission)
+        workspace_role.setPermission(
+            Device, 'tag:add_remove', defaultPermission)
+
+        workspace_role.setPermission(Collection, 'create', defaultPermission)
+        workspace_role.setPermission(Collection, 'edit', defaultPermission)
+        workspace_role.setPermission(Collection, 'delete', defaultPermission)
+
+        workspace_role.setPermission(Tag, 'create', defaultPermission)
+        workspace_role.setPermission(Tag, 'edit', defaultPermission)
+        workspace_role.setPermission(Tag, 'delete', defaultPermission)
+
+        workspace_role.setPermission(Workspace, 'comment', defaultPermission)
+
+        return workspace_role
+
+    def setupWorkspace(self, admin, org, user, entityClass, actionName, permission_setting, defaultPermission='none'):
+
+        workspace = admin.newWorkspace(
+            f'{permission_setting}-{defaultPermission}')
+        workspace_role = self.newWorkspaceRole(
+            org, permission_setting, defaultPermission)
+
+        if actionName == 'create' and permission_setting is not 'none':
+            workspace_role.setPermission(
+                entityClass, 'edit', permission_setting=permission_setting)
+
+        workspace_role.setPermission(
+            entityClass, actionName, permission_setting=permission_setting)
+
+        workspace.addMember(
+            user_id=user.id, workspace_role_name=workspace_role.name)
+
+        return workspace
+
+    def setupEntity(self, admin, user, workspace, entityClass, entityParams):
+
+        entity = newEntity(admin, entityClass, {
+            **entityParams, 'group_id': workspace.id})
+
+        entity.__user__ = user
+
+        return entity
+
+    def setupAssignedEntities(self, admin, user, workspace, entityClass, entityParams):
+
+        entity_assigned = newEntity(admin, entityClass, {
+            **entityParams, 'group_id': workspace.id})
+
+        entity_assigned.assign(user.id)
+        entity_assigned.__user__ = user
+
+        entity_unassigned = newEntity(admin, entityClass, {
+            **entityParams, 'group_id': workspace.id})
+        entity_unassigned.__user__ = user
+
+        return [entity_assigned, entity_unassigned]
+
+    def testCreateAction(self, admin, user, org, entityClass, entityParams):
+
+        tests = []
+
+        def create_in_workspace(id): return newEntity(
+            user, entityClass, {**entityParams, 'group_id': id})
+
+        # Test With All Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, 'create', 'all')
+
+        tests.append({
+            'entity_name': entityClass.__name__,
+            'background_permissions': 'none',
+            'workspace_role_permission': 'all',
+            'action': 'create',
+            'expected_result': True,
+            'actual_result': self.doesSystemAllowAction(lambda: create_in_workspace(workspace.id))
+        })
+
+        # Test With None Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, 'create', 'none')
+
+        tests.append({
+            'entity_name': entityClass.__name__,
+            'background_permissions': 'none',
+            'workspace_role_permission': 'none',
+            'action': 'create',
+            'expected_result': False,
+            'actual_result': self.doesSystemAllowAction(lambda: create_in_workspace(workspace.id))
+        })
+
+        # Test None With Background All Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, 'create', 'none', defaultPermission='all')
+
+        tests.append({
+            'entity_name': entityClass.__name__,
+            'background_permissions': 'all',
+            'workspace_role_permission': 'none',
+            'action': 'create',
+            'expected_result': False,
+            'actual_result': self.doesSystemAllowAction(lambda: create_in_workspace(workspace.id))
+        })
+
+        return self.checkResults(tests)
+
+    def testEntityActionNoAssign(self, admin, user, org, entityClass, entityParams, actionName, actionTest):
+        tests = []
+        # Test With All Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, actionName, 'all')
+
+        entity = self.setupEntity(
+            admin, user, workspace, entityClass, entityParams)
+
+        # Can do action for assigned and unassigned entities
+        tests.extend([
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'none',
+                'workspace_role_permission': 'all',
+                'action': actionName,
+                'expected_result': True,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity))
+            },
+        ])
+
+        # Test With None Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, actionName, 'none', defaultPermission='all')
+
+        entity = self.setupEntity(
+            admin, user, workspace, entityClass, entityParams)
+
+        tests.extend([
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'all',
+                'workspace_role_permission': 'none',
+                'action': actionName,
+                'expected_result': False,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity))
+            }
+        ])
+
+    def testEntityAction(self, admin, user, org, entityClass, entityParams, actionName, actionTest):
+
+        tests = []
+        # Test With All Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, actionName, 'all')
+        [entity_assigned, entity_unassigned] = self.setupAssignedEntities(
+            admin, user, workspace, entityClass, entityParams)
+
+        # Can do action for assigned and unassigned entities
+        tests.extend([
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'none',
+                'workspace_role_permission': 'all',
+                'collaborator_role': 'assigned',
+                'action': actionName,
+                'expected_result': True,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity_assigned))
+            },
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'none',
+                'workspace_role_permission': 'all',
+                'collaborator_role': 'unassigned',
+                'action': actionName,
+                'expected_result': True,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity_unassigned))
+            },
+        ])
+
+        # Test With None Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, actionName, 'none', defaultPermission='all')
+        [entity_assigned, entity_unassigned] = self.setupAssignedEntities(
+            admin, user, workspace, entityClass, entityParams)
+
+        tests.extend([
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'all',
+                'workspace_role_permission': 'none',
+                'collaborator_role': 'assigned',
+                'action': actionName,
+                'expected_result': False,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity_assigned))
+            }
+        ])
+
+        # Test With If Assigned Permissions
+        workspace = self.setupWorkspace(
+            admin, org, user, entityClass, actionName, 'if_assigned')
+        [entity_assigned, entity_unassigned] = self.setupAssignedEntities(
+            admin, user, workspace, entityClass, entityParams)
+
+        tests.extend([
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'none',
+                'workspace_role_permission': 'if_assigned',
+                'collaborator_role': 'assigned',
+                'action': actionName,
+                'expected_result': True,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity_assigned))
+            },
+            {
+                'entity_name': entityClass.__name__,
+                'background_permissions': 'none',
+                'workspace_role_permission': 'if_assigned',
+                'collaborator_role': 'unassigned',
+                'action': actionName,
+                'expected_result': False,
+                'actual_result': self.doesSystemAllowAction(lambda: actionTest(entity_unassigned))
+            },
+        ])
+
+        return self.checkResults(tests)
+
+    def checkResults(self, tests):
+        for test in tests:
+            if test['expected_result'] is False and test['actual_result'] is not True:
+                continue
+
+            if test['actual_result'] != test['expected_result']:
+                raise Exception(f'Failing Test: {test}')
+
+
+helperMethods = HelperMethods()

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-""" from .fixtures import organizationUser
+""" from .fixtures import fixtures
 
 
 class TestOrganization:

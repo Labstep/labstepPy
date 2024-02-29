@@ -35,7 +35,7 @@ class Organization(Entity):
         """
         import labstep.entities.organization.repository as organizationRepository
 
-        return organizationRepository.editOrganization(self.__user__, name, extraParams=extraParams)
+        return organizationRepository.editOrganization(self, name, extraParams=extraParams)
 
     def inviteUsers(self, emails, workspace_id=UNSPECIFIED):
         """
@@ -129,3 +129,86 @@ class Organization(Entity):
                                                    self.id,
                                                    extraParams={'has_invited_user': False,
                                                                 **extraParams})
+
+    def newWorkspaceRole(self,
+                         name,
+                         extraParams={}):
+        """
+        Create a new Workspace Role in your Organization.
+
+        Parameters
+        ----------
+        name (str)
+            Name of the new Workspace Role.
+
+        Returns
+        -------
+        :class:`~labstep.entities.workspaceRole.model.WorkspaceRole`
+            An object representing a Workspace Role in Labstep.
+
+        Example
+        -------
+        ::
+
+            new_workspace_role = my_organization.newWorkspaceRole(name='Inventory Manager')
+        """
+
+        import labstep.entities.workspaceRole.repository as WorkspaceRoleRepository
+        self.__user__ = self.__user__.update()
+        return WorkspaceRoleRepository.newWorkspaceRole(
+            self.__user__, organization_id=self.guid, name=name, extraParams=extraParams
+        )
+
+    def getWorkspaceRoles(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of organizations's Workspace Role in Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Workspace Roles to retrieve.
+        search_query (str)
+            Search for Workspace Role with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.workspaceRoles.model.WorkspaceRoles`]
+            A list of Workspace Roles objects.
+
+        Example
+        -------
+        ::
+
+            workspace_roles = my_organization.getWorkspaceRoles(search_query='Inventory')
+        """
+        import labstep.entities.workspaceRole.repository as WorkspaceRoleRepository
+        self.__user__.update()
+        return WorkspaceRoleRepository.getWorkspaceRoles(
+            self.__user__, count=count, search_query=search_query, extraParams=extraParams)
+
+    def getWorkspaceRole(self, workspace_role_guid):
+        """
+        Retrieve a specific Labstep Workspace Role entity.
+
+        Parameters
+        ----------
+        workspace_role_guid (str)
+            The guid of the Workspace Role to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.workspaceRole.model.WorkspaceRole`
+            An object representing a Workspace Role on Labstep.
+
+        Example
+        -------
+        ::
+
+            workspace_role = my_organization.getWorkspaceRole(17000)
+        """
+        import labstep.entities.workspaceRole.repository as WorkspaceRoleRepository
+        self.__user__ = self.__user__.update()
+        return WorkspaceRoleRepository.getWorkspaceRole(
+            self.__user__, workspace_role_guid
+        )

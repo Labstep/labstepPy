@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import device, deviceCategory, loadFixtures
+from .fixtures import fixtures
 
 from .shared import sharedTests
 
@@ -10,14 +10,14 @@ from .shared import sharedTests
 class TestDevice:
     @pytest.fixture
     def entity(self):
-        return device()
-    
+        return fixtures.device()
+
     @pytest.fixture
     def category(self):
-        return deviceCategory()
+        return fixtures.deviceCategory()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_edit(self, entity):
         assert sharedTests.edit(entity)
@@ -55,3 +55,15 @@ class TestDevice:
         entity.setDeviceCategory(category.id)
         deviceCategoryFromGet = entity.getDeviceCategory()
         assert deviceCategoryFromGet.id == category.id
+
+    def test_assign(self, entity):
+        assert sharedTests.assign(entity)
+
+    def test_getDeviceBooking(self, entity):
+        device_booking = entity.addDeviceBooking(
+            started_at='2022-12-01 00:00', ended_at='2022-12-01 10:00')
+        get_device_booking = entity.getDeviceBooking(device_booking.id)
+        get_device_bookings = entity.getDeviceBookings()
+
+        assert device_booking.id == get_device_booking.id and get_device_bookings[
+            0].id == device_booking.id

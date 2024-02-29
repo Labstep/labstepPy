@@ -3,7 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 import pytest
 import labstep
-from .fixtures import authUser, workspace, testString, loadFixtures
+from .fixtures import fixtures, testString
 from .shared import sharedTests
 
 
@@ -11,14 +11,14 @@ class TestWorkspace:
 
     @pytest.fixture
     def user(self):
-        return authUser()
+        return fixtures.defaultUser()
 
     @pytest.fixture
     def entity(self):
-        return workspace()
+        return fixtures.workspace()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_edit(self, entity):
         assert sharedTests.edit(entity)
@@ -94,7 +94,22 @@ class TestWorkspace:
 
     def test_getDeviceCategorys(self, entity, user):
         user.setWorkspace(entity.id)
-        workspace = user.getWorkspace (entity.id)
+        workspace = user.getWorkspace(entity.id)
         device_category = user.newDeviceCategory(testString)
         result = workspace.getDeviceCategorys()
-        assert result[0].id ==device_category.id
+        assert result[0].id == device_category.id
+
+    def test_getJupyterNotebook(self, entity, user):
+        user.setWorkspace(entity.id)
+        workspace = user.getWorkspace(entity.id)
+        new_jupyterNotebook = workspace.addJupyterNotebook(name=testString)
+        entity_from_get = workspace.getJupyterNotebook(
+            new_jupyterNotebook.guid)
+        assert new_jupyterNotebook.guid == entity_from_get.guid
+
+    def test_getJupyterNotebooks(self, entity, user):
+        user.setWorkspace(entity.id)
+        workspace = user.getWorkspace(entity.id)
+        new_jupyterNotebook = workspace.addJupyterNotebook(name=testString)
+        entities_from_get = workspace.getJupyterNotebooks()
+        assert new_jupyterNotebook.guid == entities_from_get[0].guid

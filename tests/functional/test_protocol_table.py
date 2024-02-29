@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import protocol, loadFixtures
+from .fixtures import fixtures
 from labstep.service.helpers import dataFrameToDataTable, dataTableToDataFrame
 
 
 class TestExperimentTable:
     @pytest.fixture
     def entity(self):
-        return protocol()
+        return fixtures.protocol()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_getDataFrame(self, entity):
         data = {
@@ -48,7 +48,7 @@ class TestExperimentTable:
     def test_dataFrameToDataTable(self, entity):
 
         data = {
-            "rowCount": 3,
+            "rowCount": 2,
             "columnCount": 2,
             "colHeaderData": {},
             "data": {
@@ -61,7 +61,7 @@ class TestExperimentTable:
                             "value": 'Column 2'
                         }
                     },
-                    '2': {
+                    '1': {
                         '0': {
                             "value": "A1"
                         },

@@ -11,4 +11,3 @@ Workspace Member
 
 .. autoclass:: labstep.entities.workspaceMember.model.WorkspaceMember
    :members:
-   

@@ -24,7 +24,7 @@ def getParent():
         if experimentGuid:
             return entityRepository.getEntity(user, ExperimentProtocol, experimentGuid, useGuid=True)
 
-    if('LABSTEP_JUPYTER_PROTOCOL_GUID' in os.environ.keys()):
+    if ('LABSTEP_JUPYTER_PROTOCOL_GUID' in os.environ.keys()):
         protocolGuid = os.environ['LABSTEP_JUPYTER_PROTOCOL_GUID']
 
         if protocolGuid:

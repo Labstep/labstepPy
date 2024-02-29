@@ -9,8 +9,14 @@ Device
 DeviceData
 ++++++++++++++++++++++++++++++++++++++++++++++
 
-.. autoclass:: labstep.entities.device.model.DeviceData
+.. autoclass:: labstep.entities.deviceData.model.DeviceData
    :inherited-members:
    :members:
    
 
+DeviceBooking
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. autoclass:: labstep.entities.deviceBooking.model.DeviceBooking
+   :inherited-members:
+   :members:

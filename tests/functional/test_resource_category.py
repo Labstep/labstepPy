@@ -3,7 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 # pylama:ignore=E501
 import pytest
-from .fixtures import resourceCategory, workspace, loadFixtures
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
@@ -11,14 +11,14 @@ class TestResourceCategory:
 
     @pytest.fixture
     def entity(self):
-        return resourceCategory()
+        return fixtures.resourceCategory()
 
     @pytest.fixture
     def workspaceToShare(self):
-        return workspace()
+        return fixtures.workspace()
 
     def setup_method(self):
-        loadFixtures('Python\\\\ResourceCategory')
+        fixtures.loadFixtures('Python\\\\ResourceCategory')
 
     def test_edit(self, entity):
         assert sharedTests.edit(entity)

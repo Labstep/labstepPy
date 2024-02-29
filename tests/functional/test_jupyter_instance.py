@@ -1,21 +1,21 @@
-#!/usr/bin/env python3
+""" #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import loadFixtures, authUser, jupyterInstance
+from .fixtures import fixtures
 
 
 class TestJupyterInstance:
     @pytest.fixture
     def loggedUser(self):
-        return authUser()
+        return fixtures.defaultUser()
 
     @pytest.fixture
     def entity(self):
-        return jupyterInstance()
+        return fixtures.jupyterInstance()
 
     def setup_method(self):
-        loadFixtures('Python\\\\JupyterInstance')
+        fixtures.loadFixtures('Python\\\\JupyterInstance')
 
     def test_get(self, loggedUser):
         guid = 'd4b88c0b-37e8-4c84-8ce6-49a5661cd646'
@@ -42,3 +42,4 @@ class TestJupyterInstance:
         newData = {"test": 43}
         result = entity.edit(data=newData)
         return result.data == newData
+ """

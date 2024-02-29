@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 import pytest
-from .fixtures import resourceLocation, testString, loadFixtures, resourceItem
+from .fixtures import fixtures
 from .shared import sharedTests
 
 
@@ -10,14 +10,14 @@ class TestResourceLocation:
 
     @pytest.fixture
     def entity(self):
-        return resourceLocation()
+        return fixtures.resourceLocation()
 
     @pytest.fixture
     def item(self):
-        return resourceItem()
+        return fixtures.resourceItem()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_edit(self, entity):
         assert sharedTests.edit(entity)
@@ -63,7 +63,7 @@ class TestResourceLocation:
 
     def test_setOuterLocation(self, entity):
 
-        outer_location = resourceLocation()
+        outer_location = fixtures.resourceLocation()
 
         entity.setOuterLocation(
             outer_location.guid, position=[1, 3], size=[2, 2])

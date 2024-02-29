@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import experimentProtocol, loadFixtures
+from .fixtures import fixtures
 
 
 class TestExperimentTable:
     @pytest.fixture
     def entity(self):
-        return experimentProtocol()
+        return fixtures.experimentProtocol()
 
     def setup_method(self):
-        loadFixtures('Python')
+        fixtures.loadFixtures('Python')
 
     def test_getDataFrame(self, entity):
         data = {

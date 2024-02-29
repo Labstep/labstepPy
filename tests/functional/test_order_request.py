@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import orderRequest, workspace, loadFixtures
+from .fixtures import fixtures
 
 from .shared import sharedTests
 
@@ -10,14 +10,14 @@ from .shared import sharedTests
 class TestOrderRequest:
     @pytest.fixture
     def entity(self):
-        return orderRequest()
+        return fixtures.orderRequest()
 
     @pytest.fixture
     def workspaceToShare(self):
-        return workspace()
+        return fixtures.workspace()
 
     def setup_method(self):
-        loadFixtures('Python\\\\OrderRequest')
+        fixtures.loadFixtures('Python\\\\OrderRequest')
 
     def test_edit(self, entity):
         result = entity.edit(status="Back orDEred")
@@ -40,3 +40,6 @@ class TestOrderRequest:
 
     def test_sharing(self, entity, workspaceToShare):
         assert sharedTests.sharing(entity, workspaceToShare)
+
+    def test_assign(self, entity):
+        assert sharedTests.assign(entity)

@@ -28,15 +28,34 @@ class User(Entity):
     def __init__(self, data, adminUser=UNSPECIFIED):
         super().__init__(data, self)
         self.__user__ = adminUser if adminUser is not UNSPECIFIED else self
+        self._activeWorkspace = getattr(self.__data__, 'group', None)
 
-        if 'group' not in data or data["group"] is None:
-            print(
-                """Warning: No default workspace.
-            Please set a workspace to continue."""
-            )
-            self.activeWorkspace = None
+    @property
+    def activeWorkspace(self):
+
+        if self._activeWorkspace is not None:
+            return self._activeWorkspace
+
+        if 'group' not in self.__data__ or self.__data__["group"] is None:
+            raise Exception(
+                "No workspace specified. Please set a workspace to continue.")
         else:
-            self.activeWorkspace = data["group"]["id"]
+            self._activeWorkspace = self.__data__["group"]["id"]
+
+        return self._activeWorkspace
+
+    def update(self):
+        import json
+        from labstep.service.helpers import url_join, update
+        from labstep.service.config import configService
+        from labstep.service.request import requestService
+
+        apikey = self.__user__['api_key']
+        url = url_join(configService.getHost(), "api/generic/user/info")
+        response = requestService.get(url, headers={"apikey": apikey})
+        data = json.loads(response.content)
+        update(self, data)
+        return self
 
     def setWorkspace(self, workspace_id: int):
         """
@@ -62,7 +81,7 @@ class User(Entity):
         if isinstance(workspace_id, int) is False:
             raise TypeError("workspace_id must be an integer")
 
-        self.activeWorkspace = workspace_id
+        self._activeWorkspace = workspace_id
 
     # getSingle()
     def getExperiment(self, experiment_id):
@@ -277,6 +296,8 @@ class User(Entity):
             organization = user.getOrganization()
         """
         import labstep.entities.organization.repository as organizationRepository
+
+        self.update()
 
         if len(self.user_organizations) > 0:
 
@@ -874,7 +895,7 @@ class User(Entity):
             self, name, outer_location_guid=outer_location_guid, extraParams=extraParams
         )
 
-    def newOrderRequest(self, resource_id, quantity=1, extraParams={}):
+    def newOrderRequest(self, resource_id, purchase_order_id=UNSPECIFIED, quantity=1, extraParams={}):
         """
         Create a new Labstep OrderRequest.
 
@@ -883,7 +904,11 @@ class User(Entity):
         resource_id (int)
             The id of the :class:`~labstep.entities.resource.model.Resource`
             to request more items of.
-        quantity (int)
+        
+        purchase_order_id (int)
+            The id of the :class:`~labstep.entities.purchaseOrder.model.PurchaseOrder`
+       
+       quantity (int)
             The quantity of items requested.
 
         Returns
@@ -901,7 +926,7 @@ class User(Entity):
         import labstep.entities.orderRequest.repository as orderRequestRepository
 
         return orderRequestRepository.newOrderRequest(
-            self, resource_id=resource_id, quantity=quantity, extraParams=extraParams
+            self, resource_id=resource_id, purchase_order_id=purchase_order_id, quantity=quantity, extraParams=extraParams
         )
 
     def newTag(self, name, type, extraParams={}):
@@ -1173,3 +1198,239 @@ class User(Entity):
         return deviceCategoryRepository.getDeviceCategory(
             self, device_category_id
         )
+
+    def newAPIKey(self, name, expires_at=UNSPECIFIED, extraParams={}):
+        """
+        Create a new API Key.
+
+        Parameters
+        ----------
+        name (str)
+            Name of the new API Key.
+
+        Returns
+        -------
+        :class:`~labstep.entities.apiKey.model.ApiKey`
+            An object representing the new Labstep ApiKey.
+
+        Example
+        -------
+        ::
+
+            entity = user.newAPIKey(name='Access Key')
+        """
+        import labstep.entities.apiKey.repository as apiKeyRepository
+
+        return apiKeyRepository.newAPIKey(
+            self, name, expires_at, extraParams=extraParams
+        )
+
+    def getAPIKey(self, APIKey_id, extraParams={}):
+        """
+        Create a new API Key.
+
+        Parameters
+        ----------
+        APIKey_id (int)
+            ID of the API Key.
+
+        Returns
+        -------
+        :class:`~labstep.entities.apiKey.model.ApiKey`
+            An object representing the new Labstep ApiKey.
+
+        Example
+        -------
+        ::
+
+            entity = user.getAPIKey(100000000)
+        """
+        import labstep.entities.apiKey.repository as apiKeyRepository
+
+        return apiKeyRepository.getAPIKey(
+            self, APIKey_id
+        )
+
+    def getAPIKeys(
+        self, count=UNSPECIFIED, api_key=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}
+    ):
+        """
+        Retrieve a list of a User's API keys. 
+
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of API keys to retrieve.
+        search_query (str)
+            Search for API keys with this 'name'.
+        api_key (str)
+            Search for API keys with this 'api_key'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.apiKey.model.apiKey`]
+            A list of Labstep API keys.
+
+        Example
+        -------
+        ::
+
+            entity = user.getAPIKeys(api_key='111f321dafd0d0sa')
+        """
+        import labstep.entities.apiKey.repository as ApiKeyRepository
+
+        return ApiKeyRepository.getAPIKeys(
+            self,
+            count=count,
+            api_key=api_key,
+            search_query=search_query,
+            extraParams=extraParams,
+        )
+
+    def getNotifications(self, count=UNSPECIFIED, type=UNSPECIFIED):
+        """
+        Retrieve a list of the User's notifications which can be filtered using the parameters
+
+        Parameters
+        ----------
+        count(int)
+            The number of Notifications to retrieve.
+
+        type (str)
+            The type of the Notifications to retrieve. Notification type can be of 'Workspace', 'Experiment',
+            'Protocol', 'Jupyter Instance', 'Device', 'Order request', 'Order', 'Resource', 'Item resource',
+            or 'Resource Location'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.workspace.model.Workspace`]
+            A list of Notification entities in Labstep.
+
+        Example
+        -------
+        ::
+
+            entities = user.getNotifications()
+        """
+        import labstep.entities.notification.repository as notificationRepository
+
+        return notificationRepository.getNotifications(self, count=count, type=type)
+
+    def getNotification(self, guid):
+        """
+        Retrieve a Notification entity in Labstep.
+
+        Parameters
+        ----------
+        guid (str)
+            Guid of the comment entity to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.notificaction.model.Notification`
+            An object representing a Notification on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getNotification(guid='100000')
+        """
+        import labstep.entities.notification.repository as notificationRepository
+
+        return notificationRepository.getNotification(self, guid=guid)
+
+    def newPurchaseOrder(self ,name=UNSPECIFIED, status=UNSPECIFIED, currency='USD', extraParams={}):
+        """
+        Create a new Labstep Purchase Order.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the Purchase Order.
+        status (str)
+            The status of the Purchase Order. Options are: "open", "pending",
+            and "completed".
+        currency (str)
+            The currency of the price in the format of the 3-letter
+            currency code by country. For example, "EUR" for Euro, "GBP" for
+            British Pound Sterling, "USD" for US Dollar, etc.
+
+        Returns
+        -------
+        :class:`~labstep.entities.purchaseOrder.model.PurchaseOrder`
+            An object representing the an PurchaseOrder on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_purchase_order = user.newPurchaseOrder()
+
+        """
+        import labstep.entities.purchaseOrder.repository as PurchaseOrderRepository
+
+        return PurchaseOrderRepository.newPurchaseOrder(
+            self, name=name, status=status, currency=currency, extraParams=extraParams
+        )
+    
+    def getPurchaseOrder(self ,purchase_order_id, extraParams={}):
+        """
+        Get an existing Labstep Purchase Order.
+
+        Parameters
+        ----------
+        purchase_order_id (int)
+            The ID of the Purchase Order.
+    
+
+        Returns
+        -------
+        :class:`~labstep.entities.purchaseOrder.model.PurchaseOrder`
+            An object representing the an PurchaseOrder on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_purchase_order = user.getPurchaseOrder(17000)
+        """
+        import labstep.entities.purchaseOrder.repository as PurchaseOrderRepository
+
+        return PurchaseOrderRepository.getPurchaseOrder(
+            self, purchase_order_id=purchase_order_id,extraParams=extraParams)
+    
+    def getPurchaseOrders(self , 
+                        count=UNSPECIFIED,
+                        status=UNSPECIFIED,
+                        extraParams={}):
+        """
+        Get an existing Labstep Purchase Order.
+
+        Parameters
+        ----------
+        count(int)
+            The number of Purchase Order entities to retrieve.
+
+        status (str)
+            The status of the Purchase Order. Options are: "open", "pending",
+            and "completed".
+    
+
+        Returns
+        -------
+        :class:`~labstep.entities.purchaseOrder.model.PurchaseOrder`
+            An object representing the an PurchaseOrder on Labstep.
+
+        Example
+        -------
+        ::
+
+            my_purchase_order = user.getPurchaseOrders()
+        """
+        import labstep.entities.purchaseOrder.repository as PurchaseOrderRepository
+
+        return PurchaseOrderRepository.getPurchaseOrders(
+            self, count=count,status=status, extraParams=extraParams)

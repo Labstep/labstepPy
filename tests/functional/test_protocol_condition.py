@@ -2,7 +2,7 @@
 # # -*- coding: utf-8 -*-
 # # Author: Labstep <dev@labstep.com>
 # import pytest
-# from .fixtures import protocolDataField, experimentInventoryField, loadFixtures, authUser
+# from .fixtures import fixtures
 # from .shared import sharedTests
 
 
@@ -27,7 +27,7 @@
 #         assert sharedTests.delete(entity)
 
 #     def test_link_to_inventory_field(self):
-#         user = authUser()
+#         user = fixtures.defaultUser()
 #         exp = user.newProtocol('Test')
 #         data = exp.addDataField('Test')
 #         inventoryField = exp.addInventoryField('Test')

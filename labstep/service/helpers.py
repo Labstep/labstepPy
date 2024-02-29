@@ -22,26 +22,6 @@ def url_join(*args):
     return "/".join(arg.strip("/") for arg in args)
 
 
-def handleError(response, *args, **kwargs):
-    """
-    Returns
-    -------
-        The error code and error message if the
-        status code of the request is not 200.
-    """
-    if response.status_code != 200:
-        print(
-            """Get the latest version of the SDK by running:
-        pip install labstep --upgrade"""
-        )
-        raise Exception(
-            "Request Error {code}:{message}".format(
-                code=response.status_code, message=response.content
-            )
-        )
-    return
-
-
 def getTime():
     """
     Returns
@@ -179,6 +159,8 @@ def dataTableToDataFrame(dataTable):
 
     df = pandas.DataFrame(values).T.rename(columns=header)
 
+    df = df.reset_index(drop=True)
+
     return df
 
 
@@ -188,10 +170,10 @@ def dataFrameToDataTable(df):
                      for colInd, colName in enumerate(df.columns)}}
 
     dataTable = {
-        str(rowInd): {str(colInd): {'value': row[colName]} for colInd, colName in enumerate(df.columns)} for rowInd, row in df.iterrows()
+        str(int(rowInd)+1): {str(colInd): {'value': row[colName]} for colInd, colName in enumerate(df.columns)} for rowInd, row in df.iterrows()
     }
 
-    data = {"rowCount": int(df.index[-1]) + 1, "columnCount": len(
+    data = {"rowCount": int(df.index[-1]) + 2, "columnCount": len(
         df.columns), "colHeaderData": {}, "data": {"dataTable": {**headers, **dataTable}}}
 
     return data

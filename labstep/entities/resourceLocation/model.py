@@ -4,11 +4,12 @@
 
 from labstep.generic.entityWithMetadata.model import EntityWithMetadata
 from labstep.generic.entityWithComments.model import EntityWithComments
+from labstep.generic.entityWithAssign.model import EntityWithAssign
 from labstep.service.helpers import getTime
 from labstep.constants import UNSPECIFIED
 
 
-class ResourceLocation(EntityWithMetadata, EntityWithComments):
+class ResourceLocation(EntityWithMetadata, EntityWithComments, EntityWithAssign):
     """
     Represents a Resource Location on Labstep.
 

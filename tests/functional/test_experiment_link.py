@@ -4,18 +4,18 @@
 import pytest
 
 from labstep.entities.experiment.model import Experiment
-from .fixtures import experiment, loadFixtures
+from .fixtures import fixtures
 
 
 class TestExperimentLink:
     @pytest.fixture
     def entity(self):
-        experiment1 = experiment()
-        experiment2 = experiment()
+        experiment1 = fixtures.experiment()
+        experiment2 = fixtures.experiment()
         return experiment1.addExperimentLink(experiment2.id)
 
     def setup_method(self):
-        loadFixtures('Python\\\\Experiment')
+        fixtures.loadFixtures('Python\\\\Experiment')
 
     def test_delete(self, entity):
         entity.delete()

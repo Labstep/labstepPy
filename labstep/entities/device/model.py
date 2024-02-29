@@ -6,7 +6,8 @@ from labstep.entities.deviceData.model import DeviceData
 from labstep.generic.entityWithMetadata.model import EntityWithMetadata
 from labstep.generic.entityWithSharing.model import EntityWithSharing
 from labstep.generic.entityWithComments.model import EntityWithComments
-from labstep.service.helpers import getTime
+from labstep.generic.entityWithAssign.model import EntityWithAssign
+from labstep.service.helpers import getTime, handleDate
 from labstep.constants import UNSPECIFIED
 
 
@@ -34,7 +35,7 @@ ALLOWED_FIELDS = {
 }
 
 
-class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments):
+class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments, EntityWithAssign):
     """
     Represents a Device on Labstep.
 
@@ -273,7 +274,7 @@ class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments):
         }
 
         return newEntity(self.__user__, DeviceData, params)
-    
+
     def setDeviceCategory(self, device_category_id, extraParams={}):
         """
         Sets the Category for the Device
@@ -305,7 +306,7 @@ class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments):
         return deviceRepository.editDevice(
             self, device_category_id=device_category_id, extraParams=extraParams
         )
-    
+
     def getDeviceCategory(self):
         """
         Get the DeviceCategory of the Device.
@@ -322,11 +323,107 @@ class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments):
             # Get a Device
             device = user.getDevice(170)
 
-            # Get the Device Category of the resource
+            # Get the Device Category of the Device
             deviceCategory = device.getDeviceCategory()
         """
+
+        if self.template is None:
+            return None
+
         import labstep.entities.deviceCategory.repository as deviceCategoryRepository
 
         return deviceCategoryRepository.getDeviceCategory(
             self.__user__, self.template["id"]
         )
+
+    def addDeviceBooking(
+        self,
+        started_at,
+        ended_at,
+        description=UNSPECIFIED,
+        extraParams={},
+    ):
+        """
+        Add a new DeviceBooking to a Device.
+
+        Parameters
+        ----------
+        started_at (str)
+            The new start date of the DeviceBooking
+            in the format of "YYYY-MM-DD HH:MM".
+
+        ended_at (str)
+            The new finish date of the DeviceBooking
+            in the format of "YYYY-MM-DD HH:MM".
+
+        description (str)
+            A description of what the booking is for.
+
+        Returns
+        -------
+        :class:`~labstep.entities.deviceBooking.model.DeviceBooking`
+            An object representing the new Labstep DeviceBooking.
+
+        Example
+        -------
+        ::
+
+            device = user.getDevice(17000)
+            device_booking = device.addDeviceBooking(started_at='2025-08-20 00:00',ended_at='2025-08-22 00:00')
+        """
+        import labstep.entities.deviceBooking.repository as deviceBookingRepository
+
+        return deviceBookingRepository.newDeviceBooking(self.__user__,
+                                                        self,
+                                                        ended_at=handleDate(
+                                                            ended_at),
+                                                        started_at=handleDate(
+                                                            started_at),
+                                                        description=description,
+                                                        extraParams=extraParams)
+
+    def getDeviceBooking(self, deviceBooking_id):
+        """
+        Get an specific DeviceBooking of the Device.
+
+        Returns
+        -------
+        :class:`~labstep.entities.deviceBooking.model.DeviceBooking`
+            An object representing the Device Booking on Labstep.
+
+        Example
+        -------
+        ::
+
+            # Get a Device
+            device = user.getDevice(170)
+
+            # Get the Device Booking of the Device
+            deviceBooking = device.getDeviceBooking(1200)
+        """
+        import labstep.entities.deviceBooking.repository as deviceBookingRepository
+
+        return deviceBookingRepository.getDeviceBooking(self.__user__, self.id, deviceBooking_id=deviceBooking_id)
+
+    def getDeviceBookings(self, count=UNSPECIFIED, extraParams={}):
+        """
+        Get the DeviceBookings of the Device.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.deviceBooking.model.DeviceBooking`]
+            List of the DeviceBookings attached to the Device.
+
+        Example
+        -------
+        ::
+
+            # Get a Device
+            device = user.getDevice(170)
+
+            # Get the Device Booking of the Device
+            deviceBookings = device.getDeviceBookings()
+        """
+        import labstep.entities.deviceBooking.repository as deviceBookingRepository
+
+        return deviceBookingRepository.getDeviceBookings(self.__user__, self.id, count=count, extraParams=extraParams)

@@ -70,19 +70,24 @@ own specific purposes.
    :maxdepth: 2
 
    source/user.rst
+   source/apiKey.rst
    source/organization.rst
    source/workspace.rst
    source/experiment.rst
    source/protocol.rst
    source/resource.rst
    source/orderRequest.rst
+   source/purchaseOrder.rst
    source/device.rst
    source/dataField.rst
    source/metadata.rst
    source/chemistry.rst
+   source/jupyterNotebook.rst
    source/comment.rst
    source/tag.rst
+   source/collection.rst
    source/file.rst
+   source/notification.rst
    source/sharelink.rst
 
 .. toctree::

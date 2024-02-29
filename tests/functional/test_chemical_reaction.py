@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import chemicalReaction, loadFixtures, authUser
+from .fixtures import fixtures
 
 from .shared import sharedTests
 
@@ -12,10 +12,10 @@ from .shared import sharedTests
 class TestChemicalReaction:
     @pytest.fixture
     def entity(self):
-        return chemicalReaction()
+        return fixtures.chemicalReaction()
 
     def setup_method(self):
-        loadFixtures('Python\\\\Molecule')
+        fixtures.loadFixtures('Python\\\\Molecule')
 
     def test_delete(self, entity):
         assert sharedTests.delete(entity)
@@ -27,17 +27,18 @@ class TestChemicalReaction:
 
     def test_setLimitingChemical(self, entity):
         import labstep.entities.chemicalReaction.repository as chemicalReactionRepository
-        user = authUser()
+        user = fixtures.defaultUser()
         chemicalReaction = chemicalReactionRepository.getChemicalReaction(
             user, 'molecule')
         assert chemicalReaction['limiting_chemical']['guid'] == '8439ae3d-4502-4f10-a7c9-822b082b2259'
-        chemicalReaction.setLimitingChemical('1e493da7-01db-4795-a5c4-e68d824dfcf3')
+        chemicalReaction.setLimitingChemical(
+            '1e493da7-01db-4795-a5c4-e68d824dfcf3')
         assert chemicalReaction['limiting_chemical']['guid'] == '1e493da7-01db-4795-a5c4-e68d824dfcf3'
 
     def test_demoForDavid(self, entity):
         import labstep.entities.resourceItem.repository as resourceItemRepository
 
-        user = authUser()
+        user = fixtures.defaultUser()
 
         experiment = user.newExperiment('Chemistry Experiment')
 
