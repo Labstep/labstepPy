@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 import pytest
-from .fixtures import fixtures
+
+from .fixtures import fixtures, newString
 from .shared import sharedTests
 
 

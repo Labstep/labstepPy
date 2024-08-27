@@ -32,7 +32,7 @@ class Experiment(EntityPrimary):
     def root_experiment(self):
         return getEntityProperty(self, 'root_experiment', ExperimentProtocol)
 
-    def edit(self, name=UNSPECIFIED, entry=UNSPECIFIED, started_at=UNSPECIFIED, extraParams={}):
+    def edit(self, name=UNSPECIFIED, entry=UNSPECIFIED, started_at=UNSPECIFIED, entity_state_id=UNSPECIFIED, entity_state_workflow_id=UNSPECIFIED, extraParams={}):
         """
         Edit an existing Experiment.
 
@@ -62,7 +62,7 @@ class Experiment(EntityPrimary):
         import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.editExperiment(
-            self, name=name, entry=entry, started_at=started_at, extraParams=extraParams
+            self, name=name, entry=entry, started_at=started_at, entity_state_id=entity_state_id, entity_state_workflow_id=entity_state_workflow_id, extraParams=extraParams
         )
 
     def delete(self):
@@ -476,7 +476,7 @@ class Experiment(EntityPrimary):
 
     def getCollections(self):
         """
-        Returns the list of collections the protocol is in.
+        Returns the list of collections the experiment is in.
         """
         import labstep.entities.collection.repository as collectionRepository
 
@@ -652,7 +652,7 @@ class Experiment(EntityPrimary):
 
     def export(self, path):
         """
-        Export the experiment to the directory specified. 
+        Export the experiment to the directory specified.
 
         Parameters
         -------
@@ -750,6 +750,31 @@ class Experiment(EntityPrimary):
             conditions = experiment.getConditions()
         """
         return self.root_experiment.getConditions()
+
+
+    def getStateWorkflow(self):
+        """
+       Retrieve the EntityStateWorkflow for this experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`]
+            A list of Labstep EntityStateWorkflows.
+
+        Example
+        -------
+        ::
+
+            entity = experiment.getStateWorkflows()
+        """
+        import labstep.entities.entityStateWorkflow.repository as EntityStateWorkflowRepository
+
+        if self['entity_state_workflow']['id'] is None:
+            return None
+        else:
+            return EntityStateWorkflowRepository.getEntityStateWorkflow(
+                self.__user__, entity_state_workflow_id=self['entity_state_workflow']['id']
+            )
 
     @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):

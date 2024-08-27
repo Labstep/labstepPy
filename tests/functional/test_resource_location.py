@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Barney Walker <barney@labstep.com>
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 
@@ -15,7 +16,6 @@ class TestResourceLocation:
     @pytest.fixture
     def item(self):
         return fixtures.resourceItem()
-
     def setup_method(self):
         fixtures.loadFixtures('Python')
 

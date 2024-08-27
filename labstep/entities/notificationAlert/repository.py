@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.entities.notificationAlert.model import NotificationAlert
 import labstep.generic.entity.repository as entityRepository
 from labstep.constants import UNSPECIFIED
+from labstep.entities.notificationAlert.model import NotificationAlert
 
 
 def getNotificationAlert(user, guid):
     return entityRepository.getEntity(user, NotificationAlert, id=guid)
 
 
-def newNotificationAlert(user, metadata_guid, message=UNSPECIFIED, minutes_before=0, extraParams={}):
+def newNotificationAlert(user, metadata_id, message=UNSPECIFIED, minutes_before=0, extraParams={}):
     params = {
-        "metadata_guid": metadata_guid,
+        "metadata_id": metadata_id,
         "message": message,
         "minutes_before": minutes_before,
         **extraParams
@@ -56,4 +56,4 @@ def setNotificationAlert(metadata, message, minutes_before):
         return notificationAlert.edit(
             message=message, minutes_before=minutes_before, extraParams={'deleted_at': None})
 
-    return newNotificationAlert(metadata.__user__, metadata_guid=metadata.guid, message=message, minutes_before=minutes_before)
+    return newNotificationAlert(metadata.__user__, metadata_id=metadata.id, message=message, minutes_before=minutes_before)

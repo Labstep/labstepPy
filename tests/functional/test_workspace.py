@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
+
 import labstep
+
 from .fixtures import fixtures, testString
 from .shared import sharedTests
 
@@ -113,3 +115,23 @@ class TestWorkspace:
         new_jupyterNotebook = workspace.addJupyterNotebook(name=testString)
         entities_from_get = workspace.getJupyterNotebooks()
         assert new_jupyterNotebook.guid == entities_from_get[0].guid
+
+    def test_getCollaboratorRoles(self, entity):
+        collaboratorRole = entity.newCollaboratorRole(name=testString, description=testString)
+        get_collaborator_roles = entity.getCollaboratorRoles()
+
+        assert get_collaborator_roles[0].id == collaboratorRole.id
+
+    def test_getExperimentTemplates(self, entity):
+        experiment_template = entity.newExperimentTemplate(name=testString)
+        get_experiment_templates = entity.getExperimentTemplates()
+
+        assert get_experiment_templates[0].id == experiment_template.id
+
+    def test_getEntityStateWorkflow(self, entity):
+        entityStateWorkflow = entity.newEntityStateWorkflow(name=testString)
+        get_state_workflows = entity.getEntityStateWorkflows()
+
+        assert get_state_workflows[0].id == entityStateWorkflow.id
+
+

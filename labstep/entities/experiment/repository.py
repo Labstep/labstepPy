@@ -67,12 +67,16 @@ def editExperiment(
     entry=UNSPECIFIED,
     started_at=UNSPECIFIED,
     deleted_at=UNSPECIFIED,
+    entity_state_id=UNSPECIFIED,
+    entity_state_workflow_id=UNSPECIFIED,
     extraParams={},
 ):
     params = {
         "name": name,
         "started_at": handleDate(started_at),
         "deleted_at": deleted_at,
+        'entity_state_id': entity_state_id,
+        'entity_state_workflow_id': entity_state_workflow_id,
         **extraParams,
     }
 

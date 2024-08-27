@@ -137,7 +137,8 @@ class SharedTests:
 
     def assign(self, entity):
         user = entity.__user__
-        workspace = user.getWorkspace(entity['owner']['id'])
+        workspace_id=entity['owner']['id'] if entity.__entityName__ != 'resource-item' else entity['resource']['owner']['id']
+        workspace = user.getWorkspace(workspace_id)
         # add second_user to workspace
         sharelink = workspace.getSharelink()
         second_user = fixtures.new_user(sharelink.token)

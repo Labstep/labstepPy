@@ -3,12 +3,12 @@
 # Author: Labstep <dev@labstep.com>
 # pylama:ignore=E501
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 
 
 class TestPurchaseOrder:
-
     def setup_method(self):
         fixtures.loadFixtures('Python')
 

@@ -43,8 +43,10 @@ def getEntity(user, entityClass, id, isDeleted="both", useGuid=False, extraParam
     identifier = 'guid' if getattr(
         entityClass, "__hasGuid__", None) or useGuid else 'id'
 
-    params = {"is_deleted": isDeleted,
-              "get_single": 1, identifier: id, **extraParams}
+    params = {"get_single": 1, identifier: id, **extraParams}
+
+    if not getattr(entityClass, "__noDelete__", None):
+        params['is_deleted']=isDeleted
 
     headers = getHeaders(user=user)
     url = url_join(configService.getHost(), "/api/generic/",
@@ -210,3 +212,11 @@ def exportEntity(entity, rootPath, folderName=UNSPECIFIED):
             lsFile.export(fileDir)
 
     return entityDir
+
+
+def getEntityCount(user, entityClass, filterParams={}):
+    headers = getHeaders(user=user)
+    url = url_join(configService.getHost(), "/api/generic/",
+                   entityClass.__entityName__)
+    response = requestService.get(url, headers=headers, params={'get_count':1,**filterParams})
+    return json.loads(response.content)

@@ -3,34 +3,36 @@
 # Author: Labstep <dev@labstep.com>
 
 
-import labstep
 import os
 import random
-import string
 import re
+import string
 import subprocess
+
 from dotenv import load_dotenv
-from labstep.entities.protocol.model import Protocol
-from labstep.entities.experiment.model import Experiment
-from labstep.entities.device.model import Device
-from labstep.entities.resource.model import Resource
-from labstep.entities.workspace.model import Workspace
-from labstep.entities.resourceLocation.model import ResourceLocation
-from labstep.entities.resourceItem.model import ResourceItem
-from labstep.entities.orderRequest.model import OrderRequest
-from labstep.entities.resourceCategory.model import ResourceCategory
-from labstep.entities.experimentProtocol.model import ExperimentProtocol
-from labstep.entities.collection.model import Collection
-from labstep.entities.metadata.model import Metadata
-from labstep.entities.jupyterNotebook.repository import newJupyterNotebook
-from labstep.entities.organization.repository import newOrganization
-from labstep.entities.user.repository import newUser, getUser
-from labstep.entities.sequence.repository import newSequence
-from labstep.generic.entity.repository import editEntity, getEntity
-from labstep.entities.user.model import User
-from labstep.entities.organization.model import Organization
 from labstep.constants.unspecified import UNSPECIFIED
+from labstep.entities.collection.model import Collection
+from labstep.entities.device.model import Device
+from labstep.entities.experiment.model import Experiment
+from labstep.entities.experimentProtocol.model import ExperimentProtocol
+from labstep.entities.jupyterNotebook.repository import newJupyterNotebook
+from labstep.entities.metadata.model import Metadata
+from labstep.entities.orderRequest.model import OrderRequest
+from labstep.entities.organization.model import Organization
+from labstep.entities.organization.repository import newOrganization
+from labstep.entities.protocol.model import Protocol
+from labstep.entities.resource.model import Resource
+from labstep.entities.resourceCategory.model import ResourceCategory
+from labstep.entities.resourceItem.model import ResourceItem
+from labstep.entities.resourceLocation.model import ResourceLocation
+from labstep.entities.sequence.repository import newSequence
+from labstep.entities.user.model import User
+from labstep.entities.user.repository import getUser, newUser
+from labstep.entities.workspace.model import Workspace
+from labstep.generic.entity.repository import editEntity, getEntity
 from labstep.service.helpers import configService
+
+import labstep
 
 load_dotenv(override=True)
 LABSTEP_API_URL = os.getenv("LABSTEP_API_URL")
@@ -165,6 +167,8 @@ class Fixtures:
         if self._defaultUser is None:
             self._defaultUser = labstep.authenticate(
                 apikey=LABSTEP_API_APIKEY)
+
+        self._defaultUser.setWorkspace(self._defaultUser.group['id'])
 
         return self._defaultUser
 
@@ -311,12 +315,6 @@ class Fixtures:
             share_link_token=token,
             extraParams={'is_signup_enterprise': True, 'skip_verification_email': True})
 
-    def workspace_role(self, user: User = None):
-        user = user if user is not None else self.defaultUser()
-        [org, users] = self.organization_with_users(user)
-
-        return org.newWorkspaceRole(name=newString())
-
     def organization_with_users(self, user: User = None):
         user = user if user is not None else self.defaultUser()
         org = newOrganization(user, newString())
@@ -375,6 +373,45 @@ class Fixtures:
         member_2 = labstep.authenticate(
             LABSTEP_PERMISSIONS_MEMBER_TWO, LABSTEP_PERMISSIONS_MEMBER_TWO_APIKEY)
         return [admin, member_1, member_2]
+
+    def collaborator_role(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        workspace = user.getWorkspace(user.activeWorkspace)
+        return workspace.newCollaboratorRole(name=newString())
+
+    # def collaborator_role_requirement(self, user=None):
+    #     user = user if user is not None else self.defaultUser()
+    #     workspace = user.getWorkspace(user.activeWorkspace)
+    #     collaborator_role = workspace.newCollaboratorRole(name=newString())
+    #     return workspace.newCollaboratorRoleRequirement(collaborator_role.id, number_required=1)
+
+    def experiment_template(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        return user.newExperimentTemplate(newString())
+
+    def entity_state_workflow(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        return user.newEntityStateWorkflow(newString())
+
+    def entity_state(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        return user.newEntityStateWorkflow(newString()).newEntityState(newString())
+
+    def collaborator_role_requirements(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        workspace = user.getWorkspace(user.activeWorkspace)
+        collaborator_role = workspace.newCollaboratorRole(name=newString())
+        entity_state=user.newEntityStateWorkflow(newString()).newEntityState(newString())
+        return entity_state.addRoleRequirement(collaborator_role.id, number_required=1)
+
+    def signature_requirement(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        workspace = user.getWorkspace(user.activeWorkspace)
+        collaborator_role = workspace.newCollaboratorRole(name=newString())
+        entity_state=user.newEntityStateWorkflow(newString()).newEntityState(newString())
+        collaborator_role_requirement = entity_state.addRoleRequirement(collaborator_role.id, number_required=1)
+        return collaborator_role_requirement.setSignatureRequirement()
+
 
 
 fixtures = Fixtures()

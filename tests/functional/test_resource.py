@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
+
 from .fixtures import fixtures, testString
 from .shared import sharedTests
 
@@ -18,7 +19,6 @@ class TestResource:
     @pytest.fixture
     def workspaceToShare(self):
         return fixtures.workspace()
-
     def setup_method(self):
         fixtures.loadFixtures('Python\\\\Resource')
 

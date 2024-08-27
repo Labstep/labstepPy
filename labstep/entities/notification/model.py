@@ -13,3 +13,4 @@ class Notification(Entity):
     
     __entityName__='notification'
     __unSearchable__=True
+    __noDelete__=True

@@ -775,3 +775,180 @@ class Workspace(EntityWithComments):
         import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
         return jupyterNotebookRepository.newJupyterNotebook(self.__user__, name, data, extraParams={'group_id': self.id})
+
+    def newCollaboratorRole(self, name, description=UNSPECIFIED,extraParams={}):
+        """
+        Create a new Collaborator Role within the Workspace.
+
+        Parameters
+        ----------
+        name (str)
+            Name of the new Collaborator Role.
+        description (str)
+            Description of the new Collaborator Role.
+
+        Returns
+        -------
+        :class:`~labstep.entities.collaboratorRole.model.CollaboratorRole`
+            An object representing the new Collaborator Role.
+
+        Example
+        -------
+        ::
+
+            collaborator_role = workspace.newCollaboratorRole(name='Reviewer number 2')
+        """
+        import labstep.entities.collaboratorRole.repository as collaboratorRoleRepository
+
+        return collaboratorRoleRepository.addCollaboratorRole(self.__user__, group_id=self.id, name=name, description=description, extraParams=extraParams)
+
+    def getCollaboratorRoles(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of Collaborator Roles within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Collaborator Roles to retrieve.
+        search_query (str)
+            Search for Collaborator Roles with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.collaboratorRole.model.CollaboratorRole`]
+            A list of Labstep Collaborator Roles.
+
+        Example
+        -------
+        ::
+
+            entity = workspace.getCollaboratorRoles(search_query='Reviewer number 2')
+        """
+        import labstep.entities.collaboratorRole.repository as collaboratorRoleRepository
+
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return collaboratorRoleRepository.getCollaboratorRoles(
+            self.__user__, group_id=self.id, count=count, search_query=search_query, extraParams=extraParams
+        )
+
+    def newExperimentTemplate(self, name, entry=UNSPECIFIED, entity_state_workflow_id=UNSPECIFIED, extraParams={}):
+        """
+        Create a new Experiment Template within the Workspace.
+
+        Parameters
+        ----------
+        name (str)
+            Name of the new Experiment Template.
+
+        entry (obj)
+            A JSON object representing the state of the Experiment Entry.
+
+        entity_state_workflow_id (int)
+            The ID of the EntityStateWorkflow to associate with the Experiment Template.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentTemplate.model.ExperimentTemplate`
+            An object representing the new Experiment Template.
+
+        Example
+        -------
+        ::
+
+            experiment_template = workspace.newExperimentTemplate(name='PCR')
+        """
+        import labstep.entities.experimentTemplate.repository as experimentTemplateRepository
+
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return experimentTemplateRepository.newExperimentTemplate(self.__user__, name=name, entry=entry, entity_state_workflow_id=entity_state_workflow_id, extraParams=extraParams)
+
+    def getExperimentTemplates(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of Experiment Templates within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Experiment Templates to retrieve.
+        search_query (str)
+            Search for Experiment Templates with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.experimentTemplate.model.ExperimentTemplate`]
+            A list of Labstep Experiment Templates.
+
+        Example
+        -------
+        ::
+
+            entity = workspace.getExperimentTemplates(search_query='PCR')
+        """
+        import labstep.entities.experimentTemplate.repository as experimentTemplateRepository
+
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return experimentTemplateRepository.getExperimentTemplates(
+            self.__user__,  count=count, search_query=search_query, extraParams=extraParams
+        )
+
+    def newEntityStateWorkflow(self, name, extraParams={}):
+        """
+        Create a new EntityStateWorkflow within the Workspace.
+
+        Parameters
+        ----------
+        name (str)
+            Name of the new EntityStateWorkflow.
+
+        Returns
+        -------
+        :class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`
+            An object representing the new EntityStateWorkflow.
+
+        Example
+        -------
+        ::
+
+            entity_state_workflow = workspace.newEntityStateWorkflow(name='Experiment Workflow')
+        """
+        import labstep.entities.entityStateWorkflow.repository as entityStateWorkflowRepository
+
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return entityStateWorkflowRepository.newEntityStateWorkflow(self.__user__, name=name, extraParams=extraParams)
+
+    def getEntityStateWorkflows(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of EntityStateWorkflows within this specific Workspace,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of EntityStateWorkflows to retrieve.
+        search_query (str)
+            Search for EntityStateWorkflows with this 'name'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`]
+            A list of Labstep EntityStateWorkflows.
+
+        Example
+        -------
+        ::
+
+            entity = workspace.getEntityStateWorkflows(search_query='Experiment Workflow')
+        """
+        import labstep.entities.entityStateWorkflow.repository as entityStateWorkflowRepository
+
+        extraParams = {"group_id": self.id, **extraParams}
+
+        return entityStateWorkflowRepository.getEntityStateWorkflows(
+            self.__user__, count=count, search_query=search_query, extraParams=extraParams
+        )

@@ -142,6 +142,9 @@ def getDataFieldValue(dataField):
 
         keys = [k for k, v in dataField.options['values'].items() if v]
 
+        if keys == []:
+            return None
+
         if dataField.options['is_allow_multiple']:
             return keys
 

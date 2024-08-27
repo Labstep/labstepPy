@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import fixtures, proseMirrorState
+from .fixtures import fixtures, proseMirrorState, testString
 
 
 from .shared import sharedTests
@@ -136,3 +136,16 @@ class TestExperiment:
 
     def test_assign(self, entity):
         assert sharedTests.assign(entity)
+
+    def test_edit_state_workflow(self, entity):
+        stateWorkflow = entity.__user__.newEntityStateWorkflow(testString)
+        entity.edit(entity_state_workflow_id=stateWorkflow.id)
+        get_state_workflow = entity.getStateWorkflow()
+
+        assert get_state_workflow.id == stateWorkflow.id
+
+    def test_set_state(self, entity):
+        stateWorkflow = entity.__user__.newEntityStateWorkflow(testString)
+        state_entity=stateWorkflow.newEntityState(testString)
+        entity=entity.edit(entity_state_id=state_entity.id)
+        assert entity['entity_state']['id'] == state_entity.id
