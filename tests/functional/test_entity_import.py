@@ -7,6 +7,7 @@ from labstep.entities.device.model import Device
 
 
 class TestEntityImport:
+
     def setup_method(self):
         fixtures.loadFixtures('Python\\\\EntityImport')
 

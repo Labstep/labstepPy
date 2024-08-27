@@ -114,9 +114,14 @@ def getHeaders(user=None):
         return {
             "User-Agent": configService.getUserAgent()
         }
-    else:
+    elif hasattr(user,'api_key'):
         return {
             "apikey": user.api_key,
+            "User-Agent": configService.getUserAgent()
+        }
+    else:
+        return {
+            "Authorization": "Bearer " + user.token,
             "User-Agent": configService.getUserAgent()
         }
 

@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-
 from labstep.entities.experiment.model import Experiment
+
 from .fixtures import fixtures
 
 

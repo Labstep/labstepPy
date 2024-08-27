@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
-from labstep.entities.sequence.model import Sequence
 import pytest
+from labstep.entities.sequence.model import Sequence
+
 from .fixtures import fixtures
 from .shared import sharedTests
 
@@ -12,7 +13,6 @@ class TestSequence:
     @pytest.fixture
     def entity(self):
         return fixtures.sequence()
-
     def setup_method(self):
         fixtures.loadFixtures('Python')
 

@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import json
+
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 

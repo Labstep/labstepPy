@@ -757,7 +757,7 @@ class User(Entity):
 
     # newEntity()
 
-    def newExperiment(self, name, entry=UNSPECIFIED, extraParams={}):
+    def newExperiment(self, name, entry=UNSPECIFIED, template_id=UNSPECIFIED,extraParams={}):
         """
         Create a new Labstep Experiment.
 
@@ -780,7 +780,8 @@ class User(Entity):
             entity = user.newExperiment(name='The Synthesis of Aspirin')
         """
         import labstep.entities.experiment.repository as experimentRepository
-
+        extraParams={'source_id': template_id,
+                     **extraParams}
         return experimentRepository.newExperiment(
             self, name, entry=entry, extraParams=extraParams
         )
@@ -904,11 +905,11 @@ class User(Entity):
         resource_id (int)
             The id of the :class:`~labstep.entities.resource.model.Resource`
             to request more items of.
-        
+
         purchase_order_id (int)
             The id of the :class:`~labstep.entities.purchaseOrder.model.PurchaseOrder`
-       
-       quantity (int)
+
+        quantity (int)
             The quantity of items requested.
 
         Returns
@@ -1255,7 +1256,7 @@ class User(Entity):
         self, count=UNSPECIFIED, api_key=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}
     ):
         """
-        Retrieve a list of a User's API keys. 
+        Retrieve a list of a User's API keys.
 
         which can be filtered using the parameters:
 
@@ -1289,7 +1290,7 @@ class User(Entity):
             extraParams=extraParams,
         )
 
-    def getNotifications(self, count=UNSPECIFIED, type=UNSPECIFIED):
+    def getNotifications(self, count=UNSPECIFIED, notification_type=UNSPECIFIED):
         """
         Retrieve a list of the User's notifications which can be filtered using the parameters
 
@@ -1316,9 +1317,9 @@ class User(Entity):
         """
         import labstep.entities.notification.repository as notificationRepository
 
-        return notificationRepository.getNotifications(self, count=count, type=type)
+        return notificationRepository.getNotifications(self, count=count, notification_type=notification_type)
 
-    def getNotification(self, guid):
+    def getNotification(self, id):
         """
         Retrieve a Notification entity in Labstep.
 
@@ -1340,7 +1341,7 @@ class User(Entity):
         """
         import labstep.entities.notification.repository as notificationRepository
 
-        return notificationRepository.getNotification(self, guid=guid)
+        return notificationRepository.getNotification(self, id=id)
 
     def newPurchaseOrder(self ,name=UNSPECIFIED, status=UNSPECIFIED, currency='USD', extraParams={}):
         """
@@ -1375,7 +1376,7 @@ class User(Entity):
         return PurchaseOrderRepository.newPurchaseOrder(
             self, name=name, status=status, currency=currency, extraParams=extraParams
         )
-    
+
     def getPurchaseOrder(self ,purchase_order_id, extraParams={}):
         """
         Get an existing Labstep Purchase Order.
@@ -1384,7 +1385,7 @@ class User(Entity):
         ----------
         purchase_order_id (int)
             The ID of the Purchase Order.
-    
+
 
         Returns
         -------
@@ -1401,8 +1402,8 @@ class User(Entity):
 
         return PurchaseOrderRepository.getPurchaseOrder(
             self, purchase_order_id=purchase_order_id,extraParams=extraParams)
-    
-    def getPurchaseOrders(self , 
+
+    def getPurchaseOrders(self ,
                         count=UNSPECIFIED,
                         status=UNSPECIFIED,
                         extraParams={}):
@@ -1417,7 +1418,7 @@ class User(Entity):
         status (str)
             The status of the Purchase Order. Options are: "open", "pending",
             and "completed".
-    
+
 
         Returns
         -------
@@ -1434,3 +1435,185 @@ class User(Entity):
 
         return PurchaseOrderRepository.getPurchaseOrders(
             self, count=count,status=status, extraParams=extraParams)
+
+    def newExperimentTemplate(self, name,entry=UNSPECIFIED, entity_state_workflow_id=UNSPECIFIED, extraParams={}):
+        """
+        Create a new Labstep Experiment Template.
+
+        Parameters
+        ----------
+        name (str)
+            Give your Experiment Template a name.
+
+        entry (obj)
+            A JSON object representing the state of the Experiment Entry.
+
+        entity_state_workflow_id (int)
+            The ID of the EntityStateWorkflow to associate with the Experiment Template.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentTemplate.model.ExperimentTemplate`
+            An object representing an Experiment Template on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.newExperimentTemplate(name='The Synthesis of Aspirin')
+        """
+        import labstep.entities.experimentTemplate.repository as experimentTemplateRepository
+
+        return experimentTemplateRepository.newExperimentTemplate(
+            self, name,entry=entry, entity_state_workflow_id=entity_state_workflow_id, extraParams=extraParams
+        )
+
+    def getExperimentTemplate(self, experiment_template_id):
+        """
+        Retrieve a specific Labstep Experiment Template.
+
+        Parameters
+        ----------
+        experiment_template_id (int)
+            The id of the Experiment Template to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentTemplate.model.ExperimentTemplate`
+            An object representing an Experiment Template on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperimentTemplate(17000)
+        """
+        import labstep.entities.experimentTemplate.repository as experimentTemplateRepository
+
+        return experimentTemplateRepository.getExperimentTemplate(self, experiment_template_id)
+
+    def getExperimentTemplates(
+        self,
+        count=UNSPECIFIED,
+        search_query=UNSPECIFIED,
+        extraParams={},
+    ):
+        """
+        Retrieve a list of a User's Experiment Templates
+        across different Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Experiment Templates to retrieve.
+        search_query (str)
+            Search for Experiment Templates containing this string in the name.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.experimentTemplate.model.ExperimentTemplate`]
+            A list of Labstep Experiment Templates.
+
+        Example
+        -------
+        ::
+
+            entity = user.getExperimentTemplates(search_query='bacteria')
+        """
+        import labstep.entities.experimentTemplate.repository as experimentTemplateRepository
+
+        return experimentTemplateRepository.getExperimentTemplates(
+            self,
+            count=count,
+            search_query=search_query,
+            extraParams=extraParams,
+        )
+
+    def newEntityStateWorkflow(self, name, extraParams={}):
+        """
+        Create a new Labstep Entity State Workflow.
+
+        Parameters
+        ----------
+        name (str)
+            Give your Entity State Workflow a name.
+
+        Returns
+        -------
+        :class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`
+            An object representing an Entity State Workflow on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.newEntityStateWorkflow(name='The Synthesis of Aspirin')
+        """
+        import labstep.entities.entityStateWorkflow.repository as entityStateWorkflowRepository
+
+        return entityStateWorkflowRepository.newEntityStateWorkflow(
+            self, name, group_id=self.activeWorkspace, extraParams=extraParams
+        )
+
+    def getEntityStateWorkflow(self, entity_state_workflow_id):
+        """
+        Retrieve a specific Labstep Entity State Workflow.
+
+        Parameters
+        ----------
+        entity_state_workflow_id (int)
+            The id of the Entity State Workflow to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`
+            An object representing an Entity State Workflow on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getEntityStateWorkflow(17000)
+        """
+        import labstep.entities.entityStateWorkflow.repository as entityStateWorkflowRepository
+
+        return entityStateWorkflowRepository.getEntityStateWorkflow(self, entity_state_workflow_id)
+
+    def getEntityStateWorkflows(
+        self,
+        count=UNSPECIFIED,
+        search_query=UNSPECIFIED,
+        extraParams={},
+    ):
+        """
+        Retrieve a list of a User's Entity State Workflows
+        across different Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Entity State Workflows to retrieve.
+        search_query (str)
+            Search for Entity State Workflows containing this string in the name.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`]
+            A list of Labstep Entity State Workflows.
+
+        Example
+        -------
+        ::
+
+            entity = user.getEntityStateWorkflows(search_query='bacteria')
+        """
+        import labstep.entities.entityStateWorkflow.repository as entityStateWorkflowRepository
+
+        return entityStateWorkflowRepository.getEntityStateWorkflows(
+            self,
+            count=count,
+            search_query=search_query,
+            extraParams=extraParams,
+        )

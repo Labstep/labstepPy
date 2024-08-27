@@ -11,7 +11,7 @@ labstepPy
 
 Introduction
 ------------
-`Labstep <https://www.labstep.com>`_ is a flexible research 
+`Labstep <https://www.labstep.com>`_ is a flexible research
 environment that connects `your electronic notebook
 <https://app.labstep.com/login>`_, inventory, applications,
 and data in one collaborative workspace.
@@ -64,7 +64,7 @@ own specific purposes.
    :maxdepth: 2
 
    source/installation_login.rst
-   
+
 .. toctree::
    :caption: Entity Classes
    :maxdepth: 2
@@ -89,6 +89,7 @@ own specific purposes.
    source/file.rst
    source/notification.rst
    source/sharelink.rst
+   source/entityStateWorkflow.rst
 
 .. toctree::
    :caption: Examples
@@ -96,6 +97,7 @@ own specific purposes.
 
    source/device_integration.rst
    source/example_uses.rst
+   source/export_examples.rst
 
 Troubleshooting
 ---------------
@@ -117,7 +119,7 @@ Contributors
 
 Getting Involved
 ----------------
-labstepPy is an Open Source package. 
+labstepPy is an Open Source package.
 
 Feel free to submit bug reports, feature requests or PRs on Github `here <https://github.com/Labstep/labstepPy>`_.
 

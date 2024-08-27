@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
-import labstep
 import os
+
 import pytest
+
+import labstep
+
 from .fixtures import fixtures
 
 

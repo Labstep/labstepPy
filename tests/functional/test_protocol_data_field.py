@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 
@@ -15,7 +16,6 @@ class TestDataField:
     @pytest.fixture
     def inventoryField(self):
         return fixtures.experimentInventoryField()
-
     def setup_method(self):
         fixtures.loadFixtures('Python\\\\Metadata')
 

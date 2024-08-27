@@ -14,7 +14,7 @@ class TestEntityExportCustom:
     @pytest.fixture
     def user(self):
         return fixtures.defaultUser()
-
+        
     def setup_method(self):
         fixtures.loadFixtures('Python\\\\EntityExportCustom')
 

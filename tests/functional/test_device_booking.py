@@ -3,6 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 # pylama:ignore=E501
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 
@@ -12,6 +13,9 @@ class TestDeviceBooking:
     @pytest.fixture
     def entity(self):
         return fixtures.device_booking()
+
+    def setup_method(self):
+        fixtures.loadFixtures('Python')
 
     def test_edit(self, entity):
         from labstep.service.helpers import handleDate

@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import fixtures, testString, proseMirrorState
+
+from .fixtures import fixtures, proseMirrorState, testString
 from .shared import sharedTests
 
 
@@ -19,7 +20,6 @@ class TestProtocol:
     @pytest.fixture
     def workspaceToShare(self):
         return fixtures.workspace()
-
     def setup_method(self):
         fixtures.loadFixtures('Python\\\\Protocol')
 

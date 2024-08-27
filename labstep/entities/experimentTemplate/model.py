@@ -10,16 +10,17 @@ from labstep.service.helpers import getTime, handleDate
 from labstep.constants import UNSPECIFIED
 
 
-class ExperimentTemplate(Entity):
+class ExperimentTemplate(EntityPrimary):
     __entityName__ = "experiment-workflow"
     __unSearchable__ = True
     __isTemplate__ = True
+    __hasParentGroup__ = True
 
     @property
     def root_experiment(self):
         return getEntityProperty(self, 'root_experiment', ExperimentProtocol)
 
-    def edit(self, name=UNSPECIFIED, entry=UNSPECIFIED, extraParams={}):
+    def edit(self, name=UNSPECIFIED, entry=UNSPECIFIED, entity_state_id=UNSPECIFIED, entity_state_workflow_id=UNSPECIFIED,extraParams={}):
         """
         Edit an existing ExperimentTemplate.
 
@@ -28,7 +29,7 @@ class ExperimentTemplate(Entity):
         name (str)
             The new name of the ExperimentTemplate
         entry (obj)
-            A JSON object representing the state of the Experiment Entry.
+            A JSON object representing the state of the ExperimentTemplate Entry.
 
         Returns
         -------
@@ -40,12 +41,12 @@ class ExperimentTemplate(Entity):
         ::
 
             my_experiment_template = user.getExperimentTemplate(17000)
-            my_experiment.edit(name='A New Template Name')
+            my_experiment_template.edit(name='A New Template Name')
         """
         import labstep.entities.experiment.repository as experimentRepository
 
         return experimentRepository.editExperiment(
-            self, name=name, entry=entry, extraParams=extraParams
+            self, name=name, entry=entry, entity_state_id=entity_state_id, entity_state_workflow_id=entity_state_workflow_id, extraParams=extraParams
         )
 
     def delete(self):
@@ -56,8 +57,8 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            my_experiment = user.getExperimentTemplate(17000)
-            my_experiment.delete()
+            my_experiment_template = user.getExperimentTemplate(17000)
+            my_experiment_template.delete()
         """
         import labstep.entities.experiment.repository as experimentRepository
 
@@ -71,36 +72,36 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            my_experiment = user.getExperimentTemplate(17000)
-            my_experiment.lock()
+            my_experiment_template = user.getExperimentTemplate(17000)
+            my_experiment_template.lock()
         """
         import labstep.entities.experiment.repository as experimentRepository
         return experimentRepository.editExperiment(self, extraParams={'locked_at': getTime()})
 
     def unlock(self):
         """
-        Unlock a locked ExperimentTemplate. Can only be done with owner permission.
+        Unlock a locked ExperimentTemplate. Can only be done with correct permission.
 
         Example
         -------
         ::
 
-            my_experiment = user.getExperimentTemplate(17000)
-            my_experiment.lock()
-            my_experiment.unlock()
+            my_experiment_template = user.getExperimentTemplate(17000)
+            my_experiment_template.lock()
+            my_experiment_template.unlock()
         """
         import labstep.entities.experiment.repository as experimentRepository
         return experimentRepository.editExperiment(self, extraParams={'locked_at': None})
 
     def getEntry(self):
         """
-        Returns a JSON document representing the entry for the experiment.
+        Returns a JSON document representing the entry for the experiment template.
 
         Example
         -------
         ::
 
-            my_experiment = user.getExperimentTemplate(17000)
+            my_experiment_template = user.getExperimentTemplate(17000)
             print(my_experiment.getEntry())
         """
         return self.root_experiment.getBody()
@@ -124,13 +125,13 @@ class ExperimentTemplate(Entity):
         ::
 
             # Get an Experiment
-            my_experiment = user.getExperimentTemplate(17000)
+            my_experiment_template = user.getExperimentTemplate(17000)
 
             # Get a Protocol
             my_protocol = user.getProtocol(10000)
 
             # Attach the Protocol to the Experiment
-            my_experiment.addProtocol(my_protocol)
+            my_experiment_template.addProtocol(my_protocol)
         """
         import labstep.entities.experiment.repository as experimentRepository
 
@@ -184,7 +185,7 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
+            experiment_template = user.getExperimentTemplate(17000)
             chemicalReaction = experiment.addChemicalReaction(data='RXN 233')
         """
         return self.root_experiment.addChemicalReaction(
@@ -233,7 +234,7 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
+            experiment_template = user.getExperimentTemplate(17000)
             dataField = experiment.addDataField("Refractive Index",
                                                value="1.73")
         """
@@ -262,7 +263,7 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
+            experiment_template = user.getExperimentTemplate(17000)
             exp_protocol = experiment.getProtocols()[0]
             dataFields = exp_protocol.getDataFields()
         """
@@ -281,77 +282,11 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
+            experiment_template = user.getExperimentTemplate(17000)
             exp_chemical_reactions = experiment.getChemicalReactions()
         """
         return self.root_experiment.getChemicalReactions()
 
-    def getSignatures(self):
-        """
-        Retrieve a list of signatures added to the experiment
-
-        Returns
-        -------
-        List[:class:`~labstep.entities.experimentSignature.model.ExperimentSignature`]
-            List of the signatures added to the Experiment
-        """
-        self.update()
-        return EntityList(self.signatures, ExperimentSignature, self.__user__)
-
-    def addSignature(self, statement=UNSPECIFIED, lock=False):
-        """
-        Add a signature to experiment
-
-        Parameters
-        ----------
-        statement (str)
-            Statement describing the signature.
-        lock (boolean)
-            Whether to lock the experiment against further edits.
-
-        Returns
-        -------
-        :class:`~labstep.entities.experimentSignature.model.ExperimentSignature`
-            The signature that has been added
-        """
-        import labstep.generic.entity.repository as entityRepository
-
-        params = {
-            "statement": statement,
-            "is_lock": int(lock),
-            "experiment_workflow_id": self.id,
-        }
-        return entityRepository.newEntity(self.__user__, ExperimentSignature, params)
-
-    def getSignatureRequests(self):
-        """
-        Returns a list of pending signature requests for the experiment.
-
-        Returns
-        -------
-        List[:class:`~labstep.entities.experimentSignatureRequest.model.ExperimentSignatureRequest`]
-        """
-        import labstep.entities.experimentSignatureRequest.repository as experimentSignatureRequestRepository
-
-        return experimentSignatureRequestRepository.getExperimentSignatureRequests(self.__user__, self.id)
-
-    def requestSignature(self, user_id, message=UNSPECIFIED):
-        """
-        Request a signature from another user in the workspace
-
-        Parameters
-        ----------
-
-        user_id (int)
-            Id of the user you are requesting a signature from
-
-        message (str)
-            Optional message to include in signature request email
-
-        """
-        import labstep.entities.experimentSignatureRequest.repository as experimentSignatureRequestRepository
-
-        return experimentSignatureRequestRepository.newExperimentSignatureRequest(self.__user__, self.id, user_id=user_id, message=message)
 
     def getInventoryFields(self):
         """
@@ -378,7 +313,6 @@ class ExperimentTemplate(Entity):
         amount=UNSPECIFIED,
         units=UNSPECIFIED,
         resource_id=UNSPECIFIED,
-        resource_item_id=UNSPECIFIED,
         extraParams={},
     ):
         """
@@ -394,9 +328,6 @@ class ExperimentTemplate(Entity):
             The units for the amount.
         resource_id (int)
             The id of the :class:`~labstep.entities.resource.model.Resource` used.
-        resource_item_id (ResourceItem)
-            The id of the specific
-            :class:`~labstep.entities.resource.model.ResourceItem` used.
 
         Returns
         -------
@@ -407,21 +338,20 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
+            experiment_template = user.getExperimentTemplate(17000)
             resource = user.getResources(search_query='Sample A')[0]
-            experiment.addInventoryField(name='Sample A', amount='2', units='ml',
+            experiment_template.addInventoryField(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
         return self.root_experiment.addInventoryField(name=name,
                                                       resource_id=resource_id,
-                                                      resource_item_id=resource_item_id,
                                                       amount=amount,
                                                       units=units,
                                                       extraParams=extraParams)
 
     def addToCollection(self, collection_id):
         """
-        Add the experiment to a collection.
+        Add the experiment template to a collection.
 
         Parameters
         ----------
@@ -438,7 +368,7 @@ class ExperimentTemplate(Entity):
 
     def getCollections(self):
         """
-        Returns the list of collections the protocol is in.
+        Returns the list of collections the experiment template is in.
         """
         import labstep.entities.collection.repository as collectionRepository
 
@@ -446,7 +376,7 @@ class ExperimentTemplate(Entity):
 
     def removeFromCollection(self, collection_id):
         """
-        Remove the experiment from a collection.
+        Remove the experiment template from a collection.
 
         Parameters
         ----------
@@ -471,8 +401,8 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
-            tables = experiment.getTables()
+            experiment_template = user.getExperimentTemplate(17000)
+            tables = experiment_template.getTables()
         """
         return self.root_experiment.getTables()
 
@@ -514,8 +444,8 @@ class ExperimentTemplate(Entity):
                 }
             }
 
-            experiment = user.getExperimentTemplate(17000)
-            experiment.addTable(name='Calibration', data=data)
+            experiment_template = user.getExperimentTemplate(17000)
+            experiment_template.addTable(name='Calibration', data=data)
         """
         return self.root_experiment.addTable(name=name, data=data)
 
@@ -540,8 +470,8 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
-            experiment.addFile(filepath='./my_file.csv')
+            experiment_template = user.getExperimentTemplate(17000)
+            experiment_template.addFile(filepath='./my_file.csv')
         """
         return self.root_experiment.addFile(filepath, rawData)
 
@@ -580,26 +510,26 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
+            experiment_template = user.getExperimentTemplate(17000)
             experiment_files = experiment.getFiles()
         """
         return self.root_experiment.getFiles()
 
     def export(self, path):
         """
-        Export the experiment to the directory specified. 
+        Export the experiment template to the directory specified.
 
         Parameters
         -------
         path (str)
-            The path to the directory to save the experiment.
+            The path to the directory to save the experiment template.
 
         Example
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
-            experiment.export('/my_folder')
+            experiment_template = user.getExperimentTemplate(17000)
+            experiment_template.export('/my_folder')
         """
         import labstep.entities.experiment.repository as experimentRepository
 
@@ -626,7 +556,7 @@ class ExperimentTemplate(Entity):
 
     def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
-        Add a Jupyter Notebook to an experiment entry.
+        Add a Jupyter Notebook to an experiment template.
 
         Parameters
         ----------
@@ -652,7 +582,8 @@ class ExperimentTemplate(Entity):
 
     def addConditions(self, number_of_conditions):
         """
-        Add conditions to the experiment
+        Add conditions to the experiment template
+
         Parameters
         ----------
         number_of_conditions (int)
@@ -665,23 +596,52 @@ class ExperimentTemplate(Entity):
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
-            conditions = experiment.addConditions(5)
+            experiment_template = user.getExperimentTemplate(17000)
+            conditions = experiment_template.addConditions(5)
         """
         return self.root_experiment.addConditions(number_of_conditions)
 
     def getConditions(self):
         """
-        Retrieve a list of the different conditions associated with this experiment protocol.
+        Retrieve a list of the different conditions associated with this experiment template.
         Returns
         -------
         List[:class:`~labstep.entities.protocolCondition.model.ProtocolCondition`]
-            A list of the protocol conditions associated with the experiment protocol.
+            A list of the protocol conditions associated with the experiment template.
         Example
         -------
         ::
 
-            experiment = user.getExperimentTemplate(17000)
-            conditions = experiment.getConditions()
+            experiment_template = user.getExperimentTemplate(17000)
+            conditions = experiment_template.getConditions()
         """
         return self.root_experiment.getConditions()
+
+
+    def getStateWorkflow(self):
+        """
+        Retrieve the EntityStateWorkflow associated with this template.
+
+        Parameters
+        ----------
+        entity_state_workflow_id (int)
+            The id of the EntityStateWorkflow to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.entityStateWorkflow.model.EntityStateWorkflow`
+            An object representing the EntityStateWorkflow.
+
+        Example
+        -------
+        ::
+
+            entity = experiment_template.getStateWorkflow(17000)
+        """
+        import labstep.entities.entityStateWorkflow.repository as EntityStateWorkflowRepository
+
+        if self['entity_state_workflow']['id'] is None:
+            return None
+        else:
+            return EntityStateWorkflowRepository.getEntityStateWorkflow(
+                self.__user__, entity_state_workflow_id=self['entity_state_workflow']['id'])

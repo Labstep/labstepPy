@@ -4,17 +4,17 @@ from labstep.constants import UNSPECIFIED
 
 
 def getNotification(user,
-                    guid,):
-    return getEntity(user, Notification, guid=guid)
+                    id,):
+    return getEntity(user, Notification, id=id)
 
 
 def getNotifications(user,
                      count=UNSPECIFIED,
-                     type=UNSPECIFIED,
+                     notification_type=UNSPECIFIED,
                      extraParams={},):
 
     params = {
-        'type': type,
+        'type': notification_type,
         **extraParams,
     }
     return getEntities(user, Notification, count, params)

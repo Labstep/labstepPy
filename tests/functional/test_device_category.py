@@ -3,6 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 # pylama:ignore=E501
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 

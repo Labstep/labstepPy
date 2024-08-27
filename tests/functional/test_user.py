@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.entities.user.model import User
-import labstep
-import pytest
 import os
-from .fixtures import fixtures, testString, newString
+
+import pytest
+from labstep.entities.user.model import User
+
+import labstep
+
+from .fixtures import fixtures, newString, testString
 
 
 class TestUser:
@@ -75,6 +78,16 @@ class TestUser:
         result = user.getPurchaseOrder(entity.id)
         assert result.id == entity.id
 
+    def test_getExperimentTemplate(self, user):
+        entity = user.newExperimentTemplate(testString)
+        result = user.getExperimentTemplate(entity.id)
+        assert result.name == testString
+
+    def test_getEntityStateWorkflow(self, user):
+        entity = user.newEntityStateWorkflow(testString)
+        result = user.getEntityStateWorkflow(entity.id)
+        assert result.name == testString
+
     # getMany()
     def test_getExperiments(self, user):
         user.newExperiment(testString)
@@ -120,7 +133,7 @@ class TestUser:
         assert result[0].id
 
     def test_getTags(self, user):
-        user.newTag(fixtures.newString(), type='experiment_workflow')
+        user.newTag(newString(), type='experiment_workflow')
         result = user.getTags(count=10)
         assert result[0].id
 
@@ -141,6 +154,16 @@ class TestUser:
         assert purchase_order_open.id == result_open[0]['id'] and \
             purchase_order_pending.id == result_pending[0]['id'] and \
             purchase_order_completed.id == result_completed[0]['id']
+
+    def test_getExperimentTemplates(self, user):
+        user.newExperimentTemplate(testString)
+        result = user.getExperimentTemplates()
+        assert result[0].id
+
+    def test_getEntityStateWorkflows(self, user):
+        user.newEntityStateWorkflow(testString)
+        result = user.getEntityStateWorkflows()
+        assert result[0].id
 
     # newEntity()
 
@@ -200,4 +223,12 @@ class TestUser:
 
     def test_newPurchaseOrder(self, user):
         result = user.newPurchaseOrder(testString)
+        assert result.name == testString
+
+    def test_newExperimentTemplate(self, user):
+        result = user.newExperimentTemplate(testString)
+        assert result.name == testString
+
+    def test_newEntityStateWorkflow(self, user):
+        result = user.newEntityStateWorkflow(testString)
         assert result.name == testString

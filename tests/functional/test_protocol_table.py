@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
-from .fixtures import fixtures
 from labstep.service.helpers import dataFrameToDataTable, dataTableToDataFrame
+
+from .fixtures import fixtures
 
 
 class TestExperimentTable:
     @pytest.fixture
     def entity(self):
         return fixtures.protocol()
-
     def setup_method(self):
         fixtures.loadFixtures('Python')
 
