@@ -1,10 +1,13 @@
-Resource
+Inventory
 ----------------------------------------------
+
+Resource
+++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.resource.model.Resource
    :inherited-members:
    :members:
-   
+
 
 ResourceCategory
 ++++++++++++++++++++++++++++++++++++++++++++++
@@ -24,4 +27,4 @@ ResourceLocation
 
 .. autoclass:: labstep.entities.resourceLocation.model.ResourceLocation
    :members:
-   
+

@@ -1,24 +1,27 @@
-Experiment
+Experiments
 ----------------------------------------------
+
+Experiment
+++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.experiment.model.Experiment
    :members:
    :inherited-members:
-   
+
 
 Experiment Protocol
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.experimentProtocol.model.ExperimentProtocol
    :members:
-   
+
 
 Experiment Inventory Field
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.experimentInventoryField.model.ExperimentInventoryField
    :members:
-   
+
 Experiment Data Field
 ++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -30,21 +33,21 @@ Experiment Step
 
 .. autoclass:: labstep.entities.experimentStep.model.ExperimentStep
    :members:
-   
+
 
 Experiment Table
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.experimentTable.model.ExperimentTable
    :members:
-   
+
 
 Experiment Timer
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.experimentTimer.model.ExperimentTimer
    :members:
-   
+
 Experiment Signature
 ++++++++++++++++++++++++++++++++++++++++++++++
 

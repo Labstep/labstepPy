@@ -30,6 +30,11 @@ class ExperimentTemplate(EntityPrimary):
             The new name of the ExperimentTemplate
         entry (obj)
             A JSON object representing the state of the ExperimentTemplate Entry.
+        entity_state_id (int)
+            The ID of the EntityState for the Experiment.
+        entity_state_workflow_id (int)
+            The ID of the EntityStateWorkflow for the Experiment.
+
 
         Returns
         -------

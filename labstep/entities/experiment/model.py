@@ -45,6 +45,10 @@ class Experiment(EntityPrimary):
         started_at (str)
             The start date of the Experiment
             in the format of "YYYY-MM-DD HH:MM".
+        entity_state_id (int)
+            The ID of the EntityState for the Experiment.
+        entity_state_workflow_id (int)
+            The ID of the EntityStateWorkflow for the Experiment.
 
         Returns
         -------
