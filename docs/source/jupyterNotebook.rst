@@ -1,5 +1,8 @@
-Jupyter Notebook
+Jupyter
 ----------------------------------------------
+
+Jupyter Notebook
+++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.jupyterNotebook.model.JupyterNotebook
    :members:

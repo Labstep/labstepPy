@@ -1,17 +1,20 @@
-Protocol
+Protocol Library
 ----------------------------------------------
+
+Protocol
+++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.protocol.model.Protocol
    :members:
    :inherited-members:
-   
+
 
 Protocol Inventory Field
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.protocolInventoryField.model.ProtocolInventoryField
    :members:
-   
+
 Protocol Data Field
 ++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -23,14 +26,14 @@ Protocol Step
 
 .. autoclass:: labstep.entities.protocolStep.model.ProtocolStep
    :members:
-   
+
 
 Protocol Table
 ++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: labstep.entities.protocolTable.model.ProtocolTable
    :members:
-   
+
 
 Protocol Timer
 ++++++++++++++++++++++++++++++++++++++++++++++
@@ -43,4 +46,4 @@ Protocol Condition
 
 .. autoclass:: labstep.entities.protocolCondition.model.ProtocolCondition
    :members:
-   
+

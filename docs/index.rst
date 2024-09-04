@@ -77,15 +77,13 @@ own specific purposes.
    source/protocol.rst
    source/resource.rst
    source/orderRequest.rst
-   source/purchaseOrder.rst
    source/device.rst
-   source/dataField.rst
+   source/jupyterNotebook.rst
    source/metadata.rst
    source/chemistry.rst
-   source/jupyterNotebook.rst
-   source/comment.rst
    source/tag.rst
    source/collection.rst
+   source/comment.rst
    source/file.rst
    source/notification.rst
    source/sharelink.rst

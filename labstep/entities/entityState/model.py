@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
-from deprecated import deprecated
 from labstep.generic.entity.model import Entity
-from labstep.service.helpers import getTime, handleDate
 from labstep.constants import UNSPECIFIED
 
 
@@ -73,10 +71,13 @@ class EntityState(Entity):
         Example
         -------
         ::
+
             my_entity_state_workflow = user.getEntityStateWorkflow(17000)
             collaborator_role = workspace.getCollaboratorRole(17000)
             my_entity_state = my_entity_state_workflow.getEntityStates()
-            my_entity_state[0].addRoleRequirement(entity_user_role_id=collaborator_role.id, number_required=2)
+            my_entity_state[0].addRoleRequirement(entity_user_role_id=collaborator_role.id,
+                                                  number_required=2
+                                                  )
         """
         import labstep.entities.collaboratorRoleRequirement.repository as collaboratorRoleRequirementRepository
 

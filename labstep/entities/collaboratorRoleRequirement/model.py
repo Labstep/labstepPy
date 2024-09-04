@@ -44,7 +44,7 @@ class CollaboratorRoleRequirement(Entity):
             my_entity_state_workflow = user.getEntityStateWorkflow(17000)
             my_entity_state = my_entity_state_workflow.newEntityState(name='A New EntityState Name')
             collaborator_requirements=my_entity_state.addRoleRequirement(collaborator_role_id=17000, number_required=4)
-            collaborator_requirements..edit(number_required=2)
+            collaborator_requirements.edit(number_required=2)
         """
         import labstep.entities.collaboratorRoleRequirement.repository as collaboratorRoleRequirementRepository
 
@@ -65,10 +65,13 @@ class CollaboratorRoleRequirement(Entity):
         Example
         -------
         ::
+
             my_entity_state_workflow = user.getEntityStateWorkflow(17000)
             my_entity_state = my_entity_state_workflow.newEntityState(name='A New EntityState Name')
-            collaborator_requirements=my_entity_state.addRoleRequirement(collaborator_role_id=17000, number_required=2)
-            my_signature_requirement = collaborator_requirements.getSignatureRequirement()
+            collaborator_req=my_entity_state.addRoleRequirement(collaborator_role_id=17000,
+                                                                         number_required=2
+                                                                         )
+            signature_requirement = collaborator_req.getSignatureRequirement()
         """
         import labstep.entities.signatureRequirement.repository as signatureRequirementRepository
 
@@ -100,6 +103,7 @@ class CollaboratorRoleRequirement(Entity):
         Example
         -------
         ::
+
             my_entity_state_workflow = user.getEntityStateWorkflow(17000)
             my_entity_state = my_entity_state_workflow.newEntityState(name='A New EntityState Name')
             collaborator_requirements=my_entity_state.addRoleRequirement(collaborator_role_id=17000, number_required=2)
