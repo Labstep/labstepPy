@@ -188,3 +188,83 @@ class ResourceItem(EntityWithMetadata, EntityWithComments, EntityWithAssign):
                 'position': [position['x'], position['y']],
                 'size': [position['w'], position['h']]
             }
+
+    def getLineageParents(self):
+        """
+        Fetches lineage tracked input inventory fields with items on the experiment where the item was created.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`
+            Object representing the parent inventory field
+
+        Example
+        -------
+        ::
+
+            my_resource_item = user.getResourceItem(17000)
+            lineageParents = my_resource_item.getLineageParents()
+
+            parentItem = lineageParents[0].getItem()
+        """
+
+        import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
+
+        if not hasattr(self, 'protocol_value_origin'):
+            self.update()
+        if self.protocol_value_origin is None:
+            return []
+        return experimentInventoryFieldRepository.getExperimentInventoryFields(
+            user=self.__user__,
+            experiment_id=self.protocol_value_origin['experiment']['id'],
+            extraParams={
+                'is_input': 1,
+                'is_lineage': 1,
+                'is_variable': 0,
+                'has_resource_item': 1,
+                'protocol_condition_guid_or_null': self.protocol_value_origin['protocol_condition_guid']
+            }
+        )
+
+    def getLineageChildren(self):
+        """
+        Fetches lineage tracked output inventory fields on experiments where the item was used.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`
+            Object representing the parent inventory field
+
+        Example
+        -------
+        ::
+
+            my_resource_item = user.getResourceItem(17000)
+            lineageParents = my_resource_item.getLineageParents()
+
+            parentItem = lineageParents[0].getItem()
+        """
+
+        import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
+
+        if not hasattr(self, 'input_experiment_ids'):
+            self.update()
+
+        lineage_children=[]
+
+        if self.input_experiment_ids is []:
+            return lineage_children
+
+        for experiment_id in self.input_experiment_ids:
+            lineage_children.append(experimentInventoryFieldRepository.getExperimentInventoryFields(
+                user=self.__user__,
+                experiment_id=experiment_id,
+                extraParams={
+                    'is_output': 1,
+                    'is_lineage': 1,
+                    'is_variable': 0,
+                    'has_resource_item_output': 1,
+                    'protocol_condition_guid_or_null': self.input_protocol_condition_guids
+                }
+            ))
+        return lineage_children

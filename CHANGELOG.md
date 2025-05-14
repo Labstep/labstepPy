@@ -5,13 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project (tries to) adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.0] - 2024-12-28
+
+### Added
+
+- `getLineageParents` and `getLineageChildren` methods to `ResourceItem`
+
+### Removed
+
+- `linkToInventoryField` and `getLinkedInventoryFields` from `ExperimentDataField` (manual linking no longer required)
+
+## [3.30.0] - 2024-12-28
+
+### Changed
+
+- To support Protocol Draft, added getter getCurrentVersion to return draft_version or last_version
+
+## [3.29.0] - 2024-12-13
+
+### Added
+
+- JupyterInstance data
+
+## [3.28.2] - 2024-11-05
+
+### Added
+
+- Option to save export PDF as file
+
+## [3.28.1] - 2024-11-04
+
+### Fixed
+
+- PDF export request too large error
+
+## [3.28.0] - 2024-09-19
+
+### Changed
+
+- serializerGroups requires 'default'
+
+## [3.27.0] - 2024-09-13
+
+### Changed
+
+- `JupyterInstance` model and repository for edit
+
 ## [3.26.0] - 2024-09-04
 
 ### Added
 
 - `newCollaboratorRole()`, `getCollaboratorRoles()`, `newExperimentTemplate()`, `getExperimentTemplates()`,
   `newEntityStateWorkflow()`, `getEntityStateWorkflows()` to `Workspace` model
-- `newExperimentTemplate()`, `getExperimentTemplates()`,`newEntityStateWorkflow()`, `getEntityStateWorkflows()`, to`User` model
+- `newExperimentTemplate()`, `getExperimentTemplates()`,`newEntityStateWorkflow()`, `getEntityStateWorkflows()` to `User` model
 - `EntityStateWorkflow` model and repository
 - `EntityState` model and repository
 - `CollaboratorRole` model and repository

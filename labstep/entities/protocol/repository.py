@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.service.helpers import (
-    handleDate,
-)
+import labstep.generic.entity.repository as entityRepository
+from labstep.config.export import includePDF
+from labstep.constants import UNSPECIFIED
 from labstep.entities.protocol.model import Protocol
 from labstep.entities.protocolVersion.model import ProtocolVersion
-import labstep.generic.entity.repository as entityRepository
+from labstep.service.helpers import handleDate
 from labstep.service.htmlExport import htmlExportService
-from labstep.constants import UNSPECIFIED
-from labstep.config.export import includePDF
 from labstep.service.htmlToPDF import htmlToPDF
 
 
@@ -51,7 +49,7 @@ def editProtocol(
     params = {"name": name, "deleted_at": deleted_at, **extraParams}
 
     if body is not UNSPECIFIED:
-        entityRepository.editEntity(protocol.last_version, {"state": body})
+        entityRepository.editEntity(protocol.getCurrentVersion(), {"state": body})
         protocol.update()
 
     return entityRepository.editEntity(protocol, params)

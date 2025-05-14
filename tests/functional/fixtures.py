@@ -180,10 +180,17 @@ class Fixtures:
         user = user if user is not None else self.defaultUser()
         return user.newProtocol(newString())
 
+    def protocolWithLastVersion(self, user=None):
+        user = user if user is not None else self.defaultUser()
+        protocol = user.newProtocol(newString())
+        draftVersion = protocol.draft_version
+        draftVersion.setLive()
+        return user.getProtocol(protocol.id)
+
     def experimentProtocol(self, user=None):
         user = user if user is not None else self.defaultUser()
         exp = user.newExperiment(newString())
-        experiment_protocol = exp.addProtocol(self.protocol())
+        experiment_protocol = exp.addProtocol(self.protocolWithLastVersion())
         return experiment_protocol
 
     def resource(self, user=None):
@@ -230,7 +237,7 @@ class Fixtures:
     def chemicalReaction(self, user=None):
         user = user if user is not None else self.defaultUser()
         experiment = user.newExperiment('Test')
-        experiment_protocol = experiment.addProtocol(self.protocol())
+        experiment_protocol = experiment.addProtocol(self.protocolWithLastVersion())
         return experiment_protocol.addChemicalReaction()
 
     def metadata(self, user=None):

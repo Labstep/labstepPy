@@ -58,7 +58,7 @@ class TestResourceLocation:
         assert entity.map_data == {
             'rowCount': 10,
             'columnCount': 5,
-            'data': []
+            'data': {}
         }
 
     def test_setOuterLocation(self, entity):

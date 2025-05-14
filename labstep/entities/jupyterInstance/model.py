@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
+from labstep.constants import UNSPECIFIED
 from labstep.generic.entity.model import Entity
-from labstep.service.helpers import getTime
 
 
 class JupyterInstance(Entity):
@@ -14,79 +14,40 @@ class JupyterInstance(Entity):
     __entityName__ = "jupyter-instance"
     __hasGuid__ = True
 
-    def start(self):
-        """
-        Update JupyterInstance to indicate that server instance has started and is ready to use.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        :class:`~labstep.entities.jupyterInstance.model.JupyterInstance`
-            An object representing the edited JupyterInstance.
-
-        Example
-        -------
-        ::
-
-            my_jupyterInstance = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
-            my_jupyterInstance.start()
-        """
-        import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
-
-        return jupyterInstanceRepository.editJupyterInstance(
-            self, startedAt=getTime()
-        )
-
-    def end(self):
-        """
-        Update JupyterInstance to indicate that server instance has shutdown.
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-        :class:`~labstep.entities.jupyterInstance.model.JupyterInstance`
-            An object representing the edited JupyterInstance.
-
-        Example
-        -------
-        ::
-
-            my_jupyterInstance = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
-            my_jupyterInstance.end()
-        """
-        import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
-
-        return jupyterInstanceRepository.editJupyterInstance(
-            self, endedAt=getTime()
-        )
-
-    def edit(self, data=None, extraParams={}):
+    def edit(self, startedAt=UNSPECIFIED, endedAt=UNSPECIFIED, status=UNSPECIFIED, data=UNSPECIFIED, errorMessage=UNSPECIFIED):
         """
         Edit an existing JupyterInstance.
 
         Parameters
         ----------
-        data (str)
-            JupyterNotebook ipyb JSON data.
+        startedAt (datetime, optional)
+            Start date.
+        endedAt (datetime, optional)
+            End date.
+        status (string, optional)
+            Status can be 'success' or 'error'.
+        errorMessage (string, optional)
+            Error message.
 
         Returns
         -------
-        :class:`~labstep.entities.jupyterInstance.model.JupyterInstance`
-            An object representing the edited JupyterInstance.
+        :class:`~labstep.entities.jupyterInstance.model.Device`
+            An object representing the edited Device.
 
         Example
         -------
         ::
 
-            my_jupyterInstance = user.getJupyterInstance("872b3e7e-e21f-4403-9ef3-3650fe0d86ba")
-            my_jupyterInstance.edit(data='{test: 42}')
+            myJuyterInstance = user.getJupyterInstance('943fe3f3-a50e-40a0-9b91-a0fa5675b9ac)
+            myJuyterInstance.edit(startedAt='2024-01-01T00:00:00+0000')
         """
         import labstep.entities.jupyterInstance.repository as jupyterInstanceRepository
 
         return jupyterInstanceRepository.editJupyterInstance(
-            self, data=data
+            self,
+            startedAt,
+            endedAt,
+            status,
+            data,
+            errorMessage
         )

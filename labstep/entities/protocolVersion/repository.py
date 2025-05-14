@@ -1,8 +1,16 @@
 import labstep.generic.entity.repository as entityRepository
-from labstep.service.htmlExport import htmlExportService
-from labstep.constants import UNSPECIFIED
 from labstep.config.export import includePDF
+from labstep.constants import UNSPECIFIED
+from labstep.service.htmlExport import htmlExportService
 from labstep.service.htmlToPDF import htmlToPDF
+
+
+def edit(
+    protocolVersion, is_draft=UNSPECIFIED, extraParams={}
+):
+    params = {"is_draft": is_draft, **extraParams}
+
+    return entityRepository.editEntity(protocolVersion, params)
 
 
 def exportProtocolVersion(protocolVersion, root_path):

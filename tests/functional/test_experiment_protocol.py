@@ -50,4 +50,4 @@ class TestExperimentProtocol:
         assert sharedTests.jupyterNotebooks(entity)
 
     def test_experiment_protocol_conditions(self, entity):
-        assert sharedTests.conditions(entity)
+        assert sharedTests.experimentConditions(entity)

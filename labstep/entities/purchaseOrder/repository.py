@@ -2,22 +2,22 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.service.helpers import handleKeyword
-from labstep.entities.purchaseOrder.model import PurchaseOrder
 import labstep.generic.entity.repository as entityRepository
 from labstep.constants import UNSPECIFIED
+from labstep.entities.purchaseOrder.model import PurchaseOrder
+from labstep.service.helpers import handleKeyword
 
 
 def newPurchaseOrder(user,name=UNSPECIFIED, status=UNSPECIFIED, currency='USD', extraParams={}):
     params = {'name':name,
               "group_id": user.activeWorkspace,
-              "status": handleKeyword(status), 
+              "status": handleKeyword(status),
               "currency": currency,
               **extraParams}
     return entityRepository.newEntity(user, PurchaseOrder, params)
 
 def getPurchaseOrder(user, purchase_order_id, extraParams={}):
-    return entityRepository.getEntity(user, PurchaseOrder, id=purchase_order_id, extraParams={**extraParams,'serializerGroups': 'order_request_show'})
+    return entityRepository.getEntity(user, PurchaseOrder, id=purchase_order_id, extraParams={**extraParams,'serializerGroups': 'default,order_request_show'})
 
 
 def getPurchaseOrders(
