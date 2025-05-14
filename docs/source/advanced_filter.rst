@@ -1,15 +1,12 @@
-.. raw:: html
-
-    <h1 style="font-size:40px; border-bottom:2px solid #000; padding-bottom:10px;text-align:right;">Advance filters in Labstep using Python</h1>
-
+Advance filters in Labstep using Python
 ##########################
 Index
-##########################
+****************
 .. contents:: Table of contents
     :depth: 3
 
 Overview of the filterEntities method
-##########################
+************************************************
 **LabstepPy** has the capability to fetch entities based on their attributes and their values,
 as well as associated attributes and values of associated entitites. :func:`~labstep.generic.entity.repository.filterEntities` allows a user
 to fetch entities of a certain class filtering them using a json object that contains the filter query.
