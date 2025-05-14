@@ -37,7 +37,7 @@ master_doc = 'index'
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
               'sphinx.ext.napoleon', 'sphinx_rtd_theme',
-              'sphinxcontrib.programoutput']
+              'sphinxcontrib.programoutput', 'sphinx_design']
 
 # Napoleon settings
 napoleon_google_docstring = True

@@ -19,13 +19,8 @@ def assign(parent_entity, user_id, extraParams):
 
 
 def unassign(collaborator, extraParams={}):
-    entity_name = collaborator['permission_entity_info']['entityName']
-    params = {f'{entity_name}_id': collaborator['permission_entity_info']['id'],
-              'user_id': collaborator['user']['id'],
-              'is_assigned': False,
-              **extraParams}
+    return editEntity(collaborator,{'is_assigned': False})
 
-    return newEntity(collaborator.__user__, Collaborator, params)
 
 
 def getCollaborators(parent_entity, count, extraParams):

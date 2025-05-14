@@ -72,51 +72,6 @@ class ExperimentDataField(EntityWithComments):
             self, extraParams={"deleted_at": getTime()}
         )
 
-    def linkToInventoryField(self, inventoryField):
-        """
-        Link a data field to an inventory field.
-
-        Parameters
-        ----------
-        inventoryField
-            The :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField` to link the data field to.
-
-        Example
-        -------
-        ::
-
-            inventoryField = experiment.addInventoryField('Sample')
-            data = experiment.addDataField('Concentration')
-            data.linkToInventoryField(inventoryField)
-        """
-        return entityRepository.linkEntities(self.__user__, self, inventoryField)
-
-    def getLinkedInventoryFields(self):
-        """
-        Returns the inventory fields linked to this data field..
-
-        Returns
-        ----------
-        List[:class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`]
-            The inventory field link the data field to.
-
-        Example
-        -------
-        ::
-
-            inventoryField = experiment.addInventoryField('Sample')
-            data = experiment.addDataField('Concentration')
-            data.linkToInventoryField(inventoryField)
-        """
-        import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
-
-        if self.experiment_id is not None:
-
-            return experimentInventoryFieldRepository.getExperimentInventoryFields(
-                user=self.__user__,
-                experiment_id=self.experiment_id,
-                extraParams={'metadata_id': self.id}
-            )
 
     def getValue(self):
         """
@@ -144,8 +99,8 @@ class ExperimentDataField(EntityWithComments):
 
         Parameters
         ----------
-        value 
-            The value to set, depends on the type of the data field. 
+        value
+            The value to set, depends on the type of the data field.
 
         Returns
         ----------
@@ -226,6 +181,3 @@ class ExperimentDataField(EntityWithComments):
 
         return setNotificationAlert(self, message=message, minutes_before=minutes_before)
 
-    @deprecated(version='3.12.0', reason="You should use linkToInventoryField instead")
-    def linkToMaterial(self, *args, **kwargs):
-        return self.linkToInventoryField(*args, **kwargs)

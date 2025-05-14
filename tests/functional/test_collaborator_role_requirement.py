@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
+
 from .fixtures import fixtures
 from .shared import sharedTests
 
@@ -22,11 +23,12 @@ class TestCollaboratorRoleRequirement:
     def test_edit(self, entity):
         entity = entity.edit(number_required=2)
         assert entity['number_required'] == 2
-    def test_edit_autoassign(self, entity):
 
+    def test_edit_autoassign(self, entity):
         entity = entity.edit(auto_assign='creator')
         entity = entity.edit(auto_assign='contributor')
         assert True
+
     def test_delete(self, entity):
         assert sharedTests.delete(entity)
 

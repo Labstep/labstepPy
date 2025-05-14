@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.service.helpers import (
-    handleDate,
-)
-from labstep.entities.experimentTemplate.model import ExperimentTemplate, ExperimentProtocol
 import labstep.generic.entity.repository as entityRepository
+from labstep.config.export import includePDF
+from labstep.constants import UNSPECIFIED
+from labstep.entities.experimentTemplate.model import (ExperimentProtocol,
+                                                       ExperimentTemplate)
+from labstep.service.helpers import handleDate
 from labstep.service.htmlExport import htmlExportService
 from labstep.service.htmlToPDF import htmlToPDF
-from labstep.constants import UNSPECIFIED
-from labstep.config.export import includePDF
 
 
 def getExperimentTemplate(user, experiment_template_id):

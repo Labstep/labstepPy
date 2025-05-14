@@ -75,9 +75,9 @@ class RequestService:
                                 filterUnspecified(params)))
         return response
 
-    def post(self, url, headers, json=None, files=None, data=None):
+    def post(self, url, headers, json=None, files=None, data=None, params=None):
         response = http.post(
-            url, headers=headers, json=filterUnspecified(json), files=files, data=data
+            url, headers=headers, json=filterUnspecified(json), files=files, data=data, params=filterUnspecified(params)
         )
         return response
 

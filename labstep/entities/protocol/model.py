@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 from deprecated import deprecated
+from labstep.constants import UNSPECIFIED
+from labstep.entities.protocolVersion.model import ProtocolVersion
 from labstep.generic.entity.repository import getEntityProperty
 from labstep.generic.entityPrimary.model import EntityPrimary
-from labstep.entities.protocolVersion.model import ProtocolVersion
 from labstep.service.helpers import getTime
-from labstep.constants import UNSPECIFIED
 
 
 class Protocol(EntityPrimary):
@@ -27,8 +27,25 @@ class Protocol(EntityPrimary):
     __searchKey__ = 'label'
 
     @property
+    def draft_version(self):
+        return getEntityProperty(self, 'draft_version', ProtocolVersion)
+
+    @property
     def last_version(self):
         return getEntityProperty(self, 'last_version', ProtocolVersion)
+
+    def getCurrentVersion(self):
+        """
+        Returns the current version of the protocol.
+
+        Returns
+        -------
+        :class:`~labstep.entities.protocolVersion.model.ProtocolVersion`
+            The current version of the protocol.
+        """
+        if self.draft_version:
+            return self.draft_version
+        return self.last_version
 
     def edit(self, name=UNSPECIFIED, body=UNSPECIFIED, extraParams={}):
         """
@@ -124,7 +141,7 @@ class Protocol(EntityPrimary):
 
             my_protocol.getBody()
         """
-        return self.last_version.getBody()
+        return self.getCurrentVersion().getBody()
 
     def addSteps(self, N):
         """
@@ -142,7 +159,7 @@ class Protocol(EntityPrimary):
             my_protocol = user.newProtocol('My API Protocol')
             my_protocol.addSteps(5)
         """
-        return self.last_version.addSteps(N)
+        return self.getCurrentVersion().addSteps(N)
 
     def getSteps(self):
         """
@@ -161,7 +178,7 @@ class Protocol(EntityPrimary):
             protocol_steps = protocol.getSteps()
             protocol_steps[0].attributes()
         """
-        return self.last_version.getSteps()
+        return self.getCurrentVersion().getSteps()
 
     def getDataFields(self):
         """
@@ -180,7 +197,7 @@ class Protocol(EntityPrimary):
             protocol = user.getProtocol(17000)
             metadata = protocol.getDataFields()
         """
-        return self.last_version.getDataFields()
+        return self.getCurrentVersion().getDataFields()
 
     def addDataField(
         self,
@@ -226,7 +243,7 @@ class Protocol(EntityPrimary):
             dataField = protocol.addDataField("Refractive Index",
                                                value="1.73")
         """
-        return self.last_version.addDataField(
+        return self.getCurrentVersion().addDataField(
             fieldName=fieldName,
             fieldType=fieldType,
             value=value,
@@ -269,7 +286,7 @@ class Protocol(EntityPrimary):
             protocol.addInventoryField(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        return self.last_version.addInventoryField(
+        return self.getCurrentVersion().addInventoryField(
             resource_id=resource_id, name=name,
             amount=amount,
             units=units,
@@ -292,7 +309,7 @@ class Protocol(EntityPrimary):
             protocol_inventoryFields = protocol.getInventoryFields()
             protocol_inventory_fields[0]
         """
-        return self.last_version.getInventoryFields(count=count, extraParams=extraParams)
+        return self.getCurrentVersion().getInventoryFields(count=count, extraParams=extraParams)
 
     def addTimer(self, name=UNSPECIFIED, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):
         """
@@ -321,7 +338,7 @@ class Protocol(EntityPrimary):
             protocol = user.getProtocol(17000)
             protocol.addTimer(name='Refluxing', hours='4', minutes='30')
         """
-        return self.last_version.addTimer(name=name, hours=hours, minutes=minutes, seconds=seconds)
+        return self.getCurrentVersion().addTimer(name=name, hours=hours, minutes=minutes, seconds=seconds)
 
     def getTimers(self):
         """
@@ -340,7 +357,7 @@ class Protocol(EntityPrimary):
             protocol_timers = protocol.getTimers()
             protocol_timers[0].attributes()
         """
-        return self.last_version.getTimers()
+        return self.getCurrentVersion().getTimers()
 
     def addTable(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
@@ -383,7 +400,7 @@ class Protocol(EntityPrimary):
             protocol = user.getProtocol(17000)
             protocol.addTable(name='Calibration', data=data)
         """
-        return self.last_version.addTable(name=name, data=data)
+        return self.getCurrentVersion().addTable(name=name, data=data)
 
     def getTables(self):
         """
@@ -402,7 +419,7 @@ class Protocol(EntityPrimary):
             protocol_tables = protocol.getTables()
             protocol_tables[0].attributes()
         """
-        return self.last_version.getTables()
+        return self.getCurrentVersion().getTables()
 
     def addToCollection(self, collection_id):
         """
@@ -464,7 +481,7 @@ class Protocol(EntityPrimary):
             protocol = user.getProtocol(17000)
             protocol.addFile(filepath='./my_file.csv')
         """
-        return self.last_version.addFile(filepath=filepath, rawData=rawData)
+        return self.getCurrentVersion().addFile(filepath=filepath, rawData=rawData)
 
     def getFiles(self):
         """
@@ -482,7 +499,7 @@ class Protocol(EntityPrimary):
             protocol = user.getProtocol(17000)
             protocol_files = protocol.getFiles()
         """
-        return self.last_version.getFiles()
+        return self.getCurrentVersion().getFiles()
 
     def export(self, path):
         """
@@ -521,7 +538,7 @@ class Protocol(EntityPrimary):
             jupyter_notebooks = protocol.getJupyterNotebooks()
             print(jupyter_notebooks[0])
         """
-        return self.last_version.getJupyterNotebooks()
+        return self.getCurrentVersion().getJupyterNotebooks()
 
     def addJupyterNotebook(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
@@ -546,7 +563,7 @@ class Protocol(EntityPrimary):
             protocol = user.getProtocol(17000)
             protocol.addJupyterNotebook()
         """
-        return self.last_version.addJupyterNotebook(name=name, data=data)
+        return self.getCurrentVersion().addJupyterNotebook(name=name, data=data)
 
     def addConditions(self, number_of_conditions):
         """
@@ -567,7 +584,7 @@ class Protocol(EntityPrimary):
             conditions = protocol.addConditions(5)
         """
 
-        return self.last_version.addConditions(number_of_conditions)
+        return self.getCurrentVersion().addConditions(number_of_conditions)
 
     def getConditions(self):
         """
@@ -584,7 +601,7 @@ class Protocol(EntityPrimary):
             conditions = protocol.getConditions()
         """
 
-        return self.last_version.getConditions()
+        return self.getCurrentVersion().getConditions()
 
     @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):

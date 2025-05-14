@@ -2,18 +2,19 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.generic.entityWithComments.model import EntityWithComments
+import labstep.entities.file.repository as fileRepository
+import labstep.entities.protocolInventoryField.repository as protocolInventoryFieldRepository
+from labstep.constants import UNSPECIFIED
+from labstep.entities.file.model import File
 from labstep.entities.jupyterNotebook.model import JupyterNotebook
 from labstep.entities.protocolDataField.model import ProtocolDataField
+from labstep.entities.protocolInventoryField.model import \
+    ProtocolInventoryField
 from labstep.entities.protocolStep.model import ProtocolStep
 from labstep.entities.protocolTable.model import ProtocolTable
 from labstep.entities.protocolTimer.model import ProtocolTimer
-from labstep.entities.protocolInventoryField.model import ProtocolInventoryField
-import labstep.entities.protocolInventoryField.repository as protocolInventoryFieldRepository
 from labstep.generic.entityList.model import EntityList
-from labstep.entities.file.model import File
-import labstep.entities.file.repository as fileRepository
-from labstep.constants import UNSPECIFIED
+from labstep.generic.entityWithComments.model import EntityWithComments
 
 
 class ProtocolVersion(EntityWithComments):
@@ -51,6 +52,21 @@ class ProtocolVersion(EntityWithComments):
         return protocolRepository.editProtocol(
             self, body=body, extraParams=extraParams
         )
+
+    def setLive(self):
+        """
+        Set the protocol version as the live version.
+
+        Example
+        -------
+        ::
+
+            my_protocol = user.getProtocol(17000)
+            my_protocol.setLive()
+        """
+        import labstep.entities.protocolVersion.repository as protocolVersionRepository
+
+        return protocolVersionRepository.edit(self, is_draft=False)
 
     def getProtocol(self):
         """
@@ -550,11 +566,12 @@ class ProtocolVersion(EntityWithComments):
         Example
         -------
         ::
-        
+
             protocol = user.getProtocol(17000)
             conditions = protocol.addConditions(5)
         """
-        from labstep.entities.protocolCondition.repository import addProtocolConditions
+        from labstep.entities.protocolCondition.repository import \
+            addProtocolConditions
 
         return addProtocolConditions(self, number_of_conditions)
 
@@ -572,6 +589,7 @@ class ProtocolVersion(EntityWithComments):
             protocol = user.getProtocol(17000)
             conditions = protocol.getConditions()
         """
-        from labstep.entities.protocolCondition.repository import getProtocolConditions
+        from labstep.entities.protocolCondition.repository import \
+            getProtocolConditions
 
         return getProtocolConditions(self)

@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.service.helpers import getTime
+from labstep.constants import PLACEHOLDER_SVG, UNSPECIFIED
+from labstep.entities.resourceItem.model import ResourceItem
 from labstep.generic.entityPrimary.model import EntityPrimary
 from labstep.generic.entityWithMetadata.model import EntityWithMetadata
-from labstep.entities.resourceItem.model import ResourceItem
-from labstep.constants import PLACEHOLDER_SVG, UNSPECIFIED
+from labstep.service.helpers import getTime
 
 
 class Resource(EntityPrimary, EntityWithMetadata):

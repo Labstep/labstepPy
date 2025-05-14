@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 import pytest
+
 from .fixtures import fixtures, proseMirrorState, testString
-
-
 from .shared import sharedTests
 
 
@@ -15,7 +14,7 @@ class TestExperiment:
 
     @pytest.fixture
     def protocolToAdd(self):
-        return fixtures.protocol()
+        return fixtures.protocolWithLastVersion()
 
     @pytest.fixture
     def resourceToAdd(self):
@@ -132,7 +131,7 @@ class TestExperiment:
         assert sharedTests.jupyterNotebooks(entity)
 
     def test_experiment_conditions(self, entity):
-        assert sharedTests.conditions(entity)
+        assert sharedTests.experimentConditions(entity)
 
     def test_assign(self, entity):
         assert sharedTests.assign(entity)

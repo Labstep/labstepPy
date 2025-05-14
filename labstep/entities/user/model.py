@@ -50,9 +50,9 @@ class User(Entity):
         from labstep.service.config import configService
         from labstep.service.request import requestService
 
-        apikey = self.__user__['api_key']
+        headers = getHeaders(self)
         url = url_join(configService.getHost(), "api/generic/user/info")
-        response = requestService.get(url, headers={"apikey": apikey})
+        response = requestService.get(url, headers=headers)
         data = json.loads(response.content)
         update(self, data)
         return self

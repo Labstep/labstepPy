@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.entities.collaboratorRoleRequirement.model import CollaboratorRoleRequirement
 import labstep.generic.entity.repository as entityRepository
-from labstep.generic.entityList.model import EntityList
 from labstep.constants import UNSPECIFIED
+from labstep.entities.collaboratorRoleRequirement.model import \
+    CollaboratorRoleRequirement
+from labstep.generic.entityList.model import EntityList
+
 
 def getCollaboratorRoleRequirements(user, entityState):
     if entityState['entity_user_role_requirements'] is None or entityState['entity_user_role_requirements'] == []:
@@ -47,6 +49,7 @@ def editCollaboratorRoleRequirement(collaboratorRoleRequirement,
     if auto_assign == 'creator:':
         params['automation'] = {
         'type': 'experiment_workflow_create',
+        'trigger_type': 'log',
         'trigger_log_type': 'experiment_workflow_created',
         'filter': [],
         'action': 'set_entity_user_role',
@@ -54,6 +57,7 @@ def editCollaboratorRoleRequirement(collaboratorRoleRequirement,
     if auto_assign == 'contributor':
         params['automation'] ={
             "type":"experiment_workflow_edit",
+            "trigger_type": 'log',
             "trigger_log_type":"experiment_workflow_updated",
             "filter":[
                 {"type":"and",

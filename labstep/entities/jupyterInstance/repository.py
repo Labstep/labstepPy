@@ -2,25 +2,29 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.entities.jupyterInstance.model import JupyterInstance
 import labstep.generic.entity.repository as entityRepository
 from labstep.constants import UNSPECIFIED
+from labstep.entities.jupyterInstance.model import JupyterInstance
 
 
-def getJupyterInstance(user, guid):
-    return entityRepository.getEntity(user, JupyterInstance, id=guid)
+def getJupyterInstance(user, id):
+    return entityRepository.getEntity(user, JupyterInstance, id)
 
 
 def editJupyterInstance(
     jupyterInstance,
-    data=UNSPECIFIED,
     startedAt=UNSPECIFIED,
-    endedAt=UNSPECIFIED
+    endedAt=UNSPECIFIED,
+    status=UNSPECIFIED,
+    data=UNSPECIFIED,
+    errorMessage=UNSPECIFIED
 ):
     params = {
-        "data": data,
         "started_at": startedAt,
         "ended_at": endedAt,
+        "status": status,
+        "data": data,
+        "error_message": errorMessage,
     }
 
     return entityRepository.editEntity(jupyterInstance, params)

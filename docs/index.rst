@@ -96,6 +96,7 @@ own specific purposes.
    source/device_integration.rst
    source/example_uses.rst
    source/export_examples.rst
+   source/advanced_filter.rst
 
 Troubleshooting
 ---------------

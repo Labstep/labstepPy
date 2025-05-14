@@ -14,6 +14,10 @@ class TestProtocol:
         return fixtures.protocol()
 
     @pytest.fixture
+    def protocolWithLastVersion(self):
+        return fixtures.protocolWithLastVersion()
+
+    @pytest.fixture
     def collection(self):
         return fixtures.protocolCollection()
 
@@ -64,17 +68,17 @@ class TestProtocol:
     def test_collections(self, entity, collection):
         assert sharedTests.collections(entity, collection)
 
-    def test_new_version(self, entity):
-        oldId = entity.last_version['id']
-        result = entity.newVersion()
-        assert result.id == entity.id \
-            and result.last_version['id'] != oldId
+    def test_new_version(self, protocolWithLastVersion):
+        oldId = protocolWithLastVersion.last_version['id']
+        result = protocolWithLastVersion.newVersion()
+        assert result.id == protocolWithLastVersion.id \
+            and result.draft_version['id'] != oldId
 
     def test_jupyter_notebooks(self, entity):
         assert sharedTests.jupyterNotebooks(entity)
 
     def test_protocol_conditions(self, entity):
-        assert sharedTests.conditions(entity)
+        assert sharedTests.protocolConditions(entity)
 
     def test_assign(self, entity):
         assert sharedTests.assign(entity)

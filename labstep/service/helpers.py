@@ -63,7 +63,7 @@ def handleDate(date):
         except ValueError:
             pass
     raise ValueError(
-        'Please Specify date in format: YY-MM-DD or YY-MM-DD HH:MM:SS')
+        'Please Specify date in format: YYYY-MM-DD, YYYY-MM-DD HH:MM or YYYY-MM-DD HH:MM:SS')
 
 
 def handleString(string):

@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.entities.resourceItem.model import ResourceItem
 import labstep.generic.entity.repository as entityRepository
-from labstep.service.helpers import handleKeyword
 from labstep.constants import UNSPECIFIED
+from labstep.entities.resourceItem.model import ResourceItem
+from labstep.service.helpers import handleKeyword
 
 
 def getResourceItem(user, resourceItem_id):
-    return entityRepository.getEntity(user, ResourceItem, id=resourceItem_id, extraParams={'serializerGroups': 'resource_item_metadatas'})
+    return entityRepository.getEntity(user, ResourceItem, id=resourceItem_id, extraParams={'serializerGroups': 'default,resource_item_metadatas'})
 
 
 def getResourceItems(
