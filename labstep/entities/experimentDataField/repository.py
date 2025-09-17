@@ -163,7 +163,34 @@ def getDataFieldValue(dataField):
     return None
 
 
-def setDataFieldValue(dataField, value):
+def setDataFieldValue(dataField, value, condition_id=None):
+    if condition_id is not None:
+        if dataField.is_variable is False:
+            raise Exception(
+                'Cannot set value for conditions on a constant data field')
+
+        conditionDataField = entityRepository.getEntities(
+            dataField.__user__, ExperimentDataField, count=UNSPECIFIED, filterParams={
+                'protocol_condition_id': condition_id
+        }).get(dataField.guid, searchKey='variable_template_guid')
+
+        if conditionDataField is None:
+            params = {
+                "metadata_thread_id": dataField.metadata_thread["id"],
+                "source_id": dataField.id,
+                "variable_template_id": dataField.id,
+                "protocol_condition_id": condition_id,
+            }
+            newField = entityRepository.newEntity(dataField.__user__, ExperimentDataField, params)
+            setDataFieldValue(newField, value)
+        else:
+            return setDataFieldValue(conditionDataField,value)
+
+
+    if condition_id is None and dataField.is_variable is True:
+        raise Exception(
+            'Please specify a condition ID for variable data fields')
+
 
     if dataField.type == 'default':
         return dataField.edit(extraParams={'value': str(value)})

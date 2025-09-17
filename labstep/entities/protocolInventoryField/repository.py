@@ -21,13 +21,14 @@ def getProtocolInventoryFields(user, protocol_id, count=UNSPECIFIED, extraParams
     return entityRepository.getEntities(user, ProtocolInventoryField, count, params)
 
 
-def newProtocolInventoryField(user, protocol_id, name, resource_id=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, extraParams={}):
+def newProtocolInventoryField(user, protocol_id, name, resource_id=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, category_id=UNSPECIFIED, extraParams={}):
     params = {
         "protocol_id": protocol_id,
         "name": name,
         "resource_id": resource_id,
         "value": amount,
         "units": units,
+        "resource_template_id": category_id,
         **extraParams,
     }
 

@@ -146,7 +146,6 @@ class ProtocolVersion(EntityWithComments):
 
             protocol = user.getProtocol(17000)
             protocol_steps = protocol.getSteps()
-            protocol_steps[0].attributes()
         """
         self.update()
         if hasattr(self, "protocol_steps") is False:
@@ -241,7 +240,7 @@ class ProtocolVersion(EntityWithComments):
         )
 
     def addInventoryField(
-        self, name=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, resource_id=UNSPECIFIED, extraParams={}
+        self, name=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, resource_id=UNSPECIFIED, category_id=UNSPECIFIED, extraParams={}
     ):
         """
         Add a new inventory field to the Protocol.
@@ -277,6 +276,7 @@ class ProtocolVersion(EntityWithComments):
                                                                           resource_id=resource_id, name=name,
                                                                           amount=amount,
                                                                           units=units,
+                                                                          category_id=category_id,
                                                                           extraParams=extraParams)
 
     def getInventoryFields(self, count=UNSPECIFIED, extraParams={}):
@@ -355,7 +355,6 @@ class ProtocolVersion(EntityWithComments):
 
             protocol = user.getProtocol(17000)
             protocol_timers = protocol.getTimers()
-            protocol_timers[0].attributes()
         """
         self.update()
         if hasattr(self, "protocol_timers") is False:
@@ -426,7 +425,6 @@ class ProtocolVersion(EntityWithComments):
 
             protocol = user.getProtocol(17000)
             protocol_tables = protocol.getTables()
-            protocol_tables[0].attributes()
         """
         self.update()
         if hasattr(self, "protocol_tables") is False:

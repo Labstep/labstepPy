@@ -3,9 +3,9 @@ class EntityList(list):
         super().__init__(map(lambda x: entityClass(x, user), items))
         self.__searchKey__ = getattr(entityClass, '__searchKey__', 'name')
 
-    def get(self, key):
-        hits = [entity for entity in self if getattr(
-            entity, self.__searchKey__) == key]
+    def get(self, key, searchKey=None):
+        searchKey = searchKey or self.__searchKey__
+        hits = [entity for entity in self if getattr(entity, searchKey) == key]
 
         if len(hits) == 0:
             return None

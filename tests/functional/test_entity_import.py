@@ -13,7 +13,7 @@ class TestEntityImport:
 
     def test_get_entity_import(self):
         user = fixtures.defaultUser()
-        entityImportGuid = 'entity-import-guid'
+        entityImportGuid = '71900e4a-2d42-4cbb-bc48-cf12a7876f0b'
         entityImport = getEntityImport(user, guid=entityImportGuid)
         assert entityImport['guid'] == entityImportGuid
 
@@ -48,7 +48,7 @@ class TestEntityImport:
                 ]
             }
         }
-        templateGuid = 'device-template-guid'
+        templateGuid = '4cc02d3b-3d5c-462a-afc8-c62d840e05ad'
         name = 'custom import name'
         entityImport = newEntityImport(user, Device, data, templateGuid, name)
         assert entityImport['author']['id'] == user.id
@@ -59,7 +59,7 @@ class TestEntityImport:
 
     def test_edit_name(self):
         user = fixtures.defaultUser()
-        entityImportGuid = 'entity-import-guid'
+        entityImportGuid = '71900e4a-2d42-4cbb-bc48-cf12a7876f0b'
         entityImport = getEntityImport(user, guid=entityImportGuid)
         assert entityImport['guid'] == entityImportGuid
         newName = 'new name'

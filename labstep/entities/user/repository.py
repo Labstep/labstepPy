@@ -49,6 +49,12 @@ def authenticate(username, apikey):
     user["api_key"] = apikey
     return User(user)
 
+def authenticateWithToken(token):
+    url = url_join(configService.getHost(), "api/generic/user/info")
+    response = requestService.get(url, headers={"Authorization": f"Bearer {token}"})
+    user = json.loads(response.content)
+    return User(user)
+
 
 def login(username, password):
     raise Exception(

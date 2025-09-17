@@ -54,7 +54,6 @@ class EntityWithComments(Entity):
 
             entity = user.getExperiment(17000)
             comments = entity.getComments()
-            comments[0].attributes()
         """
         import labstep.entities.comment.repository as commentRepository
 

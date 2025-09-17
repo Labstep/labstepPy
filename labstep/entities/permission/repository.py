@@ -15,8 +15,8 @@ def newPermission(entity, workspace_guid, permission):
     entityName = entity.__entityName__.replace("-", "_")
 
     params = {
-        f'{entityName}_guid': entity.guid,
-        "group_guid": workspace_guid,
+        f'{entityName}_id': entity.guid,
+        "group_id": workspace_guid,
         "type": permission,
     }
     return newEntity(entity.__user__, Permission, params)

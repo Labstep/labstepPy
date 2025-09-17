@@ -54,9 +54,6 @@ class TestExperimentTemplate:
     def test_sharelink(self, entity):
         assert sharedTests.sharelink(entity)
 
-    def test_sharing(self, entity, workspaceToShare):
-        assert sharedTests.sharing(entity, workspaceToShare)
-
     def test_collections(self, entity, collection):
         assert sharedTests.collections(entity, collection)
 

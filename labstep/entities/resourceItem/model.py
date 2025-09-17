@@ -233,16 +233,16 @@ class ResourceItem(EntityWithMetadata, EntityWithComments, EntityWithAssign):
         Returns
         -------
         :class:`~labstep.entities.experimentInventoryField.model.ExperimentInventoryField`
-            Object representing the parent inventory field
+            Object representing the children inventory field
 
         Example
         -------
         ::
 
             my_resource_item = user.getResourceItem(17000)
-            lineageParents = my_resource_item.getLineageParents()
+            lineageChildren = my_resource_item.getLineageChildren()
 
-            parentItem = lineageParents[0].getItem()
+            parentItem = lineageChildren[0].getItem()
         """
 
         import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository

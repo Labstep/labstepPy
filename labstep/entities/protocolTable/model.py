@@ -58,10 +58,12 @@ class ProtocolTable(Entity):
         params = {"name": name, "data": data, **extraParams}
         return entityRepository.editEntity(self, params)
 
-    def getDataTable(self):
+    def getDataTable(self,sheet='Sheet1'):
+        if 'sheets' in self.data:
+            return self.data['sheets'][sheet]['data']['dataTable']
         return self.data['data']['dataTable']
 
-    def getDataFrame(self):
+    def getDataFrame(self,sheet='Sheet1'):
         """
         Converts a Labstep Table to a Pandas DataFrame.
 
@@ -106,4 +108,4 @@ class ProtocolTable(Entity):
             dataFrame = protocol_table.getDataFrame()
             print(dataFrame['Column A'][0])
         """
-        return dataTableToDataFrame(self.getDataTable())
+        return dataTableToDataFrame(self.getDataTable(sheet=sheet))

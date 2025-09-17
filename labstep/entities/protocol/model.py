@@ -176,7 +176,6 @@ class Protocol(EntityPrimary):
 
             protocol = user.getProtocol(17000)
             protocol_steps = protocol.getSteps()
-            protocol_steps[0].attributes()
         """
         return self.getCurrentVersion().getSteps()
 
@@ -255,7 +254,7 @@ class Protocol(EntityPrimary):
         )
 
     def addInventoryField(
-        self, name=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, resource_id=UNSPECIFIED, extraParams={}
+        self, name=UNSPECIFIED, amount=UNSPECIFIED, units=UNSPECIFIED, resource_id=UNSPECIFIED, category_id=UNSPECIFIED,extraParams={}
     ):
         """
         Add a new inventory field to the Protocol.
@@ -269,8 +268,10 @@ class Protocol(EntityPrimary):
         units (str)
             The units for the amount.
         resource_id (int)
-            The id of the :class:`~labstep.entities.resource.model.Resource` recommended for
-            use with the protocol.
+            The id of the :class:`~labstep.entities.resource.model.Resource` items must be from in this field.
+        category_id (int)
+            The id of the :class:`~labstep.entities.resourceCategory.model.ResourceCategory`
+            items must be from in this field.
 
         Returns
         -------
@@ -290,6 +291,7 @@ class Protocol(EntityPrimary):
             resource_id=resource_id, name=name,
             amount=amount,
             units=units,
+            category_id=category_id,
             extraParams=extraParams)
 
     def getInventoryFields(self, count=100, extraParams={}):
@@ -355,7 +357,6 @@ class Protocol(EntityPrimary):
 
             protocol = user.getProtocol(17000)
             protocol_timers = protocol.getTimers()
-            protocol_timers[0].attributes()
         """
         return self.getCurrentVersion().getTimers()
 
@@ -417,7 +418,6 @@ class Protocol(EntityPrimary):
 
             protocol = user.getProtocol(17000)
             protocol_tables = protocol.getTables()
-            protocol_tables[0].attributes()
         """
         return self.getCurrentVersion().getTables()
 
@@ -602,6 +602,25 @@ class Protocol(EntityPrimary):
         """
 
         return self.getCurrentVersion().getConditions()
+
+    def getVersions(self):
+        """
+        Retrieve a list of the different versions associated with this protocol.
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolVersion.model.ProtocolVersion`]
+            A list of the protocol versions associated with the protocol.
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            versions = protocol.getVersions()
+        """
+        from labstep.generic.entity.repository import getEntities
+
+
+        return getEntities(self.__user__, ProtocolVersion, UNSPECIFIED,filterParams={"protocol_collection_id": self.id})
 
     @deprecated(version='3.3.2', reason="You should use experiment.addDataField instead")
     def addDataElement(self, *args, **kwargs):

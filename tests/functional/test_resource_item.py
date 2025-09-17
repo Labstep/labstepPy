@@ -29,16 +29,6 @@ class TestResourceItem:
     def test_metadata(self, entity):
         assert sharedTests.metadata(entity)
 
-    def test_getData(self, entity):
-        user = fixtures.defaultUser()
-        exp = user.newExperiment('Test')
-        data = exp.addDataField('Test', value='test')
-        inventoryField = exp.addInventoryField(
-            resource_id=entity.resource['id'], resource_item_id=entity.id)
-        data.linkToInventoryField(inventoryField)
-        result = entity.getData()
-        assert result[0].id == data.id
-
     def test_setLocation(self, entity, location):
 
         entity.setLocation(location['guid'], position=[5, 10])

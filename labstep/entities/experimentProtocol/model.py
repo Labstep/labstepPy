@@ -102,12 +102,12 @@ class ExperimentProtocol(Entity):
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_inventory_fields = exp_protocol.getInventoryFields()
-            exp_protocol_inventory_fields[0].attributes()
+            exp_protocol_inventory_fields[0]
         """
         self.update()
-        return EntityList(self.protocol_values, ExperimentInventoryField, self.__user__)
+        #return EntityList(self.protocol_values, ExperimentInventoryField, self.__user__)
 
-        # return experimentInventoryFieldRepository.getExperimentInventoryFields(self.__user__,experiment_id=self.id, count=count, extraParams=extraParams)
+        return experimentInventoryFieldRepository.getExperimentInventoryFields(self.__user__,experiment_id=self.id, count=count, extraParams=extraParams)
 
     def addInventoryField(
         self,
@@ -267,7 +267,6 @@ class ExperimentProtocol(Entity):
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_steps = exp_protocol.getSteps()
-            exp_protocol_steps[0].attributes()
         """
         self.update()
         if hasattr(self, 'experiment_steps'):
@@ -351,7 +350,6 @@ class ExperimentProtocol(Entity):
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_tables = exp_protocol.getTables()
-            exp_protocol_tables[0].attributes()
         """
         self.update()
         if hasattr(self, 'experiment_tables'):
@@ -376,7 +374,6 @@ class ExperimentProtocol(Entity):
             experiment = user.getExperiment(17000)
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_timers = exp_protocol.getTimers()
-            exp_protocol_timers[0].attributes()
         """
         self.update()
         if hasattr(self, 'experiment_timers'):
@@ -581,7 +578,7 @@ class ExperimentProtocol(Entity):
         Example
         -------
         ::
-        
+
             experiment = user.getExperiment(17000)
             protocol = experiment.getProtocols()[0]
             conditions = protocol.addConditions(5)

@@ -84,7 +84,6 @@ class ResourceTemplate(Entity):
 
             entity = user.getResourceCategory(17000)
             metadatas = entity.getMetadata()
-            metadatas[0].attributes()
         """
         import labstep.entities.metadata.repository as metadataRepository
 

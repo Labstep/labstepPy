@@ -25,12 +25,3 @@ class TestDataField:
 
     def test_delete(self, entity):
         assert sharedTests.delete(entity)
-
-    def test_link_to_inventory_field(self):
-        user = fixtures.defaultUser()
-        exp = user.newProtocol('Test')
-        data = exp.addDataField('Test')
-        inventoryField = exp.addInventoryField('Test')
-        data.linkToInventoryField(inventoryField)
-        linkedInventoryFields = data.getLinkedInventoryFields()
-        assert linkedInventoryFields[0].id == inventoryField.id

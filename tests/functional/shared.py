@@ -118,23 +118,32 @@ class SharedTests:
     def protocolConditions(self, entity):
         user = fixtures.defaultUser()
         test_resource = user.newResource(name='Test')
-        output_data_field = entity.addDataField(
-            'Test', extraParams={'is_variable': True, 'is_output': True})
-        output_inventory_field = entity.addInventoryField('Test',
-                                                          resource_id=test_resource.id,
-                                                          extraParams={'is_variable': True, 'is_output': True})
+        entity.addDataField(
+            'Test',
+            extraParams={'is_variable': True, 'is_output': True}
+        )
+        entity.addInventoryField(
+            'Test',
+            resource_id=test_resource.id,
+            extraParams={'is_variable': True, 'is_output': True}
+        )
 
-        condition = entity.addConditions(1)
-        condition_entity = condition[0]
+        return entity.addConditions(1)
 
-        condition_from_get = entity.getConditions()[0]
+    def experimentConditions(self, entity):
+        user = fixtures.defaultUser()
+        test_resource = user.newResource(name='Test')
+        entity.addDataField(
+            'Test',
+            extraParams={'is_variable': True, 'is_output': True}
+        )
+        entity.addInventoryField(
+            'Test',
+            resource_id=test_resource.id,
+            extraParams={'is_variable': True, 'is_output': True}
+        )
 
-        input_data_field_from_get = condition_entity.getDataFields()
-        input_inventory_field_from_get = condition_entity.getInventoryFields()
-
-        return condition_entity.guid == condition_from_get.guid \
-            and condition_entity.guid == input_data_field_from_get[0].protocol_condition_guid \
-            and condition_entity.guid == input_inventory_field_from_get[0].protocol_condition_guid
+        return entity.addConditions(1)
 
     def experimentConditions(self, entity):
         user = fixtures.defaultUser()

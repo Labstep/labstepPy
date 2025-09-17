@@ -26,5 +26,3 @@ data = {
 }
 
 table = protocol.addTable(name='Test Table', data=data)
-
-table.attributes()

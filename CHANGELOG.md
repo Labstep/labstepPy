@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project (tries to) adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.34.0] - XXXX-XX-XX
+### Added
+- `CustomIdentifierSet` model and repository
+
+
+## [3.33.0] - 2025-06-11
+
+### Added
+
+- `shareWith` and `assign` methods added to `Folder`
+- `addUsers` method to `Organization` model
+- Action `view` now supported in `setWorkspaceRolePermission`
+
+## [3.32.1] - 2025-05-22
+
+### Fixed
+
+- `getDataFrame` method now works on multisheet tables for `ExperimentTable` and `ProtocolTable`
+
+## [3.32.0] - 2025-05-20
+
+### Added
+
+- `getVersions` method to `Protocol` model
+
 ## [3.31.0] - 2024-12-28
 
 ### Added

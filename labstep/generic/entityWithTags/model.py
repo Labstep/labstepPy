@@ -48,7 +48,6 @@ class EntityWithTags(Entity):
 
             entity = user.getExperiment(17000)
             tags = entity.getTags()
-            tags[0].attributes()
         """
         import labstep.entities.tag.repository as tagRepository
 

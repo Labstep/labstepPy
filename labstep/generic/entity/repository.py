@@ -60,7 +60,7 @@ def filterEntities(user, entityClass, filter, count=UNSPECIFIED, pageSize=50):
     headers = getHeaders(user=user)
     url = url_join(configService.getHost(), "/api/generic/",
                    entityClass.__entityName__, "filter")
-    print(f'Fetching page {page}')
+    #print(f'Fetching page {page}')
     response = requestService.post(
         url, headers=headers, json={"filter": filter, "page": page, "skip_total": 1, "count": pageSize, "group_id": user.activeWorkspace})
 

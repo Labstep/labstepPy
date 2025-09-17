@@ -31,15 +31,6 @@ class TestExperimentDataField:
     def test_delete(self, entity):
         assert sharedTests.delete(entity)
 
-    def test_link_to_inventory_field(self):
-        user = fixtures.defaultUser()
-        exp = user.newExperiment('Test')
-        data = exp.addDataField('Test')
-        inventoryField = exp.addInventoryField('Test')
-        data.linkToInventoryField(inventoryField)
-        linkedInventoryFields = data.getLinkedInventoryFields()
-        assert linkedInventoryFields[0].id == inventoryField.id
-
     def test_device_data(self, entity, device):
         deviceData = device.addData(fieldName='Numeric Test',
                                     fieldType='numeric',

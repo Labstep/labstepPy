@@ -157,7 +157,6 @@ class ExperimentTemplate(EntityPrimary):
 
             entity = user.getExperimentTemplate(17000)
             protocols = entity.getProtocols()
-            protocols[0].attributes()
         """
         import labstep.generic.entity.repository as entityRepository
 
@@ -495,7 +494,6 @@ class ExperimentTemplate(EntityPrimary):
 
             entity = user.getExperimentTemplate(17000)
             comments = entity.getComments()
-            comments[0].attributes()
         """
         import labstep.entities.comment.repository as commentRepository
 
