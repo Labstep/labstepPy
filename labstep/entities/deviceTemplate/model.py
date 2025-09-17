@@ -84,9 +84,8 @@ class DeviceTemplate(Entity):
 
             entity = user.getDeviceCategory(17000)
             metadatas = entity.getMetadata()
-            metadatas[0].attributes()
         """
         import labstep.entities.metadata.repository as metadataRepository
 
         return metadataRepository.getMetadata(self)
-    
+

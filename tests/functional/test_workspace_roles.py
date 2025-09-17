@@ -48,11 +48,11 @@ class TestWorkspaceRole:
         from labstep.entities.experiment.model import Experiment
         workspace_role.__user__.update()
         workspace_role_permission = workspace_role.setPermission(
-            Experiment, 'create')
+            Experiment, 'view')
 
         workspace_role_permissions = workspace_role.getPermissions()
 
         assert workspace_role_permission.guid == workspace_role_permissions[0].guid
-        assert workspace_role_permissions[0]['action'] == 'experiment_workflow:create'
-        assert workspace_role_permissions[0]['entity_name'] == 'group'
+        assert workspace_role_permissions[0]['action'] == 'view'
+        assert workspace_role_permissions[0]['entity_name'] == 'experiment_workflow'
         assert workspace_role_permissions[0]['type'] == 'all'

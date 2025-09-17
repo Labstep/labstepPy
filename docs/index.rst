@@ -93,9 +93,11 @@ own specific purposes.
    :caption: Examples
    :maxdepth: 2
 
-   source/device_integration.rst
+   source/experiment_examples.rst
+   source/protocol_examples.rst
+   source/inventory_examples.rst
+   source/device_examples.rst
    source/example_uses.rst
-   source/export_examples.rst
    source/advanced_filter.rst
 
 Troubleshooting

@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: Labstep <dev@labstep.com>
 
-from labstep.generic.entity.model import Entity
+from labstep.generic.entityWithSharing.model import EntityWithSharing
+from labstep.generic.entityWithTags.model import EntityWithTags
+from labstep.generic.entityWithAssign.model import EntityWithAssign
 from labstep.service.helpers import getTime
 from labstep.constants import UNSPECIFIED
 
 
-class Collection(Entity):
+class Collection(EntityWithSharing,EntityWithAssign):
     """
     Represents a Collection on Labstep.
 

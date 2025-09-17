@@ -27,6 +27,9 @@ def setWorkspaceRolePermission(workspaceRole, entityClass, action, permission_se
     if action == 'create':
         params = {'entity_name': 'group',
                   'action': f'{entityName}:create'}
+    elif action == 'view':
+        params = {'entity_name': entityName,
+                  'action': 'view'}
     elif action == 'assign':
         params = {'entity_name': entityName,
                   'action': 'entity_user:*'}
@@ -51,8 +54,6 @@ def setWorkspaceRolePermission(workspaceRole, entityClass, action, permission_se
         raise Exception(
             f'{action} is not a valid action for which permission can be granted')
 
-    if permission_setting == 'if_assigned':
-        permission_setting = 'custom'
 
     params = {**params,
               'permission_role_id': workspaceRole.guid,

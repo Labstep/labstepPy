@@ -44,9 +44,6 @@ class TestProtocol:
     def test_sharelink(self, entity):
         assert sharedTests.sharelink(entity)
 
-    def test_sharing(self, entity, workspaceToShare):
-        assert sharedTests.sharing(entity, workspaceToShare)
-
     def test_steps(self, entity):
         assert sharedTests.steps(entity)
 

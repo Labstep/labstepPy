@@ -1,43 +1,41 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import labstep
-import pandas
-
-# Login
-user = labstep.login('myaccount@labstep.com', 'mypassword')
+import pandas as pd
+from labstep.service.helpers import linearToCartesianCoordinates
 
 
-# Set to an existing workspace
-my_workspace = user.newWorkspace('Shared Inventory')
-user.setWorkspace(my_workspace.id)
+## Authenticate user
+user = labstep.authenticate()
 
 
-# Read input data
-# headers = ['ID', 'Name', 'Location', 'Amount / uL']
-data = pandas.read_csv('./resource_import.csv')
+## Set to the ID of the workspace to import into.
+user.setWorkspace(WORKSPACE_ID) ## Replace with ID of target workspace.
 
 
-# For each entry:
-for counter, name in enumerate(data['Name']):
+## Create templates for resources and items
+resourceCategory = user.newResourceCategory('Plasmid Preps')
+resourceTemplate = resourceCategory.getResourceTemplate()
+itemTemplate = resourceCategory.getItemTemplate()
 
-    # Create a new Resource for it
-    new_resource = user.newResource(name)
+resourceTemplate.addMetadata(fieldName="Plasmid Backbone", fieldType="default")
+itemTemplate.addMetadata(fieldName="Concentration", fieldType="numeric", unit="ng / µL")
+itemTemplate.addMetadata(fieldName="Prep Date", fieldType="date")
 
-    # Add a new Item and use the 'ID' as the Item name
-    new_item = new_resource.newItem(name=data['ID'][counter])
 
-    # Set the amount
-    new_item.edit(quantity_amount=data['Amount / uL'][counter],
-                  quantity_unit='uL')
+## Import data from xlsx file to create locations, resources and items.
+df = pd.read_excel('inventory.xlsx')
 
-    # Set the location
-    location = my_workspace.getResourceLocations(
-        search_query=data['Location'][counter])
+df_locations = df['Location'].unique()
+locations = {}
 
-    if len(location) == 0:
-        location = user.newResourceLocation(data['Location'][counter])
-    else:
-        location = location[0]
+for location in df_locations:
+    newLocation = user.newResourceLocation(name=location)
+    locations[newLocation.name] = newLocation.guid
 
-    new_item.edit(resource_location_id=location.id)
+for index, row in df.iterrows():
+    newResource = user.newResource(name=row['Name'], resource_category_id=resourceCategory.id)
+    newResource.addMetadata(fieldName='Plasmid Backbone', fieldType='default', value=row['Plasmid backbone'])
+    newItem = newResource.newItem()
+    newItem.addMetadata(fieldName='Concentration', fieldType="numeric", number=row['Concentration (ng / µl)'])
+    newItem.addMetadata(fieldName='Prep Date', fieldType="date", date=str(row['Prep Date']))
+    mapPosition = linearToCartesianCoordinates(position=row['Box Position'], number_of_columns=10)
+    newItem.setLocation(locations[row['Location']], position=mapPosition)

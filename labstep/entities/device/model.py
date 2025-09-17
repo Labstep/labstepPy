@@ -166,7 +166,6 @@ class Device(EntityWithSharing, EntityWithMetadata, EntityWithComments, EntityWi
 
             my_device = user.getDevice(17000)
             metadatas = my_device.getMetadata()
-            metadatas[0].attributes()
         """
         import labstep.entities.metadata.repository as metadataRepository
 

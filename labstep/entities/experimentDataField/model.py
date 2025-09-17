@@ -93,7 +93,7 @@ class ExperimentDataField(EntityWithComments):
 
         return experimentDataFieldRepository.getDataFieldValue(self)
 
-    def setValue(self, value):
+    def setValue(self, value, condition_id=None):
         """
         Sets the value of the data field.
 
@@ -101,6 +101,9 @@ class ExperimentDataField(EntityWithComments):
         ----------
         value
             The value to set, depends on the type of the data field.
+
+        condition_id (int, optional)
+            The ID of the condition to set the value for (variable data fields only).
 
         Returns
         ----------
@@ -134,7 +137,7 @@ class ExperimentDataField(EntityWithComments):
 
         import labstep.entities.experimentDataField.repository as experimentDataFieldRepository
 
-        return experimentDataFieldRepository.setDataFieldValue(self, value)
+        return experimentDataFieldRepository.setDataFieldValue(self, value,condition_id=condition_id)
 
     def getNotificationAlert(self):
         """

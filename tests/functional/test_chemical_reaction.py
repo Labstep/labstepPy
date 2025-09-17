@@ -29,7 +29,7 @@ class TestChemicalReaction:
         import labstep.entities.chemicalReaction.repository as chemicalReactionRepository
         user = fixtures.defaultUser()
         chemicalReaction = chemicalReactionRepository.getChemicalReaction(
-            user, 'molecule')
+            user, '1234ae5d-4502-4f10-a7c9-822b082b5678')
         assert chemicalReaction['limiting_chemical']['guid'] == '8439ae3d-4502-4f10-a7c9-822b082b2259'
         chemicalReaction.setLimitingChemical(
             '1e493da7-01db-4795-a5c4-e68d824dfcf3')

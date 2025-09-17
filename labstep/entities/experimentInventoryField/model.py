@@ -7,6 +7,8 @@ from labstep.generic.entity.repository import getEntityProperty
 from labstep.entities.resource.model import Resource
 from labstep.entities.resourceItem.model import ResourceItem
 from labstep.constants import UNSPECIFIED
+import labstep.generic.entity.repository as entityRepository
+
 
 
 class ExperimentInventoryField(Entity):
@@ -64,3 +66,16 @@ class ExperimentInventoryField(Entity):
                                                                                resource_id=resource_id,
                                                                                resource_item_id=resource_item_id,
                                                                                extraParams=extraParams)
+
+    def setValue(self,amount,resource_item_id,condition_id=UNSPECIFIED):
+        """
+        Sets the amount associated with this inventory field.
+
+        Parameters
+        ----------
+        amount : float
+            The amount to set.
+        """
+        import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
+
+        return experimentInventoryFieldRepository.setValue(self, amount=amount, resource_item_id=resource_item_id,condition_id=condition_id)

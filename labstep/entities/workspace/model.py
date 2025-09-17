@@ -618,7 +618,7 @@ class Workspace(EntityWithComments):
             self.__user__, count, type, search_query, extraParams=extraParams
         )
 
-    def newCollection(self, name, type="experiment"):
+    def newCollection(self, name, type="experiment", is_sharing_enabled=UNSPECIFIED):
         """
         Create a new Collection within the Workspace for Experiments or Protocols.
 
@@ -632,6 +632,8 @@ class Workspace(EntityWithComments):
         type (str)
             Return only collections of a certain type. Options are:
            'experiment', 'protocol'. Defaults to 'experiment'
+        is_sharing_enabled (bool)
+            Whether the collection should be sharable.
 
         Returns
         -------
@@ -642,6 +644,7 @@ class Workspace(EntityWithComments):
 
         return collectionRepository.newCollection(
             self.__user__, name=name, type=type, extraParams={
+                "is_sharing_enabled": is_sharing_enabled,
                 "group_id": self.id}
         )
 

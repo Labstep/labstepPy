@@ -37,6 +37,43 @@ class Organization(Entity):
 
         return organizationRepository.editOrganization(self, name, extraParams=extraParams)
 
+    def addUsers(self, users, workspace_id=UNSPECIFIED):
+        """
+        Add users to your organization.
+
+        Parameters
+        ----------
+        users (list)
+            A list of users to add in form [{'first_name': 'Bob',
+            'last_name': 'Ross', 'email': 'test@labstep.com'}]
+
+        workspace_id (string)
+            Optionally specify the id of a workspace to add the new users to.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.organizationUser.model.OrganizationUser`]
+            A list of OrganizationUser objects representing the users added to the organization.
+
+        Example
+        -------
+        ::
+
+            users = my_organization.addUsers([
+                {
+                    'first_name': 'Bob',
+                    'username': 'Ross',
+                    'email': 'bob@labstep.com'
+                },
+                {
+                    'first_name': 'Alice',
+                    'username': 'Wonderland',
+                    'email': 'alice@labstep.com'
+                }
+            ])
+        """
+        return organizationUserRepository.addUsers(self.__user__, users, workspace_id=workspace_id)
+
     def inviteUsers(self, emails, workspace_id=UNSPECIFIED):
         """
         Invite users to your organization.
