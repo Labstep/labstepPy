@@ -109,7 +109,7 @@ Always ensure you are using the latest version of the SDK by running:
 
     pip install labstep --upgrade
 
-If you have further issues please contact **barney@labstep.com** for support.
+If you have further issues please contact **farhan.aslam@starlims.com** for support.
 
 
 Contributors
@@ -117,6 +117,7 @@ Contributors
 
 - Sze May Yee
 - Barney Walker
+- Farhan Aslam
 
 Getting Involved
 ----------------
@@ -124,7 +125,7 @@ labstepPy is an Open Source package.
 
 Feel free to submit bug reports, feature requests or PRs on Github `here <https://github.com/Labstep/labstepPy>`_.
 
-If you are interested in contributing please contact **barney@labstep.com**.
+If you are interested in contributing please contact **farhan.aslam@starlims.com**.
 
 
 Indices and tables
