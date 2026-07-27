@@ -925,6 +925,36 @@ class Workspace(EntityWithComments):
 
         return entityStateWorkflowRepository.newEntityStateWorkflow(self.__user__, name=name, extraParams=extraParams)
 
+    def getActivityLogs(self, count=UNSPECIFIED, created_at_from=UNSPECIFIED, created_at_to=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of Activity Logs within this specific Workspace.
+
+        Parameters
+        ----------
+        count (int)
+            The number of Activity Logs to retrieve.
+        created_at_from (str)
+            The start date of the search range, must be in the format of 'YYYY-MM-DD'.
+        created_at_to (str)
+            The end date of the search range, must be in the format of 'YYYY-MM-DD'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.activityLog.model.ActivityLog`]
+            A list of Labstep ActivityLog objects.
+
+        Example
+        -------
+        ::
+
+            logs = workspace.getActivityLogs(created_at_from='2026-01-01', created_at_to='2026-07-24')
+        """
+        import labstep.entities.activityLog.repository as activityLogRepository
+
+        return activityLogRepository.getActivityLogs(
+            self.__user__, workspace_id=self.id, count=count, created_at_from=created_at_from, created_at_to=created_at_to, extraParams=extraParams
+        )
+
     def getEntityStateWorkflows(self, count=UNSPECIFIED, search_query=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of EntityStateWorkflows within this specific Workspace,

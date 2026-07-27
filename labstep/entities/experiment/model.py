@@ -717,6 +717,47 @@ class Experiment(EntityPrimary):
 
         return self.root_experiment.addJupyterNotebook(name, data)
 
+    def addSmartTable(self, name=UNSPECIFIED, extraParams={}):
+        """
+        Add a new smart table to an Experiment.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the smart table.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentSmartTable.model.ExperimentSmartTable`
+            The newly added smart table entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            experiment.addSmartTable(name='My Smart Table')
+        """
+        return self.root_experiment.addSmartTable(name=name, extraParams=extraParams)
+
+    def getSmartTables(self):
+        """
+        Returns a list of the smart tables in an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.experimentSmartTable.model.ExperimentSmartTable`]
+            List of the smart tables in an Experiment.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            smart_tables = experiment.getSmartTables()
+        """
+        return self.root_experiment.getSmartTables()
+
     def addConditions(self, number_of_conditions):
         """
         Add conditions to the experiment

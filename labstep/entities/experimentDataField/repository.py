@@ -20,59 +20,59 @@ def getDataFields(entity, count=UNSPECIFIED, extraParams={}):
 
     params = {}
 
-    if hasattr(entity, 'metadata_thread') is False:
+    if hasattr(entity, "metadata_thread") is False:
         entity.update()
 
     if isinstance(entity, ExperimentProtocol):
-        params = {
-            "metadata_thread_id": entity.metadata_thread["id"]}
+        params = {"metadata_thread_id": entity.metadata_thread["id"]}
 
     elif isinstance(entity, Resource):
-        params = {
-            "multiplexing_input_resource_id": entity.id,
-            "has_value": True
-        }
+        params = {"multiplexing_input_resource_id": entity.id, "has_value": True}
         dataWhenInput = entityRepository.getEntities(
-            entity.__user__, ExperimentDataField, count=count, filterParams={
-                **params, **extraParams})
+            entity.__user__,
+            ExperimentDataField,
+            count=count,
+            filterParams={**params, **extraParams},
+        )
 
-        params = {
-            "multiplexing_output_resource_id": entity.id,
-            "has_value": True
-        }
+        params = {"multiplexing_output_resource_id": entity.id, "has_value": True}
         dataWhenOutput = entityRepository.getEntities(
-            entity.__user__, ExperimentDataField, count=count, filterParams={
-                **params, **extraParams})
+            entity.__user__,
+            ExperimentDataField,
+            count=count,
+            filterParams={**params, **extraParams},
+        )
 
         return dataWhenInput + dataWhenOutput
 
     elif isinstance(entity, ResourceItem):
-        params = {
-            "multiplexing_input_resource_item_id": entity.id,
-            "has_value": True
-        }
+        params = {"multiplexing_input_resource_item_id": entity.id, "has_value": True}
         dataWhenInput = entityRepository.getEntities(
-            entity.__user__, ExperimentDataField, count=count, filterParams={
-                **params, **extraParams})
+            entity.__user__,
+            ExperimentDataField,
+            count=count,
+            filterParams={**params, **extraParams},
+        )
 
-        params = {
-            "multiplexing_output_resource_item_id": entity.id,
-            "has_value": True
-        }
+        params = {"multiplexing_output_resource_item_id": entity.id, "has_value": True}
         dataWhenOutput = entityRepository.getEntities(
-            entity.__user__, ExperimentDataField, count=count, filterParams={
-                **params, **extraParams})
+            entity.__user__,
+            ExperimentDataField,
+            count=count,
+            filterParams={**params, **extraParams},
+        )
 
         return dataWhenInput + dataWhenOutput
 
     return entityRepository.getEntities(
-        entity.__user__, ExperimentDataField, count=count, filterParams={
-            **params, **extraParams}
+        entity.__user__,
+        ExperimentDataField,
+        count=count,
+        filterParams={**params, **extraParams},
     )
 
 
 def addDataFieldTo(
-
     entity,
     fieldName,
     fieldType="default",
@@ -89,7 +89,7 @@ def addDataFieldTo(
     else:
         fileId = UNSPECIFIED
 
-    if hasattr(entity, 'metadata_thread') is False:
+    if hasattr(entity, "metadata_thread") is False:
         entity.update()
 
     params = {
@@ -107,12 +107,18 @@ def addDataFieldTo(
     return entityRepository.newEntity(entity.__user__, ExperimentDataField, params)
 
 
-def editDataField(dataField, fieldName=UNSPECIFIED, value=UNSPECIFIED, is_variable=UNSPECIFIED, extraParams={}):
+def editDataField(
+    dataField,
+    fieldName=UNSPECIFIED,
+    value=UNSPECIFIED,
+    is_variable=UNSPECIFIED,
+    extraParams={},
+):
     params = {
         "label": handleString(fieldName),
         "value": handleString(value),
         "is_variable": is_variable,
-        **extraParams
+        **extraParams,
     }
     return entityRepository.editEntity(dataField, params)
 
@@ -122,43 +128,43 @@ def getDataFieldValue(dataField):
     if dataField.device_data is not None:
         dataField = DeviceData(dataField.device_data, dataField.__user__)
 
-    if dataField.type == 'default':
+    if dataField.type == "default":
         return dataField.value
 
-    if dataField.type == 'numeric':
+    if dataField.type == "numeric":
         return dataField.number
 
-    if dataField.type == 'date':
+    if dataField.type == "date":
         if dataField.date is None:
             return None
         return formatDate(dataField.date, time=False)
 
-    if dataField.type == 'datetime':
+    if dataField.type == "datetime":
         return formatDate(dataField.date)
 
-    if dataField.type == 'options':
+    if dataField.type == "options":
         if dataField.options is None:
             return None
 
-        keys = [k for k, v in dataField.options['values'].items() if v]
+        keys = [k for k, v in dataField.options["values"].items() if v]
 
         if keys == []:
             return None
 
-        if dataField.options['is_allow_multiple']:
+        if dataField.options["is_allow_multiple"]:
             return keys
 
         return keys[0]
 
-    if dataField.type == 'file':
+    if dataField.type == "file":
 
         if len(dataField.files) == 1:
             return File(dataField.files[0], dataField.__user__)
         else:
             return EntityList(dataField.files, File, dataField.__user__)
 
-    if dataField.type == 'sequence':
-        return json.loads(dataField.sequence['data'])
+    if dataField.type == "sequence":
+        return json.loads(dataField.sequence["data"])
 
     return None
 
@@ -166,13 +172,14 @@ def getDataFieldValue(dataField):
 def setDataFieldValue(dataField, value, condition_id=None):
     if condition_id is not None:
         if dataField.is_variable is False:
-            raise Exception(
-                'Cannot set value for conditions on a constant data field')
+            raise Exception("Cannot set value for conditions on a constant data field")
 
         conditionDataField = entityRepository.getEntities(
-            dataField.__user__, ExperimentDataField, count=UNSPECIFIED, filterParams={
-                'protocol_condition_id': condition_id
-        }).get(dataField.guid, searchKey='variable_template_guid')
+            dataField.__user__,
+            ExperimentDataField,
+            count=UNSPECIFIED,
+            filterParams={"protocol_condition_id": condition_id},
+        ).get(dataField.guid, searchKey="variable_template_guid")
 
         if conditionDataField is None:
             params = {
@@ -181,27 +188,26 @@ def setDataFieldValue(dataField, value, condition_id=None):
                 "variable_template_id": dataField.id,
                 "protocol_condition_id": condition_id,
             }
-            newField = entityRepository.newEntity(dataField.__user__, ExperimentDataField, params)
+            newField = entityRepository.newEntity(
+                dataField.__user__, ExperimentDataField, params
+            )
             setDataFieldValue(newField, value)
         else:
-            return setDataFieldValue(conditionDataField,value)
+            return setDataFieldValue(conditionDataField, value)
 
+    if condition_id is None and dataField.is_variable is True and dataField.variable_template_guid is None:
+        raise Exception("Please specify a condition ID for variable data fields")
 
-    if condition_id is None and dataField.is_variable is True:
-        raise Exception(
-            'Please specify a condition ID for variable data fields')
+    if dataField.type == "default":
+        return dataField.edit(extraParams={"value": str(value)})
 
+    if dataField.type == "numeric":
+        return dataField.edit(extraParams={"number": float(value)})
 
-    if dataField.type == 'default':
-        return dataField.edit(extraParams={'value': str(value)})
+    if dataField.type == "date" or dataField.type == "datetime":
+        return dataField.edit(extraParams={"date": handleDate(value)})
 
-    if dataField.type == 'numeric':
-        return dataField.edit(extraParams={'number': float(value)})
-
-    if dataField.type == 'date' or dataField.type == 'datetime':
-        return dataField.edit(extraParams={'date': handleDate(value)})
-
-    if dataField.type == 'options':
+    if dataField.type == "options":
 
         if isinstance(value, list) is False:
             value = [str(value)]
@@ -209,31 +215,25 @@ def setDataFieldValue(dataField, value, condition_id=None):
         options = dataField.options
 
         if options is None:
-            options = {
-                'is_allow_multiple': False,
-                'is_allow_add': True,
-                'values': {}
-            }
+            options = {"is_allow_multiple": False, "is_allow_add": True, "values": {}}
 
-        if options['values'] is None:
-            options['values'] = {}
+        if options["values"] is None:
+            options["values"] = {}
 
-        options['values'] = {key: False for key in options['values'].keys()}
+        options["values"] = {key: False for key in options["values"].keys()}
 
-        if options['is_allow_multiple'] is False and len(value) > 1:
-            raise Exception(
-                'Specifying multiple values for this field is forbidden. ')
+        if options["is_allow_multiple"] is False and len(value) > 1:
+            raise Exception("Specifying multiple values for this field is forbidden. ")
 
         for activeKey in value:
-            options['values'][activeKey] = True
+            options["values"][activeKey] = True
 
-        return dataField.edit(extraParams={'options': options})
+        return dataField.edit(extraParams={"options": options})
 
-    if dataField.type == 'file':
+    if dataField.type == "file":
         if isinstance(value, File) is False:
-            raise Exception(
-                'Please specify a Labstep File object as the value')
+            raise Exception("Please specify a Labstep File object as the value")
 
-        return dataField.edit(extraParams={'file_id': value.id})
+        return dataField.edit(extraParams={"file_id": value.id})
 
     return None

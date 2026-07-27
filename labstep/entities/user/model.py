@@ -132,6 +132,30 @@ class User(Entity):
 
         return protocolRepository.getProtocol(self, protocol_id)
 
+    def getProtocolTemplate(self, protocol_template_id):
+        """
+        Retrieve a specific Labstep Protocol Template.
+
+        Parameters
+        ----------
+        protocol_template_id (int)
+            The id of the Protocol Template to retrieve.
+
+        Returns
+        -------
+        :class:`~labstep.entities.protocolTemplate.model.ProtocolTemplate`
+            An object representing a Protocol Template on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.getProtocolTemplate(17000)
+        """
+        import labstep.entities.protocolTemplate.repository as protocolTemplateRepository
+
+        return protocolTemplateRepository.getProtocolTemplate(self, protocol_template_id)
+
     def getResource(self, resource_id):
         """
         Retrieve a specific Labstep Resource.
@@ -473,6 +497,56 @@ class User(Entity):
             extraParams=extraParams,
         )
 
+    def getProtocolTemplates(
+        self,
+        count=UNSPECIFIED,
+        search_query=UNSPECIFIED,
+        created_at_from=UNSPECIFIED,
+        created_at_to=UNSPECIFIED,
+        extraParams={},
+    ):
+        """
+        Retrieve a list of a User's Protocol Templates
+        across all Workspaces on Labstep,
+        which can be filtered using the parameters:
+
+        Parameters
+        ----------
+        count (int)
+            The number of Protocol Templates to retrieve.
+        search_query (str)
+            Search for Protocol Templates with this 'name'.
+        created_at_from (str)
+            The start date of the search range, must be
+            in the format of 'YYYY-MM-DD'.
+        created_at_to (str)
+            The end date of the search range, must be
+            in the format of 'YYYY-MM-DD'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolTemplate.model.ProtocolTemplate`]
+            A list of Labstep Protocol Templates.
+
+        Example
+        -------
+        ::
+
+            entity = user.getProtocolTemplates(search_query='synthesis',
+                                               created_at_from='2019-01-01',
+                                               created_at_to='2019-01-31')
+        """
+        import labstep.entities.protocolTemplate.repository as protocolTemplateRepository
+
+        return protocolTemplateRepository.getProtocolTemplates(
+            self,
+            count=count,
+            search_query=search_query,
+            created_at_from=created_at_from,
+            created_at_to=created_at_to,
+            extraParams=extraParams,
+        )
+
     def getResources(self, count=UNSPECIFIED, search_query=UNSPECIFIED, resource_category_id=UNSPECIFIED, tag_id=UNSPECIFIED, extraParams={}):
         """
         Retrieve a list of a User's Resources
@@ -809,6 +883,30 @@ class User(Entity):
         import labstep.entities.protocol.repository as protocolRepository
 
         return protocolRepository.newProtocol(self, name, extraParams=extraParams)
+
+    def newProtocolTemplate(self, name, extraParams={}):
+        """
+        Create a new Labstep Protocol Template.
+
+        Parameters
+        ----------
+        name (str)
+            Give your Protocol Template a name.
+
+        Returns
+        -------
+        :class:`~labstep.entities.protocolTemplate.model.ProtocolTemplate`
+            An object representing a Protocol Template on Labstep.
+
+        Example
+        -------
+        ::
+
+            entity = user.newProtocolTemplate(name='Aspirin Synthesis Template')
+        """
+        import labstep.entities.protocolTemplate.repository as protocolTemplateRepository
+
+        return protocolTemplateRepository.newProtocolTemplate(self, name, extraParams=extraParams)
 
     def newResource(self, name, resource_category_id=UNSPECIFIED, extraParams={}):
         """
@@ -1616,4 +1714,34 @@ class User(Entity):
             count=count,
             search_query=search_query,
             extraParams=extraParams,
+        )
+
+    def getActivityLogs(self, count=UNSPECIFIED, created_at_from=UNSPECIFIED, created_at_to=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of Activity Logs for this User.
+
+        Parameters
+        ----------
+        count (int)
+            The number of Activity Logs to retrieve.
+        created_at_from (str)
+            The start date of the search range, must be in the format of 'YYYY-MM-DD'.
+        created_at_to (str)
+            The end date of the search range, must be in the format of 'YYYY-MM-DD'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.activityLog.model.ActivityLog`]
+            A list of Labstep ActivityLog objects.
+
+        Example
+        -------
+        ::
+
+            logs = user.getActivityLogs(created_at_from='2026-01-01', created_at_to='2026-07-24')
+        """
+        import labstep.entities.activityLog.repository as activityLogRepository
+
+        return activityLogRepository.getActivityLogs(
+            self, author_id=self.id, count=count, created_at_from=created_at_from, created_at_to=created_at_to, extraParams=extraParams
         )

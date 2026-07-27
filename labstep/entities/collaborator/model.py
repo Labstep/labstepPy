@@ -11,7 +11,7 @@ class Collaborator(Entity):
 
     def unassign (self):
         """
-        Unassign collaborator.
+        Unassign collabortor.
 
         Example
         -------
@@ -21,3 +21,4 @@ class Collaborator(Entity):
             collaborators[0].unassign()
         """
         return collaboratorRepository.unassign(self)
+        

@@ -8,8 +8,9 @@ from labstep.entities.resourceCategory.model import ResourceCategory
 from labstep.entities.resourceItem.model import ResourceItem
 from labstep.entities.resourceLocation.model import ResourceLocation
 from labstep.entities.tag.model import Tag
+from labstep.entities.user.model import User
 from labstep.entities.workspace.model import Workspace
-from labstep.generic.entity.repository import newEntity
+from labstep.generic.entity.repository import newEntity, newEntities
 from labstep.service.request import RequestException
 
 from .fixtures import fixtures, tableData, testString
@@ -144,27 +145,6 @@ class SharedTests:
         )
 
         return entity.addConditions(1)
-
-    def experimentConditions(self, entity):
-        user = fixtures.defaultUser()
-        test_resource = user.newResource(name='Test')
-        output_data_field = entity.addDataField(
-            'Test', extraParams={'is_variable': True, 'is_output': True})
-        output_inventory_field = entity.addInventoryField('Test',
-                                                          resource_id=test_resource.id,
-                                                          extraParams={'is_variable': True, 'is_output': True})
-
-        condition = entity.addConditions(1)
-        condition_entity = condition[0]
-
-        condition_from_get = entity.getConditions()[1]
-
-        input_data_field_from_get = condition_entity.getDataFields()
-        input_inventory_field_from_get = condition_entity.getInventoryFields()
-
-        return condition_entity.guid == condition_from_get.guid \
-            and condition_entity.guid == input_data_field_from_get[0].protocol_condition_guid \
-            and condition_entity.guid == input_inventory_field_from_get[0].protocol_condition_guid
 
     def assign(self, entity):
         user = entity.__user__

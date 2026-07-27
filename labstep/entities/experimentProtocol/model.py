@@ -11,9 +11,11 @@ from labstep.entities.chemicalReaction.model import ChemicalReaction
 from labstep.entities.experimentTable.model import ExperimentTable
 from labstep.entities.experimentTimer.model import ExperimentTimer
 from labstep.entities.experimentInventoryField.model import ExperimentInventoryField
+from labstep.entities.experimentSmartTable.model import ExperimentSmartTable
 import labstep.entities.file.repository as fileRepository
 import labstep.entities.experimentInventoryField.repository as experimentInventoryFieldRepository
 import labstep.entities.chemicalReaction.repository as chemicalReactionRepository
+import labstep.entities.experimentSmartTable.repository as experimentSmartTableRepository
 from labstep.constants import UNSPECIFIED
 
 
@@ -22,7 +24,12 @@ class ExperimentProtocol(Entity):
     __unSearchable__ = True
 
     def edit(
-        self, name=UNSPECIFIED, body=UNSPECIFIED, started_at=UNSPECIFIED, ended_at=UNSPECIFIED, extraParams={}
+        self,
+        name=UNSPECIFIED,
+        body=UNSPECIFIED,
+        started_at=UNSPECIFIED,
+        ended_at=UNSPECIFIED,
+        extraParams={},
     ):
         """
         Edit an existing ExperimentProtocol.
@@ -69,7 +76,7 @@ class ExperimentProtocol(Entity):
 
         from labstep.entities.experiment.repository import getExperiment
 
-        return getExperiment(self.__user__, self.experiment_workflow['id'])
+        return getExperiment(self.__user__, self.experiment_workflow["id"])
 
     def getBody(self):
         """
@@ -105,9 +112,11 @@ class ExperimentProtocol(Entity):
             exp_protocol_inventory_fields[0]
         """
         self.update()
-        #return EntityList(self.protocol_values, ExperimentInventoryField, self.__user__)
+        # return EntityList(self.protocol_values, ExperimentInventoryField, self.__user__)
 
-        return experimentInventoryFieldRepository.getExperimentInventoryFields(self.__user__,experiment_id=self.id, count=count, extraParams=extraParams)
+        return experimentInventoryFieldRepository.getExperimentInventoryFields(
+            self.__user__, experiment_id=self.id, count=count, extraParams=extraParams
+        )
 
     def addInventoryField(
         self,
@@ -149,14 +158,16 @@ class ExperimentProtocol(Entity):
             experiment.addInventoryField(name='Sample A', amount='2', units='ml',
                                  resource_id=resource.id)
         """
-        return experimentInventoryFieldRepository.newExperimentInventoryField(self.__user__,
-                                                                              experiment_id=self.id,
-                                                                              name=name,
-                                                                              amount=amount,
-                                                                              units=units,
-                                                                              resource_id=resource_id,
-                                                                              resource_item_id=resource_item_id,
-                                                                              extraParams=extraParams)
+        return experimentInventoryFieldRepository.newExperimentInventoryField(
+            self.__user__,
+            experiment_id=self.id,
+            name=name,
+            amount=amount,
+            units=units,
+            resource_id=resource_id,
+            resource_item_id=resource_item_id,
+            extraParams=extraParams,
+        )
 
     def addChemicalReaction(
         self,
@@ -180,7 +191,9 @@ class ExperimentProtocol(Entity):
             experiment = user.getExperiment(17000)
             experiment.addChemicalReaction()
         """
-        return chemicalReactionRepository.newChemicalReaction(self.__user__, self.id, extraParams=extraParams)
+        return chemicalReactionRepository.newChemicalReaction(
+            self.__user__, self.id, extraParams=extraParams
+        )
 
     def addSteps(self, N):
         """
@@ -269,7 +282,7 @@ class ExperimentProtocol(Entity):
             exp_protocol_steps = exp_protocol.getSteps()
         """
         self.update()
-        if hasattr(self, 'experiment_steps'):
+        if hasattr(self, "experiment_steps"):
             steps = self.experiment_steps
         else:
             steps = self.protocol_steps
@@ -295,7 +308,13 @@ class ExperimentProtocol(Entity):
         self.update()
         return EntityList(self.molecules, ChemicalReaction, self.__user__)
 
-    def addTimer(self, name=UNSPECIFIED, hours=UNSPECIFIED, minutes=UNSPECIFIED, seconds=UNSPECIFIED):
+    def addTimer(
+        self,
+        name=UNSPECIFIED,
+        hours=UNSPECIFIED,
+        minutes=UNSPECIFIED,
+        seconds=UNSPECIFIED,
+    ):
         """
         Add a new timer to a Protocol within an Experiment.
 
@@ -334,7 +353,7 @@ class ExperimentProtocol(Entity):
         }
         return entityRepository.newEntity(self.__user__, ExperimentTimer, params)
 
-    def getTables(self):
+    def getTables(self, extraParams={}):
         """
         Returns a list of the tables in a Protocol within an Experiment.
 
@@ -351,12 +370,11 @@ class ExperimentProtocol(Entity):
             exp_protocol = experiment.getProtocols()[0]
             exp_protocol_tables = exp_protocol.getTables()
         """
-        self.update()
-        if hasattr(self, 'experiment_tables'):
-            tables = self.experiment_tables
-        else:
-            tables = self.protocol_tables
-        return EntityList(tables, ExperimentTable, self.__user__)
+        import labstep.entities.experimentTable.repository as experimentTableRepository
+
+        return experimentTableRepository.getExperimentTables(
+            self.__user__, experiment_id=self.id, extraParams=extraParams
+        )
 
     def getTimers(self):
         """
@@ -376,7 +394,7 @@ class ExperimentProtocol(Entity):
             exp_protocol_timers = exp_protocol.getTimers()
         """
         self.update()
-        if hasattr(self, 'experiment_timers'):
+        if hasattr(self, "experiment_timers"):
             timers = self.experiment_timers
         else:
             timers = self.protocol_timers
@@ -490,8 +508,10 @@ class ExperimentProtocol(Entity):
             experiment_protocol = experiment.getProtocols()[0]
             file = experiment_protocol.addFile(filepath='./my_file.csv')
         """
-        params = {'experiment_id': self.id}
-        return fileRepository.newFile(self.__user__, filepath=filepath, rawData=rawData, extraParams=params)
+        params = {"experiment_id": self.id}
+        return fileRepository.newFile(
+            self.__user__, filepath=filepath, rawData=rawData, extraParams=params
+        )
 
     def getFiles(self):
         """
@@ -515,7 +535,10 @@ class ExperimentProtocol(Entity):
 
     def export(self, rootPath, folderName=UNSPECIFIED):
         import labstep.entities.experimentProtocol.repository as experimentProtocolRepository
-        return experimentProtocolRepository.exportExperimentProtocol(self, rootPath, folderName=folderName)
+
+        return experimentProtocolRepository.exportExperimentProtocol(
+            self, rootPath, folderName=folderName
+        )
 
     def getJupyterNotebooks(self, count=UNSPECIFIED):
         """
@@ -562,7 +585,57 @@ class ExperimentProtocol(Entity):
         """
         import labstep.entities.jupyterNotebook.repository as jupyterNotebookRepository
 
-        return jupyterNotebookRepository.newJupyterNotebook(self.__user__, name, data, extraParams={'experiment_id': self.id})
+        return jupyterNotebookRepository.newJupyterNotebook(
+            self.__user__, name, data, extraParams={"experiment_id": self.id}
+        )
+
+    def addSmartTable(self, name=UNSPECIFIED, columns=UNSPECIFIED, extraParams={}):
+        """
+        Add a new smart table to a Protocol within an Experiment.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the smart table.
+        columns (list)
+            The columns of the smart table.
+
+        Returns
+        -------
+        :class:`~labstep.entities.experimentSmartTable.model.ExperimentSmartTable`
+            The newly added smart table entity.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol.addSmartTable(name='My Smart Table')
+        """
+        return experimentSmartTableRepository.newExperimentSmartTable(
+            self.__user__, name=name, columns=columns, extraParams=extraParams
+        )
+
+    def getSmartTables(self):
+        """
+        Returns a list of the smart tables in a Protocol within an Experiment.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.experimentSmartTable.model.ExperimentSmartTable`]
+            List of the smart tables in an Experiment's Protocol.
+
+        Example
+        -------
+        ::
+
+            experiment = user.getExperiment(17000)
+            exp_protocol = experiment.getProtocols()[0]
+            exp_protocol_smart_tables = exp_protocol.getSmartTables()
+        """
+        self.update()
+        return EntityList(self.entity_views, ExperimentSmartTable, self.__user__)
 
     def addConditions(self, number_of_conditions):
         """
@@ -583,7 +656,9 @@ class ExperimentProtocol(Entity):
             protocol = experiment.getProtocols()[0]
             conditions = protocol.addConditions(5)
         """
-        from labstep.entities.experimentCondition.repository import addExperimentConditions
+        from labstep.entities.experimentCondition.repository import (
+            addExperimentConditions,
+        )
 
         return addExperimentConditions(self, number_of_conditions)
 
@@ -602,22 +677,29 @@ class ExperimentProtocol(Entity):
             protocol = experiment.getProtocols()[0]
             conditions = protocol.getConditions()
         """
-        from labstep.entities.experimentCondition.repository import getExperimentConditions
+        from labstep.entities.experimentCondition.repository import (
+            getExperimentConditions,
+        )
 
         return getExperimentConditions(self)
 
-    @deprecated(version='3.3.2', reason="You should use experimentProtocol.addDataField instead")
+    @deprecated(
+        version="3.3.2", reason="You should use experimentProtocol.addDataField instead"
+    )
     def addDataElement(self, *args, **kwargs):
         return self.addDataField(*args, **kwargs)
 
-    @deprecated(version='3.3.2', reason="You should use experimentProtocol.getDataFields instead")
+    @deprecated(
+        version="3.3.2",
+        reason="You should use experimentProtocol.getDataFields instead",
+    )
     def getDataElements(self):
         return self.getDataFields()
 
-    @deprecated(version='3.12.0', reason="You should use getInventoryFields instead")
+    @deprecated(version="3.12.0", reason="You should use getInventoryFields instead")
     def getMaterials(self, *args, **kwargs):
         return self.getInventoryFields(*args, **kwargs)
 
-    @deprecated(version='3.12.0', reason="You should use addInventoryField instead")
+    @deprecated(version="3.12.0", reason="You should use addInventoryField instead")
     def addMaterial(self, *args, **kwargs):
         return self.addInventoryField(*args, **kwargs)

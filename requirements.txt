@@ -7,7 +7,6 @@ Pylama
 Sphinx
 sphinx_rtd_theme
 sphinxcontrib-programoutput
-sphinx_design
 pycodestyle
 pylint
 beautifulsoup4

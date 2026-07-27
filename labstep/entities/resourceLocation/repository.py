@@ -59,7 +59,10 @@ def setPosition(entity, location, position, size=[1, 1]):
         location = user.getResourceItem(17000)
         setPosition(location,item,position=[1,2],size=[1,1])
     """
-    location.update()
+    entity.edit(extraParams={'position': {'x': position[0], 'y':position[1], 'x_span': size[0],'y_span':size[1]}})
+
+
+    """ location.update()
     # Create a reference to the item being mapped
     map_key = f'{entity.__entityName__.replace("-","_")}-{entity.id}'
 
@@ -94,7 +97,7 @@ def setPosition(entity, location, position, size=[1, 1]):
     }
 
     # Edit the item on labstep with the new map data
-    location.edit(extraParams={'map_data': updatedMapData})
+    location.edit(extraParams={'map_data': updatedMapData}) """
 
 
 def getPosition(entity, location):

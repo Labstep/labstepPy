@@ -4,12 +4,14 @@
 
 import labstep.entities.file.repository as fileRepository
 import labstep.entities.protocolInventoryField.repository as protocolInventoryFieldRepository
+import labstep.entities.protocolSmartTable.repository as protocolSmartTableRepository
 from labstep.constants import UNSPECIFIED
 from labstep.entities.file.model import File
 from labstep.entities.jupyterNotebook.model import JupyterNotebook
 from labstep.entities.protocolDataField.model import ProtocolDataField
 from labstep.entities.protocolInventoryField.model import \
     ProtocolInventoryField
+from labstep.entities.protocolSmartTable.model import ProtocolSmartTable
 from labstep.entities.protocolStep.model import ProtocolStep
 from labstep.entities.protocolTable.model import ProtocolTable
 from labstep.entities.protocolTimer.model import ProtocolTimer
@@ -170,16 +172,9 @@ class ProtocolVersion(EntityWithComments):
             protocol = user.getProtocol(17000)
             metadata = protocol.getDataFields()
         """
-        self.update()
+        import labstep.entities.protocolDataField.repository as protocolDataFieldRepository
 
-        if "metadatas" not in self.metadata_thread:
-            return []
-
-        def addId(field):
-            field['protocol_id'] = self.id
-            return field
-
-        return EntityList(map(addId, self.metadata_thread["metadatas"]), ProtocolDataField, self.__user__)
+        return protocolDataFieldRepository.getDataFields(self)
 
     def addDataField(
         self,
@@ -410,7 +405,7 @@ class ProtocolVersion(EntityWithComments):
             "protocol_id": self.id, "name": name, "data": data}
         return entityRepository.newEntity(self.__user__, ProtocolTable, params)
 
-    def getTables(self):
+    def getTables(self, count=UNSPECIFIED, extraParams={}):
         """
         Returns a list of the tables in a Protocol.
 
@@ -426,12 +421,11 @@ class ProtocolVersion(EntityWithComments):
             protocol = user.getProtocol(17000)
             protocol_tables = protocol.getTables()
         """
-        self.update()
-        if hasattr(self, "protocol_tables") is False:
-            return []
+        import labstep.entities.protocolTable.repository as protocolTableRepository
 
-        tables = self.protocol_tables
-        return EntityList(tables, ProtocolTable, self.__user__)
+        return protocolTableRepository.getProtocolTables(
+            self.__user__, protocol_id=self.id, count=count, extraParams=extraParams
+        )
 
     def addFile(self, filepath=UNSPECIFIED, rawData=UNSPECIFIED):
         """
@@ -543,12 +537,58 @@ class ProtocolVersion(EntityWithComments):
         -------
         ::
 
-            experiment = user.getProtocol(17000)
-            experiment.export('/my_folder')
+            protocol = user.getProtocol(17000)
+            protocol.export('/my_folder')
         """
         import labstep.entities.protocolVersion.repository as protocolVersionRepository
 
         return protocolVersionRepository.exportProtocolVersion(self, path)
+
+    def addSmartTable(self, name=UNSPECIFIED, extraParams={}):
+        """
+        Add a new smart table to the Protocol.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the smart table.
+
+        Returns
+        -------
+        :class:`~labstep.entities.protocolSmartTable.model.ProtocolSmartTable`
+            The newly added smart table entity.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol.addSmartTable(name='My Smart Table')
+        """
+        return protocolSmartTableRepository.newProtocolSmartTable(
+            self.__user__, self.id, name=name, extraParams=extraParams
+        )
+
+    def getSmartTables(self):
+        """
+        Returns a list of the smart tables in a Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolSmartTable.model.ProtocolSmartTable`]
+            List of the smart tables in a Protocol.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol_smart_tables = protocol.getSmartTables()
+        """
+        self.update()
+        if hasattr(self, "entity_views") is False:
+            return []
+        return EntityList(self.entity_views, ProtocolSmartTable, self.__user__)
 
     def addConditions(self, number_of_conditions):
         """
