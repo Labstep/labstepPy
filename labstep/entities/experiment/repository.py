@@ -111,13 +111,15 @@ def exportExperiment(experiment, root_path):
 
     # get html
     html = htmlExportService.getHTML(experiment, withImages=includePDF)
-    html_with_paths = htmlExportService.insertFilepaths(expDir, html)
+    #html_with_paths = htmlExportService.insertFilepaths(expDir, html)
 
     with open(expDir.joinpath(f'{expDir.name}.html'), 'w', encoding="utf-8") as out:
-        out.write(html_with_paths)
+        out.write(html)
+
+    html_file = experiment.__user__.newFile(expDir.joinpath(f'{expDir.name}.html'))
 
     # get pdf
     if includePDF:
-        pdf = htmlToPDF(experiment.__user__, html)
+        pdf = htmlToPDF(experiment.__user__, file_id=html_file.id)
         with open(expDir.joinpath(f'{expDir.name}.pdf'), 'wb') as out:
             out.write(pdf)

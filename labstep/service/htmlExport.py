@@ -41,6 +41,27 @@ class HTMLExportService:
 
         return json.loads(response.content)['html']
 
+    def getHTMLFile(self, entity, withImages=False):
+        """
+        Gets HTML summary of experiments / protocols.
+
+        """
+        headers = getHeaders(entity.__user__)
+
+        body = {
+            "group_id": entity.__user__.activeWorkspace,
+            "query_entity_name": entity.__entityName__.replace("-", "_"),
+            "query_parameters": {
+                "id": entity.id
+            },
+            "type": "html_file" if withImages else "html"
+        }
+
+        url = url_join(configService.getHost(), 'api/generic', 'entity-export')
+        response = requestService.post(url, json=body, headers=headers)
+
+        return json.loads(response.content)
+
     def insertFilepaths(self, rootDir, html):
 
         soup = BeautifulSoup(html, 'html.parser')

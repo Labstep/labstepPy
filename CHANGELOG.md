@@ -5,10 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project (tries to) adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.34.0] - XXXX-XX-XX
+## [3.37.1] - 2026-07-24
 ### Added
+- Date filters for activity log methods
+
+
+## [3.37.0] - 2026-07-24
+
+### Added
+- `ActivityLog` model and repository
+- `getActivityLogs()` method to `User`, `Workspace`, and `Organization` models
+
+## [3.36.3] - 2026-06-28
+
+### Added
+- Backwards compatibility for new way of setting position of items
+
+## [3.36.2] - 2026-06-01
+
+### Fixed
+- Bug in getTables
+
+## [3.36.1] - 2026-04-23
+
+### Added
+- Forwards compatibility for Code Capsules
+
+## [3.36.0] - 2026-03-23
+
+### Added
+
+- `addSmartTable()` and `getSmartTables()` methods to `Experiment` model.
+- `addSmartTable()` and `getSmartTables()` methods to `ExperimentProtocol` model.
+- `addSmartTable()` and `getSmartTables()` methods to `Protocol` and `ProtocolVersion` models.
+- `ExperimentSmartTable` model and repository.
+- `ProtocolSmartTable` model and repository.
+
+### Fixed
+
+- `getConditions()` now correctly filters by `entity_id` instead of `entity_guid`.
+- `editExperimentInventoryField()` now correctly serialises `amount` as a string.
+- `setDataFieldValue()` no longer raises an error for variable data fields that are not bound to a condition (i.e. where `variable_template_guid` is set).
+- `getDataFields()` on `ProtocolVersion` now delegates to the repository instead of reading from a local snapshot, ensuring up-to-date results.
+
+## [3.35.1] - 2026-03-02
+
+### Fixed
+
+- PDF export out of memory
+
+## [3.35.0] - 2025-11-26
+
+### Fixed
+
+- `alphanumericToCartesianCoordinates` now returns coordinates starting at [0,0] for A1, [1,0] for A2, etc.
+
+### Added
+
+- `ProtocolTemplate` model and repository.
+- `ProtocolTemplate` methods to User model.
+
+## [3.34.0] - 2025-09-25
+
+### Added
+
 - `CustomIdentifierSet` model and repository
 
+### Changed
+
+- Made `resource` a property of `resourceItem`
 
 ## [3.33.0] - 2025-06-11
 

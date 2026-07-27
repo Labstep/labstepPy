@@ -218,7 +218,7 @@ class Protocol(EntityPrimary):
             The name of the field.
         fieldType (str)
             The field type. Options are: "default", "date",
-            "quantity", or "number". The "default" type is "Text".
+            "datetime", "numeric", "options" or "file". The "default" type is "Text".
         value (str)
             The value accompanying the fieldName entry.
         date (str)
@@ -420,6 +420,47 @@ class Protocol(EntityPrimary):
             protocol_tables = protocol.getTables()
         """
         return self.getCurrentVersion().getTables()
+
+    def addSmartTable(self, name=None, extraParams={}):
+        """
+        Add a new smart table to the Protocol.
+
+        Parameters
+        ----------
+        name (str)
+            The name of the smart table.
+
+        Returns
+        -------
+        :class:`~labstep.entities.protocolSmartTable.model.ProtocolSmartTable`
+            The newly added smart table entity.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol.addSmartTable(name='My Smart Table')
+        """
+        return self.getCurrentVersion().addSmartTable(name=name, extraParams=extraParams)
+
+    def getSmartTables(self):
+        """
+        Returns a list of the smart tables in a Protocol.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.protocolSmartTable.model.ProtocolSmartTable`]
+            List of the smart tables in a Protocol.
+
+        Example
+        -------
+        ::
+
+            protocol = user.getProtocol(17000)
+            protocol_smart_tables = protocol.getSmartTables()
+        """
+        return self.getCurrentVersion().getSmartTables()
 
     def addToCollection(self, collection_id):
         """

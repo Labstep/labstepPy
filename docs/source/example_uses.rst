@@ -1,7 +1,10 @@
 .. _example-uses:
 
-Workspace Setup
+Further Examples
 ----------------------------------------------
+
+Workspace Setup
+++++++++++++++++++++++++++++++++++++++++++++++
 To setup a Workspace on Labstep:
 
 :download:`workspace_setup.py <../../examples/workspace_setup.py>`
@@ -9,20 +12,8 @@ To setup a Workspace on Labstep:
 .. literalinclude:: ../../examples/workspace_setup.py
 
 
-Importing Resources
-----------------------------------------------
-To import a list of resources into Labstep
-from a *resource_import.csv* file:
-
-:download:`resource_import.csv <../../examples/resource_import.csv>`
-
-:download:`resource_import.py <../../examples/resource_import.py>`
-
-.. literalinclude:: ../../examples/resource_import.py
-
-
 Deleting Multiple Entities
-----------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++
 You can use **labstepPy** to easily delete
 multiple different Entities on Labstep (a list
 of Experiments, Protocols, or Tags, etc.),
@@ -34,10 +25,22 @@ performing a global delete.
 .. literalinclude:: ../../examples/delete_multiple.py
 
 Downloading Files
-----------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++
 You can use **labstepPy** to download files uploaded directly to Labstep or
 attached to different Labstep entities
 
 :download:`download_file.py <../../examples/download_file.py>`
 
 .. literalinclude:: ../../examples/download_file.py
+
+
+A basic python GUI
+++++++++++++++++++++++++++++++++++++++++++++++
+In this basic example, a GUI is created that can be used to authenticate a user on Labstep
+and create new experiments.
+
+| :download:`basic_python_gui.py <../../examples/basic_python_gui.py>`
+|
+| :download:`labstep_logo.png <../../examples/labstep_logo.png>`
+
+.. literalinclude:: ../../examples/basic_python_gui.py

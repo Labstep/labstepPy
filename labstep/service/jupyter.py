@@ -30,4 +30,15 @@ def getParent():
         if protocolGuid:
             return entityRepository.getEntity(user, ProtocolVersion, protocolGuid, useGuid=True)
 
+    if ('EXPERIMENT_ID' in os.environ.keys()):
+        experimentGuid = os.environ['EXPERIMENT_ID']
+        if experimentGuid:
+            return entityRepository.getEntity(user, ExperimentProtocol, experimentGuid, useGuid=True)
+
+    if ('PROTOCOL_ID' in os.environ.keys()):
+        protocolGuid = os.environ['PROTOCOL_ID']
+
+        if protocolGuid:
+            return entityRepository.getEntity(user, ProtocolVersion, protocolGuid, useGuid=True)
+
     raise Exception("No Jupyter Parent Found")

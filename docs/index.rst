@@ -97,8 +97,8 @@ own specific purposes.
    source/protocol_examples.rst
    source/inventory_examples.rst
    source/device_examples.rst
+   source/jupyter_notebooks
    source/example_uses.rst
-   source/advanced_filter.rst
 
 Troubleshooting
 ---------------

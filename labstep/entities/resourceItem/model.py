@@ -3,6 +3,7 @@
 # Author: Labstep <dev@labstep.com>
 
 from labstep.entities.resourceLocation.repository import getResourceLocation
+from labstep.generic.entity.repository import getEntityProperty
 from labstep.generic.entityWithAssign.model import EntityWithAssign
 from labstep.generic.entityWithComments.model import EntityWithComments
 from labstep.generic.entityWithMetadata.model import EntityWithMetadata
@@ -26,6 +27,12 @@ class ResourceItem(EntityWithMetadata, EntityWithComments, EntityWithAssign):
     """
 
     __entityName__ = "resource-item"
+
+    @property
+    def resource(self):
+        from labstep.entities.resource.model import Resource
+
+        return getEntityProperty(self, 'resource', Resource)
 
     def edit(
         self,

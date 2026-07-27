@@ -157,7 +157,7 @@ class Fixtures:
 
         assert retval == 0
         assert stderrValue is None
-        assert 'Database ready' in stdoutValue.decode('utf-8')
+        assert 'Loaded fixtures' in stdoutValue.decode('utf-8')
 
         if ('LABSTEP_DEBUG' in os.environ.keys()):
             print('\nFixtures loaded')

@@ -249,3 +249,33 @@ class Organization(Entity):
         return WorkspaceRoleRepository.getWorkspaceRole(
             self.__user__, workspace_role_guid
         )
+
+    def getActivityLogs(self, count=UNSPECIFIED, created_at_from=UNSPECIFIED, created_at_to=UNSPECIFIED, extraParams={}):
+        """
+        Retrieve a list of Activity Logs for this Organization.
+
+        Parameters
+        ----------
+        count (int)
+            The number of Activity Logs to retrieve.
+        created_at_from (str)
+            The start date of the search range, must be in the format of 'YYYY-MM-DD'.
+        created_at_to (str)
+            The end date of the search range, must be in the format of 'YYYY-MM-DD'.
+
+        Returns
+        -------
+        List[:class:`~labstep.entities.activityLog.model.ActivityLog`]
+            A list of Labstep ActivityLog objects.
+
+        Example
+        -------
+        ::
+
+            logs = my_organization.getActivityLogs(created_at_from='2026-01-01', created_at_to='2026-07-24')
+        """
+        import labstep.entities.activityLog.repository as activityLogRepository
+
+        return activityLogRepository.getActivityLogs(
+            self.__user__, organization_id=self.id, count=count, created_at_from=created_at_from, created_at_to=created_at_to, extraParams=extraParams
+        )

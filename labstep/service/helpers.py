@@ -57,7 +57,7 @@ def handleDate(date):
     if date is UNSPECIFIED:
         return UNSPECIFIED
 
-    for fmt in ('%Y-%m-%d', '%Y-%m-%d %H:%M', '%Y-%m-%d %H:%M:%S'):
+    for fmt in ('%Y-%m-%d', '%Y-%m-%d %H:%M', '%Y-%m-%d %H:%M:%S','%Y-%m-%dT%H:%M:%S+00:00'):
         try:
             return datetime.strptime(date, fmt).strftime('%Y-%m-%dT%H:%M:%S+00:00')
         except ValueError:
@@ -207,7 +207,7 @@ def alphanumericToCartesianCoordinates(position):
     else:
         row = 0
         for ch in m.group(1):
-            row += ord(ch) - 96
-        col = int(m.group(2))
+            row += ord(ch) - 97
+        col = int(m.group(2))-1
 
     return [col, row]

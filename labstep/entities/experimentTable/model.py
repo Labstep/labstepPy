@@ -10,6 +10,7 @@ from labstep.constants import UNSPECIFIED
 class ExperimentTable(Entity):
     __entityName__ = "protocol-table"
     __hasGuid__ = True
+    __unSearchable__ = True
 
     def edit(self, name=UNSPECIFIED, data=UNSPECIFIED):
         """
